@@ -1,0 +1,7 @@
+{
+  "cleanUrls": false,
+  "trailingSlash": true,
+  "headers": [
+    { "source": "/assets/(.*)\\.(mp4|webp|jpg|glb|json)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] }
+  ]
+}

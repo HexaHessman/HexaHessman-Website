@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HexaHessman · Sulphur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0F2A1E; --ink: #eee3c7; --muted: rgba(238, 227, 199, 0.66); --ring: rgba(238, 227, 199, 0.5);
+    --sans: "Geist", "Suisse Intl", "Helvetica Neue", Arial, sans-serif;
+    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  #scene { position: fixed; inset: 0; display: block; width: 100%; height: 100%; }
+  .shade { position: fixed; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 45% 50% at 8% 18%, rgba(15,42,30,.7), rgba(15,42,30,0) 70%),
+      radial-gradient(ellipse 45% 45% at 92% 88%, rgba(15,42,30,.65), rgba(15,42,30,0) 70%); }
+  .ui { position: fixed; inset: 0; pointer-events: none; }
+  html, body { overflow-x: hidden; overflow-y: auto; height: auto; }
+  .scroll-space { height: 420vh; }                /* scrolling drives the stream */
+  .cap { position: absolute; max-width: 400px; pointer-events: auto; opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .cap.show { opacity: 1; transform: none; }
+  .cap .num { font-family: var(--mono); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px; }
+  .cap h2 { font-weight: 400; font-size: clamp(30px, 3.1vw, 44px); letter-spacing: -0.035em; line-height: 1.04; margin-bottom: 18px; }
+  .cap p { font-size: 16px; line-height: 1.55; color: var(--muted); margin-bottom: 24px; }
+  .cap a.more { display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; border: 1px solid var(--ring); color: var(--ink); text-decoration: none; transition: background .3s; }
+  .cap a.more:hover { background: rgba(238,227,199,.08); }
+  .cap a.more svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+  .cap.one { left: 52px; top: max(150px, 18vh); max-width: 340px; }      /* the photo's empty top-left corner ... */
+  .cap.two { right: 52px; bottom: 9vh; }               /* ... and the hexagon floor, bottom right */
+  .hint { position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); transition: opacity .5s; }
+  .hint i { width: 1px; height: 34px; background: linear-gradient(var(--ink), transparent); animation: drip 1.8s ease-in-out infinite; transform-origin: top; }
+  @keyframes drip { 0% { transform: scaleY(0); opacity: 1; } 70% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+  .hint.gone { opacity: 0; }
+  .loading { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); transition: opacity .6s; pointer-events: none; }
+  .loading.done { opacity: 0; }
+  .shade { background:
+      radial-gradient(ellipse 45% 50% at 8% 20%, rgba(15,42,30,.7), rgba(15,42,30,0) 70%),
+      radial-gradient(ellipse 45% 45% at 92% 88%, rgba(15,42,30,.6), rgba(15,42,30,0) 70%); }
+  @media (max-width: 900px) {
+    .cap, .cap.one, .cap.two { left: 20px; right: 20px; top: auto; bottom: 40px; max-width: none; }
+    .cap h2 { font-size: 30px; margin-bottom: 10px; }
+    .cap p { font-size: 15px; margin-bottom: 14px; }
+    .cap .num { font-size: 11px; margin-bottom: 10px; }
+    .cap a.more { width: 50px; height: 50px; }
+    .shade { background: linear-gradient(180deg, rgba(15,42,30,0) 40%, rgba(15,42,30,.85) 66%, var(--bg) 84%); }
+    .hint { display: none; }
+  }
+</style>
+<style>
+  .veil { position: fixed; inset: 0; background: var(--bg); opacity: 0; pointer-events: none; }
+  .cap.zero { left: 52px; top: max(150px, 18vh); max-width: 420px; }
+  @media (max-width: 900px) { .cap.zero { left: 20px; right: 20px; top: auto; bottom: 40px; max-width: none; } }
+</style>
+<link rel="stylesheet" href="assets/header.css" />
+<style>
+  /* embedded in a group page: no chrome, the host page scrolls */
+  html.embed, html.embed body { overflow: hidden; }
+  html.embed .ui .site-header, html.embed .hint, html.embed .cap, html.embed .loading { display: none !important; }
+</style>
+</head>
+<body>
+<canvas id="scene" aria-label="A grab pours sulphur into a ship's hold; scrolling on, bagged sulphur drifts away in a row"></canvas>
+<div class="shade"></div>
+<div class="veil" id="veil"></div>
+<div class="loading" id="loading">Loading</div>
+<div class="ui">
+  <header class="site-header">
+    <div class="bar">
+      <a class="logo-link" href="index.html" aria-label="HexaHessman home">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="2.5" y="3" width="13" height="42"/><rect x="5.5" y="6" width="7" height="36" stroke-width="1"/>
+          <rect x="32.5" y="3" width="13" height="42"/><rect x="35.5" y="6" width="7" height="36" stroke-width="1"/>
+          <path d="M24 9.5 L38.5 24 L24 38.5 L9.5 24 Z"/><path d="M24 14 L34 24 L24 34 L14 24 Z" stroke-width="1"/>
+        </svg>
+        <span class="word">HexaHessman</span>
+      </a>
+      <nav class="nav">
+        <a href="#">Consultancy</a><a href="#">Energy</a><a href="#">Engineering</a><a class="active" href="commodities.html">Commodities</a><a href="#">About</a>
+      </nav>
+      <div class="actions">
+        <a class="btn primary" href="#"><span>Explore</span><span>services</span></a>
+        <a class="btn light" href="#"><span>Company</span><span>profile</span></a>
+        <a class="btn ghost" href="#"><span>Contact</span><span>us</span></a>
+      </div>
+      <button class="menu-btn" aria-label="Menu"><span></span><span></span></button>
+    </div>
+  </header>
+  <div class="cap zero show" data-from="0" data-to="0.3">
+    <div class="num">02 · Commodity supply</div>
+    <h2>Sulphur, loaded by grab and surveyed at the quay.</h2>
+    <p>Lump and granular sulphur at 99.80% minimum purity, loaded into bulk carriers and verified at the loading point by independent surveyors.</p>
+    <a class="more" href="commodities.html" aria-label="Read more about sulphur loading"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
+  </div>
+  <div class="cap one" data-from="0.42" data-to="0.72">
+    <div class="num">03 · Bagged supply</div>
+    <h2>Sulphur</h2>
+    <p>Lump and granular sulphur at 99.80% minimum purity, packed in jumbo bags and supplied directly to end buyers…</p>
+    <a class="more" href="commodities.html" aria-label="Read more about sulphur"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
+  </div>
+  <div class="cap two" data-from="0.72" data-to="1.01">
+    <div class="num">04 · Bagged supply</div>
+    <h2>Barite</h2>
+    <p>API-grade barium sulphate for drilling fluids, chemicals and manufacturing, delivered in jumbo bags with full analysis reports…</p>
+    <a class="more" href="#" aria-label="Read more about barite"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
+  </div>
+  <div class="hint" id="hint"><span>Scroll</span><i></i></div>
+</div>
+<div class="scroll-space" style="height: 760vh"></div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="assets/sulphur3d.js?v=2611b"></script>
+</body>
+</html>

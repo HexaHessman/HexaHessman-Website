@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cookie Notice · HexaHessman</title>
+<meta name="description" content="Cookie Notice for hexahessman.com.">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=2610k">
+<link rel="stylesheet" href="/assets/site.css?v=2611e">
+<style>
+.spec-stack { display: grid; gap: 34px; }
+.spec-title { margin-bottom: 12px; }
+.card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.card ul.list { margin-top: 6px; }
+.who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
+.cta-band { border: 1px solid var(--line); border-radius: 12px; padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; background: rgba(var(--ink-rgb),.03); }
+.cta-band h2 { max-width: 20ch; }
+.related { display: grid; gap: 18px; }
+/* 3D mount points (#hero-3d on two group pages, #globe on contact) are empty until the scenes are mounted:
+   hide them and keep the plain hero's full top padding so the breadcrumb clears the header bar. */
+.hero-3d:empty, .globe:empty { display: none; }
+.hero-3d:empty + .hero.plain, .globe:empty + .hero.plain { padding-top: 170px; }
+.hero .wrap .coverage { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
+@media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section class="hero plain"><div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>Cookie Notice</span></nav>
+  <p class="eyebrow">Legal</p>
+  <h1>Cookie Notice</h1>
+  <p class="lead">The Cookie Notice text for hexahessman.com will follow. For any questions in the meantime, contact inquiry@hexahessman.com.</p>
+</div></section>
+</main>
+<div id="site-footer"></div>
+<script src="/assets/site-header.js?v=2610k" defer></script>
+<script src="/assets/site-footer.js" defer></script>
+</body>
+</html>

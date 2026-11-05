@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Straatman · HexaHessman</title>
+<meta name="description" content="HexaHessman is an official representative of Straatman in Southeast Asia. With more than 50 years of maritime experience, Straatman is an established…">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=2610k">
+<link rel="stylesheet" href="/assets/site.css?v=2611e">
+<style>
+.spec-stack { display: grid; gap: 34px; }
+.spec-title { margin-bottom: 12px; }
+.card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.card ul.list { margin-top: 6px; }
+.who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
+.cta-band { border: 1px solid var(--line); border-radius: 12px; padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; background: rgba(var(--ink-rgb),.03); }
+.cta-band h2 { max-width: 20ch; }
+.related { display: grid; gap: 18px; }
+/* 3D mount points (#hero-3d on two group pages, #globe on contact) are empty until the scenes are mounted:
+   hide them and keep the plain hero's full top padding so the breadcrumb clears the header bar. */
+.hero-3d:empty, .globe:empty { display: none; }
+.hero-3d:empty + .hero.plain, .globe:empty + .hero.plain { padding-top: 170px; }
+.hero .wrap .coverage { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
+@media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
+</style>
+</head>
+<body class="eng">
+<div id="site-header"></div>
+<main>
+<section class="hero plain"><div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span><a href="/engineering/">Engineering Solutions</a></span><span>Straatman</span></nav>
+  <p class="eyebrow">Engineering Solutions</p>
+  <h1>Straatman Mooring Systems</h1>
+  <p class="lead">HexaHessman is an official representative of Straatman in Southeast Asia. With more than 50 years of maritime experience, Straatman is an established manufacturer of mooring, berthing and dredging equipment. In 2024 it reorganised into Straatman Mooring Systems and Straatman Dredging &amp; Construction.</p><p class="eyebrow">Principal · Mooring &amp; berthing</p><p class="coverage">Coverage: Indonesia · Thailand</p>
+</div></section>
+<section class="section" id="quick-release-mooring-hooks"><div class="wrap"><div class="section-head"><h2>Quick release mooring hooks</h2></div><p>A key safety feature for tankers, FSRUs, FPSOs and other vessels, released quickly even under load. Designed for oil, gas, chemical, iron, coal and grain terminals, with options for electric-hydraulic release, load monitoring, remote control and rope keepers.</p></div></section>
+
+<section class="section" id="ship-to-shore-link-ssl"><div class="wrap"><div class="section-head"><h2>Ship-to-Shore Link (SSL)</h2></div><p>Enables simultaneous emergency shutdown of ship and shore during LNG, oil and chemical transfers whenever either side detects an issue. Straatman’s SafeCom SSL is customised to client needs, with standby services available.</p></div></section>
+
+<section class="section" id="smart-bollard"><div class="wrap"><div class="section-head"><h2>Smart Bollard</h2></div><p>Measures mooring-line loads in real time — critical in high waves, strong currents and gusts — and logs data to prevent line failures and breakaways.</p></div></section>
+
+<section class="section" id="full-product-range"><div class="wrap"><div class="section-head"><h2>Full product range</h2></div><ul class="list"><li>Quick release mooring hooks</li><li>FPSO / FLNG and offshore quick release hooks</li><li>Quick release towing hooks</li><li>Portal smart bollards for LNG terminals</li><li>Strainstall / AMTS hooks and spares</li><li>Ship-to-Shore Link (SSL)</li><li>Mooring Load Monitoring System (MLMS)</li><li>Environmental Monitoring System (EMS)</li><li>Berthing Aid System (BAS)</li><li>Carry-on-board mooring system</li><li>Solar power systems for dredging, ports and terminals</li></ul></div></section>
+
+<section class="section" id="cta"><div class="wrap"><div class="cta-band"><div class="btn-row"><a class="pill solid" href="/contact/#quote">Request a quotation</a><a class="pill" href="/contact/#service">Book a service visit</a></div></div></div></section>
+
+</main>
+<div id="site-footer"></div>
+<script src="/assets/site-header.js?v=2610k" defer></script>
+<script src="/assets/site-footer.js" defer></script>
+</body>
+</html>

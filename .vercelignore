@@ -1,0 +1,46 @@
+# Only the website is published. Working files, renders, test pages and source documents stay on this Mac.
+scenes-3d
+scenes-3d-v2
+scenes-real
+scenes-real-v2
+masters
+tools
+/*.png
+/*.jpg
+/*.mp4
+/*.pdf
+/*.docx
+/_port-test.html
+/journey.html
+/port-view.html
+/port-wire.html
+/bags.html
+/bags3d.html
+/commodities.html
+/commodities-drawing.html
+/products.html
+.claude
+
+# assets not used by any live page
+assets/journey
+assets/entrance-a.mp4
+assets/entrance-b.mp4
+assets/entrance-c.mp4
+assets/zoom-1.mp4
+assets/zoom-2.mp4
+assets/side-1.mp4
+assets/port3d.js
+assets/sulphur3d-procedural.js
+assets/models/port.glb
+assets/models/port-grey.glb
+assets/models/port-grey.blend
+assets/models/sky_8k.jpg
+assets/models/sky_2k.hdr
+assets/models/clouds.png
+assets/models/water_normal.jpg
+assets/models/jumbo-bag-tripo.glb
+assets/models/jumbo-bag.glb
+
+# source portraits (cut to assets/team/cut) and review images
+individual
+previews

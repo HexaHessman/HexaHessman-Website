@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HexaHessman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #0F2A1E;          /* sampled from the card */
+    --ink: #eee3c7;            /* bright pencil */
+    --ink-soft: #d2c6aa;       /* faint pencil */
+    --muted: rgba(238, 227, 199, 0.6);
+    --sans: "Geist", "Suisse Intl", "Helvetica Neue", Arial, sans-serif;
+    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--paper); color: var(--ink); font-family: var(--sans); overflow: hidden; -webkit-font-smoothing: antialiased; }
+  #scene { position: fixed; inset: 0; display: block; }
+  .paper {
+    position: fixed; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 85% 10%, rgba(255,255,255,.045), transparent 55%),
+      radial-gradient(ellipse at 10% 95%, rgba(0,0,0,.22), transparent 60%);
+  }
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; opacity: .11; mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .ui { position: fixed; inset: 0; pointer-events: none; }
+
+  /* ---------- hero copy ---------- */
+  .copy { position: absolute; left: 52px; bottom: 64px; max-width: 560px; }
+  .copy .label { font-family: var(--mono); font-size: 13px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
+  .copy h1 { font-weight: 400; font-size: clamp(40px, 4.9vw, 70px); letter-spacing: -0.05em; line-height: 0.95; margin-bottom: 22px; }
+  .copy p { font-weight: 400; font-size: 18px; letter-spacing: -0.01em; line-height: 1.5; color: var(--muted); max-width: 460px; }
+  .hint {
+    position: absolute; right: 52px; bottom: 64px; display: flex; align-items: center; gap: 14px;
+    color: var(--muted); font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .hint .ring { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(238,227,199,.4); display: grid; place-items: center; }
+  .hint .ring svg { width: 16px; height: 16px; stroke: var(--ink); fill: none; stroke-width: 1.2; animation: nudge 2.4s ease-in-out infinite; }
+  @keyframes nudge { 0%,100% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+
+  @media (max-width: 720px) {
+    .copy { left: 20px; right: 20px; bottom: 112px; }
+    .copy p { font-size: 16px; }
+    .copy .label { font-size: 11px; letter-spacing: 0.12em; margin-bottom: 16px; }
+    .hint { right: 20px; bottom: 36px; }
+    .hint span { display: none; }
+  }
+  html.preloader .ui, html.preloader .paper { display: none; }
+  /* ?embed: just the drawing, see-through, for the About hero */
+  html.embed, html.embed body { background: transparent; }
+  html.embed .ui, html.embed .paper, html.embed .grain { display: none; }
+</style>
+<link rel="stylesheet" href="assets/header.css" />
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="paper"></div>
+<div class="grain"></div>
+<div class="ui">
+  <header class="site-header">
+    <div class="bar">
+      <a class="logo-link" href="index.html" aria-label="HexaHessman home">
+        <!-- front elevation of the mark: two framed uprights and a square on its corner -->
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="miter">
+          <rect x="2.5" y="3" width="13" height="42"/><rect x="5.5" y="6" width="7" height="36" stroke-width="1"/>
+          <rect x="32.5" y="3" width="13" height="42"/><rect x="35.5" y="6" width="7" height="36" stroke-width="1"/>
+          <path d="M24 9.5 L38.5 24 L24 38.5 L9.5 24 Z"/>
+          <path d="M24 14 L34 24 L24 34 L14 24 Z" stroke-width="1"/>
+        </svg>
+        <span class="word">HexaHessman</span>
+      </a>
+      <nav class="nav">
+        <a href="#">Consultancy</a><a href="#">Energy</a><a href="#">Engineering</a><a href="commodities.html">Commodities</a><a href="#">About</a>
+      </nav>
+      <div class="actions">
+        <a class="btn primary" href="#"><span>Explore</span><span>services</span></a>
+        <a class="btn light" href="#"><span>Company</span><span>profile</span></a>
+        <a class="btn ghost" href="#"><span>Contact</span><span>us</span></a>
+      </div>
+      <button class="menu-btn" aria-label="Menu"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <div class="copy">
+    <div class="label">Consultancy · Energy · Engineering</div>
+    <h1>Seamless solutions across borders.</h1>
+    <p>Headquartered in Singapore, HexaHessman delivers consultancy, project management, marine engineering and commodity supply across APAC and beyond.</p>
+  </div>
+  <div class="hint">
+    <span>Drag to turn</span>
+    <div class="ring"><svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6M10 6l-6 6 6 6"/></svg></div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+
+const PAPER = 0x0F2A1E, INK = 0xeee3c7, INK_SOFT = 0xd2c6aa;
+
+const PRELOADER = new URLSearchParams(location.search).has('preloader');
+if (PRELOADER) document.documentElement.classList.add('preloader');
+const EMBED = new URLSearchParams(location.search).has('embed');
+if (EMBED) document.documentElement.classList.add('embed');
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: EMBED });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.setClearColor(PAPER, EMBED ? 0 : 1);
+
+const scene = new THREE.Scene();
+
+// Parallel (isometric) camera at the drawing's angle: azimuth 45°, elevation 35.26°.
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100);
+camera.position.set(20, 20, 20);
+camera.lookAt(0, 0, 0);
+
+function frameCamera() {
+  const aspect = innerWidth / innerHeight;
+  const wide = innerWidth > 720;
+  let halfH, halfW;
+  if (wide) { halfH = 5.6; halfW = halfH * aspect; } else { halfW = 4.6; halfH = halfW / aspect; }
+  if (PRELOADER) { halfH = wide ? 7.2 : halfH * 1.3; halfW = wide ? halfH * aspect : halfW * 1.3; if (!wide) halfH = halfW / aspect; }
+  if (EMBED && wide) { halfH = aspect < 1.4 ? 7.4 : 6.2; halfW = halfH * aspect; }   // leave room for the headline
+  if (EMBED && !wide) { halfW = 5.4; halfH = halfW / aspect; }   // a little smaller on phones, above the headline
+  const fx = PRELOADER ? 0.5 : (wide ? (EMBED ? 0.70 : 0.72) : 0.5), fy = PRELOADER ? 0.5 : (wide ? 0.52 : (EMBED ? 0.30 : 0.40));   // where the world origin lands on screen
+  camera.left = -2 * halfW * fx;  camera.right = 2 * halfW * (1 - fx);
+  camera.bottom = -2 * halfH * (1 - fy); camera.top = 2 * halfH * fy;
+  camera.updateProjectionMatrix();
+}
+frameCamera();
+
+// ---------- pencil materials (fat lines, widths in CSS pixels) ----------
+const materials = [];
+function pencil({ color = INK, opacity = 1, width = 1.4, dashed = false, dash = 0.1, gap = 0.07, depthTest = true }) {
+  const m = new LineMaterial({ color, opacity, transparent: true, linewidth: width, dashed, dashSize: dash, gapSize: gap, depthTest, depthWrite: false });
+  m.resolution.set(innerWidth, innerHeight);
+  materials.push(m);
+  return m;
+}
+const matSolid     = pencil({ color: INK, opacity: 0.95, width: 1.5 });
+const matSketch    = pencil({ color: INK_SOFT, opacity: 0.35, width: 1.0 });
+const matHidden    = pencil({ color: INK_SOFT, opacity: 0.45, width: 1.0, dashed: true, dash: 0.09, gap: 0.06, depthTest: false });
+const matDim       = pencil({ color: INK_SOFT, opacity: 0.9, width: 1.1 });
+const matExt       = pencil({ color: INK_SOFT, opacity: 0.55, width: 0.9 });
+const matConstruct = pencil({ color: INK_SOFT, opacity: 0.55, width: 0.9, dashed: true, dash: 0.14, gap: 0.09, depthTest: false });
+const matOccluder  = new THREE.MeshBasicMaterial({ colorWrite: false });   // writes depth only: hides edges behind faces
+
+const logo = new THREE.Group();
+scene.add(logo);
+const drawables = [];
+
+function fatLines(positions, mat, parent = logo) {
+  const g = new LineSegmentsGeometry();
+  g.setPositions(positions);
+  const l = new LineSegments2(g, mat);
+  l.computeLineDistances();
+  parent.add(l);
+  l.userData.total = positions.length / 6;
+  drawables.push(l);
+  return l;
+}
+const toArray = pts => { const a = new Float32Array(pts.length * 3); pts.forEach((p, i) => { a[i * 3] = p.x; a[i * 3 + 1] = p.y; a[i * 3 + 2] = p.z; }); return a; };
+
+// ---------- framed piece: a hollow rectangle w x h extruded along local Z, with a 45° ridge
+// profile on both ends (outer chamfer meets hole chamfer), as the front elevation shows ----------
+function frameGeometry(w, h, depth, wall, bevel) {
+  // ExtrudeGeometry grows the outline outward by `bevel` and shrinks holes by `bevel` at mid-depth,
+  // so the drawn shape is the end-face outline: pull it in to keep the overall size.
+  const ow = w / 2 - bevel, oh = h / 2 - bevel;
+  const iw = w / 2 - wall + bevel, ih = h / 2 - wall + bevel;
+  const shape = new THREE.Shape();
+  shape.moveTo(-ow, -oh); shape.lineTo(ow, -oh); shape.lineTo(ow, oh); shape.lineTo(-ow, oh); shape.closePath();
+  const hole = new THREE.Path();
+  hole.moveTo(-iw, -ih); hole.lineTo(-iw, ih); hole.lineTo(iw, ih); hole.lineTo(iw, -ih); hole.closePath();
+  shape.holes.push(hole);
+  const geo = new THREE.ExtrudeGeometry(shape, {
+    depth: depth - 2 * bevel, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelOffset: 0, bevelSegments: 1, curveSegments: 1,
+  });
+  geo.translate(0, 0, -(depth - 2 * bevel) / 2);
+  return geo;
+}
+
+function makePiece(w, h, depth, wall, bevel) {
+  const geo = frameGeometry(w, h, depth, wall, bevel);
+  const edges = new THREE.EdgesGeometry(geo, 5).attributes.position.array;
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(geo, matOccluder));
+  const loose = Float32Array.from(edges, v => v + (Math.random() - 0.5) * 0.03);   // second, looser pencil pass
+  fatLines(edges, matHidden, g).renderOrder = -1;
+  fatLines(loose, matSketch, g);
+  fatLines(edges, matSolid, g);
+  return g;
+}
+
+// ---------- the H, proportions from the front elevation ----------
+// Uprights: 1.6 wide (z) x 4.67 tall, frame band 0.3, ridge bevel 0.14; gap between them 1.51.
+const U = { w: 0.95, d: 1.6, h: 4.67, wall: 0.3, bevel: 0.14, z: 1.557 };
+const left = makePiece(U.w, U.d, U.h, U.wall, U.bevel);
+left.rotation.x = -Math.PI / 2;
+left.position.set(0, 0, U.z);
+const right = makePiece(U.w, U.d, U.h, U.wall, U.bevel);
+right.rotation.x = -Math.PI / 2;
+right.position.set(0, 0, -U.z);
+
+// Diamond: a perfect square, side 2.24, standing on its corner in the plane of the H (x = 0),
+// centred between the uprights and reaching into both.
+const D = { s: 2.24, t: 0.3, wall: 0.28, bevel: 0.13, center: new THREE.Vector3(0, -0.13, 0) };
+const diamond = makePiece(D.s, D.s, D.t, D.wall, D.bevel);
+{
+  const qy = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2); // face the x axis
+  const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 4); // 45° in the H plane
+  diamond.quaternion.copy(qx.multiply(qy));
+}
+diamond.position.copy(D.center);
+
+logo.add(left, right, diamond);
+
+// ---------- drafting marks ----------
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+
+function dimension(p1, p2, offset) {
+  const a = p1.clone().add(offset), b = p2.clone().add(offset);
+  const dir = b.clone().sub(a).normalize();
+  const over = 0.14, extOver = offset.clone().normalize().multiplyScalar(0.22);
+  const pts = [a.clone().sub(dir.clone().multiplyScalar(over)), b.clone().add(dir.clone().multiplyScalar(over))];
+  const perp = dir.clone().cross(offset.clone().normalize()).cross(dir).normalize();
+  const L = 0.22, Wd = 0.055;
+  for (const [tip, s] of [[a, 1], [b, -1]]) {
+    const back = tip.clone().add(dir.clone().multiplyScalar(L * s));
+    pts.push(tip.clone(), back.clone().add(perp.clone().multiplyScalar(Wd)));
+    pts.push(tip.clone(), back.clone().sub(perp.clone().multiplyScalar(Wd)));
+  }
+  fatLines(toArray(pts), matDim);
+  fatLines(toArray([p1.clone(), a.clone().add(extOver), p2.clone(), b.clone().add(extOver)]), matExt);
+}
+
+const hx = U.w / 2, hy = U.h / 2, zf = U.z + U.d / 2, zb = U.z - U.d / 2;
+// front upright
+dimension(V(-hx, hy, zf), V(-hx, -hy, zf), V(-0.32, 0, 0.32));     // height
+dimension(V(-hx, hy, zf), V(-hx, hy, zb), V(-0.42, 0, 0));          // width of the top
+dimension(V(-hx, -hy, zf), V(hx, -hy, zf), V(0, -0.5, 0));          // thickness at the bottom
+dimension(V(hx, -hy, zf), V(hx, -hy, -zf), V(0.45, -0.5, 0));       // overall width along the bottom
+// back upright
+dimension(V(-hx, hy, -zb), V(-hx, hy, -zf), V(-0.45, 0, 0));
+dimension(V(-hx, hy, -zf), V(hx, hy, -zf), V(0, 0, -0.42));
+dimension(V(hx, hy, -zf), V(hx, -hy, -zf), V(0.34, 0, -0.34));
+
+// construction: dashed verticals at the faces and the centre, the diamond's centre lines
+const construct = [];
+for (const z of [zf, zb, 0, -zb, -zf]) construct.push(V(0, hy + 0.9, z), V(0, -hy - 0.9, z));
+construct.push(V(0, D.center.y, -zf - 0.6), V(0, D.center.y, zf + 0.6));
+construct.push(V(0, hy + 0.6, 0), V(0, -hy - 0.6, 0));
+construct.push(V(-hx - 0.9, D.center.y, 0), V(hx + 0.9, D.center.y, 0));
+fatLines(toArray(construct), matConstruct);
+
+// ---------- draw-on animation ----------
+for (const l of drawables) l.geometry.instanceCount = 0;
+const drawStart = performance.now(), DRAW_MS = 2800;
+
+// ---------- interaction: holds the drawing pose; tilts toward the cursor; drag to turn, then settles back ----------
+const state = { dragging: false, lastX: 0, lastY: 0, rotY: 0, rotX: 0, px: 0, py: 0 };
+canvas.addEventListener('pointerdown', e => { state.dragging = true; state.lastX = e.clientX; state.lastY = e.clientY; });
+addEventListener('pointermove', e => {
+  state.px = (e.clientX / innerWidth - 0.5) * 2;
+  state.py = (e.clientY / innerHeight - 0.5) * 2;
+  if (!state.dragging) return;
+  state.rotY += (e.clientX - state.lastX) * 0.006;
+  state.rotX += (e.clientY - state.lastY) * 0.004;
+  state.lastX = e.clientX; state.lastY = e.clientY;
+});
+// embedded: the host page sends the cursor position (the iframe itself ignores pointer events)
+// ...and the scroll progress through its hero (0..1 = one full turn)
+const spin = { target: 0, now: 0 };
+addEventListener('message', e => {
+  const d = e.data; if (!d) return;
+  if (d.type === 'logo-pointer') { state.px = d.x; state.py = d.y; }
+  if (d.type === 'logo-scroll') spin.target = d.p * Math.PI * 2;
+  if (d.type === 'logo-spinout' && !spin.outStart) spin.outStart = performance.now();
+});
+// preloader exit: one and a quarter turns, slow to start, quick through the middle, and the mark grows toward the viewer
+const SPIN_OUT_MS = 1700;
+function spinOut(now) {
+  if (!spin.outStart) return 0;
+  const k = Math.min(1, (now - spin.outStart) / SPIN_OUT_MS);
+  const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+  logo.scale.setScalar(1 + 0.45 * k * k);
+  return e * Math.PI * 2.5;
+}
+const release = () => { state.dragging = false; };
+addEventListener('pointerup', release); addEventListener('pointercancel', release); addEventListener('pointerleave', release);
+
+addEventListener('resize', () => {
+  frameCamera();
+  renderer.setSize(innerWidth, innerHeight);
+  for (const m of materials) m.resolution.set(innerWidth, innerHeight);
+});
+
+function tick(now) {
+  const k = Math.min(1, Math.max(0, (now - drawStart) / DRAW_MS));
+  const e = 1 - Math.pow(1 - k, 3);
+  for (const l of drawables) l.geometry.instanceCount = Math.floor(l.userData.total * e);
+  if (PRELOADER && k >= 1 && !tick.sent) { tick.sent = true; parent.postMessage('logo-drawn', '*'); }
+
+  if (!state.dragging) {
+    const targetY = state.px * 0.10, targetX = state.py * 0.06;
+    state.rotY += (targetY - state.rotY) * 0.035;
+    state.rotX += (targetX - state.rotX) * 0.035;
+  }
+  spin.now += (spin.target - spin.now) * 0.05;   // eases after the scroll, so the turn stays slow and soft
+  logo.rotation.set(state.rotX, state.rotY + spin.now + spinOut(now), 0);
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+window.__debug = { logo, state, camera };
+</script>
+</body>
+</html>

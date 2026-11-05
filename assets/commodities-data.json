@@ -1,0 +1,184 @@
+[
+ {
+  "slug": "fertilizer-phosphate",
+  "name": "Fertilizer & Phosphate Value Chain",
+  "who": "Supplying fertilizer producers, acid plants, blenders and distributors across South and Southeast Asia.",
+  "products": [
+   {
+    "slug": "sulphur",
+    "name": "Sulphur",
+    "short": "Granular, prilled and lump sulphur, 99.5% min. purity",
+    "lead": "Elemental sulphur in granular, prilled and lump form, produced to international standards for sulphuric acid, fertilizer, refining and industrial users.",
+    "title": "Sulphur (Granular / Prills / Lumps)"
+   },
+   {
+    "slug": "sulphuric-acid",
+    "name": "Sulphuric Acid",
+    "short": "H₂SO₄ 98% min. for phosphate and ammonium sulphate production",
+    "lead": "High-purity sulphuric acid (H₂SO₄) produced to GB/T 534-2002 and other global quality norms, for phosphate fertilizer, metal leaching and chemical manufacture.",
+    "title": "Sulphuric Acid"
+   },
+   {
+    "slug": "phosphoric-acid",
+    "name": "Phosphoric Acid",
+    "short": "Merchant-grade 52–54% P₂O₅ and technical 85% H₃PO₄",
+    "lead": "Phosphoric acid (H₃PO₄) is the key intermediate between rock phosphate and finished fertilizers such as MAP, DAP and TSP. We supply merchant-grade acid for fertilizer producers and purified technical grade for industrial users.",
+    "title": "Phosphoric Acid"
+   },
+   {
+    "slug": "rock-phosphate",
+    "name": "Rock Phosphate",
+    "short": "28–31% P₂O₅, BPL 62–68%",
+    "lead": "Essential resource for agriculture and industry.",
+    "title": "Rock Phosphate"
+   },
+   {
+    "slug": "map",
+    "name": "Mono Ammonium Phosphate (MAP)",
+    "short": "11-52-0 granular and 12-61-0 water-soluble",
+    "lead": "High-analysis nitrogen and phosphorus fertilizer.",
+    "title": "Mono Ammonium Phosphate (MAP)"
+   },
+   {
+    "slug": "dap",
+    "name": "Diammonium Phosphate (DAP)",
+    "short": "18-46-0 hard, free-flowing granules",
+    "lead": "Balanced crop nutrition for strong early growth.",
+    "title": "Diammonium Phosphate (DAP)"
+   },
+   {
+    "slug": "urea",
+    "name": "Urea",
+    "short": "46% N, prilled and granular",
+    "lead": "Powering agricultural productivity with precision nutrition.",
+    "title": "Urea"
+   },
+   {
+    "slug": "ammonium-sulphate",
+    "name": "Ammonium Sulphate",
+    "short": "21% N, 24% S, crystalline and granular",
+    "lead": "Ammonium sulphate ((NH₄)₂SO₄) is a nitrogen-and-sulphur fertilizer and industrial chemical valued for purity, stability and versatility — promoting healthy growth, chlorophyll formation and protein synthesis.",
+    "title": "Ammonium Sulphate"
+   }
+  ]
+ },
+ {
+  "slug": "metallurgical-reductants",
+  "name": "Metallurgical Reductants",
+  "who": "Reductants for NPI, ferroalloy, steel and foundry producers, with a focus on Indonesia’s nickel smelting sector.",
+  "products": [
+   {
+    "slug": "semi-coke",
+    "name": "Semi Coke",
+    "short": "Fixed carbon 80–88%, for RKEF nickel smelting",
+    "lead": "Semi coke (兰炭) is a critical input in nickel ferroalloy production, particularly the Rotary Kiln–Electric Furnace (RKEF) process widely used across Indonesia. Acting as both reducing agent and energy source, it enables efficient conversion of nickel ore into nickel pig iron (NPI) for stainless steel.",
+    "title": "Semi Coke"
+   },
+   {
+    "slug": "metallurgical-coke",
+    "name": "Metallurgical Coke",
+    "short": "Fixed carbon 85–92%, for blast furnaces and foundries",
+    "lead": "Metallurgical coke is produced by high-temperature carbonisation of coking coal. In blast-furnace ironmaking it acts as fuel, reductant and structural support, keeping the furnace permeable for gas flow. Its strength, low impurities and high carbon content are essential for stable, efficient steel production.",
+    "title": "Metallurgical Coke"
+   },
+   {
+    "slug": "calcined-pet-coke",
+    "name": "Calcined Pet Coke",
+    "short": "Fixed carbon 98.5% min., carbon raiser and anode grade",
+    "lead": "Calcined petroleum coke (CPC) is green pet coke heated to around 1,200–1,350°C to drive off moisture and volatiles, leaving a high-purity, electrically conductive carbon. It is the main carbon source for aluminium anodes and a widely used carbon raiser in steel and foundry melting.",
+    "title": "Calcined Pet Coke"
+   },
+   {
+    "slug": "graphite-pet-coke",
+    "name": "Graphite Pet Coke",
+    "short": "Graphitized, low-sulphur carbon raiser for steel and ductile iron",
+    "lead": "Graphitized petroleum coke (GPC) is calcined pet coke treated at around 2,800–3,000°C, converting its carbon into a graphite structure. With very low sulphur and nitrogen, it dissolves quickly in molten metal and is the preferred carbon raiser for ductile iron and high-grade steel.",
+    "title": "Graphite Pet Coke"
+   }
+  ]
+ },
+ {
+  "slug": "industrial-chemicals",
+  "name": "Industrial Chemicals",
+  "who": "Supplying chemical, glass, detergent, pulp & paper, alumina and water-treatment industries.",
+  "products": [
+   {
+    "slug": "methanol",
+    "name": "Methanol",
+    "short": "IMPCA-grade, 99.85% min. purity",
+    "lead": "Methanol (CH₃OH) is one of the world’s most traded chemicals — a building block for formaldehyde, acetic acid and olefins, a fuel and fuel additive, and a fast-growing low-carbon marine fuel.",
+    "title": "Methanol"
+   },
+   {
+    "slug": "caustic-soda",
+    "name": "Caustic Soda",
+    "short": "NaOH flakes, pearls and lye (32% / 48–50%)",
+    "lead": "Caustic soda (sodium hydroxide, NaOH) is one of the most essential industrial chemicals — a strong alkali for chemical synthesis, neutralisation and pH control.",
+    "title": "Caustic Soda"
+   },
+   {
+    "slug": "soda-ash",
+    "name": "Soda Ash",
+    "short": "Na₂CO₃ 99.2% min., dense and light grades",
+    "lead": "Sodium carbonate (Na₂CO₃), or soda ash, is a versatile alkali used in glass, detergents, chemicals and water treatment.",
+    "title": "Soda Ash"
+   }
+  ]
+ },
+ {
+  "slug": "petroleum-oilfield",
+  "name": "Petroleum & Oilfield Products",
+  "who": "Supplying road contractors, waterproofing manufacturers, lubricant blenders and drilling contractors.",
+  "products": [
+   {
+    "slug": "bitumen",
+    "name": "Bitumen",
+    "short": "Penetration, viscosity, performance and oxidised grades",
+    "lead": "Penetration, viscosity, performance and oxidised bitumen grades for road construction, roofing, waterproofing and industrial use — packed to suit every route to site.",
+    "title": "Bitumen"
+   },
+   {
+    "slug": "base-oil",
+    "name": "Base Oil",
+    "short": "Group I / II, SN150 and SN500",
+    "lead": "Base oils are the main component of finished lubricants, making up 70–90% of most engine, gear and industrial oils. We supply solvent-refined Group I and hydro-processed Group II base oils in the two most widely blended viscosity grades, SN150 and SN500.",
+    "title": "Base Oil (Group I/II, SN150, SN500)"
+   },
+   {
+    "slug": "barite-powder",
+    "name": "Barite Powder",
+    "short": "API 13A drilling grade, SG 4.1–4.2",
+    "lead": "Barite (barium sulphate, BaSO₄) is a high-density, chemically inert mineral essential to drilling, chemical and manufacturing applications.",
+    "title": "Barite Powder"
+   },
+   {
+    "slug": "bentonite",
+    "name": "Bentonite",
+    "short": "Sec 9, 10 and 11 grades for drilling and foundry",
+    "lead": "Bentonite is a natural clay composed mainly of montmorillonite, known for exceptional water absorption and swelling. We supply powder and lump forms, grades Sec 9, 10 and 11, for drilling, foundry and environmental applications.",
+    "title": "Bentonite"
+   }
+  ]
+ },
+ {
+  "slug": "biomass",
+  "name": "Biomass & Renewable Fuels",
+  "who": "Supplying biomass power and industrial furnace operators, MDF and pulp mills, and activated carbon producers.",
+  "products": [
+   {
+    "slug": "wood-chips",
+    "name": "Wood Chips",
+    "short": "Eucalyptus, pine and acacia, fuel and fibre grades",
+    "lead": "Wood chips from plantation-grown eucalyptus, acacia and pine in Indonesia and the wider region, supplied as fibre grade for pulp and panel-board mills and as fuel grade for biomass boilers and industrial furnaces.",
+    "title": "Wood Chips (Eucalyptus / Pine / Acacia)"
+   },
+   {
+    "slug": "coconut-shell-charcoal",
+    "name": "Coconut Shell Charcoal",
+    "short": "Fixed carbon 75% min., activated-carbon feedstock",
+    "lead": "Charcoal carbonised from coconut shells — a renewable, high-carbon, low-ash material and the preferred feedstock for coconut-shell activated carbon.",
+    "title": "Coconut Shell Charcoal"
+   }
+  ]
+ }
+]

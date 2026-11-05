@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MannTek · HexaHessman</title>
+<meta name="description" content="HexaHessman is the official representative of MannTek Solutions in Southeast Asia, delivering tailored solutions with comprehensive after-sales service…">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=2610k">
+<link rel="stylesheet" href="/assets/site.css?v=2611e">
+<style>
+.spec-stack { display: grid; gap: 34px; }
+.spec-title { margin-bottom: 12px; }
+.card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.card ul.list { margin-top: 6px; }
+.who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
+.cta-band { border: 1px solid var(--line); border-radius: 12px; padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; background: rgba(var(--ink-rgb),.03); }
+.cta-band h2 { max-width: 20ch; }
+.related { display: grid; gap: 18px; }
+/* 3D mount points (#hero-3d on two group pages, #globe on contact) are empty until the scenes are mounted:
+   hide them and keep the plain hero's full top padding so the breadcrumb clears the header bar. */
+.hero-3d:empty, .globe:empty { display: none; }
+.hero-3d:empty + .hero.plain, .globe:empty + .hero.plain { padding-top: 170px; }
+.hero .wrap .coverage { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
+@media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
+</style>
+</head>
+<body class="eng">
+<div id="site-header"></div>
+<main>
+<section class="hero plain"><div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span><a href="/engineering/">Engineering Solutions</a></span><span>MannTek</span></nav>
+  <p class="eyebrow">Engineering Solutions</p>
+  <h1>MannTek Solutions</h1>
+  <p class="lead">HexaHessman is the official representative of MannTek Solutions in Southeast Asia, delivering tailored solutions with comprehensive after-sales service, including repairs and maintenance.</p><p class="eyebrow">Principal · Marine &amp; energy transfer</p><p class="coverage">Coverage: Singapore · Malaysia · Indonesia · Vietnam · Thailand</p>
+</div></section>
+<section class="section" id="solutions-by-fuel"><div class="wrap"><div class="section-head"><h2>Solutions by fuel</h2></div><div class="grid c4"><a class="card" href="https://www.manntek.se/" target="_blank" rel="noopener"><h3>LNG</h3><span class="more">Learn more →</span></a><a class="card" href="https://www.manntek.se/" target="_blank" rel="noopener"><h3>Methanol</h3><span class="more">Learn more →</span></a><a class="card" href="https://www.manntek.se/" target="_blank" rel="noopener"><h3>Hydrogen</h3><span class="more">Learn more →</span></a><a class="card" href="https://www.manntek.se/" target="_blank" rel="noopener"><h3>Ammonia</h3><span class="more">Learn more →</span></a></div></div></section>
+
+<section class="section" id="dry-cryogenic-couplings-dcc"><div class="wrap"><div class="section-head"><h2>Dry Cryogenic Couplings (DCC)</h2></div><p>MannTek QCDC couplings load and unload cryogenic liquefied gases — LNG, nitrogen, oxygen, argon, ethylene — down to –196°C, connecting quickly and safely with minimal product loss and no re-tightening during cool-down. Built to ISO 21593 and ISO TS 18683.</p><div class="spec-stack"><table class="spec"><tbody><tr><td>Size</td><td>1" to 8"</td></tr><tr><td>Material</td><td>Stainless steel</td></tr><tr><td>Seals</td><td>PTFE</td></tr></tbody></table></div></div></section>
+
+<section class="section" id="cryogenic-breakaway-couplings-cbc"><div class="wrap"><div class="section-head"><h2>Cryogenic Breakaway Couplings (CBC)</h2></div><p>Designed as the weakest link of the hose line or loading arm, CBCs prevent spillage and damage from drive-away or pull-away incidents. Available in breaking-pin and cable-release versions.</p><div class="spec-stack"><table class="spec"><tbody><tr><td>Size</td><td>1"–8" breaking pin · 2"–8" cable release</td></tr><tr><td>Material</td><td>Stainless steel</td></tr><tr><td>Seals</td><td>PTFE</td></tr><tr><td>Working pressure</td><td>25 bar</td></tr></tbody></table></div></div></section>
+
+<section class="section" id="powered-emergency-release-coupling-perc"><div class="wrap"><div class="section-head"><h2>Powered Emergency Release Coupling (PERC)</h2></div><p>The highest safety level, with three ways to release — by ESD signal, by manual override, or by reverting to a passive breaking pin. In a blackout it falls back to a passive breakaway coupling, protecting the manifold in any situation.</p></div></section>
+
+<section class="section" id="vessel-separation-device-vsd"><div class="wrap"><div class="section-head"><h2>Vessel Separation Device (VSD)</h2></div><ul class="list"><li>Three-wire system with pendants of different lengths</li><li>First wire: alarm on vessel movement</li><li>Second wire: initiates ESD 1 — pumps stop, ESD valves close</li><li>Third wire: initiates ESD 2, activating the PERC</li></ul></div></section>
+
+<section class="section" id="perc-control-unit"><div class="wrap"><div class="section-head"><h2>PERC control unit</h2></div><table class="spec"><tbody><tr><td>PLC version</td><td>Monitors the whole transfer operation and ensures every step and periodic test is carried out</td></tr><tr><td>SIL2 version</td><td>Assessed by DNV and certified to SIL2 under IEC 61511 and IEC 61508</td></tr></tbody></table></div></section>
+
+<section class="section" id="videos"><div class="wrap"><div class="section-head"><h2>Videos</h2></div><table class="spec"><tbody><tr><td>Video 1</td><td>MannTek (QCDC) Design 2.0 — DGC</td></tr><tr><td>Video 2</td><td>Safety Breakaway Couplings</td></tr><tr><td>Video 3</td><td>Connections: Liquid Hydrogen</td></tr><tr><td>Video 4</td><td>MannTek LNG / cryogenic couplings</td></tr></tbody></table></div></section>
+
+<section class="section" id="cta"><div class="wrap"><div class="cta-band"><h2>After-sales</h2><p class="lead">Repairs, maintenance and spares across the region, with a face-to-face response within 48 hours.</p><div class="btn-row"><a class="pill solid" href="/contact/#quote">Request a quotation</a><a class="pill" href="/contact/#service">Book a service visit</a></div></div></div></section>
+
+</main>
+<div id="site-footer"></div>
+<script src="/assets/site-header.js?v=2610k" defer></script>
+<script src="/assets/site-footer.js" defer></script>
+</body>
+</html>

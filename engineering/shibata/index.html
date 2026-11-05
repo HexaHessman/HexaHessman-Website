@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShibataFenderTeam · HexaHessman</title>
+<meta name="description" content="HexaHessman is an official Southeast Asia representative of ShibataFenderTeam (SFT), a global leader in the design, engineering, manufacture and supply of…">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=2610k">
+<link rel="stylesheet" href="/assets/site.css?v=2611e">
+<style>
+.spec-stack { display: grid; gap: 34px; }
+.spec-title { margin-bottom: 12px; }
+.card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.card ul.list { margin-top: 6px; }
+.who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
+.cta-band { border: 1px solid var(--line); border-radius: 12px; padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; background: rgba(var(--ink-rgb),.03); }
+.cta-band h2 { max-width: 20ch; }
+.related { display: grid; gap: 18px; }
+/* 3D mount points (#hero-3d on two group pages, #globe on contact) are empty until the scenes are mounted:
+   hide them and keep the plain hero's full top padding so the breadcrumb clears the header bar. */
+.hero-3d:empty, .globe:empty { display: none; }
+.hero-3d:empty + .hero.plain, .globe:empty + .hero.plain { padding-top: 170px; }
+.hero .wrap .coverage { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
+@media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
+</style>
+</head>
+<body class="eng">
+<div id="site-header"></div>
+<main>
+<section class="hero plain"><div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span><a href="/engineering/">Engineering Solutions</a></span><span>ShibataFenderTeam</span></nav>
+  <p class="eyebrow">Engineering Solutions</p>
+  <h1>ShibataFenderTeam</h1>
+  <p class="lead">HexaHessman is an official Southeast Asia representative of ShibataFenderTeam (SFT), a global leader in the design, engineering, manufacture and supply of high-performance fender systems. For more than five decades SFT has safeguarded ports, harbours, terminals and offshore structures around the world.</p><p class="eyebrow">Principal · Fender systems</p>
+</div></section>
+<section class="section" id="fixed-fenders"><div class="wrap"><div class="section-head"><h2>Fixed fenders</h2></div><div class="grid c3"><div class="card"><h3>SPC Cone Fender</h3><p>Conical rubber body with fully rubber-embedded mounting flanges; exceptional energy-to-reaction ratio, high shear stability and no loss of performance up to 10° approach angle. Optional overload stopper.</p><p class="apps">Applications: container, bulk, oil &amp; gas, general cargo, cruise, ferry and RoRo terminals; navy.</p></div><div class="card"><h3>FE Element Fenders</h3><p>Fully moulded rubber legs with embedded mounting plates — modular and compact, for mounting behind steel panels or where space is limited. Easy maintenance and replacement.</p><p class="apps">Applications: container, bulk, general cargo and RoRo terminals; navy; barges.</p></div><div class="card"><h3>Cylindrical Fender</h3><p>Simple installation with chains, bars, ropes or ladder brackets; reaction force and energy rise proportionally for softer berthing. OD up to 2,700 mm, ID 50–1,300 mm, lengths up to 20 m.</p></div><div class="card"><h3>Parallel Motion Fenders</h3><p>Engineered systems with a torsion arm so the front panel moves only parallel to its mounting — equal energy absorption at any impact level, lower reaction forces and lighter substructures.</p><p class="apps">Applications: bulk, oil &amp; gas, ferry and RoRo terminals; monopiles; load-sensitive structures.</p></div><div class="card"><h3>Roller / Wheel Fender</h3><p>Elastomer unit on a rotating shaft with maintenance-free bearings, for lock entrances, dry docks and narrow or exposed passages.</p></div></div></div></section>
+
+<section class="section" id="floating-fenders"><div class="wrap"><div class="section-head"><h2>Floating fenders</h2></div><div class="grid c3"><div class="card"><h3>Pneumatic Fender</h3><p>Abrasion-resistant, air-filled rubber fender to ISO 17357-1:2014; diameters 300–4,500 mm, lengths 500–9,000 mm. Low hull pressure; deflatable for storage and reuse.</p><p class="apps">Applications: ports with extreme tidal range, ship-to-ship lightering, FSRUs, temporary berthing.</p></div><div class="card"><h3>Hydropneumatic Fender</h3><p>Partly water-filled and counterweighted to protect submerged hulls, with adjustable draft.</p><p class="apps">Applications: submarine jetties, certain ferry types, oil rigs.</p></div><div class="card"><h3>Ocean Guard Foam Fender</h3><p>Closed-cell foam core with nylon-reinforced polyurethane skin; unsinkable even if damaged; diameters 500–4,500 mm, lengths 800–10,600 mm.</p><p class="apps">Applications: navy and cruise berths, ship-to-ship and ship-to-shore operations, oil &amp; gas terminals.</p></div></div></div></section>
+
+<section class="section" id="cta"><div class="wrap"><div class="cta-band"><p class="lead">Backed by local support for sizing, supply, installation and after-sales service.</p><div class="btn-row"><a class="pill solid" href="/contact/#quote">Request fender sizing / quotation</a><a class="pill" href="/contact/#service">Book a service visit</a></div></div></div></section>
+
+</main>
+<div id="site-footer"></div>
+<script src="/assets/site-header.js?v=2610k" defer></script>
+<script src="/assets/site-footer.js" defer></script>
+</body>
+</html>

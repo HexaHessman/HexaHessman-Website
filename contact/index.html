@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · HexaHessman</title>
+<meta name="description" content="We are pleased to offer our full assistance and address any queries you may have.">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=2610k">
+<link rel="stylesheet" href="/assets/site.css?v=2611e">
+<style>
+.spec-stack { display: grid; gap: 34px; }
+.spec-title { margin-bottom: 12px; }
+.card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.card ul.list { margin-top: 6px; }
+.who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
+.cta-band { border: 1px solid var(--line); border-radius: 12px; padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; background: rgba(var(--ink-rgb),.03); }
+.cta-band h2 { max-width: 20ch; }
+.related { display: grid; gap: 18px; }
+/* 3D mount points (#hero-3d on two group pages, #globe on contact) are empty until the scenes are mounted:
+   hide them and keep the plain hero's full top padding so the breadcrumb clears the header bar. */
+.hero-3d:empty, .globe:empty { display: none; }
+.hero-3d:empty + .hero.plain, .globe:empty + .hero.plain { padding-top: 170px; }
+.hero .wrap .coverage { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
+@media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
+
+.form { display: grid; gap: 18px; max-width: 720px; }
+.form .two { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.form label { display: grid; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.form input, .form select, .form textarea { width: 100%; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--line-strong); background: rgba(255,255,255,.03); color: var(--ink); font: inherit; font-size: 15px; letter-spacing: 0; text-transform: none; }
+.form input:focus, .form select:focus, .form textarea:focus { outline: 1px solid var(--ink-soft); outline-offset: 1px; }
+.form select option { color: #111; }
+.form textarea { min-height: 160px; resize: vertical; }
+.form input[type=file] { padding: 10px 12px; }
+.form .help { font-size: 13px; color: var(--muted); text-transform: none; letter-spacing: 0; font-family: var(--sans); }
+.form .help.error { color: #f0b49a; }
+.form input.invalid { border-color: #f0b49a; }
+.contact-card h3 { margin-bottom: 6px; }
+.contact-person { display: flex; gap: 14px; align-items: center; margin-top: 12px; }
+.contact-person .avatar.photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: none; background: #fff; border: 1px solid var(--line); }
+.contact-card .role { color: var(--muted); font-size: 14px; }
+.contact-card a { display: inline-block; margin-top: 12px; text-decoration: none; font-family: var(--mono); font-size: 13px; }
+.office .country { font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
+.hours .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); }
+.hours .row:last-child { border-bottom: 1px solid var(--line); }
+</style>
+<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section id="globe" class="globe"></section>
+<section class="hero plain"><div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>Contact</span></nav>
+  <p class="eyebrow">Contact</p>
+  <h1>Navigating with Excellence</h1>
+  <p class="lead">We are pleased to offer our full assistance and address any queries you may have.</p>
+</div></section>
+<section class="section" id="response"><div class="wrap"><div class="section-head"><h2>Response commitments</h2></div><div class="grid c2"><div class="card"><h3>Commodities Supply</h3><p>Our supply team is accessible 24/7 — real-time market responsiveness and support across all time zones.</p></div><div class="card"><h3>Engineering Solutions</h3><p>A face-to-face response within 48 hours for all servicing and maintenance enquiries.</p></div></div><div style="height:24px"></div><div class="btn-row"><a class="pill solid" href="https://wa.me/6580619119" target="_blank" rel="noopener">Message us on WhatsApp (+65 8061 9119)</a></div></div></section>
+
+<section class="section" id="quote"><div class="wrap"><div class="section-head"><h2>Drop us a line</h2></div>
+<span id="datasheet"></span><span id="sample"></span><span id="service"></span>
+<form class="form" action="#" method="post" enctype="multipart/form-data" novalidate>
+  <div class="two">
+    <label>Full name *<input type="text" name="name" required autocomplete="name"></label>
+    <label>Company *<input type="text" name="company" required autocomplete="organization"></label>
+  </div>
+  <div class="two">
+    <label>Company email *<input type="email" name="email" id="email" required autocomplete="email" placeholder="name@yourcompany.com" aria-describedby="email-help"><span class="help" id="email-help">Please use your company email. Personal addresses (Gmail, Yahoo, Outlook, etc.) are not accepted.</span></label>
+    <label>Phone / WhatsApp<input type="text" name="phone" autocomplete="tel"></label>
+  </div>
+  <label>Country<select name="country"><option value="">Select…</option><option>Singapore</option><option>Malaysia</option><option>Thailand</option><option>Indonesia</option><option>Vietnam</option><option>India</option><option>South Korea</option><option>Türkiye</option><option>United Kingdom</option><option>United States</option><option>Other</option></select></label>
+  <label>I’m enquiring about *<select id="enquiring" name="enquiring" required><option>Commodities Supply</option><option>Engineering Solutions</option><option>Engineering Components</option><option>Other</option></select></label>
+  <label>Product group / product or principal<select name="product">
+    <option value="">Select…</option>
+    <optgroup label="Commodities Supply"><option>Fertilizer &amp; Phosphate Value Chain</option><option>Metallurgical Reductants</option><option>Industrial Chemicals</option><option>Petroleum &amp; Oilfield Products</option><option>Biomass &amp; Renewable Fuels</option></optgroup>
+    <optgroup label="Engineering Solutions"><option>ShibataFenderTeam</option><option>MannTek</option><option>Straatman</option><option>Raythink</option></optgroup>
+  </select></label>
+  <label>Quantity, destination port &amp; Incoterm<input type="text" name="quantity"><span class="help">For Commodities Supply enquiries.</span></label>
+  <label>Message *<textarea id="message" name="message" required></textarea></label>
+  <label>Attachment<input type="file" name="attachment"><span class="help">Specification / tender document (optional).</span></label>
+  <div class="btn-row"><button class="pill solid" type="submit">Send enquiry</button></div>
+</form></div></section>
+
+<section class="section" id="direct"><div class="wrap"><div class="section-head"><h2>Direct contacts</h2></div><div class="grid c3"><div class="card contact-card"><p class="eyebrow">All enquiries</p><a href="mailto:inquiry@hexahessman.com">inquiry@hexahessman.com</a></div><div class="card contact-card"><p class="eyebrow">Commodities Supply</p><div class="contact-person"><img class="avatar photo" src="/assets/team/adam-yeoh.jpg" alt="Adam Yeoh" loading="lazy" width="360" height="360"><div><h3>Adam Yeoh</h3><p class="role">Head of Commodity Supply, HexaHessman Singapore</p></div></div><a href="mailto:Adam.Yeoh@HexaHessman.com">Adam.Yeoh@HexaHessman.com</a></div><div class="card contact-card"><p class="eyebrow">Engineering Solutions</p><div class="contact-person"><img class="avatar photo" src="/assets/team/aizat-amin.jpg" alt="Aizat Amin" loading="lazy" width="360" height="360"><div><h3>Aizat Amin</h3><p class="role">Head of Engineering Solutions, HexaHessman Singapore</p></div></div><a href="mailto:Aizat.Amin@HexaHessman.com">Aizat.Amin@HexaHessman.com</a></div><div class="card contact-card"><p class="eyebrow">Engineering Solutions · Indonesia</p><div class="contact-person"><img class="avatar photo" src="/assets/team/krishna-hartono.jpg" alt="Krishna Hartono" loading="lazy" width="360" height="360"><div><h3>Krishna Hartono</h3><p class="role">Regional Business Director, PT HexaHessman Indonesia</p></div></div><a href="mailto:Krishna.Hartono@HexaHessman.com">Krishna.Hartono@HexaHessman.com</a></div></div></div></section>
+
+<section class="section" id="offices"><div class="wrap"><div class="section-head"><h2>All offices</h2></div><div class="grid c3"><div class="card office" data-country="Singapore"><span class="country">Singapore</span><h3>Headquarters</h3><p>39 Arab Street, Singapore 199738 · Warehouse: 10 Buroh Street, West Connect Building, Singapore 627564</p></div><div class="card office" data-country="Indonesia"><span class="country">Indonesia</span><h3>PT. HexaHessman Indonesia</h3><p>The CEO Building Level 12, Jl. TB Simatupang No. 18 C, Jakarta Selatan 12430</p></div><div class="card office" data-country="South Korea"><span class="country">South Korea</span><h3>HexaHessman Korea</h3><p>#619, 87 Ogeum-ro, Songpa-gu, Seoul 05542</p></div><div class="card office" data-country="Malaysia"><span class="country">Malaysia</span><h3>HexaHessman Sdn Bhd</h3><p>Unit 9-6, Binjai 8 Premium Soho, 2 Lorong Binjai, 50450 Kuala Lumpur</p></div><div class="card office" data-country="Thailand"><span class="country">Thailand</span><h3>HexaHessman Thailand</h3><p>118/3 Moo 7, Tambon Bang Sao Thong, Amphoe Bang Sao Thong, Samut Prakan 10570</p></div><div class="card office" data-country="India"><span class="country">India</span><h3>HexaHessman India</h3><p>129/1, Lal Bagh Main Road, Bengaluru 560027</p></div><div class="card office" data-country="United Kingdom"><span class="country">United Kingdom</span><h3>HexaHessman UK</h3><p>128 City Road, London EC1V 2NX</p></div><div class="card office" data-country="Türkiye"><span class="country">Türkiye</span><h3>HexaHessman Turkey</h3><p>Gökçe Apartmanı No: 22/12, Mustafa Kemal Mahallesi, 2124. Cadde, Çankaya, Ankara 06530</p></div><div class="card office" data-country="United States"><span class="country">United States</span><h3>HexaHessman US</h3><p>730 N Milwaukee Ave, Chicago, IL 60642</p></div></div></div></section>
+
+<section class="section" id="hours"><div class="wrap"><div class="section-head"><h2>Operating hours</h2></div><div class="hours"><div class="row"><div>Monday – Friday</div><div class="muted">09:00 – 17:00 (SGT)</div></div><div class="row"><div>Saturday – Sunday</div><div class="muted">Closed (supply desk 24/7)</div></div></div></div></section>
+
+
+<script>
+(() => {
+  // Deep links from product/principal pages (#quote, #datasheet, #sample, #service) pre-select the enquiry type.
+  const h = location.hash.replace('#', '');
+  const sel = document.getElementById('enquiring');
+  if (!sel) return;
+  if (h === 'service') sel.value = 'Engineering Solutions';
+  else if (h === 'datasheet' || h === 'sample') sel.value = 'Commodities Supply';
+  const msg = document.getElementById('message');
+  const hints = { datasheet: 'Please send the technical datasheet / SDS for: ', sample: 'Please arrange a sample of: ', service: 'Servicing / maintenance request for: ' };
+  if (msg && hints[h] && !msg.value) msg.value = hints[h];
+})();
+(() => {
+  // Company email only: reject free / personal mailbox providers (any country domain, e.g. yahoo.co.id, hotmail.co.uk).
+  const form = document.querySelector('form.form'), email = document.getElementById('email'), help = document.getElementById('email-help');
+  if (!form || !email) return;
+  const FREE = 'gmail|googlemail|yahoo|ymail|rocketmail|hotmail|outlook|live|msn|windowslive|icloud|me|mac|aol|aim|proton|protonmail|pm|tutanota|tuta|gmx|mail|email|inbox|yandex|zohomail|fastmail|hey|web|libero|seznam|qq|163|126|yeah|sina|sohu|aliyun|foxmail|naver|daum|hanmail|nate|rediffmail|mailinator|guerrillamail|temp-mail|10minutemail';
+  const TLD = 'com|net|org|co|me|de|fr|it|es|nl|be|ch|at|se|no|dk|fi|pl|cz|ru|ua|cn|jp|kr|in|id|sg|my|th|ph|vn|hk|tw|tr|uk|us|ca|au|nz|br|mx|ar|za|ie|ae|sa|pk|bd|lk|eg|ng';
+  const freeRe = new RegExp('^(' + FREE + ')(\\.(' + TLD + '))+$', 'i');
+  const tip = help.textContent;
+  function check() {
+    const v = email.value.trim(), domain = v.includes('@') ? v.split('@').pop().toLowerCase() : '';
+    let err = '';
+    if (!v) err = 'Please enter your company email.';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) err = 'Please enter a valid email address.';
+    else if (freeRe.test(domain)) err = 'Please use your company email address — ' + domain + ' is a personal email provider.';
+    email.setCustomValidity(err);
+    email.classList.toggle('invalid', !!err && v !== '');
+    help.textContent = err && v ? err : tip; help.classList.toggle('error', !!err && v !== '');
+    return !err;
+  }
+  email.addEventListener('blur', check);
+  email.addEventListener('input', () => { if (email.classList.contains('invalid')) check(); });
+  form.addEventListener('submit', (e) => {
+    const ok = check();
+    if (!ok || !form.checkValidity()) { e.preventDefault(); if (!ok) { email.focus(); help.classList.add('error'); } else form.reportValidity(); }
+  });
+})();
+</script>
+</main>
+<div id="site-footer"></div>
+<script src="/assets/site-header.js?v=2610k" defer></script>
+<script src="/assets/site-footer.js" defer></script>
+<script type="module" src="/assets/globe.js?v=2"></script>
+</body>
+</html>

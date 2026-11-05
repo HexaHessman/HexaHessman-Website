@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biomass &amp; Renewable Fuels · HexaHessman</title>
+<meta name="description" content="Sustainably sourced biomass from Southeast Asian plantations and processors, for energy, panel-board and carbon production.">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=2610k">
+<link rel="stylesheet" href="/assets/site.css?v=2611e">
+<style>
+.spec-stack { display: grid; gap: 34px; }
+.spec-title { margin-bottom: 12px; }
+.card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.card ul.list { margin-top: 6px; }
+.who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
+.cta-band { border: 1px solid var(--line); border-radius: 12px; padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; background: rgba(var(--ink-rgb),.03); }
+.cta-band h2 { max-width: 20ch; }
+.related { display: grid; gap: 18px; }
+/* 3D mount points (#hero-3d on two group pages, #globe on contact) are empty until the scenes are mounted:
+   hide them and keep the plain hero's full top padding so the breadcrumb clears the header bar. */
+.hero-3d:empty, .globe:empty { display: none; }
+.hero-3d:empty + .hero.plain, .globe:empty + .hero.plain { padding-top: 170px; }
+.hero .wrap .coverage { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
+@media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section class="hero plain"><div class="wrap">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span><a href="/commodities/">Commodities Supply</a></span><span>Biomass &amp; Renewable Fuels</span></nav>
+  <p class="eyebrow">Commodities Supply</p>
+  <h1>Biomass &amp; Renewable Fuels</h1>
+  <p class="lead">Sustainably sourced biomass from Southeast Asian plantations and processors, for energy, panel-board and carbon production.</p>
+</div></section>
+<section class="section" id="who"><div class="wrap"><div class="section-head"><p class="eyebrow">Who it’s for</p></div><p class="who">Supplying biomass power and industrial furnace operators, MDF and pulp mills, and activated carbon producers.</p></div></section>
+
+<section class="section" id="products"><div class="wrap"><div class="section-head"><h2>Products</h2></div><div class="grid c3"><a class="card" href="/commodities/biomass/wood-chips/"><h3>Wood Chips</h3><p>Eucalyptus, pine and acacia, fuel and fibre grades</p><span class="more">View product →</span></a><a class="card" href="/commodities/biomass/coconut-shell-charcoal/"><h3>Coconut Shell Charcoal</h3><p>Fixed carbon 75% min., activated-carbon feedstock</p><span class="more">View product →</span></a></div></div></section>
+
+<section class="section" id="cta"><div class="wrap"><div class="cta-band"><p class="lead">Send your specification, quantity and destination and our team will respond with availability and pricing.</p><div class="btn-row"><a class="pill solid" href="/contact/#quote">Request a quote</a><a class="pill" href="/contact/#datasheet">Request datasheet / SDS</a></div></div></div></section>
+
+</main>
+<div id="site-footer"></div>
+<script src="/assets/site-header.js?v=2610k" defer></script>
+<script src="/assets/site-footer.js" defer></script>
+</body>
+</html>
