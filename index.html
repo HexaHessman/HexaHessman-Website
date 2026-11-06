@@ -116,8 +116,8 @@
 <div class="stage" id="stage">
   <div class="film" id="film">
     <!-- the branch clips load only once the doors are up (settle() calls load()), so they do not hold up the preloader. 1. intro: glides in to the bow; 2. its exact last frame is held behind the doors; 3. the chosen branch starts on that frame -->
-    <img id="still" src="/assets/entrance/intro-v5-poster.jpg" alt="" class="live" />
-    <video id="intro" muted playsinline preload="auto" poster="/assets/entrance/intro-v5-poster.jpg"></video>
+    <img id="still" src="/assets/entrance/intro-v6-poster.jpg" alt="" class="live" />
+    <video id="intro" muted playsinline preload="auto" poster="/assets/entrance/intro-v6-poster.jpg"></video>
     <img id="hold" src="/assets/entrance/choice-v3.jpg" alt="" />
     <video id="vc" muted playsinline preload="none"></video>
     <video id="ve" muted playsinline preload="none"></video>
@@ -162,7 +162,7 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // smaller files on phones and narrow screens
   const small = Math.min(screen.width, screen.height) < 820 || (navigator.connection && /2g|3g/.test(navigator.connection.effectiveType || ''));
-  const src = (n) => '/assets/entrance/' + n + '-v5' + (small ? '-m' : '') + '.mp4';   // v5 (2026-11-07): dusk hero, 2 s fly-in intro, particle bursts; all three meet the hero frame exactly
+  const src = (n) => '/assets/entrance/' + n + '-v6' + (small ? '-m' : '') + '.mp4';   // v6 (2026-11-07): graded to the hero's colours; dusk hero, 2 s fly-in intro, particle bursts; all three meet the hero frame exactly
   intro.src = src('intro'); vc.src = src('commodities'); ve.src = src('engineering');
   const layers = [still, intro, hold, vc, ve];
   let want = still;   // the layer that should be on screen; late callbacks for an older layer are ignored
