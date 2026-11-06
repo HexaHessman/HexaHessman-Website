@@ -50,34 +50,56 @@ function loadDrawn(url, { height, onReady }) {
   return g;   // origin at the bottom centre of the model once loaded
 }
 
-// ---------- ISO tank container ----------
+const REC = new URLSearchParams(location.search).has('rec'), REC_S = 8;   // recording mode for the window videos
+const recPhase = t => (t % REC_S) / REC_S;
+
+// ---------- ISO tank containers: three, stood up on a steep slant (top end to the upper left), each rolling about its own
+// long axis as you scroll while the line slides past (user's drawing, 2026-11-05: slant them up, bigger, roll like the arrows)
 export function buildIso() {
   const world = new THREE.Group(); world.visible = false;
-  const H = 2.5;
-  const tank = loadDrawn('/assets/models/iso.d.glb', { height: H }); world.add(tank);
-  const rig = { pos: V(0.5, 1.6, 13.0), look: V(0, -0.2, 0), roll: -0.04, fov: 34 };
+  const H = 2.5;   // model height; the tank's long axis is its local X (about 6 units long at this height)
+  const tanks = [0, 1, 2].map(() => {
+    const pivot = new THREE.Group(), roll = new THREE.Group(), tank = loadDrawn('/assets/models/iso.d.glb', { height: H });
+    tank.position.y = -H / 2;   // centre the tank on its long axis so it rolls in place
+    roll.add(tank); pivot.add(roll); world.add(pivot);
+    return { pivot, roll };
+  });
+  const rig = { pos: V(0.4, 1.4, 15.5), look: V(0, -0.1, 0), roll: -0.03, fov: 34 };
+  let sm = 0;   // eased scroll position, so the motion glides
   return { world, rig, update(lp, t) {
-    // rolls in from the right, turning slowly to show its length, then settles three-quarters on
-    const e = 1 - Math.pow(1 - Math.min(1, lp * 1.3), 3);
-    const narrow = innerWidth < innerHeight, sc = narrow ? 0.9 : 1.35;
-    tank.scale.setScalar(sc);
-    tank.position.set(THREE.MathUtils.lerp(10, narrow ? 0.3 : -0.2, e), -3.4 + Math.sin(t * 0.5) * 0.02, THREE.MathUtils.lerp(-4, narrow ? -0.5 : 2.6, e));
-    tank.rotation.set(0, THREE.MathUtils.lerp(-0.9, -0.42, e) + Math.sin(t * 0.18) * 0.03, 0);
+    sm += (lp - sm) * 0.12;
+    const ph = REC ? recPhase(t) : 0;
+    const narrow = innerWidth < innerHeight, sc = narrow ? 0.62 : 1.0, gap = narrow ? 3.4 : 5.6;
+    const run = REC ? 0 : THREE.MathUtils.lerp(gap * 1.1, -gap * 1.1, sm);   // the line drifts right → left across the chapter
+    tanks.forEach(({ pivot, roll }, i) => {
+      const x = run + (i - 1) * gap;
+      pivot.scale.setScalar(sc);
+      const bob = REC ? Math.sin(ph * Math.PI * 2 + i) * 0.04 : Math.sin(t * 0.5 + i) * 0.04;
+      pivot.position.set(x, -0.1 + bob, -Math.abs(x) * 0.15);   // clear of the floor fade
+      pivot.rotation.set(0, -0.28, -1.08);   // long axis tipped ~62° up: top end to the upper left
+      roll.rotation.x = (REC ? ph * Math.PI * 2 : sm * Math.PI * 2.5) + i * 0.7;   // rolls about its own length
+    });
   } };
 }
 
-// ---------- IBC totes: three of them slide in and park ----------
+// ---------- IBC totes: three of them slide in, park, and each turns a full 360° as the chapter scrolls ----------
+// (user, 2026-11-05: bigger, and spin smoothly with the scroll)
 export function buildIbc() {
   const world = new THREE.Group(); world.visible = false;
   const totes = [0, 1, 2].map(() => loadDrawn('/assets/models/ibc.d.glb', { height: 2.0 }));
   for (const t of totes) world.add(t);
   const rig = { pos: V(0.6, 1.9, 12.5), look: V(0.6, -0.9, 0), roll: -0.06, fov: 34 };
+  let sm = 0;   // the scroll position, eased so the turn glides instead of stepping with each wheel tick
   return { world, rig, update(lp, t) {
-    const e = 1 - Math.pow(1 - Math.min(1, lp * 1.25), 3);
-    const narrow = innerWidth < innerHeight;
+    sm += (lp - sm) * 0.12;
+    const ph = REC ? recPhase(t) : 0;
+    const e = REC ? 1 : 1 - Math.pow(1 - Math.min(1, sm * 1.25), 3);
+    const narrow = innerWidth < innerHeight, sc = narrow ? 1.15 : 1.5;
     totes.forEach((g, i) => {
-      const x = THREE.MathUtils.lerp(-9, narrow ? 0.2 : -1.8, e) + i * (narrow ? 2.0 : 2.9), z = (narrow ? -1.6 : 0.6) - i * 2.2;
-      g.position.set(x, -3.4 + Math.sin(t * 0.6 + i) * 0.01, z); g.rotation.y = -0.35 + i * 0.05 + Math.sin(t * 0.15 + i) * 0.02;
+      g.scale.setScalar(sc);
+      const x = THREE.MathUtils.lerp(-10, narrow ? -0.4 : -3.2, e) + i * (narrow ? 2.6 : 4.1), z = (narrow ? -1.6 : 0.4) - i * 2.6;
+      g.position.set(x, -3.4 + (REC ? Math.sin(ph * Math.PI * 2 + i) : Math.sin(t * 0.6 + i)) * 0.01, z);
+      g.rotation.y = -0.35 + (REC ? ph : sm) * Math.PI * 2 + i * 0.25;   // one full turn
     });
   } };
 }

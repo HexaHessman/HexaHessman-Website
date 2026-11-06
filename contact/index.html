@@ -8,36 +8,162 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=2610k">
-<link rel="stylesheet" href="/assets/site.css?v=2611e">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=2611d">
+<link rel="stylesheet" href="/assets/site.css?v=2612q">
 <style>
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
+.trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
+.trio-col h3 { font-size: clamp(19px, 1.5vw, 22px); font-weight: 400; letter-spacing: -.015em; }
+.trio-col > p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.55; }
+.trio-col .list { margin: 0; }
+.trio-col .list li { font-size: 15.5px; }
+.trio-sub { margin-top: 6px; font-size: 14px; font-weight: 500; color: var(--muted); }
+.col-pic { margin: 10px 0 0; }
+.col-pic img { display: block; width: 100%; height: auto; }
+.col-pic.photo img { aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; }
+.col-pic.cut img { aspect-ratio: 4 / 3; object-fit: contain; }   /* the profile's cut-outs sit free on the page */
+@media (max-width: 900px) { .trio { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .trio { grid-template-columns: 1fr; } }
 .spec-stack { display: grid; gap: 34px; }
-.spec-title { margin-bottom: 12px; }
+.spec-title { margin-bottom: 14px; text-align: center; }
+.centered-head .wrap > p { width: min(880px, 100%); margin: 0 auto 24px; color: var(--ink-soft); }   /* a note above a chart lines up with it */
 .card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
 .card ul.list { margin-top: 6px; }
 .who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
-.cta-band { border: 1px solid var(--line); border-radius: 12px; padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; background: rgba(var(--ink-rgb),.03); }
-.cta-band h2 { max-width: 20ch; }
+.cta-band { display: grid; gap: 22px; padding: clamp(24px, 6vh, 72px) 0 clamp(16px, 3vh, 32px); justify-items: center; text-align: center; }   /* no box: the user wants no cards anywhere */
+.cta-band h2 { max-width: 18ch; font-size: clamp(28px, 3.2vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
+.cta-band .lead { max-width: 46ch; }
+.cta-band .btn-row { justify-content: center; margin-top: 10px; }
 .related { display: grid; gap: 18px; }
 /* 3D mount points (#hero-3d on two group pages, #globe on contact) are empty until the scenes are mounted:
    hide them and keep the plain hero's full top padding so the breadcrumb clears the header bar. */
 .hero-3d:empty, .globe:empty { display: none; }
 .hero-3d:empty + .hero.plain, .globe:empty + .hero.plain { padding-top: 170px; }
-.hero .wrap .coverage { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.hero .wrap .coverage { font-size: clamp(15px, 1.15vw, 17px); color: var(--muted); margin-top: 6px; }
+/* catalogue-style line drawings, translucent behind the words (Shibata page) */
+.has-draw { position: relative; overflow: hidden; }
+.has-draw > .wrap { position: relative; z-index: 1; }
+.bg-draw { position: absolute; z-index: 0; right: -3%; top: 50%; width: min(1180px, 92vw); height: auto; transform: translateY(-50%); opacity: .1; pointer-events: none; user-select: none; }   /* lighter so the words read clearly (user, 2026-11-06) */
+.hero.has-draw .bg-draw { top: auto; bottom: 4%; transform: none; opacity: .09; }
+@media (max-width: 720px) { .bg-draw { right: -20%; width: 150vw; opacity: .08; } }
+.pr-hero { min-height: 86vh; }
+.pr-hero .media img { filter: none; }
+.pr-hero .media::after { background: linear-gradient(180deg, rgba(0,0,0,.05) 30%, rgba(0,0,0,.62)); }
+.contact-hero .media::after { background: linear-gradient(90deg, rgba(10,22,16,.78), rgba(10,22,16,.35) 55%, rgba(10,22,16,.1)), linear-gradient(180deg, transparent 50%, rgba(0,0,0,.5)); }
+.pr-hero .wrap, .pr-hero .crumbs, .pr-hero .crumbs a, .pr-hero .eyebrow { color: #fff; }
+.pr-hero .crumbs, .pr-hero .eyebrow { opacity: .85; }
+.pr-hero h1 { color: #fff; font-size: clamp(34px, 4.2vw, 60px); }
+.pr-hero .lead { color: rgba(255,255,255,.9); max-width: 58ch; }
+.pr-hero .pr-cov { font-size: 15px; color: rgba(255,255,255,.72); }
+.pr-photo .media::after { background: linear-gradient(180deg, rgba(15,42,30,.5) 0%, rgba(15,42,30,.58) 45%, rgba(15,42,30,.86) 100%); }   /* a dark HexaHessman-green veil so the words read on any photo */
+.pr-logo { position: absolute; z-index: 2; right: var(--gutter); top: clamp(150px, 20vh, 200px); width: auto; height: 54px; max-width: 34vw; object-fit: contain; filter: brightness(0) invert(1); opacity: .92; }   /* in white, so every part reads on the photo */
+.pr-logo.mq-shibata { height: 46px; } .pr-logo.mq-manntek { height: 70px; } .pr-logo.mq-straatman { height: 58px; } .pr-logo.mq-raythink { height: 60px; }
+@media (max-width: 720px) { .pr-logo { top: 104px; height: 34px; } .pr-logo.mq-manntek { height: 44px; } }
+.product-hero { min-height: 74vh; }
+.product-hero .media::after { background: linear-gradient(90deg, rgba(10,22,16,.82), rgba(10,22,16,.45) 55%, rgba(10,22,16,.15)), linear-gradient(180deg, transparent 45%, rgba(10,22,16,.55)); }
+.product-hero .lead + .lead { margin-top: -6px; }
+.pr-intro { display: grid; justify-items: center; text-align: center; gap: 22px; }
+.pr-intro .lead { max-width: 58ch; color: var(--ink); }
+.pr-intro .coverage { font-size: 15px; color: var(--muted); }
+.centered-head .section-head { margin-left: auto; margin-right: auto; text-align: center; justify-items: center; }
+.pr-logo { display: block; width: min(340px, 64vw); height: auto; margin: 0 auto 6px; }
+.hero.has-logo .wrap { text-align: center; justify-items: center; margin-left: auto; margin-right: auto; }
+.hero.has-logo .crumbs { justify-content: center; }
+.hero.has-logo .lead, .hero.has-logo .coverage { margin-left: auto; margin-right: auto; }
+/* solutions by fuel: four photo tiles in one line; they rise (1st, 3rd) and drop (2nd, 4th) into place when the row scrolls in; a tile opens its drop-down */
+.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 1.6vw, 22px); }
+.fuel-tile { position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
+  opacity: 0; transform: translateY(70px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * .12s); }
+.fuel-tile:nth-child(even) { transform: translateY(-70px); }
+.fuel-row.in .fuel-tile { opacity: 1; transform: none; }
+.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.fuel-tile:hover img { transform: scale(1.05); }
+.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.45); transition: background .3s; }
+.fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
+.fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
+.fuel-tile[aria-expanded="true"] .fuel-more { background: #fff; color: #0F2A1E; }
+.spin-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.2,.7,.2,1); }
+.spin-panel.open { grid-template-rows: 1fr; }
+.spin-panel-in { overflow: hidden; }
+.spin-panel-in > div { display: grid; gap: 18px; max-width: 62ch; margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--line); }
+.spin-panel-in p { font-size: clamp(17px, 1.35vw, 20px); color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .fuel-tile { opacity: 1; transform: none; transition: none; } }
+@media (max-width: 720px) { .fuel-tiles { grid-template-columns: 1fr 1fr; } .fuel-label { font-size: 18px; } }
+/* the labelled system diagram: labels pop out one by one (dot, then the leader line draws, then the tag) */
+.dg-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.dg { position: relative; margin: 0; min-width: 860px; border-radius: 14px; overflow: hidden; }
+.dg img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.dg svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dg line { stroke: #fff; stroke-width: 2.2; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.dg circle { fill: #fff; stroke: #0F2A1E; stroke-width: 3; transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.dg-tag { position: absolute; transform: translate(-50%, -50%) scale(.85); opacity: 0; padding: 7px 13px; border-radius: 980px; white-space: nowrap;
+  background: rgba(255,255,255,.88); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: #0F2A1E; font-size: clamp(11px, 1.05vw, 15px); font-weight: 500; letter-spacing: -.01em; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+.dg.in circle { transform: scale(1); transition: transform .5s cubic-bezier(.3,1.6,.5,1) calc(var(--i) * .35s); }
+.dg.in line { stroke-dashoffset: 0; transition: stroke-dashoffset .6s ease calc(var(--i) * .35s + .15s); }
+.dg.in .dg-tag { opacity: 1; transform: translate(-50%, -50%) scale(1); transition: opacity .5s ease calc(var(--i) * .35s + .45s), transform .6s cubic-bezier(.3,1.5,.5,1) calc(var(--i) * .35s + .45s); }
+@media (prefers-reduced-motion: reduce) { .dg circle, .dg-tag { transform: translate(0,0); } .dg circle { transform: none; } .dg line { stroke-dashoffset: 0; } .dg-tag { opacity: 1; transform: translate(-50%, -50%); } }
+/* photos on the principal pages (Shibata): plain photos, the orange-panel layers, the floating clips */
+.zig-photo img, .zig-photo video, .zig-layers { border-radius: 4px; }
+.zig-photo video { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; mix-blend-mode: normal; }
+.zig-layers { position: relative; overflow: hidden; }
+.zig-layers .pl-base { display: block; width: 100%; height: auto; max-height: none; margin: 0; }
+.zig-layers .pl { position: absolute; display: block; max-height: none; margin: 0; clip-path: inset(100% 0 0 0); }
+.zig-layers.in .pl { clip-path: inset(0 0 0 0); transition: clip-path .9s cubic-bezier(.2,.7,.2,1) calc(.3s + var(--i) * .45s); }
+@media (prefers-reduced-motion: reduce) { .zig-layers .pl { clip-path: none; } }
+.zig-sub { margin: 26px 0 8px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+.zig-text > p + p { margin-top: 14px; }
+/* a product with its picture: picture one side, text the other, alternating down the page (as on the principal's own site) */
+.zig { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 80px); align-items: center; }
+.zig.right .zig-media { order: 2; }
+.zig-media { margin: 0; }
+.zig-text.has-drawing { position: relative; isolation: isolate; }
+.zig-drawing { position: absolute; z-index: -1; left: 50%; top: 50%; width: 130%; max-width: none; height: auto; transform: translate(-50%, -50%); opacity: .1; pointer-events: none; user-select: none; }
+@media (max-width: 720px) { .zig-drawing { width: 110%; opacity: .08; } }
+.zig-media video, .zig-media img { display: block; width: 100%; height: auto; }
+.zig-media[data-spin] { position: relative; aspect-ratio: 1; }
+.zig-media canvas, .zig-media .spin-still { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: multiply; }   /* the frames' off-white studio ground melts into the page */
+.zig-media.ready .spin-still { display: none; }
+.zig-media img { width: auto; max-width: 100%; max-height: 72vh; margin: 0 auto; }
+.zig-text h2 { margin-bottom: 20px; }
+.zig-text .spec-stack { margin-top: 18px; }
+@media (max-width: 720px) { .zig { grid-template-columns: 1fr; gap: 24px; } .zig.right .zig-media { order: 0; } .zig-media img { max-height: 60vh; } }
+.pr-media { margin: clamp(8px, 2vw, 24px) auto 0; }
+.pr-media video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 12px; background: #fff; object-fit: cover; }
+.yt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 2.4vw, 32px); }
+@media (max-width: 720px) { .yt-grid { grid-template-columns: 1fr; } }
+.yt-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: rgba(var(--ink-rgb),.06); }
+.yt-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt figcaption { margin-top: 10px; font-size: 15px; color: var(--muted); }
 .steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
 .steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
 @media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
 
-.form { display: grid; gap: 18px; max-width: 720px; }
-.form .two { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
-.form label { display: grid; gap: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.form input, .form select, .form textarea { width: 100%; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--line-strong); background: rgba(255,255,255,.03); color: var(--ink); font: inherit; font-size: 15px; letter-spacing: 0; text-transform: none; }
-.form input:focus, .form select:focus, .form textarea:focus { outline: 1px solid var(--ink-soft); outline-offset: 1px; }
+/* the enquiry form beside its box: labels above, quiet filled fields, one clear button (user: "like a normal contact us form") */
+.contact-grid { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
+.contact-aside { position: sticky; top: 110px; display: grid; gap: 22px; padding: clamp(24px, 2.6vw, 34px); border: 1px solid var(--line-strong); border-radius: 16px; background: rgba(var(--ink-rgb), .035); }
+.contact-aside .ca-item { display: grid; gap: 6px; padding-top: 18px; border-top: 1px solid var(--line); }
+.contact-aside h3 { font-size: 18px; font-weight: 500; }
+.contact-aside p { font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+.contact-aside .ca-mail { display: grid; gap: 14px; padding-top: 20px; border-top: 1px solid var(--line); }
+.contact-aside .ca-mail .pill { justify-self: start; font-size: 14.5px; }
+.contact-aside .ca-wa { justify-self: start; margin-top: 8px; font-size: 14.5px; }
+.form { display: grid; gap: 20px; }
+.form .two { display: grid; gap: 20px; grid-template-columns: 1fr 1fr; }
+.form label { display: grid; gap: 8px; font-family: var(--sans); font-size: 14px; font-weight: 500; letter-spacing: -.005em; text-transform: none; color: var(--ink); }
+.form input, .form select, .form textarea { width: 100%; height: 50px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line-strong); background: rgba(var(--ink-rgb), .05); color: var(--ink); font: 400 16px/1.4 var(--sans); transition: border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
+.form select { background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 22px) 22px, calc(100% - 17px) 22px; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 40px; }
+.form input::placeholder, .form textarea::placeholder { color: var(--muted); }
+.form input:focus, .form select:focus, .form textarea:focus { outline: none; border-color: var(--ink); background: rgba(var(--ink-rgb), .08); }
 .form select option { color: #111; }
-.form textarea { min-height: 160px; resize: vertical; }
-.form input[type=file] { padding: 10px 12px; }
-.form .help { font-size: 13px; color: var(--muted); text-transform: none; letter-spacing: 0; font-family: var(--sans); }
+.form textarea { height: auto; min-height: 170px; padding: 14px 16px; resize: vertical; }
+.form input[type=file] { height: auto; padding: 12px 14px; }
+.form .help { font-size: 13px; font-weight: 400; color: var(--muted); text-transform: none; letter-spacing: 0; font-family: var(--sans); }
+.form .btn-row .pill { min-width: 200px; }
+.form .help-row { margin-top: -10px; }
+.form .two { align-items: end; }
+@media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } .contact-aside { position: static; order: 2; } .form .two { grid-template-columns: 1fr; } }
 .form .help.error { color: #f0b49a; }
 .form input.invalid { border-color: #f0b49a; }
 .contact-card h3 { margin-bottom: 6px; }
@@ -45,7 +171,7 @@
 .contact-person .avatar.photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: none; background: #fff; border: 1px solid var(--line); }
 .contact-card .role { color: var(--muted); font-size: 14px; }
 .contact-card a { display: inline-block; margin-top: 12px; text-decoration: none; font-family: var(--mono); font-size: 13px; }
-.office .country { font-family: var(--mono); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
+.office .country { font-family: var(--sans); font-size: 14px; letter-spacing: -.01em; text-transform: none; color: var(--muted); margin-bottom: 10px; display: block; }
 .hours .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); }
 .hours .row:last-child { border-bottom: 1px solid var(--line); }
 </style>
@@ -54,16 +180,13 @@
 <body>
 <div id="site-header"></div>
 <main>
-<section id="globe" class="globe"></section>
-<section class="hero plain"><div class="wrap">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>Contact</span></nav>
-  <p class="eyebrow">Contact</p>
-  <h1>Navigating with Excellence</h1>
-  <p class="lead">We are pleased to offer our full assistance and address any queries you may have.</p>
-</div></section>
-<section class="section" id="response"><div class="wrap"><div class="section-head"><h2>Response commitments</h2></div><div class="grid c2"><div class="card"><h3>Commodities Supply</h3><p>Our supply team is accessible 24/7 — real-time market responsiveness and support across all time zones.</p></div><div class="card"><h3>Engineering Solutions</h3><p>A face-to-face response within 48 hours for all servicing and maintenance enquiries.</p></div></div><div style="height:24px"></div><div class="btn-row"><a class="pill solid" href="https://wa.me/6580619119" target="_blank" rel="noopener">Message us on WhatsApp (+65 8061 9119)</a></div></div></section>
-
-<section class="section" id="quote"><div class="wrap"><div class="section-head"><h2>Drop us a line</h2></div>
+<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg" alt="The HexaHessman office" fetchpriority="high"></div>
+<div class="wrap"><p class="eyebrow">Contact</p><h1>Navigating with Excellence</h1><p class="lead">We are pleased to offer our full assistance and address any queries you may have.</p></div></section>
+<section id="globe" class="globe" data-people="[{&quot;name&quot;: &quot;Adam Yeoh&quot;, &quot;role&quot;: &quot;Business Development Manager&quot;, &quot;slug&quot;: &quot;adam-yeoh&quot;, &quot;office&quot;: &quot;sg&quot;}, {&quot;name&quot;: &quot;Parin Udornwong&quot;, &quot;role&quot;: &quot;Supply Chain Manager&quot;, &quot;slug&quot;: &quot;parin-udornwong&quot;, &quot;office&quot;: &quot;th&quot;}, {&quot;name&quot;: &quot;Ensari Inci&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;slug&quot;: &quot;ensari-inci&quot;, &quot;office&quot;: &quot;tr&quot;}, {&quot;name&quot;: &quot;Dr. Sang Joon Park&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;slug&quot;: &quot;sang-joon-park&quot;, &quot;office&quot;: &quot;kr&quot;}, {&quot;name&quot;: &quot;Raja Sekhar&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;slug&quot;: &quot;raja-sekhar&quot;, &quot;office&quot;: &quot;in&quot;}, {&quot;name&quot;: &quot;Thanin Amin&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;thanin-amin&quot;, &quot;office&quot;: &quot;th&quot;}, {&quot;name&quot;: &quot;Cemal Koc&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;cemal-koc&quot;, &quot;office&quot;: &quot;tr&quot;}, {&quot;name&quot;: &quot;Yos Rizaldy&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;yos-rizaldy&quot;, &quot;office&quot;: &quot;id&quot;}, {&quot;name&quot;: &quot;Krishna Hartono&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;krishna-hartono&quot;, &quot;office&quot;: &quot;id&quot;}, {&quot;name&quot;: &quot;Larbi Neron&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;larbi-neron&quot;, &quot;office&quot;: &quot;uk&quot;}, {&quot;name&quot;: &quot;Eddie Jeong&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;eddie-jeong&quot;, &quot;office&quot;: &quot;kr&quot;}, {&quot;name&quot;: &quot;Yani Lee&quot;, &quot;role&quot;: &quot;President Director&quot;, &quot;slug&quot;: &quot;yani-lee&quot;, &quot;office&quot;: &quot;id&quot;}, {&quot;name&quot;: &quot;Ibrahim Koc&quot;, &quot;role&quot;: &quot;Principal Advisor&quot;, &quot;slug&quot;: &quot;ibrahim-koc&quot;, &quot;office&quot;: &quot;tr&quot;}, {&quot;name&quot;: &quot;Anuar Ebrahim&quot;, &quot;role&quot;: &quot;Director of Trading&quot;, &quot;slug&quot;: &quot;anuar-ebrahim&quot;, &quot;office&quot;: &quot;my&quot;}]"></section>
+<section class="section" id="quote"><div class="wrap"><div class="section-head"><h2>Drop us a line</h2></div><div class="contact-grid"><aside class="contact-aside" id="response">
+  <p class="eyebrow">Response commitments</p><div class="ca-item"><h3>Commodities Supply</h3><p>Our supply team is accessible 24/7 — real-time market responsiveness and support across all time zones.</p><a class="pill ca-wa" href="https://wa.me/6580619119?text=Hi%2C%20I%27d%20like%20to%20ask%20about%20commodities%20supply." target="_blank" rel="noopener">WhatsApp us</a></div><div class="ca-item"><h3>Engineering Solutions</h3><p>A face-to-face response within 48 hours for all servicing and maintenance enquiries.</p></div>
+  <div class="ca-mail"><p>Prefer email? Write to us any time.</p><a class="pill solid" href="mailto:inquiry@hexahessman.com">inquiry@hexahessman.com</a></div>
+</aside><div class="contact-form">
 <span id="datasheet"></span><span id="sample"></span><span id="service"></span>
 <form class="form" action="#" method="post" enctype="multipart/form-data" novalidate>
   <div class="two">
@@ -71,9 +194,10 @@
     <label>Company *<input type="text" name="company" required autocomplete="organization"></label>
   </div>
   <div class="two">
-    <label>Company email *<input type="email" name="email" id="email" required autocomplete="email" placeholder="name@yourcompany.com" aria-describedby="email-help"><span class="help" id="email-help">Please use your company email. Personal addresses (Gmail, Yahoo, Outlook, etc.) are not accepted.</span></label>
-    <label>Phone / WhatsApp<input type="text" name="phone" autocomplete="tel"></label>
+    <label>Company email *<input type="email" name="email" id="email" required autocomplete="email" placeholder="name@yourcompany.com" aria-describedby="email-help"></label>
+    <label>Phone<input type="text" name="phone" autocomplete="tel"></label>
   </div>
+  <span class="help help-row" id="email-help">Please use your company email. Personal addresses (Gmail, Yahoo, Outlook, etc.) are not accepted.</span>
   <label>Country<select name="country"><option value="">Select…</option><option>Singapore</option><option>Malaysia</option><option>Thailand</option><option>Indonesia</option><option>Vietnam</option><option>India</option><option>South Korea</option><option>Türkiye</option><option>United Kingdom</option><option>United States</option><option>Other</option></select></label>
   <label>I’m enquiring about *<select id="enquiring" name="enquiring" required><option>Commodities Supply</option><option>Engineering Solutions</option><option>Engineering Components</option><option>Other</option></select></label>
   <label>Product group / product or principal<select name="product">
@@ -85,13 +209,7 @@
   <label>Message *<textarea id="message" name="message" required></textarea></label>
   <label>Attachment<input type="file" name="attachment"><span class="help">Specification / tender document (optional).</span></label>
   <div class="btn-row"><button class="pill solid" type="submit">Send enquiry</button></div>
-</form></div></section>
-
-<section class="section" id="direct"><div class="wrap"><div class="section-head"><h2>Direct contacts</h2></div><div class="grid c3"><div class="card contact-card"><p class="eyebrow">All enquiries</p><a href="mailto:inquiry@hexahessman.com">inquiry@hexahessman.com</a></div><div class="card contact-card"><p class="eyebrow">Commodities Supply</p><div class="contact-person"><img class="avatar photo" src="/assets/team/adam-yeoh.jpg" alt="Adam Yeoh" loading="lazy" width="360" height="360"><div><h3>Adam Yeoh</h3><p class="role">Head of Commodity Supply, HexaHessman Singapore</p></div></div><a href="mailto:Adam.Yeoh@HexaHessman.com">Adam.Yeoh@HexaHessman.com</a></div><div class="card contact-card"><p class="eyebrow">Engineering Solutions</p><div class="contact-person"><img class="avatar photo" src="/assets/team/aizat-amin.jpg" alt="Aizat Amin" loading="lazy" width="360" height="360"><div><h3>Aizat Amin</h3><p class="role">Head of Engineering Solutions, HexaHessman Singapore</p></div></div><a href="mailto:Aizat.Amin@HexaHessman.com">Aizat.Amin@HexaHessman.com</a></div><div class="card contact-card"><p class="eyebrow">Engineering Solutions · Indonesia</p><div class="contact-person"><img class="avatar photo" src="/assets/team/krishna-hartono.jpg" alt="Krishna Hartono" loading="lazy" width="360" height="360"><div><h3>Krishna Hartono</h3><p class="role">Regional Business Director, PT HexaHessman Indonesia</p></div></div><a href="mailto:Krishna.Hartono@HexaHessman.com">Krishna.Hartono@HexaHessman.com</a></div></div></div></section>
-
-<section class="section" id="offices"><div class="wrap"><div class="section-head"><h2>All offices</h2></div><div class="grid c3"><div class="card office" data-country="Singapore"><span class="country">Singapore</span><h3>Headquarters</h3><p>39 Arab Street, Singapore 199738 · Warehouse: 10 Buroh Street, West Connect Building, Singapore 627564</p></div><div class="card office" data-country="Indonesia"><span class="country">Indonesia</span><h3>PT. HexaHessman Indonesia</h3><p>The CEO Building Level 12, Jl. TB Simatupang No. 18 C, Jakarta Selatan 12430</p></div><div class="card office" data-country="South Korea"><span class="country">South Korea</span><h3>HexaHessman Korea</h3><p>#619, 87 Ogeum-ro, Songpa-gu, Seoul 05542</p></div><div class="card office" data-country="Malaysia"><span class="country">Malaysia</span><h3>HexaHessman Sdn Bhd</h3><p>Unit 9-6, Binjai 8 Premium Soho, 2 Lorong Binjai, 50450 Kuala Lumpur</p></div><div class="card office" data-country="Thailand"><span class="country">Thailand</span><h3>HexaHessman Thailand</h3><p>118/3 Moo 7, Tambon Bang Sao Thong, Amphoe Bang Sao Thong, Samut Prakan 10570</p></div><div class="card office" data-country="India"><span class="country">India</span><h3>HexaHessman India</h3><p>129/1, Lal Bagh Main Road, Bengaluru 560027</p></div><div class="card office" data-country="United Kingdom"><span class="country">United Kingdom</span><h3>HexaHessman UK</h3><p>128 City Road, London EC1V 2NX</p></div><div class="card office" data-country="Türkiye"><span class="country">Türkiye</span><h3>HexaHessman Turkey</h3><p>Gökçe Apartmanı No: 22/12, Mustafa Kemal Mahallesi, 2124. Cadde, Çankaya, Ankara 06530</p></div><div class="card office" data-country="United States"><span class="country">United States</span><h3>HexaHessman US</h3><p>730 N Milwaukee Ave, Chicago, IL 60642</p></div></div></div></section>
-
-<section class="section" id="hours"><div class="wrap"><div class="section-head"><h2>Operating hours</h2></div><div class="hours"><div class="row"><div>Monday – Friday</div><div class="muted">09:00 – 17:00 (SGT)</div></div><div class="row"><div>Saturday – Sunday</div><div class="muted">Closed (supply desk 24/7)</div></div></div></div></section>
+</form></div></div></div></section>
 
 
 <script>
@@ -135,8 +253,10 @@
 </script>
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=2610k" defer></script>
+<script src="/assets/site-header.js?v=2612d" defer></script>
+<script src="/assets/deco-lines.js?v=1" defer></script>
+<script src="/assets/words.js?v=1" defer></script>
 <script src="/assets/site-footer.js" defer></script>
-<script type="module" src="/assets/globe.js?v=2"></script>
+<script type="module" src="/assets/globe.js?v=11"></script>
 </body>
 </html>

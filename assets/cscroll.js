@@ -16,8 +16,14 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const pad = n => String(n).padStart(2, '0');
   // windows that play a filmed loop instead of the 3D scene (the grab comes down, opens and pours, then again)
-  const VIDEOS = { 'fertilizer-phosphate': { d: '/assets/commodities/grab-loop.mp4', m: '/assets/commodities/grab-loop-m.mp4', poster: '/assets/commodities/grab-loop.jpg' } };
-  const vidTag = v => v ? `<video class="cs-vid" muted loop playsinline preload="none" poster="${v.poster}" data-src="${innerWidth <= 900 ? v.m : v.d}"></video>` : '';
+  const VIDEOS = {
+    'fertilizer-phosphate': { d: '/assets/commodities/grab-loop.mp4', m: '/assets/commodities/grab-loop-m.mp4', poster: '/assets/commodities/grab-loop.jpg' },
+    // recorded from the 3D scene itself (one full turn every 8 s), so they keep turning when the scroll stops (2026-11-06)
+    'industrial-chemicals': { d: '/assets/commodities/iso-loop.mp4', m: '/assets/commodities/iso-loop-m.mp4', poster: '/assets/commodities/iso-loop.jpg', pos: '50% 50%' },
+    'petroleum-oilfield': { d: '/assets/commodities/ibc-loop.mp4', m: '/assets/commodities/ibc-loop-m.mp4', poster: '/assets/commodities/ibc-loop.jpg', pos: '50% 50%' },
+    biomass: { d: '/assets/commodities/chips-loop.mp4', m: '/assets/commodities/chips-loop-m.mp4', poster: '/assets/commodities/chips-loop.jpg', pos: '30% 50%' },   // conveyor dropping wood chips onto a heap (2026-11-05)
+  };
+  const vidTag = v => v ? `<video class="cs-vid" muted loop playsinline preload="none" poster="${v.poster}" data-src="${innerWidth <= 900 ? v.m : v.d}"${v.pos ? ` style="object-position:${v.pos}"` : ''}></video>` : '';
 
   // "… Value Chain" goes on its own line under the rest of the name
   const catLines = name => { const m = /^(.*?)\s+(Value Chain)$/i.exec(name); return m ? m.slice(1).map(t => `<span class="mask"><span class="line">${esc(t)}</span></span>`).join('') : esc(name); };
@@ -34,7 +40,6 @@
           ${g.products.map((p, pi) => `
           <article class="cs-item" id="${p.slug}">
             <div class="cs-text">
-              <span class="cs-num">${pad(pi + 1)} / ${pad(g.products.length)}</span>
               <h3 class="cs-title" data-reveal="split"><a href="/commodities/${g.slug}/${p.slug}/">${esc(p.name)}</a></h3>
               <p class="cs-fill">${esc(p.lead || p.short)}</p>
               <a class="cs-view" data-reveal="fade" href="/commodities/${g.slug}/${p.slug}/">View product →</a>
@@ -46,8 +51,8 @@
 
   sec.innerHTML = `
     <div class="cs-wins" aria-hidden="true">
-      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=2611b" title="" tabindex="-1"></iframe>
-      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=2611b" title="" tabindex="-1"></iframe>
+      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=2612a" title="" tabindex="-1"></iframe>
+      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=2612a" title="" tabindex="-1"></iframe>
     </div>
     <div class="cs-flow">
       <div class="cs-intro">
@@ -111,7 +116,7 @@
   // ---- the window shape (after Terminal's): a notch stepping down along the top, an indent on the inner edge,
   // rounded corners; the outer edge runs off the screen. `inner` is the side facing the text. ----
   function shape(w, h, inner) {
-    const d = Math.max(18, Math.min(30, w * 0.04)), far = w + 120;
+    const d = Math.max(18, Math.min(30, w * 0.04)), far = innerWidth <= 900 ? w + 120 : w;   // desktop: the window closes inside the page; phone: it still bleeds off the edge
     let pts = [[0, 0], [w * 0.5, 0], [w * 0.5 + d, d], [far, d], [far, h], [0, h], [0, h * 0.82], [d, h * 0.82 - d], [d, h * 0.43 + d], [0, h * 0.43]];
     if (inner === 'right') pts = pts.map(([px, py]) => [w - px, py]);
     const n = pts.length, r = 16; let out = '';
@@ -141,8 +146,19 @@
     for (const g of groups) {
       const w = g.panel.offsetWidth, h = g.panel.offsetHeight, d = shape(w, h, innerOf(g));
       let svg = g.panel.querySelector('.cs-outline');
-      if (!svg) { svg = document.createElementNS(SVGNS, 'svg'); svg.setAttribute('class', 'cs-outline'); svg.appendChild(document.createElementNS(SVGNS, 'path')); g.panel.prepend(svg); }
+      if (!svg) {
+        svg = document.createElementNS(SVGNS, 'svg'); svg.setAttribute('class', 'cs-outline');
+        svg.appendChild(document.createElementNS(SVGNS, 'path'));
+        const run = document.createElementNS(SVGNS, 'path'); run.setAttribute('class', 'cs-run'); svg.appendChild(run);   // the light that travels round the line
+        g.panel.prepend(svg);
+      }
       svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.firstChild.setAttribute('d', d);
+      const run = svg.lastChild; run.setAttribute('d', d);
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {   // one short bright dash, 7% of the way round, circling in ~8 s
+        const L = run.getTotalLength(); run.style.strokeDasharray = `${(L * 0.07).toFixed(1)} ${L.toFixed(1)}`;
+        if (run._anim) run._anim.cancel();
+        run._anim = run.animate([{ strokeDashoffset: 0 }, { strokeDashoffset: -L * 1.07 }], { duration: Math.max(7000, L * 2.4), iterations: Infinity, easing: 'linear' });
+      }
       if (g.video) g.video.style.clipPath = `path('${d}')`;
     }
     sized = [null, null];
@@ -165,20 +181,26 @@
     }
     wins.forEach((f, c) => {
       const hit = best[c];
-      if (!hit) { if (f.style.visibility !== 'hidden') f.style.visibility = 'hidden'; return; }
+      const pause = v => { if (f._paused !== v && ready.has(f)) { f._paused = v; f.contentWindow.postMessage({ type: 'scene-pause', v }, '*'); } };
+      if (!hit) { if (f.style.visibility !== 'hidden') f.style.visibility = 'hidden'; pause(true); return; }
+      pause(false);
       const { g, b } = hit;
       if (sized[c] !== g) {   // size and shape it to this window
-        sized[c] = g; lastP[c] = -1;
+        sized[c] = g; lastP[c] = -1; f.dataset.jump = '1'; f.style.visibility = 'hidden';   // stays hidden until its own chapter is on
         f.style.width = b.width + 'px'; f.style.height = b.height + 'px';
         f.style.clipPath = `path('${shape(b.width, b.height, innerOf(g))}')`;
       }
       f.style.transform = `translate3d(${b.left.toFixed(1)}px, ${b.top.toFixed(1)}px, 0)`;
-      if (f.style.visibility !== 'visible') f.style.visibility = 'visible';
+      if (f.style.visibility !== 'visible' && !f.dataset.jump) f.style.visibility = 'visible';
       // this group's stretch of the scene, as its products scroll past (kept clear of the neighbouring chapters)
       const pr = g.pin.getBoundingClientRect();
       const local = Math.min(1, Math.max(0, (vh * 0.5 - pr.top) / Math.max(1, pr.height - vh * 0.5)));
       const p = g.from + (g.to - g.from) * (0.04 + 0.92 * local);
-      if (ready.has(f) && Math.abs(p - lastP[c]) > 0.0005) { lastP[c] = p; f.contentWindow.postMessage({ type: 'hero-progress', p, grabSide: 0.5 }, '*'); }
+      if (ready.has(f) && Math.abs(p - lastP[c]) > 0.0005) {
+        const jump = !!f.dataset.jump; lastP[c] = p;
+        f.contentWindow.postMessage({ type: 'hero-progress', p, grabSide: 0.5, jump }, '*');
+        if (jump) { delete f.dataset.jump; setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => { if (sized[c] === g) f.style.visibility = 'visible'; })), 60); }   // show it once the cut has rendered
+      }
     });
     // words: a paragraph lights up as it rises from the bottom of the screen to a little above the middle
     if (near && !reduce) for (const f of fills) {

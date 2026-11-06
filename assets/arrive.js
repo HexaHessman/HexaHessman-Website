@@ -12,8 +12,8 @@
   const start = () => {
     box.classList.add('on');
     if (reduce) { chs.forEach(c => c.classList.add('lit')); box.classList.add('listed'); return; }
-    setTimeout(() => chs.forEach((c, i) => setTimeout(() => c.classList.add('lit'), 22 * i)), 1300);
-    stagger(); setTimeout(() => box.classList.add('listed'), 1300 + 22 * chs.length + 150);
+    setTimeout(() => chs.forEach((c, i) => setTimeout(() => c.classList.add('lit'), 22 * i)), 250);   /* no logo to wait for now */
+    stagger(); setTimeout(() => box.classList.add('listed'), 250 + 22 * chs.length + 150);
   };
   if (document.readyState === 'complete') requestAnimationFrame(start); else addEventListener('load', () => requestAnimationFrame(start), { once: true });
 })();

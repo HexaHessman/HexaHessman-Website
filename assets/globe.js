@@ -19,18 +19,22 @@ const OFFICES = [
 ];
 
 const sec = document.getElementById('globe'); if (!sec) throw new Error('no #globe');
+// the people for each office come from the About team (data-people); Singapore is represented by Adam Yeoh alone
+let TEAM = []; try { TEAM = JSON.parse(sec.dataset.people || '[]'); } catch (e) {}
+if (TEAM.length) OFFICES.forEach(o => { o.leads = TEAM.filter(p => p.office === o.id).map(p => P(p.slug, p.name, p.role)); });
 const INK = 0xeee3c7, PAPER = 0x0F2A1E;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ---------- markup ----------
 sec.innerHTML = `
-  <div class="globe-stage"><canvas class="globe-canvas"></canvas><div class="globe-labels"></div></div>
+  <div class="globe-stage"><canvas class="globe-canvas"></canvas><div class="globe-labels"></div><div class="gp-line" aria-hidden="true"></div></div>
   <div class="globe-side">
     <div class="eyebrow">Global reach, local impact</div>
     <h2>Nine markets. One standard of delivery.</h2>
-    <div class="globe-list" role="tablist">${OFFICES.map((o, i) => `<button role="tab" data-i="${i}" aria-selected="${i === 0}"><span class="n">${String(i + 1).padStart(2, '0')}</span>${o.country}</button>`).join('')}</div>
+    <div class="globe-list" role="tablist">${OFFICES.map((o, i) => `<button role="tab" data-i="${i}" aria-selected="${i === 0}">${o.country}</button>`).join('')}</div>
     <div class="globe-card" aria-live="polite"></div>
   </div>`;
+const line = sec.querySelector('.gp-line');
 const canvas = sec.querySelector('.globe-canvas'), labelsEl = sec.querySelector('.globe-labels'), card = sec.querySelector('.globe-card'), tabs = [...sec.querySelectorAll('.globe-list button')];
 
 // ---------- scene ----------
@@ -94,9 +98,16 @@ function select(i, byUser) {
   const v = toVec(o.lat, o.lon, 1); targetQ.setFromUnitVectors(v, FACE);
   tabs.forEach((t, k) => t.setAttribute('aria-selected', String(k === i)));
   pins.forEach((p, k) => p.label.classList.toggle('active', k === i));
-  const people = (o.leads || []).map(l => `
-      <div class="lead"><img class="avatar photo" src="/assets/team/${l.slug}.jpg" alt="" loading="lazy" />
-        <div><div class="who">${l.name}</div><div class="muted">${l.role}</div><a href="mailto:${l.email}">${l.email}</a></div></div>`).join('');
+  // the office's people step out in front of the globe, as in the About lineup: the first in front, the rest either side
+  const L = o.leads || [], mid = (L.length - 1) / 2;
+  line.innerHTML = L.map((l, k) => { const d = Math.abs(k - mid), side = Math.sign(k - mid);
+    return `<figure class="gp-fig" style="--x:${(side * Math.min(d, 2) * 34).toFixed(0)}%;--s:${(1 - 0.16 * d).toFixed(2)};--z:${10 - Math.round(d)};--k:${k}">
+      <img src="/assets/team/cut/${l.slug}.webp?v=2" alt="" draggable="false"></figure>`; }).join('')
+    // the names sit in one row on a shared baseline, each centred under its person
+    + `<div class="gp-names">${L.map((l, k) => `<p class="gp-name" style="--k:${k}"><b>${l.name}</b><span>${l.role}</span></p>`).join('')}</div>`;   // one evenly spaced row
+  line.classList.remove('in'); void line.offsetWidth; line.classList.add('in');
+  const people = L.map(l => `
+      <div class="lead"><div><div class="who">${l.name}</div><div class="muted">${l.role}</div><a href="mailto:${l.email}">${l.email}</a></div></div>`).join('');
   card.innerHTML = `
     <div class="globe-card-head"><span class="eyebrow">${o.entity}</span><h3>${o.country}</h3></div>
     <p class="addr">${o.address}${o.extra ? `<br><span class="muted">${o.extra}</span>` : ''}</p>
@@ -110,7 +121,23 @@ let drag = null;
 canvas.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY, q: globe.quaternion.clone() }; userTouched = true; canvas.setPointerCapture(e.pointerId); });
 canvas.addEventListener('pointermove', e => { if (!drag) return; const dx = (e.clientX - drag.x) / 200, dy = (e.clientY - drag.y) / 200;
   const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(dy, dx, 0)); globe.quaternion.copy(q.multiply(drag.q)); targetQ.copy(globe.quaternion); });
-canvas.addEventListener('pointerup', () => { drag = null; lastAuto = performance.now(); });
+// a click (not a drag) on or near an office's dot picks that office (user, 2026-11-06)
+canvas.addEventListener('pointerup', e => {
+  const moved = drag ? Math.hypot(e.clientX - drag.x, e.clientY - drag.y) : 99;
+  drag = null; lastAuto = performance.now();
+  if (moved > 6) return;
+  const r = canvas.getBoundingClientRect();
+  // the nearest dot under the pointer; if two are close, the one nearer the camera (front of the globe) wins
+  let best = -1, bz = Infinity;
+  pins.forEach((p, i) => {
+    const w = new THREE.Vector3(); p.g.getWorldPosition(w);
+    const v = w.project(camera), x = (v.x * 0.5 + 0.5) * r.width, y = (-v.y * 0.5 + 0.5) * r.height;
+    const d = Math.hypot(x - (e.clientX - r.left), y - (e.clientY - r.top));
+    if (d < 30 && v.z + d * 0.0004 < bz) { bz = v.z + d * 0.0004; best = i; }
+  });
+  if (best >= 0) select(best, true);
+});
+canvas.addEventListener('pointermove', e => { if (drag) return; canvas.style.cursor = 'grab'; });
 
 // ---------- size and loop ----------
 const stage = sec.querySelector('.globe-stage');

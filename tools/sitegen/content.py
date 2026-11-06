@@ -525,86 +525,6 @@ COMMODITIES_HUB = {
 }
 
 # ---------------------------------------------------------------- engineering
-PRINCIPALS = [
-    {
-        "slug": "shibata", "name": "ShibataFenderTeam", "h1": "ShibataFenderTeam", "eyebrow": "Principal · Fender systems",
-        "hero": ["HexaHessman is an official Southeast Asia representative of ShibataFenderTeam (SFT), a global leader in the design, engineering, manufacture and supply of high-performance fender systems. For more than five decades SFT has safeguarded ports, harbours, terminals and offshore structures around the world."],
-        "sections": [
-            {"title": "Fixed fenders", "cards": [
-                ("SPC Cone Fender", "Conical rubber body with fully rubber-embedded mounting flanges; exceptional energy-to-reaction ratio, high shear stability and no loss of performance up to 10° approach angle. Optional overload stopper.",
-                 "Applications: container, bulk, oil & gas, general cargo, cruise, ferry and RoRo terminals; navy."),
-                ("FE Element Fenders", "Fully moulded rubber legs with embedded mounting plates — modular and compact, for mounting behind steel panels or where space is limited. Easy maintenance and replacement.",
-                 "Applications: container, bulk, general cargo and RoRo terminals; navy; barges."),
-                ("Cylindrical Fender", "Simple installation with chains, bars, ropes or ladder brackets; reaction force and energy rise proportionally for softer berthing. OD up to 2,700 mm, ID 50–1,300 mm, lengths up to 20 m.", None),
-                ("Parallel Motion Fenders", "Engineered systems with a torsion arm so the front panel moves only parallel to its mounting — equal energy absorption at any impact level, lower reaction forces and lighter substructures.",
-                 "Applications: bulk, oil & gas, ferry and RoRo terminals; monopiles; load-sensitive structures."),
-                ("Roller / Wheel Fender", "Elastomer unit on a rotating shaft with maintenance-free bearings, for lock entrances, dry docks and narrow or exposed passages.", None),
-            ]},
-            {"title": "Floating fenders", "cards": [
-                ("Pneumatic Fender", "Abrasion-resistant, air-filled rubber fender to ISO 17357-1:2014; diameters 300–4,500 mm, lengths 500–9,000 mm. Low hull pressure; deflatable for storage and reuse.",
-                 "Applications: ports with extreme tidal range, ship-to-ship lightering, FSRUs, temporary berthing."),
-                ("Hydropneumatic Fender", "Partly water-filled and counterweighted to protect submerged hulls, with adjustable draft.",
-                 "Applications: submarine jetties, certain ferry types, oil rigs."),
-                ("Ocean Guard Foam Fender", "Closed-cell foam core with nylon-reinforced polyurethane skin; unsinkable even if damaged; diameters 500–4,500 mm, lengths 800–10,600 mm.",
-                 "Applications: navy and cruise berths, ship-to-ship and ship-to-shore operations, oil & gas terminals."),
-            ]},
-        ],
-        "cta_p": "Backed by local support for sizing, supply, installation and after-sales service.",
-        "cta_buttons": ["Request fender sizing / quotation", "Book a service visit"],
-    },
-    {
-        "slug": "manntek", "name": "MannTek", "h1": "MannTek Solutions", "eyebrow": "Principal · Marine & energy transfer",
-        # The skeleton offers "[exclusive / official]"; "official" is used, matching the other principals.
-        "hero": ["HexaHessman is the official representative of MannTek Solutions in Southeast Asia, delivering tailored solutions with comprehensive after-sales service, including repairs and maintenance."],
-        "coverage": "Coverage: Singapore · Malaysia · Indonesia · Vietnam · Thailand",
-        "sections": [
-            {"title": "Solutions by fuel", "links": [("LNG", "https://www.manntek.se/"), ("Methanol", "https://www.manntek.se/"), ("Hydrogen", "https://www.manntek.se/"), ("Ammonia", "https://www.manntek.se/")]},
-            {"title": "Dry Cryogenic Couplings (DCC)",
-             "paras": ["MannTek QCDC couplings load and unload cryogenic liquefied gases — LNG, nitrogen, oxygen, argon, ethylene — down to –196°C, connecting quickly and safely with minimal product loss and no re-tightening during cool-down. Built to ISO 21593 and ISO TS 18683."],
-             "spec": [{"rows": [["Size", "1\" to 8\""], ["Material", "Stainless steel"], ["Seals", "PTFE"]]}]},
-            {"title": "Cryogenic Breakaway Couplings (CBC)",
-             "paras": ["Designed as the weakest link of the hose line or loading arm, CBCs prevent spillage and damage from drive-away or pull-away incidents. Available in breaking-pin and cable-release versions."],
-             "spec": [{"rows": [["Size", "1\"–8\" breaking pin · 2\"–8\" cable release"], ["Material", "Stainless steel"], ["Seals", "PTFE"], ["Working pressure", "25 bar"]]}]},
-            {"title": "Powered Emergency Release Coupling (PERC)",
-             "paras": ["The highest safety level, with three ways to release — by ESD signal, by manual override, or by reverting to a passive breaking pin. In a blackout it falls back to a passive breakaway coupling, protecting the manifold in any situation."]},
-            {"title": "Vessel Separation Device (VSD)",
-             "items": ["Three-wire system with pendants of different lengths", "First wire: alarm on vessel movement", "Second wire: initiates ESD 1 — pumps stop, ESD valves close", "Third wire: initiates ESD 2, activating the PERC"]},
-            {"title": "PERC control unit", "defs": [
-                ("PLC version", "Monitors the whole transfer operation and ensures every step and periodic test is carried out"),
-                ("SIL2 version", "Assessed by DNV and certified to SIL2 under IEC 61511 and IEC 61508")]},
-            {"title": "Videos", "defs": [("Video 1", "MannTek (QCDC) Design 2.0 — DGC"), ("Video 2", "Safety Breakaway Couplings"),
-                                         ("Video 3", "Connections: Liquid Hydrogen"), ("Video 4", "MannTek LNG / cryogenic couplings")]},
-        ],
-        "cta_h": "After-sales",
-        "cta_p": "Repairs, maintenance and spares across the region, with a face-to-face response within 48 hours.",
-        "cta_buttons": ["Request a quotation", "Book a service visit"],
-    },
-    {
-        "slug": "straatman", "name": "Straatman", "h1": "Straatman Mooring Systems", "eyebrow": "Principal · Mooring & berthing",
-        # The skeleton offers "[more than 50 years / since 1902]"; "more than 50 years" is used.
-        "hero": ["HexaHessman is an official representative of Straatman in Southeast Asia. With more than 50 years of maritime experience, Straatman is an established manufacturer of mooring, berthing and dredging equipment. In 2024 it reorganised into Straatman Mooring Systems and Straatman Dredging & Construction."],
-        "coverage": "Coverage: Indonesia · Thailand",
-        "sections": [
-            {"title": "Quick release mooring hooks", "paras": ["A key safety feature for tankers, FSRUs, FPSOs and other vessels, released quickly even under load. Designed for oil, gas, chemical, iron, coal and grain terminals, with options for electric-hydraulic release, load monitoring, remote control and rope keepers."]},
-            {"title": "Ship-to-Shore Link (SSL)", "paras": ["Enables simultaneous emergency shutdown of ship and shore during LNG, oil and chemical transfers whenever either side detects an issue. Straatman’s SafeCom SSL is customised to client needs, with standby services available."]},
-            {"title": "Smart Bollard", "paras": ["Measures mooring-line loads in real time — critical in high waves, strong currents and gusts — and logs data to prevent line failures and breakaways."]},
-            {"title": "Full product range", "items": [
-                "Quick release mooring hooks", "FPSO / FLNG and offshore quick release hooks", "Quick release towing hooks", "Portal smart bollards for LNG terminals",
-                "Strainstall / AMTS hooks and spares", "Ship-to-Shore Link (SSL)", "Mooring Load Monitoring System (MLMS)", "Environmental Monitoring System (EMS)",
-                "Berthing Aid System (BAS)", "Carry-on-board mooring system", "Solar power systems for dredging, ports and terminals"]},
-        ],
-        "cta_buttons": ["Request a quotation", "Book a service visit"],
-    },
-    {
-        "slug": "raythink", "name": "Raythink", "h1": "Raythink", "eyebrow": "Principal · Gas detection & hazard monitoring",
-        "hero": ["Raythink provides advanced visualisation and monitoring solutions for critical industries, including oil & gas and marine. Building on core expertise in augmented reality (AR), optical systems and AI-driven perception, Raythink supports gas-leak detection and real-time hazard monitoring."],
-        "sections": [
-            {"title": "Applications", "items": ["Gas-leak detection at terminals, refineries and FSRUs", "Real-time hazard monitoring"]},
-        ],
-        "cta_buttons": ["Request a demo", "Request a quotation"],
-    },
-]
-
 # ---------------------------------------------------------------- about
 ABOUT = {
     "eyebrow": "About HexaHessman",
@@ -615,8 +535,20 @@ ABOUT = {
         "Our leaders have always looked beyond the immediate horizon, combining engineering rigour with entrepreneurial insight. In 2024 HexaHessman unified these legacy strengths with fresh ambition, establishing itself as a reliable partner for structured supply and engineering solutions.",
         "Today we are guided by operational discipline, strategic insight and people-first values — connecting trusted partners worldwide and delivering what our clients need with precision and dependability.",
     ],
-    "timeline": [("2007", "HexaHessman founded on a legacy of precision engineering."),
-                 ("2024", "Group reimagined. HexaHessman Pte. Ltd. incorporated in Singapore (UEN 202419032H).")],
+    # the voyage timeline: (year, title, text, photo). 2007 and 2024 are the client's facts; the years between and their
+    # words are PLACEHOLDER copy written for the layout (user, 2026-11-05: "find filler words") — confirm with the client.
+    "timeline_h": "Our voyage",
+    "timeline_lead": "From a single engineering drawing to a group trading across nine markets — the course so far.",
+    "timeline": [
+        ("2007", "The first drawing", "HexaHessman is founded on a legacy of precision engineering: specifying, sourcing and commissioning equipment for marine and industrial clients who needed it done right the first time.", "/assets/about/tl-coupling.jpg"),
+        ("2011", "First principals", "European manufacturers of couplings, fenders and mooring systems appoint us to represent them in Southeast Asia, and our engineers train alongside theirs at the factory.", "/assets/about/tl-team.jpg"),
+        ("2015", "Into commodities", "The trading desk opens with sulphur and fertilizers, moving bulk cargo from producer to plant with the same discipline we bring to engineering — inspected, documented and delivered on schedule.", "/assets/about/tl-sulphur.jpg"),
+        ("2018", "A regional network", "Offices open across Indonesia, Malaysia and Thailand, putting our people on site at the refineries, plants and terminals we serve.", "/assets/about/tl-refinery.jpg"),
+        ("2021", "Cleaner fuels", "As shipping turns to LNG, methanol and ammonia, we commission our principals’ dry-disconnect and emergency-release couplings on board, side by side with the crews.", "/assets/about/tl-commissioning.jpg"),
+        ("2023", "Sharing what we know", "Technical seminars for terminal operators and shipowners on safe transfer, PERC control units and bunkering practice, across the region.", "/assets/about/tl-perc-talk.jpg"),
+        ("2024", "Group reimagined", "HexaHessman Pte. Ltd. is incorporated in Singapore (UEN 202419032H), uniting commodities, engineering and investment under HexaHessman Global Group.", "/assets/about/tl-sulphur-talk.jpg"),
+        ("Today", "Eight offices, nine markets", "From Singapore to London, our people keep cargo moving and equipment running for clients across Asia, the Middle East and Europe — in our own colours.", "/assets/about/tl-bags.jpg"),
+    ],
     "group_h": "HexaHessman Global Group",
     "group_p": "HexaHessman Global Group (HHGG) is the holding company overseeing operating entities across multiple countries, delivering diversified solutions across commodities, engineering and strategic investments. Its investment arm, HexaHessman Asset Management (HHAM), identifies and manages high-value opportunities for long-term value creation.",
     "specialise": [
@@ -631,8 +563,9 @@ ABOUT = {
     # the people, in the order of the customer's team sheet (left to right, top to bottom; cutout portraits in
     # /assets/team/cut/<slug>.webp): (name, role, entity, photo slug, office, blurb). The blurbs are placeholder
     # copy written by us for the customer to replace. Yani Lee's JWHexaHessman office is Indonesia (confirmed by the user).
-    "team_h": "The people behind HexaHessman",
-    "team_lead": "Eighteen people across eight offices, from Singapore to London. Press through the line to meet them.",
+    "team_h": "Leveraging global expertise for strategic advantage",   # one colour, like Our story (user, 2026-11-06)
+    "team_eyebrow": "Seamless solutions across borders",
+    "team_lead": "A growing team across eight offices, from Singapore to London. Press through the line to meet some of them.",   # no head count: the team is bigger (user)
     "team": [
         ("Adam Yeoh", "Business Development Manager", "HexaHessman Singapore", "adam-yeoh", "sg",
          "Adam develops new supply relationships across Southeast Asia, matching buyers with the right product, origin and shipping terms."),
@@ -734,52 +667,89 @@ ENGINEERING_HUB = {
 PRINCIPALS = [
     {
         "slug": "shibata", "name": "ShibataFenderTeam", "h1": "ShibataFenderTeam", "eyebrow": "Principal · Fender systems",
+        "logo": "/assets/engineering/logo-shibata.svg?v=3", "hero_img": "/assets/engineering/shibata/hero.jpg?v=2",   # SPC cone fenders along a general cargo terminal (from SFT's page on hexahessman.com); a photo hero like MannTek's (user, 2026-11-06)
         "hero": ["HexaHessman is an official Southeast Asia representative of ShibataFenderTeam (SFT), a global leader in the design, engineering, manufacture and supply of high-performance fender systems. For more than five decades SFT has safeguarded ports, harbours, terminals and offshore structures around the world."],
         "sections": [
-            {"title": "Fixed fenders", "cards": [
-                ("SPC Cone Fender", "Conical rubber body with fully rubber-embedded mounting flanges; exceptional energy-to-reaction ratio, high shear stability and no loss of performance up to 10° approach angle. Optional overload stopper.",
-                 "Applications: container, bulk, oil & gas, general cargo, cruise, ferry and RoRo terminals; navy."),
-                ("FE Element Fenders", "Fully moulded rubber legs with embedded mounting plates — modular and compact, for mounting behind steel panels or where space is limited. Easy maintenance and replacement.",
-                 "Applications: container, bulk, general cargo and RoRo terminals; navy; barges."),
-                ("Cylindrical Fender", "Simple installation with chains, bars, ropes or ladder brackets; reaction force and energy rise proportionally for softer berthing. OD up to 2,700 mm, ID 50–1,300 mm, lengths up to 20 m.", None),
-                ("Parallel Motion Fenders", "Engineered systems with a torsion arm so the front panel moves only parallel to its mounting — equal energy absorption at any impact level, lower reaction forces and lighter substructures.",
-                 "Applications: bulk, oil & gas, ferry and RoRo terminals; monopiles; load-sensitive structures."),
-                ("Roller / Wheel Fender", "Elastomer unit on a rotating shaft with maintenance-free bearings, for lock entrances, dry docks and narrow or exposed passages.", None),
-            ]},
-            {"title": "Floating fenders", "cards": [
-                ("Pneumatic Fender", "Abrasion-resistant, air-filled rubber fender to ISO 17357-1:2014; diameters 300–4,500 mm, lengths 500–9,000 mm. Low hull pressure; deflatable for storage and reuse.",
-                 "Applications: ports with extreme tidal range, ship-to-ship lightering, FSRUs, temporary berthing."),
-                ("Hydropneumatic Fender", "Partly water-filled and counterweighted to protect submerged hulls, with adjustable draft.",
-                 "Applications: submarine jetties, certain ferry types, oil rigs."),
-                ("Ocean Guard Foam Fender", "Closed-cell foam core with nylon-reinforced polyurethane skin; unsinkable even if damaged; diameters 500–4,500 mm, lengths 800–10,600 mm.",
-                 "Applications: navy and cruise berths, ship-to-ship and ship-to-shore operations, oil & gas terminals."),
-            ]},
+            # one block per fender, photo and words side by side, alternating (as on hexahessman.com/shibata-fenders-team).
+            # media: "layers" = the orange panels arrive one by one (tools/drawings/orange_layers.py), "loop" = a floating clip
+            {"title": "SPC Cone Fender", "drawing": "/assets/engineering/shibata/spc-cone-drawing.webp", "media": {"appear": "/assets/engineering/shibata/spc-cone-appear"}, "side": "left",   # Seedance: bare quay → fenders fitted one by one
+             "paras": ["The SPC Cone Fender is an efficient rubber fender used in many applications. Its conical body and fully rubber-embedded mounting flanges give a refined geometry with outstanding performance."],
+             "lists": [("Characteristics", ["Exceptional energy absorption to reaction force ratio (E/R)", "Outstanding energy absorption per fender weight", "High shear stability",
+                                            "No loss of performance up to 10° approach angle", "Sophisticated, optimised fender geometry", "Optional overload stopper"]),
+                       ("Applications", ["Container & bulk terminals", "Oil & gas terminals", "General cargo terminals", "Cruise terminals", "Ferry & RoRo terminals", "Navy"])]},
+            {"title": "FE Element Fenders", "drawing": "/assets/engineering/shibata/fe-element-drawing.webp", "media": {"image": "/assets/engineering/shibata/fe-element.jpg"}, "side": "right",
+             "paras": ["Fully moulded rubber legs with embedded mounting plates. Based on V Fenders but with separate legs, the FE Element Fender gives high layout flexibility behind steel panels or where mounting space is limited."],
+             "lists": [("Characteristics", ["Good energy absorption to reaction force ratio (E/R)", "High energy absorption per fender weight", "Modular, compact design with a small footprint",
+                                            "Vertical and horizontal mounting, typically in pairs", "Pile fender designs may use single units", "Easy maintenance & replacement"]),
+                       ("Applications", ["Container & bulk terminals", "General cargo terminals", "RoRo terminals", "Navy", "Barges"])]},
+            {"title": "Cylindrical Fender", "drawing": "/assets/engineering/shibata/cylindrical-drawing.webp", "media": {"image": "/assets/engineering/shibata/cylindrical.jpg"}, "side": "left",
+             "paras": ["The first rubber fender type produced with a defined performance. It installs simply with chains, bars, ropes or ladder brackets, and its reaction force and energy rise in proportion to deflection for softer berthing.",
+                       "Extruded or wrapped depending on size: outside diameters up to 2,700 mm, inside diameters 50–1,300 mm, lengths up to 20 m. Supplied with the matching fixings — chains, brackets, support bar or ladder brackets."]},
+            {"title": "Pneumatic Fender", "drawing": "/assets/engineering/shibata/pneumatic-drawing.webp", "media": {"loop": "/assets/engineering/shibata/pneumatic-float"}, "side": "right",
+             "paras": ["An abrasion-resistant rubber fender filled with high-pressure air. It deflates easily for simple, low-cost relocation and re-commissioning elsewhere.",
+                       "Diameters from 300 mm to 4,500 mm and lengths from 500 mm to 9,000 mm, plus special sizes."],
+             "lists": [("Characteristics", ["Proportional increase of energy and reaction", "Low hull pressure", "Economical", "Deflates for use in other locations or storage on deck", "Built to ISO 17357-1:2014"]),
+                       ("Applications", ["Ports with extreme tidal variations", "Ship-to-ship lightering", "Oil & gas (typically FSRU)", "Temporary berthing"])]},
+            {"title": "Parallel Motion Fenders", "drawing": "/assets/engineering/shibata/parallel-motion-drawing.webp", "media": {"image": "/assets/engineering/shibata/parallel-motion.jpg"}, "side": "left",
+             "paras": ["Individually engineered systems. A torsion arm between the back structure and the steel front panel lets the panel move only parallel to its mounting, whatever the impact level and angle."],
+             "lists": [("Characteristics", ["Equal energy absorption at any impact level", "Only parallel panel movement — no second ship/panel contact", "Substantially lower reaction forces with back-to-back rubber units",
+                                            "Lower hull pressures and a lighter substructure, cutting project cost"]),
+                       ("Applications", ["Bulk terminals", "Oil & gas terminals", "Ferry & RoRo terminals", "Monopiles", "Load-sensitive structures"])]},
+            {"title": "Hydropneumatic Fender", "media": {"image": "/assets/engineering/shibata/hydropneumatic.jpg"}, "side": "right",
+             "paras": ["A version of the Pneumatic Fender developed for submarines: partly filled with water and air and counterweighted to stay vertical, so the submerged hull is protected at all times. Performance depends on the air-to-water ratio and initial pressure."],
+             "lists": [("Characteristics", ["Submerged contact area", "Low hull pressure", "Adjustable draft", "Movable"]),
+                       ("Applications", ["Submarine jetties", "Certain ferry types", "Oil rigs"])]},
+            {"title": "Ocean Guard Foam Fender", "drawing": "/assets/engineering/shibata/ocean-guard-drawing.webp", "media": {"loop": "/assets/engineering/shibata/ocean-guard-float"}, "side": "left",
+             "paras": ["A heat-laminated, 100% closed-cell foam core under a thick, nylon-reinforced polyurethane skin with embedded end fittings: high energy absorption, hull-conforming, non-marking and low maintenance.",
+                       "Diameters from 500 mm to 4,500 mm and lengths from 800 mm to 10,600 mm, in several foam grades and special shapes, with two- or four-point mounting."],
+             "lists": [("Characteristics", ["Proportional increase of energy and reaction", "Extremely robust", "No performance loss and unsinkable even if damaged", "Small skin damage repairable on site", "Low hull pressure, non-marking skin"]),
+                       ("Applications", ["Navy berths and cruise terminals", "Ship-to-ship operations", "Ship-to-shore operations", "Oil & gas terminals"])]},
+            {"title": "Roller / Wheel Fender", "drawing": "/assets/engineering/shibata/roller-drawing.webp", "media": {"image": "/assets/engineering/shibata/roller.jpg"}, "side": "right",
+             "paras": ["An energy-absorbing elastomer unit on a single rotating shaft with maintenance-free stainless and composite bearings."],
+             "lists": [("Installed as", ["Stacked double or triple to cover tidal heights", "Side by side to guide vessels through narrow passages", "At an angle to suit the hull's flare"]),
+                       ("Applications", ["Entrances to locks, dry docks and other narrow or exposed areas"])]},
         ],
         "cta_p": "Backed by local support for sizing, supply, installation and after-sales service.",
         "cta_buttons": ["Request fender sizing / quotation", "Book a service visit"],
     },
     {
         "slug": "manntek", "name": "MannTek", "h1": "MannTek Solutions", "eyebrow": "Principal · Marine & energy transfer",
+        "logo": "/assets/engineering/logo-manntek.svg?v=3",
+        "hero_img": "/assets/engineering/manntek-hero.jpg",   # MannTek couplings at a methanol bunkering (from the principal's page on hexahessman.com)
+        "subhead": "Dry cryogenic couplings, breakaway couplings and emergency release systems for LNG, methanol, hydrogen and ammonia.",   # the principal's own logo, centred over the intro like their site
         # The skeleton offers "[exclusive / official]"; "official" is used, matching the other principals.
         "hero": ["HexaHessman is the official representative of MannTek Solutions in Southeast Asia, delivering tailored solutions with comprehensive after-sales service, including repairs and maintenance."],
         "coverage": "Coverage: Singapore · Malaysia · Indonesia · Vietnam · Thailand",
         "sections": [
-            {"title": "Solutions by fuel", "links": [("LNG", "https://www.manntek.se/"), ("Methanol", "https://www.manntek.se/"), ("Hydrogen", "https://www.manntek.se/"), ("Ammonia", "https://www.manntek.se/")]},
-            {"title": "Dry Cryogenic Couplings (DCC)",
+            # four photo tiles in a row (assets/engineering/fuel-<id>.jpg), rising and dropping in alternately; each opens a drop-down
+            {"title": "Solutions by fuel", "fuels": [
+                ("LNG", "lng", "Dry cryogenic couplings, breakaway couplings and powered emergency release for LNG bunkering and truck, rail and ship transfer, down to –196°C.", "https://www.manntek.se/"),
+                ("Methanol", "methanol", "Dry disconnect and safety breakaway couplings for methanol bunkering, keeping a toxic, flammable product contained at connection and disconnection.", "https://www.manntek.se/"),
+                ("Hydrogen", "hydrogen", "Couplings and breakaways for liquid hydrogen transfer, built for –253°C and the tightest tolerances in cryogenic handling.", "https://www.manntek.se/"),
+                ("Ammonia", "ammonia", "Dry disconnect couplings, breakaways and emergency release couplings for ammonia transfer, with spill-free connection for a toxic product.", "https://www.manntek.se/"),
+            ]},
+            # the whole ship-to-ship transfer line, labels popping out one by one (label x, y → part x, y, in the image's 1672×941 pixels)
+            {"title": "A complete transfer system", "diagram": {"img": "/assets/engineering/manntek-system.webp", "w": 1672, "h": 941, "labels": [
+                ("Dry Disconnect Coupling (DDC)", 150, 330, 378, 410), ("Insulation flange", 250, 240, 403, 406), ("Hose tail", 470, 300, 455, 410),
+                ("PERC", 560, 520, 552, 414), ("Cryogenic breakaway coupling (CBC)", 190, 560, 510, 412), ("Hose saddle", 640, 650, 760, 470),
+                ("Transfer hose", 820, 330, 930, 498), ("PERC activation line", 1040, 280, 995, 522), ("VSD wire", 980, 690, 1060, 603),
+                ("Fall arrest", 1190, 770, 1300, 600), ("Vessel Separation Device (VSD)", 1380, 870, 1470, 622), ("PERC control unit", 1330, 320, 1530, 382),
+                ("Alternative placement CBC", 1430, 170, 1600, 428), ("Ship manifold", 1540, 520, 1645, 432)]}},
+            {"title": "Dry Cryogenic Couplings (DCC)", "media": {"video": "/assets/engineering/spin/dcc"}, "side": "left",
              "paras": ["MannTek QCDC couplings load and unload cryogenic liquefied gases — LNG, nitrogen, oxygen, argon, ethylene — down to –196°C, connecting quickly and safely with minimal product loss and no re-tightening during cool-down. Built to ISO 21593 and ISO TS 18683."],
              "spec": [{"rows": [["Size", "1\" to 8\""], ["Material", "Stainless steel"], ["Seals", "PTFE"]]}]},
-            {"title": "Cryogenic Breakaway Couplings (CBC)",
+            {"title": "Cryogenic Breakaway Couplings (CBC)", "media": {"video": "/assets/engineering/spin/cbc"}, "side": "right",
              "paras": ["Designed as the weakest link of the hose line or loading arm, CBCs prevent spillage and damage from drive-away or pull-away incidents. Available in breaking-pin and cable-release versions."],
              "spec": [{"rows": [["Size", "1\"–8\" breaking pin · 2\"–8\" cable release"], ["Material", "Stainless steel"], ["Seals", "PTFE"], ["Working pressure", "25 bar"]]}]},
-            {"title": "Powered Emergency Release Coupling (PERC)",
+            {"title": "Powered Emergency Release Coupling (PERC)", "media": {"video": "/assets/engineering/spin/perc"}, "side": "left",
              "paras": ["The highest safety level, with three ways to release — by ESD signal, by manual override, or by reverting to a passive breaking pin. In a blackout it falls back to a passive breakaway coupling, protecting the manifold in any situation."]},
-            {"title": "Vessel Separation Device (VSD)",
+            {"title": "Vessel Separation Device (VSD)", "media": {"image": "/assets/engineering/manntek-vsd.webp"}, "side": "right",
              "items": ["Three-wire system with pendants of different lengths", "First wire: alarm on vessel movement", "Second wire: initiates ESD 1 — pumps stop, ESD valves close", "Third wire: initiates ESD 2, activating the PERC"]},
-            {"title": "PERC control unit", "defs": [
+            {"title": "PERC control unit", "media": {"image": "/assets/engineering/manntek-pcu.webp"}, "side": "left", "defs": [
                 ("PLC version", "Monitors the whole transfer operation and ensures every step and periodic test is carried out"),
                 ("SIL2 version", "Assessed by DNV and certified to SIL2 under IEC 61511 and IEC 61508")]},
-            {"title": "Videos", "defs": [("Video 1", "MannTek (QCDC) Design 2.0 — DGC"), ("Video 2", "Safety Breakaway Couplings"),
-                                         ("Video 3", "Connections: Liquid Hydrogen"), ("Video 4", "MannTek LNG / cryogenic couplings")]},
+            {"title": "Videos", "videos": [("MannTek (QCDC) Design 2.0 — DGC", "kSuzHS0QLxM"), ("Safety Breakaway Couplings", "ruqJJZ1Y6Qk"),
+                                           ("Connections: Liquid Hydrogen", "xwyUOaJOzM8"), ("MannTek LNG / cryogenic couplings", "VYfQASPLDGM")]},
         ],
         "cta_h": "After-sales",
         "cta_p": "Repairs, maintenance and spares across the region, with a face-to-face response within 48 hours.",
@@ -787,13 +757,34 @@ PRINCIPALS = [
     },
     {
         "slug": "straatman", "name": "Straatman", "h1": "Straatman Mooring Systems", "eyebrow": "Principal · Mooring & berthing",
+        "logo": "/assets/engineering/logo-straatman.svg?v=3",
+        "hero_img": "/assets/engineering/straatman/hero.jpg?v=2",   # transfer lines and an LNG carrier at dusk (from Straatman's page on hexahessman.com)
         # The skeleton offers "[more than 50 years / since 1902]"; "more than 50 years" is used.
         "hero": ["HexaHessman is an official representative of Straatman in Southeast Asia. With more than 50 years of maritime experience, Straatman is an established manufacturer of mooring, berthing and dredging equipment. In 2024 it reorganised into Straatman Mooring Systems and Straatman Dredging & Construction."],
         "coverage": "Coverage: Indonesia · Thailand",
+        # laid out like MannTek (user, 2026-11-06): the four products in one line, the videos straight under them, then one
+        # section per product; the hook's layout drawing, redrawn in code (tools/drawings/qrh.py), faint behind its words
         "sections": [
-            {"title": "Quick release mooring hooks", "paras": ["A key safety feature for tankers, FSRUs, FPSOs and other vessels, released quickly even under load. Designed for oil, gas, chemical, iron, coal and grain terminals, with options for electric-hydraulic release, load monitoring, remote control and rope keepers."]},
-            {"title": "Ship-to-Shore Link (SSL)", "paras": ["Enables simultaneous emergency shutdown of ship and shore during LNG, oil and chemical transfers whenever either side detects an issue. Straatman’s SafeCom SSL is customised to client needs, with standby services available."]},
-            {"title": "Smart Bollard", "paras": ["Measures mooring-line loads in real time — critical in high waves, strong currents and gusts — and logs data to prevent line failures and breakaways."]},
+            {"title": "Products and solutions", "tile_dir": "/assets/engineering/straatman/tile-", "fuels": [
+                ("Quick Release Hooks", "qrh", "Hooks that release a mooring line in seconds, even under full load, for tankers, FSRUs, FPSOs and bulk carriers.", "#quick-release-mooring-hooks"),
+                ("Ship-to-Shore Link", "ssl", "The SafeCom link that shuts ship and shore down together the moment either side detects a problem during a transfer.", "#ship-to-shore-link-ssl"),
+                ("Smart Bollard", "bollard", "A bollard that measures the load on every mooring line in real time and logs it, so nobody has to assume the worst.", "#smart-bollard"),
+                ("Berthing Aid Systems", "bas", "Speed, distance and angle of an approaching vessel, measured and shown on large displays for a safe berthing.", "#berthing-aid-system-bas"),
+            ]},
+            {"title": "Videos", "videos": [("Quick release mooring hooks — electric release", "9ibN4cYJUJo"), ("Smart Bollard explained", "HUaGkqjp3RY"),
+                                           ("Straatman company film", "gaFLosB-x_o"), ("Quick release hooks with solar power, Port of Rotterdam", "n8tIGkDgjsc")]},
+            {"title": "Quick Release Mooring Hooks", "drawing": "/assets/engineering/straatman/qrh-drawing.svg?v=1", "drawing_w": "92%", "media": {"image": "/assets/engineering/straatman/qrh-terminal.jpg"}, "side": "left",
+             "paras": ["Quick release mooring hooks are a key safety feature for oil and gas tankers, FSRUs, FPSOs and other vessels: they can be released quickly and easily, even under load, when the situation at the berth demands it.",
+                       "Straatman hooks are built for oil, gas, chemical, iron ore, coal and grain terminals, with options for electric-hydraulic release, load monitoring, remote control and rope keepers."],
+             "items": ["Single, double, triple and quadruple hook assemblies", "FPSO / FLNG and offshore hooks (FPSO and FSRU)", "Quick release towing hooks", "Strainstall and AMTS hooks and spares"]},
+            {"title": "Ship-to-Shore Link (SSL)", "media": {"image": "/assets/engineering/straatman/ssl.jpg"}, "side": "right",
+             "paras": ["During LNG, oil and chemical transfers the ship-shore link guards against fire, explosion and spills. Its job is to shut down ship and shore at the same moment whenever the Safety Instrumented System on either side detects an issue.",
+                       "Straatman’s SafeCom Ship-to-Shore Link is built to each client’s needs, in a range of sizes and configurations, with standby services for extra reliability."]},
+            {"title": "Smart Bollard", "media": {"image": "/assets/engineering/straatman/smart-bollard.jpg"}, "side": "left",
+             "paras": ["Without load data, ports have to assume maximum mooring loads. In high waves, strong currents and gusts an overloaded line can part and a ship can break away from the quay.",
+                       "Smart Bollards measure the load on each mooring line in real time and log it, giving the port and the terminal a clear picture of the mooring forces and the warning they need."]},
+            {"title": "Berthing Aid System (BAS)", "media": {"image": "/assets/engineering/straatman/bas.jpg"}, "side": "right",
+             "paras": ["Lasers on the quay measure an approaching vessel’s speed, distance and angle, and large displays show them to the pilot and crew so every berthing stays within safe limits. Available with a carry-on-board system for the mooring master."]},
             {"title": "Full product range", "items": [
                 "Quick release mooring hooks", "FPSO / FLNG and offshore quick release hooks", "Quick release towing hooks", "Portal smart bollards for LNG terminals",
                 "Strainstall / AMTS hooks and spares", "Ship-to-Shore Link (SSL)", "Mooring Load Monitoring System (MLMS)", "Environmental Monitoring System (EMS)",
@@ -803,6 +794,7 @@ PRINCIPALS = [
     },
     {
         "slug": "raythink", "name": "Raythink", "h1": "Raythink", "eyebrow": "Principal · Gas detection & hazard monitoring",
+        "logo": "/assets/engineering/logo-raythink.svg?v=3", "hero_img": "/assets/engineering/raythink-hero.jpg",   # a thermal image of a gas leak at a tank: a photo hero like MannTek (user, 2026-11-06)
         "hero": ["Raythink provides advanced visualisation and monitoring solutions for critical industries, including oil & gas and marine. Building on core expertise in augmented reality (AR), optical systems and AI-driven perception, Raythink supports gas-leak detection and real-time hazard monitoring."],
         "sections": [
             {"title": "Applications", "items": ["Gas-leak detection at terminals, refineries and FSRUs", "Real-time hazard monitoring"]},
@@ -848,3 +840,125 @@ LEGAL = [
     ("terms", "Terms of Use"),
     ("cookies", "Cookie Notice"),
 ]
+
+
+# ---------------------------------------------------------------- 2026 business profile (PDF) updates
+# Figures, lists and pictures from "HEXAHESSMAN - Business Profile 2026R14 (Ver7)" (pages 7–15), applied over the
+# skeleton text above (user, 2026-11-06: "do all products"). Pictures: assets/products/pdf/ (cut-outs keep their
+# see-through backgrounds). Where the profile and the skeleton disagree, the profile (newer) wins.
+PDF = "/assets/products/pdf/"
+
+
+def _p(slug):
+    return next(p for p in PRODUCTS if p["slug"] == slug)
+
+
+def _s(p, title):
+    return next((s for s in p["sections"] if s.get("title") == title), None)
+
+
+def _add(p, sec, before="Distribution"):
+    i = next((k for k, s in enumerate(p["sections"]) if s.get("title") == before), len(p["sections"]))
+    p["sections"].insert(i, sec)
+
+
+def _apply_profile():
+    # Sulphur (p.7): lump vs granular chart with test methods, packaging, industries, terms, quality
+    p = _p("sulphur")
+    _s(p, "Forms")["imgs"] = {"Granular sulphur": PDF + "sulphur-granular-bags.webp", "Lump sulphur": PDF + "sulphur-lumps.webp"}
+    _s(p, "Specifications")["spec"] = [{"headers": ["Property", "Lump sulphur", "Granular sulphur", "Test method"], "rows": [
+        ["Physical form", "Lumps & powder", "Granular", "Visual"], ["Appearance", "Bright yellow", "Bright yellow", "Visual"],
+        ["Purity, dry basis (wt%)", "99.80% min.", "99.80% min.", "ASTM D-4239"], ["Moisture (wt%)", "0.02% max.", "0.5% max.", "ASTM D-2790"],
+        ["Ash (wt%)", "0.015% max.", "0.05% max.", "ASTM D-1509"], ["Organic solid matter (wt%)", "0.01% max.", "0.01% max.", "—"],
+        ["Acidity (wt%)", "0.0001% max.", "0.02% max.", "ASTM D-1613"], ["Mechanical impurities", "0.01% max.", "—", "—"],
+        ["Hydrocarbons (wt%)", "—", "0.05% max.", "ASTM D-2360"]]}]
+    pk = _s(p, "Packaging")
+    pk["items"] = ["Loose bulk — break-bulk or direct vessel loading", "Jumbo bags (FIBC / big bags) and bulk containers", "Palletised bagging, shrink-wrapped"]
+    pk["img"] = PDF + "sulphur-bag-stack.webp"
+    _add(p, {"title": "How we supply", "paras": ["Recovered from natural-gas purification and crude-oil refining, sulphur is the feedstock for sulphuric acid, phosphate fertilisers and metal leaching. Our supply is built on direct access to end buyers and a network of trading professionals with more than 30 years in the industry — reliable execution, consistent quality and competitive terms through compliant channels."]})
+    _add(p, {"title": "Industries served", "items": ["Fertilizer producers", "Steel and metallurgy", "Energy and power generation", "Mining and chemical industries"]})
+    _add(p, {"title": "Commercial terms", "items": ["Flexible pricing — formula pricing or Argus-linked index", "Contracting options to suit each buyer"]})
+    _add(p, {"title": "Quality assurance", "items": ["Inspection and certification", "Specification compliance", "Sampling and quality-control processes"]})
+
+    # Sulphuric acid (p.7): grades, our own production
+    p = _p("sulphuric-acid")
+    _s(p, "Specifications")["spec"].append({"title": "Grades", "headers": ["Grade", "Typical purity", "Main application"], "rows": [
+        ["Industrial grade", "93–98%", "Fertilizer, mining, chemicals"], ["Battery grade", "35–38%", "Lead-acid batteries"],
+        ["Technical grade", "90–98%", "General industrial use"], ["Electronic grade", "99.999%", "Semiconductor industry"],
+        ["Food / pharma grade", "Highly purified", "Specialised applications"]]})
+    _s(p, "Packaging")["img"] = PDF + "acid-ibc.webp"
+    _add(p, {"title": "Our production", "img": PDF + "acid-iso-tanks.webp", "paras": [
+        "HexaHessman operates sulphuric acid manufacturing facilities in Vietnam and Laos, close to customers across Southeast Asia, supplying consistent volumes of industrial-grade acid efficiently and competitively.",
+        "Integrated production and logistics, strong regional partnerships and export infrastructure support fertiliser, mining and chemical clients with reliable, cost-effective supply."]})
+
+    # Bitumen (p.8): one chart of every grade, applications and strengths
+    p = _p("bitumen")
+    p["sections"] = [s for s in p["sections"] if s.get("title") not in ("Viscosity grade (VG)", "Performance grade (PG)")]
+    i = next(k for k, s in enumerate(p["sections"]) if s.get("title") == "Penetration grade") + 1
+    p["sections"].insert(i, {"title": "Grades", "spec": [{"headers": ["Bitumen type", "Grade", "Use case"], "rows": [
+        ["Penetration grade", "40/50", "Roads in hot climates"], ["Penetration grade", "60/70", "General road paving"], ["Penetration grade", "80/100", "Roads in cold climates"],
+        ["Viscosity grade", "VG-10", "Cold-region roads"], ["Viscosity grade", "VG-20", "Moderate-climate roads"], ["Viscosity grade", "VG-30", "High-traffic roads"], ["Viscosity grade", "VG-40", "Heavy-duty pavements"],
+        ["Performance grade", "PG 58-22", "–22°C to 58°C"], ["Performance grade", "PG 64-22", "Highways, flexible pavements"], ["Performance grade", "PG 70-28", "Extreme climates"],
+        ["Polymer-modified (PMB)", "PMB 40", "Medium-traffic roads"], ["Polymer-modified (PMB)", "PMB 70", "Expressways, heavy-load areas"],
+        ["Cutback bitumen", "RC-70", "Cold-weather applications"], ["Cutback bitumen", "MC-30", "Prime coating, patching"], ["Cutback bitumen", "SC-250", "Dust control, base coat"]]}]})
+    _s(p, "Packaging")["img"] = PDF + "bitumen-drums.webp"
+    _add(p, {"title": "Applications", "img": PDF + "bitumen-paving.jpg", "items": ["Road construction and highway surfacing", "Airport runways and heavy-duty pavements", "Waterproofing and industrial coatings", "Infrastructure development projects"]}, before="Packaging")
+    _add(p, {"title": "Our strengths", "items": ["Reliable supply through strategic refinery partnerships", "Consistent quality to ASTM / EN / JIS standards", "Technical support and formulations for local climate and project conditions"]})
+
+    # Barite (p.10): results by API grade with test methods
+    p = _p("barite-powder")
+    sp = _s(p, "Specifications")
+    sp["spec"][0]["title"] = "General properties"
+    sp["spec"].insert(0, {"title": "By API grade — typical", "headers": ["Parameter", "API grade 4.0", "API grade 4.1", "API grade 4.2", "Test method"], "rows": [
+        ["Density", "4.01 g/cc min.", "4.124 g/cc min.", "4.205 g/cc min.", "API 13A / ISO 13500:2009"],
+        ["Water-soluble alkaline earth metals (as Ca)", "36 mg/kg", "36 mg/kg", "252 mg/kg", "API 13A / ISO 13500:2009"],
+        ["Residue > 75 µm", "1.7% (w/w)", "1.7% (w/w)", "3% (w/w)", "API 13A / ISO 13500:2009"],
+        ["Total barium (as BaSO₄)", "83.53% (w/w)", "86.23% (w/w)", "85.1% (w/w)", "API 13K, 18th ed."],
+        ["Magnesium (as MgO)", "0.17% (w/w)", "0.18% (w/w)", "0.19% (w/w)", "API 13K"],
+        ["Cadmium (Cd)", "Not detected", "Not detected", "Not detected", "API 131 / ISO 10416:2002"],
+        ["Mercury (Hg)", "Not detected", "Not detected", "Not detected", "API 131 / ISO 10416:2002"],
+        ["Particle size < 6 µm", "18.26%", "18.26%", "30.00%", "Particle size analyser"]]})
+    _s(p, "Key features")["img"] = PDF + "barite-rocks.jpg"
+    _s(p, "Packaging")["img"] = PDF + "barite-bag.jpg"
+
+    # Semi coke and metallurgical coke (p.11): Shaanxi supply, extra features and uses
+    supply = {"title": "How we supply", "paras": ["We supply semi coke and metallurgical coke from Shaanxi, China, to clients in Asia, the Middle East and beyond — consistent quality, reliable sourcing and every shipment to specification."]}
+    p = _p("semi-coke")
+    _s(p, "Key features")["items"].append("Environmentally favourable alternative fuel")
+    _s(p, "Key features")["img"] = PDF + "semi-coke-lumps.jpg"
+    _s(p, "Applications")["items"] += ["Chemical and industrial processes", "Energy generation and heating systems"]
+    _add(p, dict(supply))
+    p = _p("metallurgical-coke")
+    _s(p, "Key features")["items"].append("High calorific value")
+    _s(p, "Key features")["img"] = PDF + "met-coke-lumps.webp"
+    _s(p, "Applications")["items"] = ["Iron and steel production (blast furnaces)", "Foundries and smelting operations", "Ferroalloy manufacturing", "Heavy industrial fuel applications"]
+    for r in _s(p, "Specifications")["spec"][0]["rows"]:
+        if r[0] == "Size":
+            r[1] = "10–100 mm"
+    _add(p, dict(supply))
+
+    # Calcined and graphite petroleum coke (p.12)
+    p = _p("calcined-pet-coke")
+    _s(p, "Key features")["items"] = ["High carbon purity", "Low volatile matter", "High electrical conductivity", "Excellent thermal stability", "Strong mechanical strength", "Consistent particle distribution"]
+    _s(p, "Key features")["img"] = PDF + "cpc-granules.jpg"
+    _s(p, "Applications")["items"] = ["Aluminium anode production", "Steel industry", "Graphite electrode manufacturing", "Titanium dioxide production", "Carbon paste manufacturing", "Metallurgical additives"]
+    _s(p, "Packaging")["img"] = PDF + "pet-coke-plant.jpg"
+    rows = _s(p, "Specifications")["spec"][0]["rows"]
+    for r in rows:
+        if r[0] == "Sulphur": r[1] = "1.5–3.5%"
+        if r[0] == "Size": r[1] = "0–5 mm / 1–5 mm / 1–10 mm"
+    rows.insert(next(k for k, r in enumerate(rows) if r[0] == "Real density"), ["Resistivity", "450–550 μΩm"])
+    p = _p("graphite-pet-coke")
+    _s(p, "Key features")["items"] = ["High fixed carbon content", "Low sulphur and low nitrogen", "Excellent absorption rate", "Stable, consistent quality", "Superior graphitisation level", "Reduced slag generation"]
+    _s(p, "Key features")["img"] = PDF + "gpc-pile.jpg"
+    _s(p, "Applications")["items"] = ["Steel manufacturing", "Foundry casting", "Ductile iron production", "Friction materials", "Carbon additive for metallurgy", "Ferroalloy production"]
+    for r in _s(p, "Specifications")["spec"][0]["rows"]:
+        if r[0] == "Nitrogen": r[1] = "≤0.03%"
+        if r[0] == "Size": r[1] = "0–1 mm / 1–5 mm / 1–10 mm"
+
+    # pictures only
+    _s(_p("caustic-soda"), "Key features")["img"] = PDF + "caustic-flakes.jpg"
+    _s(_p("urea"), "Available forms")["imgs"] = {"Granular urea": PDF + "urea-granules.webp"}
+
+
+_apply_profile()

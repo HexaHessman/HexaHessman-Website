@@ -8,23 +8,134 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=2610k">
-<link rel="stylesheet" href="/assets/site.css?v=2611e">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=2611d">
+<link rel="stylesheet" href="/assets/site.css?v=2612q">
 <style>
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
+.trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
+.trio-col h3 { font-size: clamp(19px, 1.5vw, 22px); font-weight: 400; letter-spacing: -.015em; }
+.trio-col > p { color: var(--ink-soft); font-size: 15.5px; line-height: 1.55; }
+.trio-col .list { margin: 0; }
+.trio-col .list li { font-size: 15.5px; }
+.trio-sub { margin-top: 6px; font-size: 14px; font-weight: 500; color: var(--muted); }
+.col-pic { margin: 10px 0 0; }
+.col-pic img { display: block; width: 100%; height: auto; }
+.col-pic.photo img { aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; }
+.col-pic.cut img { aspect-ratio: 4 / 3; object-fit: contain; }   /* the profile's cut-outs sit free on the page */
+@media (max-width: 900px) { .trio { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .trio { grid-template-columns: 1fr; } }
 .spec-stack { display: grid; gap: 34px; }
-.spec-title { margin-bottom: 12px; }
+.spec-title { margin-bottom: 14px; text-align: center; }
+.centered-head .wrap > p { width: min(880px, 100%); margin: 0 auto 24px; color: var(--ink-soft); }   /* a note above a chart lines up with it */
 .card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
 .card ul.list { margin-top: 6px; }
 .who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
-.cta-band { border: 1px solid var(--line); border-radius: 12px; padding: clamp(28px, 4vw, 48px); display: grid; gap: 18px; background: rgba(var(--ink-rgb),.03); }
-.cta-band h2 { max-width: 20ch; }
+.cta-band { display: grid; gap: 22px; padding: clamp(24px, 6vh, 72px) 0 clamp(16px, 3vh, 32px); justify-items: center; text-align: center; }   /* no box: the user wants no cards anywhere */
+.cta-band h2 { max-width: 18ch; font-size: clamp(28px, 3.2vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
+.cta-band .lead { max-width: 46ch; }
+.cta-band .btn-row { justify-content: center; margin-top: 10px; }
 .related { display: grid; gap: 18px; }
 /* 3D mount points (#hero-3d on two group pages, #globe on contact) are empty until the scenes are mounted:
    hide them and keep the plain hero's full top padding so the breadcrumb clears the header bar. */
 .hero-3d:empty, .globe:empty { display: none; }
 .hero-3d:empty + .hero.plain, .globe:empty + .hero.plain { padding-top: 170px; }
-.hero .wrap .coverage { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.hero .wrap .coverage { font-size: clamp(15px, 1.15vw, 17px); color: var(--muted); margin-top: 6px; }
+/* catalogue-style line drawings, translucent behind the words (Shibata page) */
+.has-draw { position: relative; overflow: hidden; }
+.has-draw > .wrap { position: relative; z-index: 1; }
+.bg-draw { position: absolute; z-index: 0; right: -3%; top: 50%; width: min(1180px, 92vw); height: auto; transform: translateY(-50%); opacity: .1; pointer-events: none; user-select: none; }   /* lighter so the words read clearly (user, 2026-11-06) */
+.hero.has-draw .bg-draw { top: auto; bottom: 4%; transform: none; opacity: .09; }
+@media (max-width: 720px) { .bg-draw { right: -20%; width: 150vw; opacity: .08; } }
+.pr-hero { min-height: 86vh; }
+.pr-hero .media img { filter: none; }
+.pr-hero .media::after { background: linear-gradient(180deg, rgba(0,0,0,.05) 30%, rgba(0,0,0,.62)); }
+.contact-hero .media::after { background: linear-gradient(90deg, rgba(10,22,16,.78), rgba(10,22,16,.35) 55%, rgba(10,22,16,.1)), linear-gradient(180deg, transparent 50%, rgba(0,0,0,.5)); }
+.pr-hero .wrap, .pr-hero .crumbs, .pr-hero .crumbs a, .pr-hero .eyebrow { color: #fff; }
+.pr-hero .crumbs, .pr-hero .eyebrow { opacity: .85; }
+.pr-hero h1 { color: #fff; font-size: clamp(34px, 4.2vw, 60px); }
+.pr-hero .lead { color: rgba(255,255,255,.9); max-width: 58ch; }
+.pr-hero .pr-cov { font-size: 15px; color: rgba(255,255,255,.72); }
+.pr-photo .media::after { background: linear-gradient(180deg, rgba(15,42,30,.5) 0%, rgba(15,42,30,.58) 45%, rgba(15,42,30,.86) 100%); }   /* a dark HexaHessman-green veil so the words read on any photo */
+.pr-logo { position: absolute; z-index: 2; right: var(--gutter); top: clamp(150px, 20vh, 200px); width: auto; height: 54px; max-width: 34vw; object-fit: contain; filter: brightness(0) invert(1); opacity: .92; }   /* in white, so every part reads on the photo */
+.pr-logo.mq-shibata { height: 46px; } .pr-logo.mq-manntek { height: 70px; } .pr-logo.mq-straatman { height: 58px; } .pr-logo.mq-raythink { height: 60px; }
+@media (max-width: 720px) { .pr-logo { top: 104px; height: 34px; } .pr-logo.mq-manntek { height: 44px; } }
+.product-hero { min-height: 74vh; }
+.product-hero .media::after { background: linear-gradient(90deg, rgba(10,22,16,.82), rgba(10,22,16,.45) 55%, rgba(10,22,16,.15)), linear-gradient(180deg, transparent 45%, rgba(10,22,16,.55)); }
+.product-hero .lead + .lead { margin-top: -6px; }
+.pr-intro { display: grid; justify-items: center; text-align: center; gap: 22px; }
+.pr-intro .lead { max-width: 58ch; color: var(--ink); }
+.pr-intro .coverage { font-size: 15px; color: var(--muted); }
+.centered-head .section-head { margin-left: auto; margin-right: auto; text-align: center; justify-items: center; }
+.pr-logo { display: block; width: min(340px, 64vw); height: auto; margin: 0 auto 6px; }
+.hero.has-logo .wrap { text-align: center; justify-items: center; margin-left: auto; margin-right: auto; }
+.hero.has-logo .crumbs { justify-content: center; }
+.hero.has-logo .lead, .hero.has-logo .coverage { margin-left: auto; margin-right: auto; }
+/* solutions by fuel: four photo tiles in one line; they rise (1st, 3rd) and drop (2nd, 4th) into place when the row scrolls in; a tile opens its drop-down */
+.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 1.6vw, 22px); }
+.fuel-tile { position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
+  opacity: 0; transform: translateY(70px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * .12s); }
+.fuel-tile:nth-child(even) { transform: translateY(-70px); }
+.fuel-row.in .fuel-tile { opacity: 1; transform: none; }
+.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.fuel-tile:hover img { transform: scale(1.05); }
+.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.45); transition: background .3s; }
+.fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
+.fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
+.fuel-tile[aria-expanded="true"] .fuel-more { background: #fff; color: #0F2A1E; }
+.spin-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.2,.7,.2,1); }
+.spin-panel.open { grid-template-rows: 1fr; }
+.spin-panel-in { overflow: hidden; }
+.spin-panel-in > div { display: grid; gap: 18px; max-width: 62ch; margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--line); }
+.spin-panel-in p { font-size: clamp(17px, 1.35vw, 20px); color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .fuel-tile { opacity: 1; transform: none; transition: none; } }
+@media (max-width: 720px) { .fuel-tiles { grid-template-columns: 1fr 1fr; } .fuel-label { font-size: 18px; } }
+/* the labelled system diagram: labels pop out one by one (dot, then the leader line draws, then the tag) */
+.dg-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.dg { position: relative; margin: 0; min-width: 860px; border-radius: 14px; overflow: hidden; }
+.dg img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.dg svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dg line { stroke: #fff; stroke-width: 2.2; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.dg circle { fill: #fff; stroke: #0F2A1E; stroke-width: 3; transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.dg-tag { position: absolute; transform: translate(-50%, -50%) scale(.85); opacity: 0; padding: 7px 13px; border-radius: 980px; white-space: nowrap;
+  background: rgba(255,255,255,.88); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: #0F2A1E; font-size: clamp(11px, 1.05vw, 15px); font-weight: 500; letter-spacing: -.01em; box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+.dg.in circle { transform: scale(1); transition: transform .5s cubic-bezier(.3,1.6,.5,1) calc(var(--i) * .35s); }
+.dg.in line { stroke-dashoffset: 0; transition: stroke-dashoffset .6s ease calc(var(--i) * .35s + .15s); }
+.dg.in .dg-tag { opacity: 1; transform: translate(-50%, -50%) scale(1); transition: opacity .5s ease calc(var(--i) * .35s + .45s), transform .6s cubic-bezier(.3,1.5,.5,1) calc(var(--i) * .35s + .45s); }
+@media (prefers-reduced-motion: reduce) { .dg circle, .dg-tag { transform: translate(0,0); } .dg circle { transform: none; } .dg line { stroke-dashoffset: 0; } .dg-tag { opacity: 1; transform: translate(-50%, -50%); } }
+/* photos on the principal pages (Shibata): plain photos, the orange-panel layers, the floating clips */
+.zig-photo img, .zig-photo video, .zig-layers { border-radius: 4px; }
+.zig-photo video { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; mix-blend-mode: normal; }
+.zig-layers { position: relative; overflow: hidden; }
+.zig-layers .pl-base { display: block; width: 100%; height: auto; max-height: none; margin: 0; }
+.zig-layers .pl { position: absolute; display: block; max-height: none; margin: 0; clip-path: inset(100% 0 0 0); }
+.zig-layers.in .pl { clip-path: inset(0 0 0 0); transition: clip-path .9s cubic-bezier(.2,.7,.2,1) calc(.3s + var(--i) * .45s); }
+@media (prefers-reduced-motion: reduce) { .zig-layers .pl { clip-path: none; } }
+.zig-sub { margin: 26px 0 8px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+.zig-text > p + p { margin-top: 14px; }
+/* a product with its picture: picture one side, text the other, alternating down the page (as on the principal's own site) */
+.zig { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 80px); align-items: center; }
+.zig.right .zig-media { order: 2; }
+.zig-media { margin: 0; }
+.zig-text.has-drawing { position: relative; isolation: isolate; }
+.zig-drawing { position: absolute; z-index: -1; left: 50%; top: 50%; width: 130%; max-width: none; height: auto; transform: translate(-50%, -50%); opacity: .1; pointer-events: none; user-select: none; }
+@media (max-width: 720px) { .zig-drawing { width: 110%; opacity: .08; } }
+.zig-media video, .zig-media img { display: block; width: 100%; height: auto; }
+.zig-media[data-spin] { position: relative; aspect-ratio: 1; }
+.zig-media canvas, .zig-media .spin-still { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: multiply; }   /* the frames' off-white studio ground melts into the page */
+.zig-media.ready .spin-still { display: none; }
+.zig-media img { width: auto; max-width: 100%; max-height: 72vh; margin: 0 auto; }
+.zig-text h2 { margin-bottom: 20px; }
+.zig-text .spec-stack { margin-top: 18px; }
+@media (max-width: 720px) { .zig { grid-template-columns: 1fr; gap: 24px; } .zig.right .zig-media { order: 0; } .zig-media img { max-height: 60vh; } }
+.pr-media { margin: clamp(8px, 2vw, 24px) auto 0; }
+.pr-media video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 12px; background: #fff; object-fit: cover; }
+.yt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 2.4vw, 32px); }
+@media (max-width: 720px) { .yt-grid { grid-template-columns: 1fr; } }
+.yt-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: rgba(var(--ink-rgb),.06); }
+.yt-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt figcaption { margin-top: 10px; font-size: 15px; color: var(--muted); }
 .steps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
 .steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
 @media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
@@ -33,21 +144,11 @@
 <body>
 <div id="site-header"></div>
 <main>
-<section class="hero plain"><div class="wrap">
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span><a href="/commodities/">Commodities Supply</a></span><span><a href="/commodities/industrial-chemicals/">Industrial Chemicals</a></span><span>Methanol</span></nav>
-  <p class="eyebrow">Industrial Chemicals</p>
-  <h1>Methanol</h1>
-  <p class="lead">Methanol (CH₃OH) is one of the world’s most traded chemicals — a building block for formaldehyde, acetic acid and olefins, a fuel and fuel additive, and a fast-growing low-carbon marine fuel.</p><p class="lead">We supply IMPCA-grade methanol in bulk and ISO tanks, inspected at load port by independent surveyors.</p>
-</div></section>
-<section class="section" id="key-features"><div class="wrap"><div class="section-head"><h2>Key features</h2></div><ul class="list"><li>Purity 99.85% wt min., meeting the IMPCA reference specification</li><li>Also available to ASTM D1152 / US Federal O-M-232 Grade AA on request</li><li>Independent load-port inspection (SGS / Intertek / BV)</li><li>Bulk parcels and ISO-tank shipments</li></ul></div></section>
+<section class="hero pr-hero product-hero"><div class="media"><img src="/assets/products/methanol.jpg" alt="Methanol" fetchpriority="high"></div>
+<div class="wrap"><p class="eyebrow">Industrial Chemicals</p><h1>Methanol</h1><p class="lead">Methanol (CH₃OH) is one of the world’s most traded chemicals — a building block for formaldehyde, acetic acid and olefins, a fuel and fuel additive, and a fast-growing low-carbon marine fuel.</p><p class="lead">We supply IMPCA-grade methanol in bulk and ISO tanks, inspected at load port by independent surveyors.</p><p class="pr-cov">Methanol supplier in Southeast Asia: Singapore, Malaysia, Thailand, Vietnam and Indonesia.</p></div></section>
+<section class="section" id="details"><div class="wrap"><div class="trio"><div class="trio-col" id="key-features"><h3>Key features</h3><ul class="list"><li>Purity 99.85% wt min., meeting the IMPCA reference specification</li><li>Also available to ASTM D1152 / US Federal O-M-232 Grade AA on request</li><li>Independent load-port inspection (SGS / Intertek / BV)</li><li>Bulk parcels and ISO-tank shipments</li></ul></div><div class="trio-col" id="applications"><h3>Applications</h3><ul class="list"><li>Formaldehyde and resins (MDF, plywood adhesives)</li><li>Acetic acid, MTBE and methylamines</li><li>Methanol-to-olefins (MTO)</li><li>Biodiesel production (transesterification)</li><li>Marine fuel and fuel blending</li><li>Solvents, antifreeze and wastewater denitrification</li></ul></div><div class="trio-col" id="packaging"><h3>Packaging</h3><ul class="list"><li>Bulk chemical tanker</li><li>ISO tanks (approx. 20 MT)</li><li>IBC (approx. 800 kg) and 160 kg steel drums</li></ul></div></div></div></section>
 
-<section class="section" id="applications"><div class="wrap"><div class="section-head"><h2>Applications</h2></div><ul class="list"><li>Formaldehyde and resins (MDF, plywood adhesives)</li><li>Acetic acid, MTBE and methylamines</li><li>Methanol-to-olefins (MTO)</li><li>Biodiesel production (transesterification)</li><li>Marine fuel and fuel blending</li><li>Solvents, antifreeze and wastewater denitrification</li></ul></div></section>
-
-<section class="section" id="specifications"><div class="wrap"><div class="section-head"><h2>Specifications</h2></div><div class="spec-stack"><h3 class="spec-title">IMPCA reference specification</h3><table class="spec"><thead><tr><th>Parameter</th><th>Specification</th><th>Test method</th></tr></thead><tbody><tr><td>Purity (on dry basis)</td><td>≥99.85% wt</td><td>IMPCA 001</td></tr><tr><td>Appearance</td><td>Clear, free of suspended matter</td><td>IMPCA 003</td></tr><tr><td>Colour</td><td>≤5 Pt-Co</td><td>ASTM D1209</td></tr><tr><td>Density at 20°C</td><td>0.791–0.793 kg/L</td><td>ASTM D4052</td></tr><tr><td>Water</td><td>≤0.10% wt</td><td>ASTM E1064</td></tr><tr><td>Acetone</td><td>≤30 mg/kg</td><td>IMPCA 001</td></tr><tr><td>Ethanol</td><td>≤50 mg/kg</td><td>IMPCA 001</td></tr><tr><td>Acidity (as acetic acid)</td><td>≤30 mg/kg</td><td>ASTM D1613</td></tr><tr><td>Permanganate time at 15°C</td><td>≥60 minutes</td><td>ASTM D1363</td></tr><tr><td>Distillation range at 760 mmHg</td><td>≤1.0°C, to include 64.6°C ± 0.1°C</td><td>ASTM D1078</td></tr><tr><td>Carbonisable substances</td><td>≤30 Pt-Co</td><td>ASTM E346</td></tr><tr><td>Hydrocarbons</td><td>Pass</td><td>ASTM D1722</td></tr><tr><td>Chloride (as Cl⁻)</td><td>≤0.5 mg/kg</td><td>IMPCA 002</td></tr><tr><td>Sulphur</td><td>≤0.5 mg/kg</td><td>ASTM D5453</td></tr><tr><td>Total iron</td><td>≤0.1 mg/kg</td><td>ASTM E394</td></tr><tr><td>Non-volatile matter</td><td>≤8 mg/L</td><td>ASTM D1353</td></tr></tbody></table><h3 class="spec-title">Product data</h3><table class="spec"><tbody><tr><td>Chemical formula</td><td>CH₃OH</td></tr><tr><td>CAS No.</td><td>67-56-1</td></tr><tr><td>UN number / class</td><td>UN1230 · Class 3 (6.1 subsidiary) · PG II</td></tr><tr><td>Boiling point</td><td>64.7°C</td></tr><tr><td>Flash point</td><td>11°C (closed cup)</td></tr><tr><td>Safety</td><td>Highly flammable and toxic if swallowed, inhaled or absorbed through skin; store in sealed, earthed tanks away from ignition sources; use PPE</td></tr></tbody></table></div></div></section>
-
-<section class="section" id="packaging"><div class="wrap"><div class="section-head"><h2>Packaging</h2></div><ul class="list"><li>Bulk chemical tanker</li><li>ISO tanks (approx. 20 MT)</li><li>IBC (approx. 800 kg) and 160 kg steel drums</li></ul></div></section>
-
-<section class="section" id="distribution"><div class="wrap"><div class="section-head"><h2>Distribution</h2></div><p>Methanol supplier in Southeast Asia: Singapore, Malaysia, Thailand, Vietnam and Indonesia.</p></div></section>
+<section class="section centered-head" id="specifications"><div class="wrap"><div class="section-head"><h2>Specifications</h2></div><div class="spec-stack"><h3 class="spec-title">IMPCA reference specification</h3><div class="spec-scroll"><table class="spec"><thead><tr><th>Parameter</th><th>Specification</th><th>Test method</th></tr></thead><tbody><tr><td>Purity (on dry basis)</td><td>≥99.85% wt</td><td>IMPCA 001</td></tr><tr><td>Appearance</td><td>Clear, free of suspended matter</td><td>IMPCA 003</td></tr><tr><td>Colour</td><td>≤5 Pt-Co</td><td>ASTM D1209</td></tr><tr><td>Density at 20°C</td><td>0.791–0.793 kg/L</td><td>ASTM D4052</td></tr><tr><td>Water</td><td>≤0.10% wt</td><td>ASTM E1064</td></tr><tr><td>Acetone</td><td>≤30 mg/kg</td><td>IMPCA 001</td></tr><tr><td>Ethanol</td><td>≤50 mg/kg</td><td>IMPCA 001</td></tr><tr><td>Acidity (as acetic acid)</td><td>≤30 mg/kg</td><td>ASTM D1613</td></tr><tr><td>Permanganate time at 15°C</td><td>≥60 minutes</td><td>ASTM D1363</td></tr><tr><td>Distillation range at 760 mmHg</td><td>≤1.0°C, to include 64.6°C ± 0.1°C</td><td>ASTM D1078</td></tr><tr><td>Carbonisable substances</td><td>≤30 Pt-Co</td><td>ASTM E346</td></tr><tr><td>Hydrocarbons</td><td>Pass</td><td>ASTM D1722</td></tr><tr><td>Chloride (as Cl⁻)</td><td>≤0.5 mg/kg</td><td>IMPCA 002</td></tr><tr><td>Sulphur</td><td>≤0.5 mg/kg</td><td>ASTM D5453</td></tr><tr><td>Total iron</td><td>≤0.1 mg/kg</td><td>ASTM E394</td></tr><tr><td>Non-volatile matter</td><td>≤8 mg/L</td><td>ASTM D1353</td></tr></tbody></table></div><h3 class="spec-title">Product data</h3><div class="spec-scroll"><table class="spec"><thead><tr><th>Parameter</th><th>Specification</th></tr></thead><tbody><tr><td>Chemical formula</td><td>CH₃OH</td></tr><tr><td>CAS No.</td><td>67-56-1</td></tr><tr><td>UN number / class</td><td>UN1230 · Class 3 (6.1 subsidiary) · PG II</td></tr><tr><td>Boiling point</td><td>64.7°C</td></tr><tr><td>Flash point</td><td>11°C (closed cup)</td></tr><tr><td>Safety</td><td>Highly flammable and toxic if swallowed, inhaled or absorbed through skin; store in sealed, earthed tanks away from ignition sources; use PPE</td></tr></tbody></table></div></div></div></section>
 
 <section class="section" id="related"><div class="wrap"><div class="section-head"><h2>Related products</h2></div><div class="grid c4"><a class="card" href="/commodities/industrial-chemicals/caustic-soda/"><h3>Caustic Soda</h3><p>NaOH flakes, pearls and lye (32% / 48–50%)</p><span class="more">View product →</span></a><a class="card" href="/commodities/industrial-chemicals/soda-ash/"><h3>Soda Ash</h3><p>Na₂CO₃ 99.2% min., dense and light grades</p><span class="more">View product →</span></a><a class="card" href="/commodities/petroleum-oilfield/base-oil/"><h3>Base Oil</h3><p>Group I / II, SN150 and SN500</p><span class="more">View product →</span></a></div></div></section>
 
@@ -60,7 +161,9 @@
 
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=2610k" defer></script>
+<script src="/assets/site-header.js?v=2612d" defer></script>
+<script src="/assets/deco-lines.js?v=1" defer></script>
+<script src="/assets/words.js?v=1" defer></script>
 <script src="/assets/site-footer.js" defer></script>
 </body>
 </html>

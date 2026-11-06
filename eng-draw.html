@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HexaHessman · Engineering drawing</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: transparent; overflow: hidden; }
+  #scene { position: fixed; inset: 0; display: block; }
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<!-- Engineering Solutions hero: a cone fender on its quay wall, drawn in pencil the way the HexaHessman mark is (logo.html):
+     construction lines first, then the outlines one after another, then the dimensions. Green ink on the white page.
+     The host page sends { type: 'logo-scroll', p } to turn it a little as you scroll, and { type: 'logo-pointer', x, y }. -->
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+
+const Q = new URLSearchParams(location.search);
+const INK = 0x0F2A1E, INK_SOFT = 0x48645a;
+const DRAW_MS = +(Q.get('ms') || 6500);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.setClearColor(0xffffff, 0);
+const scene = new THREE.Scene();
+
+// parallel (isometric) camera, as the mark
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100);
+camera.position.set(20, 20, 20); camera.lookAt(0, 0, 0);
+// framing: fit the finished drawing (every line, at its resting pose) in the box with a margin
+const fitBox = { x0: -5, x1: 5, y0: -5, y1: 5 };
+function measure() {
+  camera.updateMatrixWorld(); rig.updateMatrixWorld(true);
+  const p = new THREE.Vector3(); let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  for (const l of drawables) { const a = l.geometry.attributes.instanceStart; if (!a) continue; const arr = a.data.array;
+    for (let i = 0; i < arr.length; i += 3) { p.set(arr[i], arr[i + 1], arr[i + 2]).applyMatrix4(l.matrixWorld).applyMatrix4(camera.matrixWorldInverse); x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y); } }
+  Object.assign(fitBox, { x0, x1, y0, y1 });
+}
+function frameCamera() {
+  const aspect = innerWidth / innerHeight, m = 1.1;
+  const cx = (fitBox.x0 + fitBox.x1) / 2, cy = (fitBox.y0 + fitBox.y1) / 2;
+  let hw = (fitBox.x1 - fitBox.x0) / 2 * m, hh = (fitBox.y1 - fitBox.y0) / 2 * m;
+  if (hw / hh > aspect) hh = hw / aspect; else hw = hh * aspect;
+  camera.left = cx - hw; camera.right = cx + hw; camera.top = cy + hh; camera.bottom = cy - hh;
+  camera.updateProjectionMatrix();
+}
+frameCamera();
+
+// ---------- pencils ----------
+const materials = [];
+function pencil({ color = INK, opacity = 1, width = 1.4, dashed = false, dash = 0.1, gap = 0.07, depthTest = true }) {
+  const m = new LineMaterial({ color, opacity, transparent: true, linewidth: width, dashed, dashSize: dash, gapSize: gap, depthTest, depthWrite: false });
+  m.resolution.set(innerWidth, innerHeight); materials.push(m); return m;
+}
+const matSolid     = pencil({ opacity: 0.92, width: 1.35 });
+const matSketch    = pencil({ color: INK_SOFT, opacity: 0.3, width: 0.9 });
+const matHidden    = pencil({ color: INK_SOFT, opacity: 0.32, width: 0.9, dashed: true, dash: 0.08, gap: 0.06, depthTest: false });
+const matDim       = pencil({ color: INK_SOFT, opacity: 0.85, width: 1.0 });
+const matExt       = pencil({ color: INK_SOFT, opacity: 0.5, width: 0.8 });
+const matConstruct = pencil({ color: INK_SOFT, opacity: 0.5, width: 0.8, dashed: true, dash: 0.16, gap: 0.09, depthTest: false });
+const matHatch     = pencil({ color: INK_SOFT, opacity: 0.4, width: 0.8 });
+const matOccluder  = new THREE.MeshBasicMaterial({ colorWrite: false, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1, side: THREE.DoubleSide });
+
+const rig = new THREE.Group(); scene.add(rig);
+const drawables = [], steps = [];
+let cur = null;
+const step = w => { cur = { sets: [], w }; steps.push(cur); };   // the drawing plan: each step is one part, drawn as a whole
+function fatLines(positions, mat, parent = rig) {
+  const g = new LineSegmentsGeometry(); g.setPositions(positions);
+  const l = new LineSegments2(g, mat); l.computeLineDistances(); parent.add(l);
+  l.userData.total = positions.length / 6; drawables.push(l); if (cur) cur.sets.push(l); return l;
+}
+// segments reordered so each starts where the last ended: the pen goes round an outline instead of jumping about
+function chainSegments(arr) {
+  const n = arr.length / 6, used = new Uint8Array(n), out = new Float32Array(arr.length);
+  const P = (i, e) => [arr[i * 6 + e * 3], arr[i * 6 + e * 3 + 1], arr[i * 6 + e * 3 + 2]], d2 = (p, q) => (p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 + (p[2] - q[2]) ** 2;
+  let c = 0, best = -Infinity, end = null, o = 0;
+  for (let i = 0; i < n; i++) for (const e of [0, 1]) { const p = P(i, e), k = p[1] * 2 - p[0] - p[2] * 0.3; if (k > best) { best = k; c = i; } }
+  for (let s = 0; s < n; s++) {
+    if (end) { let bd = Infinity; for (let i = 0; i < n; i++) if (!used[i]) for (const e of [0, 1]) { const d = d2(P(i, e), end); if (d < bd) { bd = d; c = i; } } }
+    used[c] = 1; let a = P(c, 0), b = P(c, 1); if (end && d2(b, end) < d2(a, end)) [a, b] = [b, a];
+    out.set(a, o); out.set(b, o + 3); o += 6; end = b;
+  }
+  return out;
+}
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const toArray = pts => { const a = new Float32Array(pts.length * 3); pts.forEach((p, i) => { a[i * 3] = p.x; a[i * 3 + 1] = p.y; a[i * 3 + 2] = p.z; }); return a; };
+const jitter = (arr, a = 0.025) => Float32Array.from(arr, v => v + (Math.random() - 0.5) * a);
+
+// a solid with hard edges (boxes, plates): occluder + hidden pass + a loose sketch pass + the outline
+function solid(geo, parent = rig) {
+  const g = new THREE.Group(); parent.add(g);
+  g.add(new THREE.Mesh(geo, matOccluder));
+  const e = chainSegments(new THREE.EdgesGeometry(geo, 20).attributes.position.array);
+  fatLines(e, matHidden, g).renderOrder = -1;
+  fatLines(jitter(e), matSketch, g);
+  fatLines(e, matSolid, g);
+  return g;
+}
+const box = (w, h, d, x, y, z, parent) => { const g = solid(new THREE.BoxGeometry(w, h, d), parent); g.position.set(x, y, z); return g; };
+
+// a body of revolution about local +y (profile: [r, y] pairs): rims at every profile corner, and a silhouette
+// that follows the view as the drawing turns (recomputed each frame)
+const turned = [];
+function lathe(profile, parent, rings = profile.map((_, i) => i)) {
+  const g = new THREE.Group(); parent.add(g);
+  const geo = new THREE.LatheGeometry(profile.map(([r, y]) => new THREE.Vector2(r, y)), 72);
+  g.add(new THREE.Mesh(geo, matOccluder));
+  // caps so the far side hides
+  for (const [r, y] of [profile[0], profile[profile.length - 1]]) { const c = new THREE.Mesh(new THREE.CircleGeometry(r, 72), matOccluder); c.rotation.x = -Math.PI / 2; c.position.y = y; g.add(c); }
+  const ringPts = [];
+  for (const i of rings) { const [r, y] = profile[i]; for (let k = 0; k < 72; k++) { const a0 = k / 72 * Math.PI * 2, a1 = (k + 1) / 72 * Math.PI * 2; ringPts.push(V(r * Math.cos(a0), y, r * Math.sin(a0)), V(r * Math.cos(a1), y, r * Math.sin(a1))); } }
+  const ra = toArray(ringPts);
+  fatLines(ra, matHidden, g).renderOrder = -1;
+  fatLines(jitter(ra, 0.02), matSketch, g);
+  fatLines(ra, matSolid, g);
+  // silhouette: each profile segment, at the two angles where its surface turns edge-on to the camera
+  const sil = new LineSegments2(new LineSegmentsGeometry(), matSolid); g.add(sil);
+  sil.geometry.setPositions(new Float32Array(profile.length * 12));
+  sil.userData.total = (profile.length - 1) * 2; drawables.push(sil); if (cur) cur.sets.push(sil);
+  turned.push({ g, profile, sil });
+  return g;
+}
+const _v = new THREE.Vector3(), _q = new THREE.Quaternion();
+function updateSilhouettes() {
+  for (const t of turned) {
+    t.g.getWorldQuaternion(_q); _v.copy(camera.position).normalize().applyQuaternion(_q.invert());   // view direction, in the body's frame
+    const rho = Math.hypot(_v.x, _v.z), phi = Math.atan2(_v.z, _v.x), out = [];
+    for (let i = 0; i < t.profile.length - 1; i++) {
+      const [r0, y0] = t.profile[i], [r1, y1] = t.profile[i + 1];
+      const dr = r1 - r0, dy = y1 - y0, len = Math.hypot(dr, dy) || 1, a = dy / len, b = -dr / len;   // the segment's outward normal (radial a, axial b)
+      if (Math.abs(a) < 1e-3 || rho < 1e-4) { out.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); continue; }   // a flat face: the rims draw it
+      const c = -b * _v.y / (a * rho);
+      if (Math.abs(c) > 1) { out.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); continue; }
+      for (const s of [1, -1]) { const th = phi + s * Math.acos(c); out.push(r0 * Math.cos(th), y0, r0 * Math.sin(th), r1 * Math.cos(th), y1, r1 * Math.sin(th)); }
+    }
+    t.sil.geometry.setPositions(new Float32Array(out));
+    t.sil.computeLineDistances();
+  }
+}
+
+// ---------- the drawing: a cone fender on a quay wall. The fender's axis runs along +x out of the wall. ----------
+const WX = -2.7;   // the wall's face
+step(0.9);   // 1 the quay wall and its hatching
+// quay wall: a slab with its top hatched as concrete
+const wall = box(0.55, 6.8, 6.2, WX - 0.275, 0, 0);
+{ const h = []; for (let z = -3.0; z < 3.1; z += 0.34) h.push(V(WX - 0.55, 3.4, z), V(WX, 3.4, z + 0.3)); fatLines(toArray(h), matHatch); }
+
+// the fender: base flange, cone body with its waist, top flange — turned about local y, laid along x
+step(1.6);   // 2 the fender body: flanges, cone, bolts
+const fender = new THREE.Group(); fender.rotation.z = -Math.PI / 2; fender.position.x = WX; rig.add(fender);   // local +y → world +x
+const H = 3.1;   // wall face to panel back
+lathe([[1.62, 0], [1.62, 0.16], [1.42, 0.16], [1.32, 0.9], [1.12, 1.9], [1.0, 2.7], [1.08, 2.7], [1.08, 2.88]], fender, [0, 1, 2, 5, 6, 7]);
+// bolts round the base flange
+{ const b = []; for (let k = 0; k < 8; k++) { const a = (k + 0.5) / 8 * Math.PI * 2, cx = 1.52 * Math.cos(a), cz = 1.52 * Math.sin(a);
+  for (let j = 0; j < 12; j++) { const t0 = j / 12 * Math.PI * 2, t1 = (j + 1) / 12 * Math.PI * 2; b.push(V(cx + 0.06 * Math.cos(t0), 0.165, cz + 0.06 * Math.sin(t0)), V(cx + 0.06 * Math.cos(t1), 0.165, cz + 0.06 * Math.sin(t1))); } }
+  fatLines(toArray(b), matSolid, fender); }
+
+// frontal panel: a steel frame with its face pads
+step(1.7);   // 3 the frontal panel and its pads
+const PX = WX + 2.88, PT = 0.34, PW = 4.4, PH = 4.6;
+const panel = new THREE.Group(); rig.add(panel);
+box(PT, PH, PW, PX + PT / 2, 0, 0, panel);
+for (const y of [-1.5, 0, 1.5]) for (const z of [-1.45, 0, 1.45]) box(0.1, 1.3, 1.3, PX + PT + 0.05, y, z, panel);   // UHMW-PE face pads
+// lifting lugs on the top edge
+box(0.3, 0.26, 0.12, PX + 0.16, PH / 2 + 0.13, -1.6, panel); box(0.3, 0.26, 0.12, PX + 0.16, PH / 2 + 0.13, 1.6, panel);
+
+// chains from the panel's top to the wall: links alternate flat and on edge
+function chain(a, b, n = 9) {
+  const pts = [], dir = b.clone().sub(a), step = dir.length() / n; dir.normalize();
+  const up = Math.abs(dir.y) > 0.9 ? V(1, 0, 0) : V(0, 1, 0), s1 = dir.clone().cross(up).normalize(), s2 = dir.clone().cross(s1).normalize();
+  for (let i = 0; i < n; i++) {
+    const c = a.clone().add(dir.clone().multiplyScalar(step * (i + 0.5))), side = i % 2 ? s1 : s2;
+    for (let j = 0; j < 16; j++) {
+      const t0 = j / 16 * Math.PI * 2, t1 = (j + 1) / 16 * Math.PI * 2;
+      const p = t => c.clone().add(dir.clone().multiplyScalar(Math.cos(t) * step * 0.62)).add(side.clone().multiplyScalar(Math.sin(t) * 0.11));
+      pts.push(p(t0), p(t1));
+    }
+  }
+  fatLines(toArray(pts), matSolid);
+}
+step(0.5); chain(V(PX + 0.16, PH / 2 + 0.2, -1.6), V(WX, 3.05, -2.3));
+step(0.5); chain(V(PX + 0.16, PH / 2 + 0.2, 1.6), V(WX, 3.05, 2.3));
+step(0.45); chain(V(PX + 0.1, -PH / 2 + 0.3, 0), V(WX, -2.9, 0), 8);   // the weight chain
+
+// ---------- drafting marks ----------
+function dimension(p1, p2, offset) {
+  step(0.35);
+  const a = p1.clone().add(offset), b = p2.clone().add(offset), dir = b.clone().sub(a).normalize();
+  const over = 0.14, extOver = offset.clone().normalize().multiplyScalar(0.2);
+  const pts = [a.clone().sub(dir.clone().multiplyScalar(over)), b.clone().add(dir.clone().multiplyScalar(over))];
+  const perp = dir.clone().cross(offset.clone().normalize()).cross(dir).normalize(), L = 0.22, Wd = 0.055;
+  for (const [tip, s] of [[a, 1], [b, -1]]) { const back = tip.clone().add(dir.clone().multiplyScalar(L * s)); pts.push(tip.clone(), back.clone().add(perp.clone().multiplyScalar(Wd)), tip.clone(), back.clone().sub(perp.clone().multiplyScalar(Wd))); }
+  fatLines(toArray(pts), matDim);
+  fatLines(toArray([p1.clone(), a.clone().add(extOver), p2.clone(), b.clone().add(extOver)]), matExt);
+}
+dimension(V(WX, -3.4, 3.1), V(PX + PT + 0.1, -3.4, 3.1), V(0, -0.5, 0.5));          // H: wall to panel face
+dimension(V(PX + PT + 0.1, PH / 2, PW / 2), V(PX + PT + 0.1, -PH / 2, PW / 2), V(0.6, 0, 0.6));   // panel height
+dimension(V(PX + PT + 0.1, -PH / 2, -PW / 2), V(PX + PT + 0.1, -PH / 2, PW / 2), V(0.6, -0.6, 0));   // panel width
+dimension(V(WX + 0.08, 1.62, 0), V(WX + 0.08, -1.62, 0), V(0, 0, -3.6));              // base flange diameter
+
+// construction: the fender's axis, the panel's centre lines, the wall line
+step(0.6);   // construction lines go first in the plan (moved to the front below)
+const cst = [V(WX - 1.2, 0, 0), V(PX + 1.6, 0, 0), V(PX + PT + 0.1, PH / 2 + 0.8, 0), V(PX + PT + 0.1, -PH / 2 - 0.8, 0),
+             V(PX + PT + 0.1, 0, PW / 2 + 0.8), V(PX + PT + 0.1, 0, -PW / 2 - 0.8), V(WX, 3.9, -3.6), V(WX, 3.9, 3.6)];
+fatLines(toArray(cst), matConstruct);
+
+const YAW = 0.45;   // the fender turned so its axis runs across the view: the cone shows in profile, the panel at an angle
+rig.rotation.y = YAW; updateSilhouettes(); measure(); frameCamera();
+
+// ---------- drawing on, step by step ----------
+for (const l of drawables) l.geometry.instanceCount = 0;
+steps.unshift(steps.pop());   // construction lines first, then the wall, the fender, the panel, the chains, the dimensions
+{ const W = steps.reduce((a, st) => a + st.w, 0); let acc = 0; for (const st of steps) { st.from = acc / W; acc += st.w; st.to = acc / W; } }
+let start = null;   // starts when the host says so ({type:'draw-start'}), or on load when not embedded
+addEventListener('message', e => { const d = e.data; if (!d) return;
+  if (d.type === 'draw-start' && start === null) start = performance.now();
+  if (d.type === 'logo-pointer') { state.px = d.x; state.py = d.y; }
+  if (d.type === 'logo-scroll') spin.target = d.p;
+  if (d.type === 'logo-pause') paused = !!d.v; });
+if (parent === window || Q.has('auto')) start = performance.now();
+
+const state = { px: 0, py: 0, rx: 0, ry: 0 }, spin = { target: 0, now: 0 };
+let paused = false;
+addEventListener('resize', () => { frameCamera(); renderer.setSize(innerWidth, innerHeight); for (const m of materials) m.resolution.set(innerWidth, innerHeight); });
+
+function tick(now) {
+  requestAnimationFrame(tick);
+  if (paused) return;
+  const k = reduce ? 1 : start === null ? 0 : Math.min(1, (now - start) / DRAW_MS);
+  for (const st of steps) { const f = Math.min(1, Math.max(0, (k - st.from) / (st.to - st.from))), e = f * f * (3 - 2 * f); for (const l of st.sets) l.geometry.instanceCount = Math.ceil(l.userData.total * e); }
+  state.ry += (state.px * 0.08 - state.ry) * 0.04; state.rx += (state.py * 0.04 - state.rx) * 0.04;
+  spin.now += (spin.target - spin.now) * 0.05;
+  rig.rotation.set(state.rx, YAW + state.ry + spin.now * 0.6, 0);
+  updateSilhouettes();
+  renderer.render(scene, camera);
+}
+requestAnimationFrame(tick);
+window.__debug = { rig, camera };
+</script>
+</body>
+</html>

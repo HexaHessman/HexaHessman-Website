@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>HexaHessman</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet" />
 <style>
   :root {
     --paper: #0F2A1E;          /* sampled from the card */
@@ -13,7 +13,7 @@
     --ink-soft: #d2c6aa;       /* faint pencil */
     --muted: rgba(238, 227, 199, 0.6);
     --sans: "Geist", "Suisse Intl", "Helvetica Neue", Arial, sans-serif;
-    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --mono: "Geist", "Suisse Intl", "Helvetica Neue", Arial, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; background: var(--paper); color: var(--ink); font-family: var(--sans); overflow: hidden; -webkit-font-smoothing: antialiased; }
@@ -109,7 +109,8 @@ import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 
-const PAPER = 0x0F2A1E, INK = 0xeee3c7, INK_SOFT = 0xd2c6aa;
+const GREEN_INK = new URLSearchParams(location.search).get('ink') === 'green';   // ?ink=green: green lines, for white pages
+const PAPER = 0x0F2A1E, INK = GREEN_INK ? 0x0F2A1E : 0xeee3c7, INK_SOFT = GREEN_INK ? 0x48645a : 0xd2c6aa;
 
 const PRELOADER = new URLSearchParams(location.search).has('preloader');
 if (PRELOADER) document.documentElement.classList.add('preloader');
@@ -136,7 +137,9 @@ function frameCamera() {
   if (PRELOADER) { halfH = wide ? 7.2 : halfH * 1.3; halfW = wide ? halfH * aspect : halfW * 1.3; if (!wide) halfH = halfW / aspect; }
   if (EMBED && wide) { halfH = aspect < 1.4 ? 7.4 : 6.2; halfW = halfH * aspect; }   // leave room for the headline
   if (EMBED && !wide) { halfW = 5.4; halfH = halfW / aspect; }   // a little smaller on phones, above the headline
-  const fx = PRELOADER ? 0.5 : (wide ? (EMBED ? 0.70 : 0.72) : 0.5), fy = PRELOADER ? 0.5 : (wide ? 0.52 : (EMBED ? 0.30 : 0.40));   // where the world origin lands on screen
+  const story = new URLSearchParams(location.search).has('story');   // About, Our story: the mark alone, filling its box
+  if (story) { halfH = 4.3; halfW = halfH * aspect; if (aspect < 1) { halfW = 4.3; halfH = halfW / aspect; } }
+  const fx = story ? 0.5 : PRELOADER ? 0.5 : (wide ? (EMBED ? 0.70 : 0.72) : 0.5), fy = story || PRELOADER ? 0.5 : (wide ? 0.52 : (EMBED ? 0.30 : 0.40));   // where the world origin lands on screen
   camera.left = -2 * halfW * fx;  camera.right = 2 * halfW * (1 - fx);
   camera.bottom = -2 * halfH * (1 - fy); camera.top = 2 * halfH * fy;
   camera.updateProjectionMatrix();
@@ -194,15 +197,34 @@ function frameGeometry(w, h, depth, wall, bevel) {
   return geo;
 }
 
+// orders a set of segments so each one starts where the last ended (flipping as needed), from the topmost point:
+// a pen working round the outline rather than lines appearing at random
+function chainSegments(arr) {
+  const n = arr.length / 6, used = new Uint8Array(n), out = new Float32Array(arr.length);
+  const P = (i, e) => [arr[i * 6 + e * 3], arr[i * 6 + e * 3 + 1], arr[i * 6 + e * 3 + 2]];
+  let cur = 0, best = -Infinity;
+  for (let i = 0; i < n; i++) for (const e of [0, 1]) { const p = P(i, e); const k = p[1] * 2 - p[0] - p[2] * 0.3; if (k > best) { best = k; cur = i; } }
+  let end = null, o = 0;
+  for (let step = 0; step < n; step++) {
+    if (end) { let bd = Infinity; for (let i = 0; i < n; i++) if (!used[i]) for (const e of [0, 1]) { const p = P(i, e), d = (p[0] - end[0]) ** 2 + (p[1] - end[1]) ** 2 + (p[2] - end[2]) ** 2; if (d < bd) { bd = d; cur = i; } } }
+    used[cur] = 1;
+    let a = P(cur, 0), b = P(cur, 1);
+    if (end) { const da = (a[0] - end[0]) ** 2 + (a[1] - end[1]) ** 2 + (a[2] - end[2]) ** 2, db = (b[0] - end[0]) ** 2 + (b[1] - end[1]) ** 2 + (b[2] - end[2]) ** 2; if (db < da) [a, b] = [b, a]; }
+    out.set(a, o); out.set(b, o + 3); o += 6; end = b;
+  }
+  return out;
+}
+
+const pieces = [];   // each piece's line sets (hidden, sketch, outline), drawn together in story mode
 function makePiece(w, h, depth, wall, bevel) {
   const geo = frameGeometry(w, h, depth, wall, bevel);
-  const edges = new THREE.EdgesGeometry(geo, 5).attributes.position.array;
+  const edges = chainSegments(new THREE.EdgesGeometry(geo, 5).attributes.position.array);
   const g = new THREE.Group();
   g.add(new THREE.Mesh(geo, matOccluder));
   const loose = Float32Array.from(edges, v => v + (Math.random() - 0.5) * 0.03);   // second, looser pencil pass
-  fatLines(edges, matHidden, g).renderOrder = -1;
-  fatLines(loose, matSketch, g);
-  fatLines(edges, matSolid, g);
+  const hid = fatLines(edges, matHidden, g); hid.renderOrder = -1;
+  const sk = fatLines(loose, matSketch, g), so = fatLines(edges, matSolid, g);
+  g.userData.sets = [hid, sk, so];
   return g;
 }
 
@@ -244,9 +266,11 @@ function dimension(p1, p2, offset) {
     pts.push(tip.clone(), back.clone().add(perp.clone().multiplyScalar(Wd)));
     pts.push(tip.clone(), back.clone().sub(perp.clone().multiplyScalar(Wd)));
   }
-  fatLines(toArray(pts), matDim);
-  fatLines(toArray([p1.clone(), a.clone().add(extOver), p2.clone(), b.clone().add(extOver)]), matExt);
+  const ext = fatLines(toArray([p1.clone(), a.clone().add(extOver), p2.clone(), b.clone().add(extOver)]), matExt);
+  const dim = fatLines(toArray(pts), matDim);
+  dims.push([ext, dim]);
 }
+const dims = [];
 
 const hx = U.w / 2, hy = U.h / 2, zf = U.z + U.d / 2, zb = U.z - U.d / 2;
 // front upright
@@ -265,11 +289,17 @@ for (const z of [zf, zb, 0, -zb, -zf]) construct.push(V(0, hy + 0.9, z), V(0, -h
 construct.push(V(0, D.center.y, -zf - 0.6), V(0, D.center.y, zf + 0.6));
 construct.push(V(0, hy + 0.6, 0), V(0, -hy - 0.6, 0));
 construct.push(V(-hx - 0.9, D.center.y, 0), V(hx + 0.9, D.center.y, 0));
-fatLines(toArray(construct), matConstruct);
+const constructLines = fatLines(toArray(construct), matConstruct);
 
 // ---------- draw-on animation ----------
 for (const l of drawables) l.geometry.instanceCount = 0;
 const drawStart = performance.now(), DRAW_MS = 2800;
+const STORY = new URLSearchParams(location.search).has('seq'), STORY_MS = 5200;   // ?seq: piece by piece; ?story only frames the mark bigger and keeps the preloader's draw (user, 2026-11-06)
+// the plan: faint construction lines, then each piece in turn — its outline, inner frame and hidden edges drawn together
+// as one pen path — the front upright, the back one, the diamond between them, and last the dimensions, one by one
+const storySteps = [{ sets: [constructLines], w: 0.5 }, { sets: left.userData.sets, w: 1.6 }, { sets: right.userData.sets, w: 1.6 },
+  { sets: diamond.userData.sets, w: 1.3 }, ...dims.map(d => ({ sets: d, w: 0.28 }))];
+{ const W = storySteps.reduce((a, s) => a + s.w, 0); let acc = 0; for (const st of storySteps) { st.from = acc / W; acc += st.w; st.to = acc / W; } }
 
 // ---------- interaction: holds the drawing pose; tilts toward the cursor; drag to turn, then settles back ----------
 const state = { dragging: false, lastX: 0, lastY: 0, rotY: 0, rotX: 0, px: 0, py: 0 };
@@ -289,6 +319,8 @@ addEventListener('message', e => {
   const d = e.data; if (!d) return;
   if (d.type === 'logo-pointer') { state.px = d.x; state.py = d.y; }
   if (d.type === 'logo-scroll') spin.target = d.p * Math.PI * 2;
+  if (d.type === 'logo-scroll-set') spin.target = spin.now = d.p * Math.PI * 2;
+  if (d.type === 'logo-pause') paused = !!d.v;   // the host page hides it: stop drawing frames until it shows again   // jump there without turning (used while the mark is invisible)
   if (d.type === 'logo-spinout' && !spin.outStart) spin.outStart = performance.now();
 });
 // preloader exit: one and a quarter turns, slow to start, quick through the middle, and the mark grows toward the viewer
@@ -309,10 +341,19 @@ addEventListener('resize', () => {
   for (const m of materials) m.resolution.set(innerWidth, innerHeight);
 });
 
+let paused = false;
 function tick(now) {
-  const k = Math.min(1, Math.max(0, (now - drawStart) / DRAW_MS));
-  const e = 1 - Math.pow(1 - k, 3);
-  for (const l of drawables) l.geometry.instanceCount = Math.floor(l.userData.total * e);
+  if (paused) { requestAnimationFrame(tick); return; }
+  const k = Math.min(1, Math.max(0, (now - drawStart) / (STORY ? STORY_MS : DRAW_MS)));
+  if (STORY) {   // ?story: one line after another, like a pen working through the drawing (About, Our story)
+    for (const st of storySteps) {
+      const f = Math.min(1, Math.max(0, (k - st.from) / (st.to - st.from))), e = f * f * (3 - 2 * f);
+      for (const l of st.sets) l.geometry.instanceCount = Math.ceil(l.userData.total * e);
+    }
+  } else {
+    const e = 1 - Math.pow(1 - k, 3);
+    for (const l of drawables) l.geometry.instanceCount = Math.floor(l.userData.total * e);
+  }
   if (PRELOADER && k >= 1 && !tick.sent) { tick.sent = true; parent.postMessage('logo-drawn', '*'); }
 
   if (!state.dragging) {

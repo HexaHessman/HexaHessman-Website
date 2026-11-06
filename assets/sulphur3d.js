@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { buildIso, buildIbc, buildChips, setPalette } from './scene-chapters.js';
+import { buildIso, buildIbc, buildChips, setPalette } from './scene-chapters.js?v=2611e';
 
 const BG = 0x0F2A1E, CREAM = new THREE.Color(0xe6d9b6), INK = new THREE.Color(0xd8ccae);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -367,7 +367,7 @@ const BAG_H = 4.1;
 // the row slants across to the right (less depth), so a few bags cover the width
 const PATH = { from: new THREE.Vector3(-9.5, 0.0, 6.5), to: new THREE.Vector3(24, 5.6, -14) };
 const PATH_LEN = PATH.from.distanceTo(PATH.to);
-const GAP = 8.2, S0 = PATH_LEN * 0.24, DRIFT = reduce ? 0.15 : 0.45, SCROLL_GAIN = 2.2;
+const GAP = 11.5, S0 = PATH_LEN * 0.3, DRIFT = reduce ? 0.08 : 0.2, SCROLL_GAIN = 2.2;   // fewer bags, further apart, drifting slowly (user, 2026-11-06)
 const POOL = Math.ceil(PATH_LEN / GAP) + 2;
 const bags = [];
 const hash = k => { const x = Math.sin(k * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
@@ -400,10 +400,10 @@ function placeBag(b, k, sPos, t) {
 function updateBags(D, t) {
   for (const b of bags) b.visible = false;
   if (!bags.length) return;
-  const NEW = 0.3 * GAP, base = k => k < 2 ? S0 - k * GAP : -(k - 2) * GAP - NEW;
-  const kLo = Math.max(2, 2 + Math.ceil((D - NEW - PATH_LEN) / GAP)), kHi = 2 + Math.floor((D - NEW) / GAP);
-  const ks = [0, 1]; for (let k = kLo; k <= kHi; k++) ks.push(k);
-  for (const k of ks) { const s = D + base(k); if (s < 0 || s > PATH_LEN) continue; const b = bags[k % POOL]; b.visible = true; placeBag(b, k, s, t); }
+  // every bag on the same spacing along the belt (the first two used to sit on their own spacing, so a new bag arrived
+  // half inside the second one: the "two bags" glitch)
+  const kLo = Math.max(0, Math.ceil((D + S0 - PATH_LEN) / GAP)), kHi = Math.floor((D + S0) / GAP);
+  for (let k = kLo; k <= kHi; k++) { const s = D + S0 - k * GAP; if (s < 0 || s > PATH_LEN) continue; const b = bags[k % POOL]; b.visible = true; placeBag(b, k, s, t); }
 }
 
 // =====================================================================================
@@ -418,7 +418,7 @@ for (const k in EXTRA) { scene.add(EXTRA[k].world); RIG[k] = EXTRA[k].rig; }
 const CHAPTERS = [{ id: 'grab', n: 8 }, { id: 'bags', n: 4 }, { id: 'iso', n: 3 }, { id: 'ibc', n: 4 }, { id: 'chips', n: 2 }];
 { const total = CHAPTERS.reduce((a, c) => a + c.n, 0); let acc = 0; for (const c of CHAPTERS) { c.from = acc / total; acc += c.n; c.to = acc / total; } }
 const chapterAt = p => CHAPTERS.find(c => p < c.to) || CHAPTERS[CHAPTERS.length - 1];
-const BAGS_SPAN = 70;                                 // how far the bag belt travels over its chapter in ?mode=all
+const BAGS_SPAN = 24;                                 // how far the bag belt travels over its chapter in ?mode=all (slower: about two bags, user 2026-11-06)
 const SWAP = 0.38;                                   // scroll progress where the picture cuts from the ship to the bags
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 scrollTo(0, 0);
@@ -433,7 +433,7 @@ function embedScroll(p) {
   return EMBED === 'bags' ? max * (SWAP + 0.09 + p * (1 - SWAP - 0.09)) : max * SWAP * 0.98 * p;
 }
 let grabSideTarget = 1, grabSide = 1;
-if (EMBED) { scrollTarget = scrollSmooth = embedScroll(0); addEventListener('message', e => { if (e.data && e.data.type === 'hero-progress') { scrollTarget = embedScroll(Math.min(1, Math.max(0, +e.data.p || 0))); if (e.data.grabSide !== undefined) grabSideTarget = +e.data.grabSide; } }); }
+if (EMBED) { scrollTarget = scrollSmooth = embedScroll(0); addEventListener('message', e => { if (e.data && e.data.type === 'hero-progress') { scrollTarget = embedScroll(Math.min(1, Math.max(0, +e.data.p || 0))); if (e.data.jump) scrollSmooth = scrollTarget; /* a new window cuts straight to its chapter */ if (e.data.grabSide !== undefined) grabSideTarget = +e.data.grabSide; } }); }
 else addEventListener('scroll', () => { scrollTarget = scrollY; }, { passive: true });
 const caps = [...document.querySelectorAll('.cap')], hint = document.getElementById('hint'), veil = document.getElementById('veil');
 
@@ -448,7 +448,7 @@ addEventListener('pointermove', e => {
 function frame() { const a = innerWidth / innerHeight; camera.aspect = a; camera.fov = a < 1 ? 58 : RIG.bags.fov; camera.updateProjectionMatrix(); }
 
 // chapter 1 compositing: the drawing (sulphur whitened) + the 3D grab drawn in the same engraved style
-const POST_DPR = Math.min(devicePixelRatio, 1.5);
+const POST_DPR = Math.min(devicePixelRatio, 2);   // full retina resolution (user found 1.5 blurry)
 const rtColor = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 });
 const rtNormal = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType });
 rtNormal.depthTexture = new THREE.DepthTexture(1, 1);
@@ -590,7 +590,9 @@ function updateAll(p, t, dt) {
     placeCamera(RIG[c.id]);
   }
 }
-function tick() { update(Math.min(clock.getDelta(), 0.05)); renderFrame(); requestAnimationFrame(tick); }
+let paused = false;
+addEventListener('message', e => { if (e.data && e.data.type === 'scene-pause') { paused = !!e.data.v; clock.getDelta(); } });   // host hides this copy: skip all work
+function tick() { if (!paused) { update(Math.min(clock.getDelta(), 0.05)); renderFrame(); } requestAnimationFrame(tick); }
 sizePost();
 tick();
 

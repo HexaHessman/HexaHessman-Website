@@ -5,10 +5,11 @@
   --hdr-ink: #eee3c7;
   --hdr-dark: #0F2A1E;
   --hdr-sans: "Suisse Intl", "Geist", "Helvetica Neue", Arial, sans-serif;
-  --hdr-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --hdr-mono: "Geist", "Suisse Intl", "Helvetica Neue", Arial, sans-serif;
 }
 
 /* fixed on every page, so the menu can be reached at any point of the scroll; the top gap tightens once the page moves */
+.site-header { box-sizing: border-box; }   /* its padding was adding to 100% width: sideways scroll on phones */
 .site-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 2;
   padding: 46px 52px 0;
@@ -20,7 +21,7 @@
 .site-header.scrolled { padding-top: 14px; }
 html { scroll-padding-top: 120px; }
 .bar {
-  width: 100%; max-width: 1060px;   /* Terminal uses 940px; our nav labels and button words are longer */
+  width: 100%; max-width: 1060px; box-sizing: border-box;   /* (border-box: its padding no longer pushes past a phone screen) Terminal uses 940px; our nav labels and button words are longer */
   display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 24px;
   padding: 18px; border-radius: 8px;
   background: rgba(0, 0, 0, 0.3);
@@ -51,10 +52,10 @@ html { scroll-padding-top: 120px; }
 /* buttons */
 .actions { display: flex; gap: 9px; }
 .btn {
-  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 42px; padding: 8px 21px; border-radius: 8px; border: 0;
-  font-family: var(--hdr-mono); font-size: 11px; font-weight: 600; letter-spacing: 1.5px; line-height: 13.2px;
-  text-transform: uppercase; text-align: center; text-decoration: none;
+  display: inline-flex; flex-direction: row; gap: .28em; align-items: center; justify-content: center; white-space: nowrap;
+  min-height: 40px; padding: 8px 20px; border-radius: 980px; border: 0;
+  font-family: var(--hdr-sans); font-size: 14px; font-weight: 500; letter-spacing: -.01em; line-height: 1.2;
+  text-transform: none; text-align: center; text-decoration: none;
   color: var(--hdr-dark);
   cursor: pointer; transition: filter .2s, transform .2s;
 }

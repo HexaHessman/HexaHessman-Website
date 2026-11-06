@@ -7,16 +7,16 @@
       title: 'Commodities Supply', href: '/commodities/',
       footer: 'Direct-from-source supply across Southeast Asia and beyond.', footerLink: ['View all commodities', '/commodities/'],
       groups: [
-        { title: 'Fertilizer & Phosphate Value Chain', href: '/commodities/#fertilizer-phosphate', anchor: true, items: [
+        { title: 'Fertilizer & Phosphate Value Chain', href: '/commodities/fertilizer-phosphate/', items: [
           ['Sulphur', 'sulphur'], ['Sulphuric Acid', 'sulphuric-acid'], ['Phosphoric Acid', 'phosphoric-acid'], ['Rock Phosphate', 'rock-phosphate'],
           ['Mono Ammonium Phosphate (MAP)', 'map'], ['Diammonium Phosphate (DAP)', 'dap'], ['Urea', 'urea'], ['Ammonium Sulphate', 'ammonium-sulphate']] },
-        { title: 'Metallurgical Reductants', href: '/commodities/#metallurgical-reductants', anchor: true, items: [
+        { title: 'Metallurgical Reductants', href: '/commodities/metallurgical-reductants/', items: [
           ['Semi Coke', 'semi-coke'], ['Metallurgical Coke', 'metallurgical-coke'], ['Calcined Pet Coke', 'calcined-pet-coke'], ['Graphite Pet Coke', 'graphite-pet-coke']] },
-        { title: 'Industrial Chemicals', href: '/commodities/#industrial-chemicals', anchor: true, items: [
+        { title: 'Industrial Chemicals', href: '/commodities/industrial-chemicals/', items: [
           ['Methanol', 'methanol'], ['Caustic Soda', 'caustic-soda'], ['Soda Ash', 'soda-ash']] },
-        { title: 'Petroleum & Oilfield Products', href: '/commodities/#petroleum-oilfield', anchor: true, items: [
+        { title: 'Petroleum & Oilfield Products', href: '/commodities/petroleum-oilfield/', items: [
           ['Bitumen', 'bitumen'], ['Base Oil', 'base-oil'], ['Barite Powder', 'barite-powder'], ['Bentonite', 'bentonite']] },
-        { title: 'Biomass & Renewable Fuels', href: '/commodities/#biomass', anchor: true, items: [
+        { title: 'Biomass & Renewable Fuels', href: '/commodities/biomass/', items: [
           ['Wood Chips', 'wood-chips'], ['Coconut Shell Charcoal', 'coconut-shell-charcoal']] },
       ],
     },
@@ -24,12 +24,9 @@
       title: 'Engineering Solutions', href: '/engineering/',
       footer: '48-hour face-to-face response for servicing and maintenance enquiries.', footerLink: ['View Engineering Solutions', '/engineering/'],
       groups: [
-        { title: 'Principals we represent', items: [
-          ['ShibataFenderTeam — fender systems', '/engineering/shibata/'], ['MannTek — transfer & bunkering couplings', '/engineering/manntek/'],
-          ['Straatman — mooring systems', '/engineering/straatman/'], ['Raythink — gas-leak detection & monitoring', '/engineering/raythink/']] },
-        { title: 'Products & services', items: [
-          ['Engineering Components', '/engineering/#components'], ['Storage Tank Solutions', '/engineering/#services'],
-          ['Project Management & EPC Support', '/engineering/#services'], ['After-sales service & maintenance', '/engineering/#services']] },
+        { title: '', items: [   // names only, as on the old site's menu (user, 2026-11-06)
+          ['Storage Tank Fabrication', '/engineering/#services'], ['Straatman Mooring Systems', '/engineering/straatman/'],
+          ['MannTek Solutions', '/engineering/manntek/'], ['Shibata Fenders Team', '/engineering/shibata/'], ['Raythink', '/engineering/raythink/']] },
       ],
     },
   };
@@ -39,26 +36,25 @@
       <path d="M24 9.5 L38.5 24 L24 38.5 L9.5 24 Z"/><path d="M24 14 L34 24 L24 34 L14 24 Z" stroke-width="1"/></svg>`;
   const path = location.pathname.replace(/index\.html$/, '');
   const active = (href) => (href === '/' ? path === '/' : path.startsWith(href)) ? ' class="active"' : '';
-  const link = (label, href, group) => `<a href="${group ? (group.anchor ? '/commodities/#' + href : group.href + href + '/') : href}">${label}</a>`;
+  const link = (label, href, group) => `<a href="${group ? group.href + href + '/' : href}">${label}</a>`;   // each product opens its own page (user, 2026-11-06)
 
   function mega(key) {
     const d = SITE[key];
     return `<div class="mega" data-menu="${key}" hidden>
       <div class="mega-inner">
         <div class="mega-cols cols-${d.groups.length}">
-          ${d.groups.map(g => `<div class="mega-col"><h4>${g.href ? `<a href="${g.href}">${g.title}</a>` : g.title}</h4><ul>${g.items.map(([l, h]) => `<li>${link(l, h, g.href ? g : null)}</li>`).join('')}</ul></div>`).join('')}
+          ${d.groups.map(g => `<div class="mega-col">${g.title ? `<h4>${g.href ? `<a href="${g.href}">${g.title}</a>` : g.title}</h4>` : ''}<ul>${g.items.map(([l, h]) => `<li>${link(l, h, g.href ? g : null)}</li>`).join('')}</ul></div>`).join('')}
         </div>
         <div class="mega-foot"><span>${d.footer}</span><a href="${d.footerLink[1]}">${d.footerLink[0]} →</a></div>
       </div></div>`;
   }
   function drawer() {
     const sec = (key) => { const d = SITE[key]; return `<details><summary>${d.title}</summary>
-      ${d.groups.map(g => `<div class="drawer-group"><div class="drawer-group-title">${g.href ? `<a href="${g.href}">${g.title}</a>` : g.title}</div>${g.items.map(([l, h]) => link(l, h, g.href ? g : null)).join('')}</div>`).join('')}
+      ${d.groups.map(g => `<div class="drawer-group">${g.title ? `<div class="drawer-group-title">${g.href ? `<a href="${g.href}">${g.title}</a>` : g.title}</div>` : ''}${g.items.map(([l, h]) => link(l, h, g.href ? g : null)).join('')}</div>`).join('')}
       <a class="drawer-all" href="${d.href}">${d.footerLink[0]} →</a></details>`; };
     return `<div class="drawer" hidden>
-      <a href="/">Home</a>${sec('commodities')}${sec('engineering')}<a href="/about/">About</a><a href="/contact/">Contact</a>
-      <a class="btn primary drawer-cta" href="/contact/#quote"><span>Request</span><span>a quote</span></a>
-      <div class="drawer-meta">inquiry@hexahessman.com · +65 8506 6316</div></div>`;
+      <a href="/">Home</a><a href="${SITE.commodities.href}">${SITE.commodities.title}</a><a href="${SITE.engineering.href}">${SITE.engineering.title}</a><a href="/about/">About</a><a href="/contact/">Contact</a>
+      <a class="btn primary drawer-cta" href="/contact/#quote"><span>Request</span><span>a quote</span></a></div>`;   // each division goes straight to its page; no contact line (user, 2026-11-06)
   }
 
   const html = `<header class="site-header">
