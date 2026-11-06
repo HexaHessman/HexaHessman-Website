@@ -21,7 +21,7 @@
     // recorded from the 3D scene itself (one full turn every 8 s), so they keep turning when the scroll stops (2026-11-06)
     'industrial-chemicals': { d: '/assets/commodities/iso-loop.mp4', m: '/assets/commodities/iso-loop-m.mp4', poster: '/assets/commodities/iso-loop.jpg', pos: '50% 50%' },
     'petroleum-oilfield': { d: '/assets/commodities/ibc-loop.mp4', m: '/assets/commodities/ibc-loop-m.mp4', poster: '/assets/commodities/ibc-loop.jpg', pos: '50% 50%' },
-    biomass: { d: '/assets/commodities/chips-loop.mp4', m: '/assets/commodities/chips-loop-m.mp4', poster: '/assets/commodities/chips-loop.jpg', pos: '30% 50%' },   // conveyor dropping wood chips onto a heap (2026-11-05)
+    biomass: { d: '/assets/commodities/chips-loop.mp4', m: '/assets/commodities/chips-loop-m.mp4', poster: '/assets/commodities/chips-loop.jpg', pos: '74% 50%' },   // conveyor dropping wood chips onto a heap (2026-11-05)
   };
   const vidTag = v => v ? `<video class="cs-vid" muted loop playsinline preload="none" poster="${v.poster}" data-src="${innerWidth <= 900 ? v.m : v.d}"${v.pos ? ` style="object-position:${v.pos}"` : ''}></video>` : '';
 
@@ -110,7 +110,17 @@
     return true;
   };
   window.__csJump = jump;
-  if (location.hash) { setTimeout(() => jump(location.hash, false), 30); setTimeout(() => jump(location.hash, false), 700); }
+  // coming back (browser Back, or the Back button on a product page): land where the visitor left off. The browser's own
+  // restore loses out to the pinned sections growing the page as it loads, so keep the spot ourselves.
+  const KEY = 'cs-y:' + location.pathname;
+  addEventListener('pagehide', () => { try { sessionStorage.setItem(KEY, String(Math.round(scrollY))); } catch {} });
+  const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  let back = null; try { back = nav && nav.type === 'back_forward' ? sessionStorage.getItem(KEY) : null; } catch {}
+  if (back !== null) {
+    const y = +back, go = () => { if (window.__lenis) window.__lenis.scrollTo(y, { immediate: true }); else scrollTo(0, y); };
+    [30, 300, 700].forEach(t => setTimeout(go, t));
+    setTimeout(() => sec.querySelectorAll('[data-reveal]:not(.in)').forEach(r => { const rb = r.getBoundingClientRect(); if (rb.bottom > 0 && rb.top < innerHeight) { r.classList.add('in'); io.unobserve(r); } }), 760);
+  } else if (location.hash) { setTimeout(() => jump(location.hash, false), 30); setTimeout(() => jump(location.hash, false), 700); }
   addEventListener('hashchange', () => jump(location.hash, true));
 
   // ---- the window shape (after Terminal's): a notch stepping down along the top, an indent on the inner edge,

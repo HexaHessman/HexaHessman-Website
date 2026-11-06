@@ -652,7 +652,7 @@ ENGINEERING_HUB = {
     "components": "Fit-for-purpose systems for offshore, shipping and energy infrastructure — fenders, mooring hooks, breakaway couplings and fluid transfer technologies.",
     "services": [
         ("Project Management & EPC Support", "End-to-end support from feasibility to handover — planning, design, procurement, production oversight and execution, with a single point of accountability."),
-        ("Storage Tank Solutions", "Design, fabrication and installation of storage tanks for crude oil, chemicals and renewable products, built to API 650, ASME and EN standards and supported by full QA/QC, testing and commissioning."),
+        # ("Storage Tank Solutions" removed with its menu item, client 2026-11-06)
         ("After-sales service", "Repairs, maintenance, spares and standby services, with a face-to-face response within 48 hours."),
     ],
     "sectors": ["LNG and alternative-fuel bunkering (ammonia, methanol, hydrogen)", "Oil, gas and chemical terminals", "Ports, harbours and container terminals",

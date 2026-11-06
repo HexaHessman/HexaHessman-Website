@@ -99,8 +99,8 @@
 
 <script type="importmap">
 { "imports": {
-  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  "three": "/assets/vendor/three.module.js?v=160",
+  "three/addons/": "/assets/vendor/three-addons/"
 } }
 </script>
 <script type="module">
@@ -293,7 +293,7 @@ const constructLines = fatLines(toArray(construct), matConstruct);
 
 // ---------- draw-on animation ----------
 for (const l of drawables) l.geometry.instanceCount = 0;
-const drawStart = performance.now(), DRAW_MS = 2800;
+const drawStart = performance.now(), DRAW_MS = PRELOADER ? 450 : 2800;   // the preloader draws fast: the whole entrance is ~1 s (user, 2026-11-06: 2x faster again)
 const STORY = new URLSearchParams(location.search).has('seq'), STORY_MS = 5200;   // ?seq: piece by piece; ?story only frames the mark bigger and keeps the preloader's draw (user, 2026-11-06)
 // the plan: faint construction lines, then each piece in turn — its outline, inner frame and hidden edges drawn together
 // as one pen path — the front upright, the back one, the diamond between them, and last the dimensions, one by one
@@ -324,13 +324,13 @@ addEventListener('message', e => {
   if (d.type === 'logo-spinout' && !spin.outStart) spin.outStart = performance.now();
 });
 // preloader exit: one and a quarter turns, slow to start, quick through the middle, and the mark grows toward the viewer
-const SPIN_OUT_MS = 1700;
+const SPIN_OUT_MS = PRELOADER ? 420 : 750;
 function spinOut(now) {
   if (!spin.outStart) return 0;
   const k = Math.min(1, (now - spin.outStart) / SPIN_OUT_MS);
   const e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
-  logo.scale.setScalar(1 + 0.45 * k * k);
-  return e * Math.PI * 2.5;
+  logo.scale.setScalar(1 + 0.35 * k * k);
+  return e * Math.PI * 0.55;   // a short turn as it goes, not a full spin
 }
 const release = () => { state.dragging = false; };
 addEventListener('pointerup', release); addEventListener('pointercancel', release); addEventListener('pointerleave', release);

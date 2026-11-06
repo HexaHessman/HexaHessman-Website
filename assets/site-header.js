@@ -24,8 +24,8 @@
       title: 'Engineering Solutions', href: '/engineering/',
       footer: '48-hour face-to-face response for servicing and maintenance enquiries.', footerLink: ['View Engineering Solutions', '/engineering/'],
       groups: [
-        { title: '', items: [   // names only, as on the old site's menu (user, 2026-11-06)
-          ['Storage Tank Fabrication', '/engineering/#services'], ['Straatman Mooring Systems', '/engineering/straatman/'],
+        { title: '', items: [   // names only, as on the old site's menu (user, 2026-11-06); Storage Tank Fabrication removed (client, 2026-11-06)
+          ['Straatman Mooring Systems', '/engineering/straatman/'],
           ['MannTek Solutions', '/engineering/manntek/'], ['Shibata Fenders Team', '/engineering/shibata/'], ['Raythink', '/engineering/raythink/']] },
       ],
     },

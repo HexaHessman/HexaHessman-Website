@@ -447,7 +447,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2612q">
+<link rel="stylesheet" href="/assets/site.css?v=2612u">
 <style>{PAGE_CSS}{extra_head}</style>
 {head_tags}</head>
 <body{f' class="{body_class}"' if body_class else ""}>
@@ -456,13 +456,18 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 {body}
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=2612d" defer></script>
+<script src="/assets/site-header.js?v=2612e" defer></script>
 <script src="/assets/deco-lines.js?v=1" defer></script>
 <script src="/assets/words.js?v=1" defer></script>
 <script src="/assets/site-footer.js" defer></script>
 {body_scripts}</body>
 </html>
 """
+
+
+def back_btn(up):
+    """the floating Back button on product and principal pages (user, 2026-11-06); `up` is where it goes with no history"""
+    return f'<script src="/assets/back-btn.js?v=1" data-up="{up}" defer></script>\n'
 
 
 def write(relpath, html):
@@ -488,7 +493,7 @@ def build_commodities_hub():
     cells = "".join(f'<div class="pcell" data-i="{i}"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div>' for i in range(12))   # two rows (user, 2026-11-06)
     # hero: the bulk port at dusk, edge to edge, with the headline pushed to the left over the sky (user, 2026-11-06)
     body = [f'''<section class="arrive com-arrive" id="partners" aria-label="Partners">
-  <div class="com-hero"><picture><source media="(max-width: 720px)" srcset="/assets/commodities/hero-ink-m.jpg"><img src="/assets/commodities/hero-ink.jpg" alt="A bulk carrier loading at a port at dusk" width="1672" height="941" fetchpriority="high"></picture>
+  <div class="com-hero"><video class="com-hero-vid" autoplay muted loop playsinline preload="auto" poster="/assets/commodities/crane-loop.jpg" aria-label="A harbour crane loading jumbo bags onto a ship at dusk"><source media="(max-width: 720px)" src="/assets/commodities/crane-loop-m.mp4" type="video/mp4"><source src="/assets/commodities/crane-loop.mp4" type="video/mp4"></video>
   <div class="arrive-top com-top">
   <p class="eyebrow arrive-eyebrow">Commodities Supply</p>
   <h1 class="arrive-title">Trusted by producers and buyers across nine markets</h1></div></div>
@@ -500,7 +505,7 @@ def build_commodities_hub():
     body.append(section(f"""<div class="cta-band">
   <h2>{esc(H["cta_h"])}</h2><p class="lead">{esc(H["cta_p"])}</p>{buttons(H["cta_buttons"])}</div>""", id_="cta"))
 
-    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2611n" defer></script>\n<script src="/assets/cs-marks.js?v=10" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
+    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2611p" defer></script>\n<script src="/assets/cs-marks.js?v=13" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
 
 
 def build_group(g):
@@ -581,7 +586,7 @@ def build_product(p):
     if rel:
         body.append(section(grid(rel, "c4"), title="Related products", id_="related"))
     body.append(enquiry_block())
-    write(f"{product_url(p['slug'])}index.html", page(short_name(p["slug"]), meta_desc(p["hero"][-1] if len(p["hero"]) > 1 and len(clean(p["hero"][0])) < 70 else p["hero"][0]), "\n".join(body)))
+    write(f"{product_url(p['slug'])}index.html", page(short_name(p["slug"]), meta_desc(p["hero"][-1] if len(p["hero"]) > 1 and len(clean(p["hero"][0])) < 70 else p["hero"][0]), "\n".join(body), body_scripts=back_btn(group_url(g["slug"]))))
 
 
 ARRIVE_LOGO = ('<svg class="arrive-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">'
@@ -663,7 +668,7 @@ def build_principal(pr):
     cta += buttons(pr["cta_buttons"])
     body.append(section(f'<div class="cta-band">{cta}</div>', id_="cta"))
     scripts = '<script src="/assets/spin-row.js?v=6" defer></script>' if any(s.get("fuels") or s.get("media") or s.get("diagram") for s in pr["sections"]) else ""
-    write(f"/engineering/{pr['slug']}/index.html", page(pr["name"], meta_desc(pr["hero"][0]), "\n".join(body), body_scripts=scripts, body_class="eng"))
+    write(f"/engineering/{pr['slug']}/index.html", page(pr["name"], meta_desc(pr["hero"][0]), "\n".join(body), body_scripts=scripts + back_btn("/engineering/"), body_class="eng"))
 
 
 def avatar_svg(name):
@@ -704,9 +709,9 @@ SHIP_SVG = _ship_svg()
 
 ABOUT_CSS = """
 /* About hero: the shophouse street drawn in line, stroke by stroke, left to right and street up */
-.story-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: center; }
+.story-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start; }   /* text straight under the title, no gap (user, 2026-11-06) */
 .story-text { display: grid; gap: 14px; }
-.story-logo { aspect-ratio: 1; width: 100%; max-width: 600px; justify-self: center; opacity: 0; transition: opacity .8s ease; }
+.story-logo { aspect-ratio: 1; width: 100%; max-width: 460px; justify-self: center; margin-top: clamp(-90px, -6vw, -40px); opacity: 0; transition: opacity .8s ease; }
 .story-logo.in { opacity: 1; }
 .story-logo iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
 @media (max-width: 820px) { .story-grid { grid-template-columns: 1fr; } .story-logo { max-width: 360px; } }
@@ -905,6 +910,51 @@ ABOUT_CSS = """
 .cta-band.plain h2 { max-width: 18ch; font-size: clamp(28px, 3.2vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
 .cta-band.plain .lead { max-width: 46ch; }
 .cta-band.plain .btn-row { justify-content: center; margin-top: 10px; }
+
+/* Our team, Terminal-style (client, 2026-11-06): white ground, hairline cells with corner crosses, photos fill the cells */
+.tg { background: #FCFCFC; --paper: #FCFCFC; --paper-2: #FCFCFC; --paper-rgb: 252,252,252;
+  --ink: #0F2A1E; --ink-soft: rgba(15,42,30,.8); --ink-rgb: 15,42,30; --muted: rgba(15,42,30,.58); --line: rgba(15,42,30,.13); --line-strong: rgba(15,42,30,.3);
+  --tg-hi: #0F2A1E; color: var(--ink); overflow: hidden; padding-bottom: clamp(64px, 10vh, 120px); }
+.tg-head { text-align: center; justify-items: center; margin-left: auto; margin-right: auto; }
+.tg-grid { list-style: none; margin: 0 auto; padding: 0; width: min(1120px, calc(100% - 2 * var(--gutter))); display: grid; grid-template-columns: repeat(4, 1fr);   /* 4 across, smaller people (user, 2026-11-06) */
+  border-left: 1px solid var(--line); position: relative; }
+.tg-grid::before, .tg-grid::after { content: ""; position: absolute; left: -50vw; right: -50vw; height: 1px; top: 0; background: linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent); }
+.tg-grid::after { top: auto; bottom: 0; }
+.tg-cell { position: relative; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: box-shadow .35s ease; }
+.tg-cell::after { content: ""; position: absolute; inset: -1px; pointer-events: none; border: 1.5px solid var(--tg-hi); opacity: 0; transition: opacity .3s ease; z-index: 3;
+  box-shadow: 0 0 10px rgba(15,42,30,.45), inset 0 0 8px rgba(15,42,30,.25);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%); mask-image: linear-gradient(180deg, transparent 0%, #000 45%); }   /* the lines light up, fading out toward the top, as on Terminal */
+.tg-cell:hover::after { opacity: 1; }
+.tg-empty:hover::after { opacity: 0; }
+/* the little crosses at the corners; on hover they flicker and turn green */
+.tg-x { position: absolute; width: 13px; height: 13px; z-index: 4; pointer-events: none; }
+.tg-x::before, .tg-x::after { content: ""; position: absolute; background: rgba(15,42,30,.45); transition: background .3s; }
+.tg-x::before { left: 6px; top: 0; width: 1px; height: 13px; } .tg-x::after { top: 6px; left: 0; height: 1px; width: 13px; }
+.tg-x.tl { left: -7px; top: -7px; } .tg-x.tr { right: -7px; top: -7px; } .tg-x.bl { left: -7px; bottom: -7px; } .tg-x.br { right: -7px; bottom: -7px; }
+.tg-cell:hover .tg-x { animation: tgFlicker .5s steps(1) 1; }
+.tg-cell:hover .tg-x::before, .tg-cell:hover .tg-x::after { background: var(--tg-hi); }
+@keyframes tgFlicker { 0% { opacity: 1; } 15% { opacity: .1; } 30% { opacity: 1; } 45% { opacity: .2; } 60%, 100% { opacity: 1; } }
+/* the photo: a square that fills the cell, the person standing in it; it slides up into the cell when its row arrives */
+.tg-pic { padding: 8px; }
+.tg-slide { aspect-ratio: 1 / 1; overflow: hidden; position: relative; border-radius: 2px;
+  background: radial-gradient(ellipse 85% 75% at 50% 80%, #12261b, #0a1610 62%, #050b08); }   /* almost black, a dark-dark green (user, 2026-11-06) */
+.tg-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; display: block;
+  transform: translateY(101%); filter: saturate(.15) contrast(1.02); transition: transform .9s cubic-bezier(.645,.045,.355,1), filter .5s ease, scale .6s cubic-bezier(.2,.7,.2,1);
+  transition-delay: calc(var(--c, 0) * .12s), 0s, 0s; }
+.tg-cell.in .tg-slide img { transform: none; }
+.tg-cell:hover .tg-slide img { filter: none; scale: 1.04; }
+.tg-meta { display: grid; gap: 3px; justify-items: center; text-align: center; padding: 16px 10px 20px; border-top: 1px solid var(--line); position: relative; transition: background .35s ease, box-shadow .35s ease, border-color .35s ease; }
+.tg-cell:hover .tg-meta { border-top-color: var(--tg-hi); background: radial-gradient(ellipse 70% 90% at 50% 50%, rgba(15,42,30,.04), rgba(15,42,30,.11)); box-shadow: inset 0 0 26px rgba(15,42,30,.22); }   /* the name cell fills with a soft green glow (Terminal's hover, our green) */
+.tg-meta b { font-weight: 500; font-size: 17px; letter-spacing: -.015em; color: var(--ink); transition: color .3s; }
+.tg-meta span { font-size: 13.5px; color: var(--muted); }
+.tg-meta small { font-size: 13px; color: var(--muted); opacity: .8; }
+.tg-cell:hover .tg-meta b { color: #0F2A1E; }
+@media (max-width: 900px) {
+  .tg-grid { grid-template-columns: repeat(2, 1fr); width: calc(100% - 32px); }
+  .tg-empty { display: none; }
+  .tg-pic { padding: 5px; } .tg-meta { padding: 14px 8px 16px; } .tg-meta b { font-size: 15px; } .tg-meta span { font-size: 12.5px; } .tg-meta small { font-size: 11.5px; }
+}
+@media (prefers-reduced-motion: reduce) { .tg-slide img { transform: none; transition: none; } .tg-cell:hover .tg-x { animation: none; } }
 """
 
 
@@ -926,19 +976,7 @@ def build_about():
     # Our story, with the 3D drawn HexaHessman mark beside it: it draws itself on when the section comes into view and
     # turns a little as you scroll (logo.html?embed; the src is set on arrival so the drawing starts then)
     story = "".join(f"<p>{esc(p)}</p>" for p in A["story"])
-    body.append(section(f'''<div class="story-grid"><div class="story-text">{story}</div>
-  <div class="story-logo" aria-hidden="true"><iframe data-src="/logo.html?embed&story&v=8" title="" tabindex="-1"></iframe></div></div>
-<script>
-(() => {{
-  const box = document.querySelector('.story-logo'), f = box && box.querySelector('iframe'); if (!f) return;
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  new IntersectionObserver(([e], io) => {{ if (e.isIntersecting) {{ f.src = f.dataset.src; box.classList.add('in'); io.disconnect(); }} }}, {{ threshold: 0.35 }}).observe(box);
-  if (reduce) return;
-  const sec = box.closest('section');
-  const send = () => {{ const r = sec.getBoundingClientRect(); const p = (innerHeight - r.top) / (innerHeight + r.height); if (f.contentWindow && f.src) f.contentWindow.postMessage({{ type: 'logo-scroll', p: (p - 0.5) * 0.35 }}, '*'); }};
-  addEventListener('scroll', send, {{ passive: true }}); f.addEventListener('load', send);
-}})();
-</script>''', title="Our story", id_="story"))
+
     # the voyage timeline: a sea lane down the middle with a top-view ship that sails it as you scroll (assets/voyage.js),
     # the years alternating either side, each with a framed photo that has a light running round its outline
     stops = "".join(f'''<article class="vy-stop {'r' if i % 2 else 'l'}">
@@ -972,22 +1010,65 @@ def build_about():
       <div class="tl-ctrl"><span class="tl-hint">Next person</span><button class="tl-prev" type="button" aria-label="Previous person">{arrow(-1)}</button><button class="tl-next" type="button" aria-label="Next person">{arrow(1)}</button></div>
     </div>
   </div>
-  <div class="wrap tl-all">
-    <p class="eyebrow">Our team</p>
-    <ul class="tl-grid">{"".join(f'<li><button type="button" data-i="{i}"><span class="tl-grid-pic"><img src="/assets/team/cut/{slug}.webp?v=2" alt="" loading="lazy" decoding="async" width="900" height="781"></span><b>{esc(n)}</b><span>{esc(r)}</span><small>{esc(e)}</small></button></li>' for i, (n, r, e, slug, _, _) in enumerate(A["team"]))}</ul>
-  </div>
   <noscript><div class="wrap"><ul>{fallback}</ul></div></noscript>
 </section>''')
-    body += [voyage, specialise]   # the team and globe come straight after Our story, then the voyage (user, 2026-11-06)
+    story_sec = section(f'''<div class="story-grid"><div class="story-text">{story}</div>
+  <div class="story-logo" aria-hidden="true"><iframe data-src="/logo.html?embed&story&v=9" title="" tabindex="-1"></iframe></div></div>
+<script>
+(() => {{
+  const box = document.querySelector('.story-logo'), f = box && box.querySelector('iframe'); if (!f) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  new IntersectionObserver(([e], io) => {{ if (e.isIntersecting) {{ f.src = f.dataset.src; box.classList.add('in'); io.disconnect(); }} }}, {{ threshold: 0.35 }}).observe(box);
+  if (reduce) return;
+  const sec = box.closest('section');
+  const send = () => {{ const r = sec.getBoundingClientRect(); const p = (innerHeight - r.top) / (innerHeight + r.height); if (f.contentWindow && f.src) f.contentWindow.postMessage({{ type: 'logo-scroll', p: (p - 0.5) * 0.35 }}, '*'); }};
+  addEventListener('scroll', send, {{ passive: true }}); f.addEventListener('load', send);
+}})();
+</script>''', title="Our story", id_="story")
+    # Our team: everyone in a white Terminal-style grid (terminal-industries.com/about "Our Leaders"): hairline cells with
+    # corner crosses, square photos that slide up into their cells, the cell lights up green on hover (client, 2026-11-06)
+    cross = lambda pos: f'<i class="tg-x {pos}" aria-hidden="true"></i>'
+    cells = "".join(f'''<li class="tg-cell">{cross("tl")}{cross("tr")}{cross("bl")}{cross("br")}
+  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/{slug}.webp?v=2" alt="{esc_attr(n)}" loading="lazy" decoding="async" width="900" height="781"></div></div>
+  <div class="tg-meta"><b>{esc(n)}</b><span>{esc(r)}</span><small>{esc(e)}</small></div></li>''' for n, r, e, slug, _, _ in A["team"])
+    our_team = f'''<section class="section tg" id="our-team">
+  <div class="wrap section-head tg-head"><p class="eyebrow">Our team</p><h2>The people behind every delivery</h2></div>
+  <ul class="tg-grid">{cells}{'<li class="tg-cell tg-empty" aria-hidden="true"></li>' * ((-len(A["team"])) % 4)}</ul>
+<script>
+(() => {{   // each photo slides up into its cell as its row comes on screen, left to right along the row
+  const cells = [...document.querySelectorAll('.tg-cell')], g = document.querySelector('.tg-grid');
+  const cols = () => getComputedStyle(g).gridTemplateColumns.split(' ').length;
+  const io = new IntersectionObserver(es => es.forEach(e => {{ if (!e.isIntersecting) return;
+    e.target.style.setProperty('--c', cells.indexOf(e.target) % cols()); e.target.classList.add('in'); io.unobserve(e.target); }}), {{ threshold: 0.25 }});
+  cells.forEach(c => io.observe(c));
+}})();
+</script>
+</section>'''
+    # order (client, 2026-11-06): Seamless solutions across borders (the lookbook), Our voyage, Our story, What we specialise in, Our team
+    body += [voyage, story_sec, specialise, our_team]
     # the closing call: no card, centred, about working with the people above
     body.append(section(f'<div class="cta-band plain"><p class="eyebrow">{esc(A["cta_eyebrow"])}</p><h2>{esc(A["cta_h"])}</h2><p class="lead">{esc(A["cta_p"])}</p>{buttons(A["cta_buttons"])}</div>', id_="cta"))
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    scripts = '<script src="/assets/team-lookbook.js?v=11" defer></script>\n<script src="/assets/voyage.js?v=4" defer></script>\n<script type="module" src="/assets/team-globe.js?v=11"></script>\n'
+    scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=8" defer></script>\n<script type="module" src="/assets/team-globe.js?v=12"></script>\n'
     write("/about/index.html", page("About", meta_desc(A["story"][0]), "\n".join(body), extra_head=ABOUT_CSS, head_tags=head_tags, body_scripts=scripts))
 
 
 CONTACT_CSS = """
+/* Drop us a line: white section, the boxes and fields stay green (client, 2026-11-06) */
+#quote { background: #FCFCFC; --paper: #FCFCFC; --paper-2: #FCFCFC; --paper-rgb: 252,252,252;
+  --ink: #0F2A1E; --ink-soft: rgba(15,42,30,.8); --ink-rgb: 15,42,30; --muted: rgba(15,42,30,.6); --line: rgba(15,42,30,.14); --line-strong: rgba(15,42,30,.3); color: var(--ink); }
+#quote .contact-aside {
+  --paper: #0F2A1E; --paper-2: #0F2A1E; --paper-rgb: 15,42,30;
+  --ink: #eee3c7; --ink-soft: #d2c6aa; --ink-rgb: 238,227,199; --muted: rgba(238,227,199,.62); --line: rgba(238,227,199,.16); --line-strong: rgba(238,227,199,.32); }
+#quote .contact-aside { background: #0F2A1E; color: var(--ink); border-color: #0F2A1E; }
+/* the fields: light grey fills with green type, so they sit easily on the white (user, 2026-11-06) */
+#quote .form input, #quote .form select, #quote .form textarea { background-color: #EEF0EE; color: #0F2A1E; border-color: #E2E5E2; }
+#quote .form input::placeholder, #quote .form textarea::placeholder { color: rgba(15,42,30,.45); }
+#quote .form input:focus, #quote .form select:focus, #quote .form textarea:focus { background-color: #FCFCFC; border-color: #0F2A1E; box-shadow: 0 0 0 3px rgba(15,42,30,.10); }
+#quote .form input:-webkit-autofill { -webkit-text-fill-color: #0F2A1E; -webkit-box-shadow: 0 0 0 40px #EEF0EE inset; }
+#quote .form .help.error { color: #b5472a; }
+#quote .form input.invalid { border-color: #c8603f; }
 /* the enquiry form beside its box: labels above, quiet filled fields, one clear button (user: "like a normal contact us form") */
 .contact-grid { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
 .contact-aside { position: sticky; top: 110px; display: grid; gap: 22px; padding: clamp(24px, 2.6vw, 34px); border: 1px solid var(--line-strong); border-radius: 16px; background: rgba(var(--ink-rgb), .035); }
@@ -1071,7 +1152,7 @@ def build_contact():
     body = []
     body.append(f"""<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg" alt="The HexaHessman office" fetchpriority="high"></div>
 <div class="wrap">{crumbs([("Home", "/"), ("Contact", None)])}<p class="eyebrow">{esc(K["eyebrow"])}</p><h1>{esc(K["h1"])}</h1><p class="lead">{esc(K["lead"])}</p></div></section>""")   # their office photo (from hexahessman.com's about page)
-    team = [{"name": n, "role": r, "slug": s, "office": o} for n, r, e, s, o, _ in C.ABOUT["team"] if o != "sg" or s == "adam-yeoh"]
+    team = [{"name": n, "role": r, "slug": s, "office": o} for n, r, e, s, o, _ in C.ABOUT["team"]]   # everyone in each office, Singapore included (user, 2026-11-06)
     body.append(f'<section id="globe" class="globe" data-people="{_html.escape(json.dumps(team, ensure_ascii=False), quote=True)}"></section>')   # the office globe, under the photo hero
 
     groups_opts = "".join(f'<option>{esc(g["name"])}</option>' for g in C.GROUPS)
@@ -1129,7 +1210,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=11"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=12"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 

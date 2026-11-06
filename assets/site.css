@@ -236,13 +236,13 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .arrive-top { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 20px; }
 .com-arrive { padding-top: 0; }
 .com-hero { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 100svh; min-height: 520px; overflow: hidden; background: #0F2A1E; }
-.com-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; display: block; }
+.com-hero img, .com-hero video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; display: block; }
 .com-hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(20deg, rgba(8,24,16,.6), rgba(8,24,16,.2) 40%, transparent 65%); }   /* keeps the headline clear over the port, lower left */
 .com-top { position: absolute; z-index: 1; left: var(--gutter); bottom: clamp(40px, 9%, 110px); align-items: flex-start; text-align: left; padding: 0; color: #FCFCFC; }
 .com-top .arrive-eyebrow { margin-top: 0; color: rgba(252,252,252,.78); }
 .com-top .arrive-title { max-width: 15ch; text-wrap: balance; }
 .com-arrive .pwall { margin-top: clamp(56px, 9vh, 100px); }
-@media (max-width: 720px) { .com-hero { aspect-ratio: auto; height: 78svh; min-height: 480px; } .com-hero img { object-position: 62% 50%; } .com-top { bottom: 40px; right: var(--gutter); } }
+@media (max-width: 720px) { .com-hero { aspect-ratio: auto; height: 78svh; min-height: 480px; } .com-hero img { object-position: 62% 50%; } .com-hero video { object-position: 52% 55%; } .com-top { bottom: 40px; right: var(--gutter); } }
 .arrive-mark { width: clamp(60px, 6.5vw, 90px); height: auto; color: var(--ink); overflow: visible; }
 .arrive-mark * { stroke-dasharray: 220; stroke-dashoffset: 220; }
 .arrive.on .arrive-mark * { animation: arriveDraw 1.4s cubic-bezier(.6,0,.2,1) forwards; }
@@ -331,8 +331,8 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .ep .ep-photo { margin: 0; border-radius: 8px; } .ep .ep-photo img { border-radius: 8px; }
 .ep .ep-photo::after { display: none; }   /* no frame line; just the light running round the photo's own edge */
 .ep-run { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
-.ep-run rect { x: 1px; y: 1px; width: calc(100% - 2px); height: calc(100% - 2px); rx: 8px; fill: none; stroke: #FCFCFC; stroke-width: 2.2; stroke-linecap: round;
-  stroke-dasharray: 8 92; filter: drop-shadow(0 0 4px rgba(255,255,255,.95)); animation: epRun 8s linear infinite; }
+.ep-run rect { x: 1px; y: 1px; width: calc(100% - 2px); height: calc(100% - 2px); rx: 8px; fill: none; stroke: #0F2A1E; stroke-width: 2.6; stroke-linecap: round;   /* HexaHessman green (client, 2026-11-06) */
+  stroke-dasharray: 8 92; filter: drop-shadow(0 0 3px rgba(15,42,30,.55)); animation: epRun 8s linear infinite; }
 .ep.right .ep-run rect { animation-delay: -4s; }
 @keyframes epRun { to { stroke-dashoffset: -100; } }
 @media (prefers-reduced-motion: reduce) { .ep-run { display: none; } }
@@ -396,13 +396,13 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .text-left .cs-stick { grid-column: 2; grid-row: 1; padding-right: var(--g); }
 .text-right .cs-items { grid-column: 2; grid-row: 1; }
 .text-right .cs-stick { grid-column: 1; grid-row: 1; padding-left: var(--g); }
-.cs-item { min-height: 40vh; display: flex; align-items: center; }   /* tighter (user, 2026-11-05: the gap between products was too big) */
+.cs-item { min-height: 30vh; display: flex; align-items: center; }   /* tighter again (client, 2026-11-06: products felt too far apart; was 40vh) */
 .text-left .cs-item { padding: 24px 5vw 24px calc(var(--g) + 3vw); }
 .text-right .cs-item { padding: 24px var(--g) 24px 7vw; }
 .cs-text { display: grid; gap: clamp(14px, 2.2vh, 24px); max-width: 640px; }
 .cs-num { display: none; }
 .cs-item .cs-text { position: relative; z-index: 1; }
-.cs-logo3d { position: fixed; left: 0; top: 0; width: min(34vw, 440px); aspect-ratio: 1; z-index: 1; opacity: 0; pointer-events: none; transform: translate(-50%, -50%) rotate(-9deg); transition: opacity .25s linear; }   /* the 3D mark, faint (cs-marks.js) */
+.cs-logo3d { position: fixed; left: 0; top: 0; width: min(96vw, 160vh);   /* big, more of a background (user, 2026-11-06; was min(34vw, 440px)) */ aspect-ratio: 1; z-index: 1; opacity: 0; pointer-events: none; transform: translate(-50%, -50%) rotate(-9deg); transition: opacity .25s linear; }   /* the 3D mark, faint (cs-marks.js) */
 .cs-logo3d iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
    /* counters removed (user, 2026-11-05) */
 .cs-title { font-size: clamp(24px, 2.3vw, 34px); font-weight: 400; line-height: 1.05; letter-spacing: -.03em; }

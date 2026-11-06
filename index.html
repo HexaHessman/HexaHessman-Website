@@ -9,7 +9,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/header.css?v=2611d" />
-<link rel="stylesheet" href="/assets/site.css?v=2612q" />
+<link rel="stylesheet" href="/assets/site.css?v=2612u" />
+<!-- warm the cache for the preloader drawing (logo.html) so it can start sooner -->
+<link rel="preload" href="/assets/vendor/three.module.js?v=160" as="script" crossorigin>
+<link rel="preload" href="/assets/vendor/three-addons/lines/LineSegments2.js" as="script" crossorigin>
+<link rel="preload" href="/assets/vendor/three-addons/lines/LineMaterial.js" as="script" crossorigin>
+<link rel="preload" href="/assets/vendor/three-addons/lines/LineSegmentsGeometry.js" as="script" crossorigin>
 <style>
   /* ---------- the entrance: preloader -> the port (choose) -> camera travels to the crate or to the side ---------- */
   html, body { height: 100%; }
@@ -23,13 +28,20 @@
   /* the intro fades in from the preloader; every later swap (intro -> held frame -> branch) is an instant cut on identical frames */
   .film #intro.live { transition: opacity .4s; }
   .film::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1s;
-    background: radial-gradient(ellipse 70% 62% at 50% 54%, rgba(15,42,30,.72), rgba(15,42,30,.42) 55%, rgba(15,42,30,.12) 85%), linear-gradient(180deg, rgba(15,42,30,.35), transparent 22%); }
+    background: linear-gradient(180deg, rgba(0,0,0,.32), transparent 20%, transparent 50%, rgba(0,0,0,.42)); }   /* no green tint on the photo (client, 2026-11-06): only a light neutral shade top and bottom so the header and doors read */
   .stage.ready .film::after { opacity: 1; }
   .stage.leaving .film::after { opacity: 0; transition: opacity .8s; }
 
   /* preloader: the 3D drawing of the mark (logo.html?preloader) draws on, spins out, and the loader fades onto the port */
-  .loader { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: var(--paper); transition: opacity 1.1s cubic-bezier(.4,0,.2,1); }
-  .loader .pl-logo { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; opacity: 0; transition: opacity .6s; }
+  .loader { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: var(--paper); transition: opacity .3s cubic-bezier(.4,0,.2,1); }
+  /* a thin loading bar under the mark that fills while it draws (user, 2026-11-06) */
+  .loader .pl-bar { position: absolute; left: 50%; top: 81vh; width: min(240px, 27vh); height: 2px; translate: -50% 0; border-radius: 2px; background: rgba(238,227,199,.16); overflow: hidden; z-index: 1; transition: opacity .25s; }
+  .loader .pl-bar i { position: absolute; inset: 0; background: var(--ink); transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 8px rgba(238,227,199,.6); }
+  .loader.filling .pl-bar i { transform: scaleX(.92); transition: transform .5s cubic-bezier(.3,.1,.3,1); }   /* fills with the drawing */
+  .loader.full .pl-bar i { transform: scaleX(1); transition: transform .12s ease-out; }
+  .loader.spin .pl-bar { opacity: 0; }
+  @media (orientation: portrait) { .loader .pl-bar { top: calc(50% + min(46vw, 30vh)); width: 38vw; } }
+  .loader .pl-logo { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; opacity: 0; transition: opacity .2s; }
   .loader.mark .pl-logo { opacity: 1; }
   .loader.out { opacity: 0; }
   .loader .pct { position: absolute; left: 52px; bottom: 56px; z-index: 1; font-family: var(--mono); font-size: 12px; letter-spacing: .18em; color: var(--muted); transition: opacity .3s; }
@@ -46,22 +58,34 @@
   .choice .eyebrow { margin-bottom: 18px; }
   .choice h1 { max-width: 760px; text-wrap: balance; font-size: clamp(30px, 3.6vw, 48px); font-weight: 400; margin-bottom: 14px; text-shadow: 0 2px 30px rgba(0,0,0,.45); }
   .choice p { max-width: 600px; text-wrap: balance; color: var(--ink-soft); font-size: 17px; margin-bottom: 30px; text-shadow: 0 1px 20px rgba(0,0,0,.35); }
-  .doors { display: grid; grid-template-columns: repeat(2, minmax(0, 380px)); gap: 14px; }
-  .door { position: relative; display: grid; gap: 8px; justify-items: center; padding: 22px 52px; border-radius: 10px; text-decoration: none; color: var(--ink); text-align: center;
-    background: rgba(15,42,30,.55); border: 1px solid rgba(238,227,199,.22); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
-    transition: background .25s, border-color .25s, transform .25s; cursor: pointer; }
-  .door:hover { background: rgba(15,42,30,.75); border-color: rgba(238,227,199,.5); transform: translateY(-2px); }
+  /* the two doors, Terminal-style (user, 2026-11-06): no headline over the port, just two notched outline panels with a light
+     running round each line; the outline and the frosted fill share one shape, drawn by shapeDoors() below */
+  .choice { justify-content: flex-end; padding-bottom: clamp(48px, 12vh, 140px); }
+  .choice .intro { width: min(980px, 100%); margin-bottom: clamp(22px, 3.4vh, 38px); text-align: left; }   /* a short header and one line over the doors (user, 2026-11-06) */
+  .choice .intro h1 { max-width: none; margin: 0 0 10px; font-size: clamp(30px, 3.4vw, 48px); font-weight: 400; letter-spacing: -.03em; line-height: 1.06; text-shadow: 0 2px 28px rgba(0,0,0,.45); }
+  .choice .intro p { max-width: 52ch; margin: 0; font-size: clamp(15px, 1.2vw, 18px); color: var(--ink-soft); text-wrap: balance; text-shadow: 0 1px 18px rgba(0,0,0,.45); }
+  .choice .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .doors { display: grid; grid-template-columns: repeat(2, minmax(0, 470px)); gap: clamp(18px, 2.4vw, 34px); width: min(980px, 100%); }
+  .door { position: relative; display: grid; gap: 12px; align-content: end; justify-items: start; min-height: clamp(190px, 26vh, 250px); padding: 40px clamp(28px, 3vw, 44px);
+    background: none; border: 0; text-decoration: none; color: var(--ink); text-align: left; cursor: pointer; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+  .door:hover { transform: translateY(-3px); }
+  .door-bg { position: absolute; inset: 0; z-index: -1; background: rgba(12,34,24,.46); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); transition: background .35s; }
+  .door:hover .door-bg { background: rgba(12,34,24,.62); }
+  .door-line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .door-line path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+  .door-line .edge { stroke: rgba(238,227,199,.42); stroke-width: 1.2; transition: stroke .35s; }
+  .door:hover .door-line .edge { stroke: rgba(238,227,199,.75); }
+  .door-line .run { stroke: #F4ECD6; stroke-width: 2; filter: drop-shadow(0 0 5px rgba(244,236,214,.95)) drop-shadow(0 0 14px rgba(244,236,214,.5)); }
+  @media (prefers-reduced-motion: reduce) { .door-line .run { display: none; } }
   .door .k { font-family: var(--sans); font-size: 14px; letter-spacing: -.01em; text-transform: none; color: var(--muted); }
-  .door .t { font-size: clamp(21px, 2vw, 28px); letter-spacing: -.03em; line-height: 1.05; white-space: nowrap; }
-  .door .d { font-size: 14px; color: var(--muted); }
-  .door .arrow { position: absolute; right: 16px; top: 50%; margin-top: -17px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(238,227,199,.35); display: grid; place-items: center; }
-  .door .arrow svg { width: 14px; height: 14px; stroke: var(--ink); fill: none; stroke-width: 1.3; }
+  .door .t { font-size: clamp(22px, 2.1vw, 30px); font-weight: 400; letter-spacing: -.03em; line-height: 1.08; }
+  .door .d { max-width: 34ch; font-size: clamp(14px, 1.1vw, 16px); line-height: 1.5; color: var(--ink-soft); }
   .stage.leaving .choice { opacity: 0; transform: translateY(10px); transition: opacity .5s, transform .5s; pointer-events: none; }
 
   /* captions during the zoom (Terminal-style): one big centred line at a time, letters light up from grey to cream */
   .captions { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; pointer-events: none; padding: 0 6vw; }
   .captions::before { content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .6s;
-    background: radial-gradient(ellipse 62% 42% at 50% 52%, rgba(7,20,14,.62), rgba(7,20,14,.28) 55%, transparent 80%); }
+    background: radial-gradient(ellipse 62% 42% at 50% 52%, rgba(0,0,0,.5), rgba(0,0,0,.22) 55%, transparent 80%); }
   .captions.on::before { opacity: 1; }
   .cap { grid-area: 1 / 1; max-width: 18ch; margin: 0; text-align: center; font-weight: 400; color: var(--ink);
     font-size: clamp(28px, 3.2vw, 46px); line-height: 1.08; letter-spacing: -.03em; text-wrap: balance;   /* the site's heading size and weight (user, 2026-11-06) */
@@ -77,12 +101,11 @@
 
   @media (max-width: 860px) {
     .choice { padding: 80px 20px 28px; }
-    .doors { grid-template-columns: 1fr; gap: 10px; }
-    .door { padding: 16px 18px; }
-    .door .arrow { display: none; }
+    .doors { grid-template-columns: 1fr; gap: 14px; }
+    .door { min-height: 136px; padding: 26px 24px; }
     .choice p { font-size: 15px; margin-bottom: 20px; }
     .loader .pct { left: 20px; bottom: 28px; }
-    .film::after { background: radial-gradient(ellipse 95% 60% at 50% 55%, rgba(15,42,30,.78), rgba(15,42,30,.5) 60%, rgba(15,42,30,.2) 90%); }
+    .film::after { background: linear-gradient(180deg, rgba(0,0,0,.32), transparent 18%, transparent 40%, rgba(0,0,0,.5)); }
   }
   @media (prefers-reduced-motion: reduce) {
     .stage.ready .film #still { animation: none; }
@@ -92,26 +115,27 @@
 <body>
 <div class="stage" id="stage">
   <div class="film" id="film">
-    <!-- 1. intro: glides in to the bow; 2. its exact last frame is held behind the doors; 3. the chosen branch starts on that frame -->
-    <img id="still" src="/assets/entrance/intro-poster.jpg" alt="" class="live" />
-    <video id="intro" muted playsinline preload="auto" poster="/assets/entrance/intro-poster.jpg"></video>
-    <img id="hold" src="/assets/entrance/choice.jpg" alt="" />
-    <video id="vc" muted playsinline preload="auto"></video>
-    <video id="ve" muted playsinline preload="auto"></video>
+    <!-- the branch clips load only once the doors are up (settle() calls load()), so they do not hold up the preloader. 1. intro: glides in to the bow; 2. its exact last frame is held behind the doors; 3. the chosen branch starts on that frame -->
+    <img id="still" src="/assets/entrance/intro-v5-poster.jpg" alt="" class="live" />
+    <video id="intro" muted playsinline preload="auto" poster="/assets/entrance/intro-v5-poster.jpg"></video>
+    <img id="hold" src="/assets/entrance/choice-v3.jpg" alt="" />
+    <video id="vc" muted playsinline preload="none"></video>
+    <video id="ve" muted playsinline preload="none"></video>
   </div>
 
   <div class="choice" id="choice">
-    <div class="eyebrow">Commodities Supply · Engineering Solutions</div>
-    <h1>Navigating with Excellence in Energy and Engineering</h1>
-    <p>Singapore-headquartered commodity supply and engineering solutions, built on a legacy of precision engineering and delivered through trusted partners across nine markets.</p>
+    <div class="intro">
+      <h1>Navigating with Excellence</h1>
+      <p>Commodity supply and engineering solutions from Singapore, delivered across nine markets.</p>
+    </div>
     <div class="doors">
       <button class="door" id="goCommodities" type="button">
+        <span class="door-bg" aria-hidden="true"></span><svg class="door-line" aria-hidden="true"><path class="edge"/><path class="run"/></svg>
         <span class="t">Commodities Supply</span><span class="d">Specialist supply across five industrial value chains.</span>
-        <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </button>
       <button class="door" id="goEngineering" type="button">
+        <span class="door-bg" aria-hidden="true"></span><svg class="door-line" aria-hidden="true"><path class="edge"/><path class="run"/></svg>
         <span class="t">Engineering Solutions</span><span class="d">End-to-end project delivery for marine and energy infrastructure.</span>
-        <span class="arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </button>
     </div>
   </div>
@@ -120,14 +144,15 @@
 
   <div class="veil"></div>
 
-  <div class="loader" id="loader" role="img" aria-label="HexaHessman">
+  <div class="loader mark" id="loader" role="img" aria-label="HexaHessman">
     <!-- the 3D drawing of the mark: draws itself on, then spins out while the loader fades onto the port -->
-    <iframe class="pl-logo" src="/logo.html?preloader&v=3" title="" aria-hidden="true" tabindex="-1"></iframe>
+    <iframe class="pl-logo" src="/logo.html?preloader&v=12" title="" aria-hidden="true" tabindex="-1"></iframe>
+    <div class="pl-bar" aria-hidden="true"><i></i></div>
   </div>
 </div>
 
 <div id="site-header"></div>
-<script src="/assets/site-header.js?v=2612d" defer></script>
+<script src="/assets/site-header.js?v=2612e" defer></script>
 
 <script>
 (() => {
@@ -137,7 +162,7 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // smaller files on phones and narrow screens
   const small = Math.min(screen.width, screen.height) < 820 || (navigator.connection && /2g|3g/.test(navigator.connection.effectiveType || ''));
-  const src = (n) => '/assets/entrance/' + n + (small ? '-m' : '') + '.mp4';
+  const src = (n) => '/assets/entrance/' + n + '-v5' + (small ? '-m' : '') + '.mp4';   // v5 (2026-11-07): dusk hero, 2 s fly-in intro, particle bursts; all three meet the hero frame exactly
   intro.src = src('intro'); vc.src = src('commodities'); ve.src = src('engineering');
   const layers = [still, intro, hold, vc, ve];
   let want = still;   // the layer that should be on screen; late callbacks for an older layer are ignored
@@ -158,18 +183,22 @@
   const frame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
   const introReady = canPlay(intro);
   // the drawing tells us when it has finished; if it never loads (offline CDN), carry on after a few seconds
-  const drawn = new Promise(r => { addEventListener('message', e => { if (e.data === 'logo-drawn') r(); }); setTimeout(r, 4000); });
+  const drawn = new Promise(r => { addEventListener('message', e => { if (e.data === 'logo-drawn') r(); }); setTimeout(r, 1200); });
   (async function preload() {
     if (reduce) { await introReady; loader.classList.add('done'); return settle(); }
     await frame(); loader.classList.add('mark');
-    await drawn; await wait(200);                       // the drawing finishes, then it opens straight away
-    const ok = await Promise.race([introReady, wait(700).then(() => intro.readyState >= 2)]);   // don't hold the page for the whole intro to buffer
+    // the bar fills as the drawing runs: it starts when the drawing page has loaded, and completes when it says it is done
+    const fill = () => loader.classList.add('filling');
+    try { if (plLogo.contentDocument && plLogo.contentDocument.readyState === 'complete') fill(); else plLogo.addEventListener('load', fill, { once: true }); } catch (e) { fill(); }
+    setTimeout(fill, 500);
+    await drawn; loader.classList.add('filling', 'full');   // the drawing finishes, then it opens straight away
+    const ok = await Promise.race([introReady, wait(1500).then(() => intro.readyState >= 2)]);   // give the 4 s intro up to 1.5 s to be ready, so a first visit still sees the fly-in (2026-11-07)
     loader.classList.add('spin');
     plLogo.contentWindow && plLogo.contentWindow.postMessage({ type: 'logo-spinout' }, '*');
-    await wait(650);                                    // the turn gets going, then the port shows through
+    await wait(60);                                     // the turn gets going, then the port shows through (2x faster, user 2026-11-06)
     if (ok) { intro.addEventListener('ended', settle, { once: true }); playVisible(intro).catch(settle); } else settle();
     loader.classList.add('out');
-    await wait(1150); loader.classList.add('done');
+    await wait(320); loader.classList.add('done');
   })();
   // ---- the intro ends on the bow: hold that exact frame, bring in the header and the two doors, buffer both branches ----
   let settled = false;
@@ -177,7 +206,7 @@
     if (settled) return; settled = true;
     want = hold; show(hold);
     stage.classList.add('ready'); document.body.classList.add('ready');
-    vc.load(); ve.load();
+    vc.preload = ve.preload = 'auto'; vc.load(); ve.load();
   }
 
   // ---- captions over the zoom: [start, end] as fractions of the clip; letters light up across the first 55% of each line ----
@@ -226,6 +255,38 @@
   }
   document.getElementById('goCommodities').addEventListener('click', () => journey(vc, '/commodities/'));
   document.getElementById('goEngineering').addEventListener('click', () => journey(ve, '/engineering/'));
+})();
+</script>
+<script>
+// the doors' outline: rounded corners and a notch, top centre on the first door and bottom centre on the second (as on
+// terminal-industries.com); the frosted fill is cut to the same shape, and a short light runs round the line
+(() => {
+  const doors = [...document.querySelectorAll('.door')]; if (!doors.length) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function shape(w, h, notchTop) {
+    const r = Math.min(18, h / 5), nw = Math.min(w * 0.42, 230), nd = Math.min(24, h * 0.12), s = 26, cx = w / 2;
+    const a = cx - nw / 2 - s, b = cx - nw / 2, c = cx + nw / 2, d = cx + nw / 2 + s;
+    const top = notchTop ? `L${a},0 C${a + s * .55},0 ${b - s * .45},${nd} ${b},${nd} L${c},${nd} C${c + s * .45},${nd} ${d - s * .55},0 ${d},0 ` : '';
+    const bot = notchTop ? '' : `L${d},${h} C${d - s * .55},${h} ${c + s * .45},${h - nd} ${c},${h - nd} L${b},${h - nd} C${b - s * .45},${h - nd} ${a + s * .55},${h} ${a},${h} `;
+    return `M${r},0 ${top}L${w - r},0 Q${w},0 ${w},${r} L${w},${h - r} Q${w},${h} ${w - r},${h} ${bot}L${r},${h} Q0,${h} 0,${h - r} L0,${r} Q0,0 ${r},0 Z`;
+  }
+  function draw() {
+    doors.forEach((el, i) => {
+      const w = el.offsetWidth, h = el.offsetHeight; if (!w || !h) return;
+      const d = shape(w, h, i % 2 === 0), svg = el.querySelector('.door-line');
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      svg.querySelector('.edge').setAttribute('d', d);
+      const run = svg.querySelector('.run'); run.setAttribute('d', d);
+      el.querySelector('.door-bg').style.clipPath = `path('${d}')`;
+      if (!reduce) {
+        const L = run.getTotalLength(); run.style.strokeDasharray = `${(L * 0.08).toFixed(1)} ${L.toFixed(1)}`;
+        if (run._anim) run._anim.cancel();
+        run._anim = run.animate([{ strokeDashoffset: i ? -L * 0.5 : 0 }, { strokeDashoffset: (i ? -L * 0.5 : 0) - L * 1.08 }], { duration: Math.max(7000, L * 4), iterations: Infinity });
+      }
+    });
+  }
+  draw(); addEventListener('resize', draw); document.fonts && document.fonts.ready.then(draw);
+  new ResizeObserver(draw).observe(doors[0]);
 })();
 </script>
 </body>

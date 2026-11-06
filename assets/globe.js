@@ -19,7 +19,7 @@ const OFFICES = [
 ];
 
 const sec = document.getElementById('globe'); if (!sec) throw new Error('no #globe');
-// the people for each office come from the About team (data-people); Singapore is represented by Adam Yeoh alone
+// the people for each office come from the About team (data-people), everyone in that office
 let TEAM = []; try { TEAM = JSON.parse(sec.dataset.people || '[]'); } catch (e) {}
 if (TEAM.length) OFFICES.forEach(o => { o.leads = TEAM.filter(p => p.office === o.id).map(p => P(p.slug, p.name, p.role)); });
 const INK = 0xeee3c7, PAPER = 0x0F2A1E;
@@ -107,7 +107,7 @@ function select(i, byUser) {
     + `<div class="gp-names">${L.map((l, k) => `<p class="gp-name" style="--k:${k}"><b>${l.name}</b><span>${l.role}</span></p>`).join('')}</div>`;   // one evenly spaced row
   line.classList.remove('in'); void line.offsetWidth; line.classList.add('in');
   const people = L.map(l => `
-      <div class="lead"><div><div class="who">${l.name}</div><div class="muted">${l.role}</div><a href="mailto:${l.email}">${l.email}</a></div></div>`).join('');
+      <div class="lead"><div><div class="who">${l.name}</div><div class="muted">${l.role}</div></div></div>`   /* no personal emails (client, 2026-11-06) */).join('');
   card.innerHTML = `
     <div class="globe-card-head"><span class="eyebrow">${o.entity}</span><h3>${o.country}</h3></div>
     <p class="addr">${o.address}${o.extra ? `<br><span class="muted">${o.extra}</span>` : ''}</p>

@@ -14,7 +14,7 @@
     const START = ['sulphuric-acid', 'dap', 'metallurgical-coke', 'caustic-soda', 'base-oil', 'wood-chips'];
     const runs = START.map(id => { const i = items.findIndex(it => it.id === id); return i >= 0 && items[i + 1] ? [items[i], items[i + 1]] : null; }).filter(Boolean);
     const box = document.createElement('div'); box.className = 'cs-logo3d'; box.setAttribute('aria-hidden', 'true');
-    box.innerHTML = '<iframe src="/logo.html?embed&ink=green&v=5" title="" tabindex="-1" loading="lazy"></iframe>';
+    box.innerHTML = '<iframe src="/logo.html?embed&ink=green&v=6" title="" tabindex="-1" loading="lazy"></iframe>';
     (document.getElementById('cscroll') || document.body).appendChild(box); const f = box.firstChild;
     let raf = 0, lastT = -1;
     const ease = x => x * x * (3 - 2 * x);
@@ -25,16 +25,20 @@
         const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
         const ca = ra.top + ra.height * 0.22, cb = rb.top + rb.height / 2;   // from the top of the first product to the middle of the next
         const t = (vh * 0.5 - ca) / (cb - ca);
-        if (t > -0.4 && t < 1.08) { hit = { t, r: ra, ca, cb, k: runs.indexOf(runs.find(x => x[0] === a)) }; break; }
+        if (t > -0.4 && t < 1.08) { hit = { t, r: ra, ca, cb, k: runs.indexOf(runs.find(x => x[0] === a)), dir: a.closest('.text-right') ? 1 : -1 }; break; }
       }
       const setPause = v => { if (box._p !== v && f.contentWindow) { box._p = v; f.contentWindow.postMessage({ type: 'logo-pause', v }, '*'); } };
       if (!hit) { box.style.opacity = '0'; setPause(true); return; }
-      const { t, r, ca, cb, k } = hit, tc = Math.min(1, Math.max(0, t));
+      const { t, r, ca, cb, k, dir } = hit, tc = Math.min(1, Math.max(0, t));
       const turn = (k + tc) * 0.6;   // one continuous turn down the whole page: each run carries on from where the last ended, so it never flips back
-      const o = Math.min(ease(Math.min(1, Math.max(0, (t + 0.4) / 0.4))), ease(Math.min(1, Math.max(0, (1.08 - t) / 0.3)))) * 0.25;
+      const o = Math.min(ease(Math.min(1, Math.max(0, (t + 0.4) / 0.4))), ease(Math.min(1, Math.max(0, (1.08 - t) / 0.3)))) * 0.2;
       box.style.opacity = o.toFixed(3);
       setPause(o < 0.004);
-      box.style.left = (r.left + r.width * 0.6).toFixed(0) + 'px';
+      // it glides in from the outer edge on the text's side (text on the left: from the left; picture on the left: from
+      // the right), settles behind the words and keeps drifting a little the same way (user, 2026-11-06)
+      const slide = ease(Math.min(1, Math.max(0, (t + 0.4) / 0.75)));
+      const off = dir * innerWidth * (0.42 * (1 - slide) - 0.07 * tc);
+      box.style.left = (r.left + r.width * 0.5 + off).toFixed(0) + 'px';
       box.style.top = (ca + (cb - ca) * tc).toFixed(0) + 'px';   // follows the reader down until the middle of the second product
       if (!reduce && Math.abs(turn - lastT) > 0.002 && f.contentWindow) { lastT = turn; f.contentWindow.postMessage({ type: o < 0.02 ? 'logo-scroll-set' : 'logo-scroll', p: turn }, '*'); }
     };
