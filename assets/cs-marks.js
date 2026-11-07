@@ -23,11 +23,11 @@
         const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
         const ca = ra.top + ra.height * 0.22, cb = rb.top + rb.height * 0.6;   // from the top of the section's first product to its last
         const t = (vh * 0.5 - ca) / (cb - ca);
-        if (t > -0.4 && t < 1.08) { hit = { t, r: (a.querySelector('.cs-text') || a).getBoundingClientRect(), cut: start.getBoundingClientRect().top, ca, cb, k: runs.indexOf(runs.find(x => x[0] === a)), dir: a.closest('.text-right') ? 1 : -1 }; break; }
+        if (t > -0.4 && t < 1.08) { hit = { t, r: (a.querySelector('.cs-text') || a).getBoundingClientRect(), cut: start.getBoundingClientRect().top, pan: (a.closest('.cs-chapter').querySelector('.cs-panel') || a).getBoundingClientRect(), ca, cb, k: runs.indexOf(runs.find(x => x[0] === a)), dir: a.closest('.text-right') ? 1 : -1 }; break; }
       }
       const setPause = v => { if (box._p !== v && f.contentWindow) { box._p = v; f.contentWindow.postMessage({ type: 'logo-pause', v }, '*'); } };
       if (!hit) { box.style.opacity = '0'; setPause(true); return; }
-      const { t, r, cut, ca, cb, k, dir } = hit, tc = Math.min(1, Math.max(0, t));
+      const { t, r, cut, pan, ca, cb, k, dir } = hit, tc = Math.min(1, Math.max(0, t));
       const turn = (k + tc) * 0.6;   // one continuous turn down the whole page: each run carries on from where the last ended, so it never flips back
       const o = Math.min(ease(Math.min(1, Math.max(0, (t + 0.4) / 0.4))), ease(Math.min(1, Math.max(0, (1.08 - t) / 0.3)))) * 0.2;
       box.style.opacity = o.toFixed(3);
@@ -38,12 +38,22 @@
       // (no drift toward the middle; client, 2026-11-07)
       const slide = ease(Math.min(1, Math.max(0, (t + 0.4) / 0.75)));
       const off = dir * innerWidth * 0.42 * (1 - slide);
-      box.style.left = (r.left + r.width * 0.5 + off).toFixed(0) + 'px';
+      // sized to the words column and centred in it, so it sits behind the words and buttons, not the photo (client, 2026-11-07)
+      const colL = dir < 0 ? 0 : pan.right, colR = dir < 0 ? pan.left : innerWidth, colW = colR - colL;
+      const size = Math.round(Math.min(colW * 1.25, vh * 1.25));
+      if (box._w !== size) { box._w = size; box.style.width = size + 'px'; }
+      box.style.left = (colL + colW * 0.5 - size * 0.2 + off).toFixed(0) + 'px';   // (the drawing sits right of its frame's centre)
       box.style.top = (vh * (0.3 + 0.4 * tc)).toFixed(0) + 'px';   // sinks slowly down the screen as the reader goes through the section
       // never over the section's title: hidden above the line where the products start, and comes out from under it
       const topPx = vh * (0.3 + 0.4 * tc), half = box.offsetHeight / 2, edge = cut - (topPx - half);
-      const m = edge > -160 ? `linear-gradient(to bottom, transparent ${edge.toFixed(0)}px, #000 ${(edge + 160).toFixed(0)}px)` : 'none';
-      if (box._m !== m) { box._m = m; box.style.webkitMaskImage = m; box.style.maskImage = m; }
+      const vm = edge > -160 ? `linear-gradient(to bottom, transparent ${edge.toFixed(0)}px, #000 ${(edge + 160).toFixed(0)}px)` : 'linear-gradient(#000, #000)';
+      // and never onto the photo: it fades out before the picture's edge, keeping to the words and buttons (client, 2026-11-07)
+      const bx = parseFloat(box.style.left) - box.offsetWidth / 2, GAP = 36, SOFT = 180;
+      const hm = dir < 0
+        ? `linear-gradient(to right, #000 ${(pan.left - GAP - SOFT - bx).toFixed(0)}px, transparent ${(pan.left - GAP - bx).toFixed(0)}px)`
+        : `linear-gradient(to right, transparent ${(pan.right + GAP - bx).toFixed(0)}px, #000 ${(pan.right + GAP + SOFT - bx).toFixed(0)}px)`;
+      const m = vm + ', ' + hm;
+      if (box._m !== m) { box._m = m; box.style.webkitMaskImage = m; box.style.maskImage = m; box.style.webkitMaskComposite = 'source-in'; box.style.maskComposite = 'intersect'; }
       if (!reduce && Math.abs(turn - lastT) > 0.002 && f.contentWindow) { lastT = turn; f.contentWindow.postMessage({ type: o < 0.02 ? 'logo-scroll-set' : 'logo-scroll', p: turn }, '*'); }
     };
     const ask = () => { if (!raf) raf = requestAnimationFrame(frame); };
