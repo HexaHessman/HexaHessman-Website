@@ -115,7 +115,9 @@
   const KEY = 'cs-y:' + location.pathname;
   addEventListener('pagehide', () => { try { sessionStorage.setItem(KEY, String(Math.round(scrollY))); } catch {} });
   const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-  let back = null; try { back = nav && nav.type === 'back_forward' ? sessionStorage.getItem(KEY) : null; } catch {}
+  // (the Back button on a product page sets cs-restore when it opens this page fresh rather than stepping back)
+  let back = null; try { const again = sessionStorage.getItem('cs-restore') === '1'; sessionStorage.removeItem('cs-restore');
+    back = (nav && nav.type === 'back_forward') || again ? sessionStorage.getItem(KEY) : null; } catch {}
   if (back !== null) {
     const y = +back, go = () => { if (window.__lenis) window.__lenis.scrollTo(y, { immediate: true }); else scrollTo(0, y); };
     [30, 300, 700].forEach(t => setTimeout(go, t));

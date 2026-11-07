@@ -1,6 +1,6 @@
 // Floating back button on the product and principal pages: returns to the page the visitor came from, where they were
 // on it. Landed here from outside the site (a search, a shared link)? Then it opens the page one level up instead.
-// Usage: <script src="/assets/back-btn.js" data-up="/commodities/biomass/" defer></script>
+// Usage: <script src="/assets/back-btn.js" data-up="/commodities/" data-spot="urea" defer></script>
 (() => {
   const me = document.currentScript, up = (me && me.dataset.up) || '/';
   const css = `.back-btn { position: fixed; left: 22px; bottom: 22px; z-index: 40; display: inline-flex; align-items: center; gap: 10px;
@@ -23,10 +23,19 @@
   document.body.appendChild(b);
   requestAnimationFrame(() => setTimeout(() => b.classList.add('on'), 300));
 
-  // came from another page on this site: step back in history (the browser keeps where they were on it)
-  let fromSite = false;
-  try { fromSite = !!document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1; } catch {}
+  // Commodities products (data-spot = the product's slug): Back always returns to the main Commodities page, at the
+  // spot the visitor had scrolled to (cscroll.js keeps it); never been there? then it lands on this product in the list
+  // (client, 2026-11-07). Other pages: step back in history, or one level up when they came from outside the site.
+  const spot = me && me.dataset.spot;
+  let ref = null; try { ref = document.referrer ? new URL(document.referrer) : null; } catch {}
+  const fromSite = !!ref && ref.origin === location.origin && history.length > 1;
   b.addEventListener('click', () => {
+    if (spot) {
+      if (fromSite && ref.pathname === up) { const here = location.href; history.back(); setTimeout(() => { if (location.href === here) location.href = up; }, 600); return; }
+      let saved = null; try { saved = sessionStorage.getItem('cs-y:' + up); sessionStorage.setItem('cs-restore', '1'); } catch {}
+      location.href = saved !== null ? up : up + '#' + spot;
+      return;
+    }
     if (fromSite) {
       const here = location.href;
       history.back();

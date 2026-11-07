@@ -447,7 +447,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2612z">
+<link rel="stylesheet" href="/assets/site.css?v=2613c">
 <style>{PAGE_CSS}{extra_head}</style>
 {head_tags}</head>
 <body{f' class="{body_class}"' if body_class else ""}>
@@ -465,9 +465,17 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 """
 
 
-def back_btn(up):
-    """the floating Back button on product and principal pages (user, 2026-11-06); `up` is where it goes with no history"""
-    return f'<script src="/assets/back-btn.js?v=1" data-up="{up}" defer></script>\n'
+try:   # the one-line product texts the main Commodities page shows (assets/commodities-data.json)
+    HUB_LEADS = {q["slug"]: q.get("lead") for grp in json.load(open(os.path.join(ROOT, "assets/commodities-data.json"), encoding="utf-8")) for q in grp["products"]}
+except Exception:
+    HUB_LEADS = {}
+
+
+def back_btn(up, spot=None):
+    """the floating Back button on product and principal pages (user, 2026-11-06); `up` is where it goes with no history.
+    `spot` (a commodity's slug): Back always returns to the main Commodities page where the visitor left off (client, 2026-11-07)"""
+    extra = f' data-spot="{spot}"' if spot else ''
+    return f'<script src="/assets/back-btn.js?v=2" data-up="{up}"{extra} defer></script>\n'
 
 
 def write(relpath, html):
@@ -522,7 +530,7 @@ def build_commodities_hub():
     body.append(section(f"""<div class="cta-band">
   <h2>{esc(H["cta_h"])}</h2><p class="lead">{esc(H["cta_p"])}</p>{buttons(H["cta_buttons"])}</div>""", id_="cta"))
 
-    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2611p" defer></script>\n<script src="/assets/cs-marks.js?v=15" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
+    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2613a" defer></script>\n<script src="/assets/cs-marks.js?v=16" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
 
 
 def build_group(g):
@@ -595,15 +603,24 @@ def build_product(p):
 <div class="wrap"><p class="eyebrow">{esc(g["name"])}</p><h1>{esc(p["title"])}</h1>{intro}{dist}</div></section>"""]
     body += product_sections(p)
     # related products
-    rel = []
+    # always three, each with the same plain one-liner as the main Commodities page, not the spec (client, 2026-11-07)
+    slugs = []
     for name in p.get("related", []):
         slug = PRODUCT_NAME_TO_SLUG.get(name)
-        if slug and slug in PRODUCT_BY_SLUG:
-            rel.append(card(short_name(slug), descriptor(slug), href=product_url(slug), more="View product →"))
+        if slug and slug in PRODUCT_BY_SLUG and slug != p["slug"] and slug not in slugs:
+            slugs.append(slug)
+    # fewer than three listed: top up from the same group, then from the groups after it
+    gi = next((i for i, x in enumerate(C.GROUPS) if x["slug"] == g["slug"]), 0)
+    for grp in C.GROUPS[gi:] + C.GROUPS[:gi]:
+        for q in grp.get("products", []):
+            qs = q["slug"] if isinstance(q, dict) else (q[0] if isinstance(q, (list, tuple)) else q)
+            if len(slugs) >= 3: break
+            if qs in PRODUCT_BY_SLUG and qs != p["slug"] and qs not in slugs: slugs.append(qs)
+    rel = [card(short_name(slug), HUB_LEADS.get(slug) or descriptor(slug), href=product_url(slug), more="View product →") for slug in slugs[:3]]
     if rel:
-        body.append(section(grid(rel, "c4"), title="Related products", id_="related"))
+        body.append(section(grid(rel, "c3"), title="Related products", id_="related"))
     body.append(enquiry_block())
-    write(f"{product_url(p['slug'])}index.html", page(short_name(p["slug"]), meta_desc(p["hero"][-1] if len(p["hero"]) > 1 and len(clean(p["hero"][0])) < 70 else p["hero"][0]), "\n".join(body), body_scripts=back_btn(group_url(g["slug"]))))
+    write(f"{product_url(p['slug'])}index.html", page(short_name(p["slug"]), meta_desc(p["hero"][-1] if len(p["hero"]) > 1 and len(clean(p["hero"][0])) < 70 else p["hero"][0]), "\n".join(body), body_scripts=back_btn("/commodities/", p["slug"])))
 
 
 ARRIVE_LOGO = ('<svg class="arrive-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">'

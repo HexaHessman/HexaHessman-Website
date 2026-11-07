@@ -405,8 +405,8 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .cs-text { display: grid; gap: clamp(14px, 2.2vh, 24px); max-width: 640px; }
 .cs-num { display: none; }
 .cs-item .cs-text { position: relative; z-index: 1; }
-.cs-logo3d { position: fixed; left: 0; top: 0; width: min(96vw, 160vh);   /* big, more of a background (user, 2026-11-06; was min(34vw, 440px)) */ aspect-ratio: 1; z-index: 1; opacity: 0; pointer-events: none; transform: translate(-50%, -50%) rotate(-9deg); transition: opacity .25s linear; }   /* the 3D mark, faint (cs-marks.js) */
-.cs-logo3d iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
+.cs-logo3d { position: fixed; left: 0; top: 0; width: min(96vw, 160vh);   /* big, more of a background (user, 2026-11-06; was min(34vw, 440px)) */ aspect-ratio: 1; z-index: 1; opacity: 0; pointer-events: none; transform: translate(-50%, -50%); transition: opacity .25s linear; }   /* the tilt is on the iframe, so the cut under each title stays level */   /* the 3D mark, faint (cs-marks.js) */
+.cs-logo3d iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; transform: rotate(-9deg); }
    /* counters removed (user, 2026-11-05) */
 .cs-title { font-size: clamp(24px, 2.3vw, 34px); font-weight: 400; line-height: 1.05; letter-spacing: -.03em; }
 .cs-title a:hover { text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 2px; }
@@ -474,3 +474,18 @@ body.eng, .vy, .cscroll { --accent: #1F7A4A; }
 #services .card p { max-width: 46ch; margin-left: auto; margin-right: auto; }
 /* Engineering hero (ship-to-ship photo, client 2026-11-07): the decks are light, so a deeper shade behind the headline, lower left */
 .eng-arrive .com-hero::after { background: linear-gradient(90deg, rgba(8,24,16,.72), rgba(8,24,16,.38) 34%, transparent 58%), linear-gradient(0deg, rgba(8,24,16,.55), transparent 45%); }
+/* Related products (every commodity page): each one a rounded card, words centred (client, 2026-11-07) */
+#related .grid { align-items: stretch; }
+#related .card { display: grid; align-content: center; justify-items: center; gap: 10px; text-align: center; padding: clamp(28px, 3vw, 40px) clamp(20px, 2vw, 28px);
+  border: 1px solid var(--line-strong); border-radius: 28px; background: rgba(var(--ink-rgb), .045); transition: background .25s, border-color .25s, transform .25s; }
+#related .card:hover { background: rgba(var(--ink-rgb), .09); border-color: var(--ink-soft); transform: translateY(-3px); }
+#related .card h3 { margin: 0; }
+#related .card p { margin: 0; max-width: 34ch; }
+#related .card .more { margin-top: 6px; }
+/* related cards: three across, the names, lines and buttons on the same rows in every card (client, 2026-11-07) */
+#related .grid.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto auto; row-gap: 0; }
+#related .card { grid-row: span 3; display: grid; grid-template-rows: subgrid; align-content: stretch; row-gap: 12px; }
+#related .card h3 { align-self: end; }
+#related .card p { align-self: start; }
+#related .card .more { align-self: end; margin-top: 8px; }
+@media (max-width: 900px) { #related .grid.c3 { grid-template-columns: 1fr; row-gap: 16px; } #related .card { grid-row: auto; grid-template-rows: auto; } }

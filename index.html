@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/header.css?v=2611d" />
-<link rel="stylesheet" href="/assets/site.css?v=2612z" />
+<link rel="stylesheet" href="/assets/site.css?v=2613c" />
 <!-- warm the cache for the preloader drawing (logo.html) so it can start sooner -->
 <link rel="preload" href="/assets/vendor/three.module.js?v=160" as="script" crossorigin>
 <link rel="preload" href="/assets/vendor/three-addons/lines/LineSegments2.js" as="script" crossorigin>
@@ -116,8 +116,8 @@
 <div class="stage" id="stage">
   <div class="film" id="film">
     <!-- the branch clips load only once the doors are up (settle() calls load()), so they do not hold up the preloader. 1. intro: glides in to the bow; 2. its exact last frame is held behind the doors; 3. the chosen branch starts on that frame -->
-    <img id="still" src="/assets/entrance/intro-v8-poster.jpg" srcset="/assets/entrance/intro-v8-poster.jpg 1920w, /assets/entrance/intro-v8-poster-hd.jpg 2560w" sizes="100vw" alt="" class="live" />
-    <video id="intro" muted playsinline preload="auto" poster="/assets/entrance/intro-v8-poster.jpg"></video>
+    <img id="still" src="/assets/entrance/intro-v10-poster.jpg" srcset="/assets/entrance/intro-v10-poster.jpg 1920w, /assets/entrance/intro-v10-poster-hd.jpg 2560w" sizes="100vw" alt="" class="live" />
+    <video id="intro" muted playsinline preload="auto" poster="/assets/entrance/intro-v10-poster.jpg"></video>
     <img id="hold" src="/assets/entrance/choice-v5.jpg" srcset="/assets/entrance/choice-v5.jpg 1920w, /assets/entrance/choice-v5-hd.jpg 2560w" sizes="100vw" alt="" />
     <video id="vc" muted playsinline preload="none"></video>
     <video id="ve" muted playsinline preload="none"></video>
@@ -164,7 +164,7 @@
   const small = Math.min(screen.width, screen.height) < 820 || (navigator.connection && /2g|3g/.test(navigator.connection.effectiveType || ''));
   // sharper 2560 px files for big and retina screens (a 1920 file is upscaled there and looks soft)
   const hd = !small && screen.width * (devicePixelRatio || 1) >= 2400;
-  const VER = { commodities: 'v8b' };   // v8b: faster opening push (client, 2026-11-07)
+  const VER = { commodities: 'v8b', intro: 'v10' };   // v8b: faster opening push. Intro versions for the client to pick (2026-11-07): 1 = v8 original, 2 = v9 doors copied from the end frame, 3 = v10 steadied from its own neighbouring frames (posters: intro-vN-poster in the img/video tags above)
   const src = (n) => '/assets/entrance/' + n + '-' + (VER[n] || 'v8') + (small ? '-m' : hd ? '-hd' : '') + '.mp4';   // v8 (2026-11-07): native 4K; the held frame is cut from the intro footage itself, so nothing switches where the videos meet it
   intro.src = src('intro'); vc.src = src('commodities'); ve.src = src('engineering');
   const layers = [still, intro, hold, vc, ve];
