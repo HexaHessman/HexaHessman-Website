@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2612w">
+<link rel="stylesheet" href="/assets/site.css?v=2612z">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -156,7 +156,12 @@
 .shop-draw img { display: block; width: 100%; height: auto;   /* fades in from left to right behind a wide soft edge, no pen line (user, 2026-11-06) */
   -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 30%, transparent 70%); mask-image: linear-gradient(90deg, #000 0%, #000 30%, transparent 70%);
   -webkit-mask-size: 300% 100%; mask-size: 300% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-  -webkit-mask-position: 100% 0; mask-position: 100% 0; opacity: 0; animation: shopSweep 2.8s cubic-bezier(.4,.1,.25,1) .2s forwards, shopFade 1.4s ease .2s forwards; }
+  -webkit-mask-position: 100% 0; mask-position: 100% 0; opacity: 0; }
+.about-hero2.go .shop-draw img { animation: shopSweep 2.8s cubic-bezier(.4,.1,.25,1) forwards, shopFade 1.4s ease forwards; }   /* starts once the drawing has loaded */
+/* the words come in after the drawing (client, 2026-11-07) */
+.about-hero2 .wrap > * { opacity: 0; transform: translateY(18px); transition: opacity .9s ease, transform 1s cubic-bezier(.2,.7,.2,1); }
+.about-hero2.words .wrap > * { opacity: 1; transform: none; }
+.about-hero2.words .wrap > :nth-child(2) { transition-delay: .1s; } .about-hero2.words .wrap > :nth-child(3) { transition-delay: .2s; } .about-hero2.words .wrap > :nth-child(4) { transition-delay: .35s; }
 @keyframes shopSweep { to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
 @keyframes shopFade { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .shop-draw img { animation: none; opacity: 1; -webkit-mask-image: none; mask-image: none; } }
@@ -269,10 +274,13 @@
    each (smaller, fainter, more blurred); a press walks the line forward. A part of the globe sits at the right edge. ---- */
 .tl { padding-bottom: 0; }   /* dark green (tried white 2026-11-06; user wanted it back) */
 .tl + section, .tl ~ .section { }
-.tl-title { max-width: none; }
-.tl .section-head .lead { color: var(--ink); font-size: inherit; max-width: 62ch; }   /* the same text as Our story's paragraphs, not the grey lead */   /* set like Our story: one colour, the line as wide as the text allows */
+/* the header, set like the Commodities hub's: centred, no eyebrow, a large title over text that lights up word by word (client, 2026-11-07) */
+.tl-head { display: grid; gap: clamp(28px, 4vh, 48px); justify-items: center; text-align: center; padding: clamp(20px, 6vh, 80px) var(--g) 0; margin-bottom: clamp(16px, 3vh, 36px); }
+.tl-title { max-width: 18ch; font-size: clamp(30px, 3.4vw, 50px); font-weight: 400; line-height: 1.06; letter-spacing: -.03em; }
 .tl-title em { font-style: normal; color: inherit; }
-.tl .section-head { margin-bottom: clamp(16px, 3vh, 36px); }
+.tl-fill { max-width: 32ch; font-size: clamp(17px, 1.35vw, 21px); line-height: 1.35; letter-spacing: -.01em; color: var(--ink); }
+.tl-title .w, .tl-fill .w { opacity: .16; transition: opacity .25s linear; }
+@media (prefers-reduced-motion: reduce) { .tl-title .w, .tl-fill .w { opacity: 1 !important; } }
 .tl-wrap { position: relative; }
 .tl-stage { position: relative; height: 82svh; min-height: 560px; max-height: 860px; overflow: hidden; --fw: min(50vh, 34vw); }   /* smaller (user, 2026-11-05: people, globe and name too big) */
 .tl-stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; z-index: 2; pointer-events: none; background: linear-gradient(transparent, rgba(15,42,30,.55) 60%, #0F2A1E); }
@@ -348,7 +356,7 @@
   --ink: #0F2A1E; --ink-soft: rgba(15,42,30,.8); --ink-rgb: 15,42,30; --muted: rgba(15,42,30,.58); --line: rgba(15,42,30,.13); --line-strong: rgba(15,42,30,.3);
   --tg-hi: #0F2A1E; color: var(--ink); overflow: hidden; padding-bottom: clamp(64px, 10vh, 120px); }
 .tg-head { text-align: center; justify-items: center; margin-left: auto; margin-right: auto; }
-.tg-grid { list-style: none; margin: 0 auto; padding: 0; width: min(1120px, calc(100% - 2 * var(--gutter))); display: grid; grid-template-columns: repeat(4, 1fr);   /* 4 across, smaller people (user, 2026-11-06) */
+.tg-grid { list-style: none; margin: 0 auto; padding: 0; width: min(960px, calc(100% - 2 * var(--gutter))); display: grid; grid-template-columns: repeat(3, 1fr);   /* 3 across, row for row as the client's team sheet (client, 2026-11-07) */
   border-left: 1px solid var(--line); position: relative; }
 .tg-grid::before, .tg-grid::after { content: ""; position: absolute; left: -50vw; right: -50vw; height: 1px; top: 0; background: linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent); }
 .tg-grid::after { top: auto; bottom: 0; }
@@ -401,9 +409,18 @@
     <p class="lead">Founded 2007. Reimagined 2024.</p>
   </div>
   <div class="about-street"><div class="shop-draw" role="img" aria-label="The HexaHessman shophouse on a Singapore street, in line"><img src="/assets/about-shophouses.jpg" alt="" width="2000" height="826" fetchpriority="high"></div></div>
+<script>
+(() => {   // the drawing sweeps in once it has loaded, then the words follow
+  const h = document.currentScript.closest('.about-hero2'), img = h.querySelector('.shop-draw img');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { h.classList.add('go', 'words'); return; }
+  let done = false;
+  const go = () => { if (done) return; done = true; h.classList.add('go'); setTimeout(() => h.classList.add('words'), 1600); };
+  if (img.complete && img.naturalWidth) go(); else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', go, { once: true }); setTimeout(go, 3000); }
+})();
+</script>
 </section>
 <section class="section tl" id="team" data-people="[{&quot;name&quot;: &quot;Adam Yeoh&quot;, &quot;role&quot;: &quot;Business Development Manager&quot;, &quot;entity&quot;: &quot;HexaHessman Singapore&quot;, &quot;slug&quot;: &quot;adam-yeoh&quot;, &quot;office&quot;: &quot;sg&quot;, &quot;city&quot;: &quot;Singapore&quot;, &quot;country&quot;: &quot;Singapore&quot;, &quot;lat&quot;: 1.3005, &quot;lon&quot;: 103.859, &quot;blurb&quot;: &quot;Adam develops new supply relationships across Southeast Asia, matching buyers with the right product, origin and shipping terms.&quot;}, {&quot;name&quot;: &quot;Aizat Amin&quot;, &quot;role&quot;: &quot;Business Development Manager&quot;, &quot;entity&quot;: &quot;HexaHessman Singapore&quot;, &quot;slug&quot;: &quot;aizat-amin&quot;, &quot;office&quot;: &quot;sg&quot;, &quot;city&quot;: &quot;Singapore&quot;, &quot;country&quot;: &quot;Singapore&quot;, &quot;lat&quot;: 1.3005, &quot;lon&quot;: 103.859, &quot;blurb&quot;: &quot;Aizat looks after client accounts from first enquiry to delivery, keeping specifications, documents and timelines on track.&quot;}, {&quot;name&quot;: &quot;Parin Udornwong&quot;, &quot;role&quot;: &quot;Supply Chain Manager&quot;, &quot;entity&quot;: &quot;HexaHessman Thailand&quot;, &quot;slug&quot;: &quot;parin-udornwong&quot;, &quot;office&quot;: &quot;th&quot;, &quot;city&quot;: &quot;Samut Prakan&quot;, &quot;country&quot;: &quot;Thailand&quot;, &quot;lat&quot;: 13.56, &quot;lon&quot;: 100.8, &quot;blurb&quot;: &quot;Parin runs logistics for the Thai market, from port handling and inland transport to warehousing and customs.&quot;}, {&quot;name&quot;: &quot;Ensari Inci&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;entity&quot;: &quot;HexaHessman Türkiye&quot;, &quot;slug&quot;: &quot;ensari-inci&quot;, &quot;office&quot;: &quot;tr&quot;, &quot;city&quot;: &quot;Ankara&quot;, &quot;country&quot;: &quot;Türkiye&quot;, &quot;lat&quot;: 39.91, &quot;lon&quot;: 32.8, &quot;blurb&quot;: &quot;Ensari sources fertilizer and industrial chemicals from Turkish and Black Sea producers for the group’s buyers.&quot;}, {&quot;name&quot;: &quot;Dr. Sang Joon Park&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;entity&quot;: &quot;HexaHessman South Korea&quot;, &quot;slug&quot;: &quot;sang-joon-park&quot;, &quot;office&quot;: &quot;kr&quot;, &quot;city&quot;: &quot;Seoul&quot;, &quot;country&quot;: &quot;South Korea&quot;, &quot;lat&quot;: 37.505, &quot;lon&quot;: 127.11, &quot;blurb&quot;: &quot;Dr. Park brings a technical background to the Korean trade desk, advising steel and chemical customers on product grades.&quot;}, {&quot;name&quot;: &quot;Raja Sekhar&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;entity&quot;: &quot;HexaHessman India&quot;, &quot;slug&quot;: &quot;raja-sekhar&quot;, &quot;office&quot;: &quot;in&quot;, &quot;city&quot;: &quot;Bengaluru&quot;, &quot;country&quot;: &quot;India&quot;, &quot;lat&quot;: 12.955, &quot;lon&quot;: 77.59, &quot;blurb&quot;: &quot;Raja covers the Indian subcontinent, linking fertilizer and reductant demand with reliable origins.&quot;}, {&quot;name&quot;: &quot;Thanin Amin&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;entity&quot;: &quot;HexaHessman Thailand&quot;, &quot;slug&quot;: &quot;thanin-amin&quot;, &quot;office&quot;: &quot;th&quot;, &quot;city&quot;: &quot;Samut Prakan&quot;, &quot;country&quot;: &quot;Thailand&quot;, &quot;lat&quot;: 13.56, &quot;lon&quot;: 100.8, &quot;blurb&quot;: &quot;Thanin leads the Thai business, building long-term supply agreements with agricultural and industrial buyers.&quot;}, {&quot;name&quot;: &quot;Cemal Koc&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;entity&quot;: &quot;HexaHessman Türkiye&quot;, &quot;slug&quot;: &quot;cemal-koc&quot;, &quot;office&quot;: &quot;tr&quot;, &quot;city&quot;: &quot;Ankara&quot;, &quot;country&quot;: &quot;Türkiye&quot;, &quot;lat&quot;: 39.91, &quot;lon&quot;: 32.8, &quot;blurb&quot;: &quot;Cemal heads the Ankara office, developing trade between Türkiye, the Middle East and Southeast Asia.&quot;}, {&quot;name&quot;: &quot;Yos Rizaldy&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;entity&quot;: &quot;PT Hexa Hessman Indonesia&quot;, &quot;slug&quot;: &quot;yos-rizaldy&quot;, &quot;office&quot;: &quot;id&quot;, &quot;city&quot;: &quot;Jakarta&quot;, &quot;country&quot;: &quot;Indonesia&quot;, &quot;lat&quot;: -6.29, &quot;lon&quot;: 106.8, &quot;blurb&quot;: &quot;Yos leads commodity supply in Indonesia, serving the nickel, steel and fertilizer sectors.&quot;}, {&quot;name&quot;: &quot;Krishna Hartono&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;entity&quot;: &quot;PT Hexa Hessman Indonesia&quot;, &quot;slug&quot;: &quot;krishna-hartono&quot;, &quot;office&quot;: &quot;id&quot;, &quot;city&quot;: &quot;Jakarta&quot;, &quot;country&quot;: &quot;Indonesia&quot;, &quot;lat&quot;: -6.29, &quot;lon&quot;: 106.8, &quot;blurb&quot;: &quot;Krishna leads the engineering business in Indonesia, representing the group’s principals to ports, terminals and shipyards.&quot;}, {&quot;name&quot;: &quot;Larbi Neron&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;entity&quot;: &quot;HexaHessman United Kingdom&quot;, &quot;slug&quot;: &quot;larbi-neron&quot;, &quot;office&quot;: &quot;uk&quot;, &quot;city&quot;: &quot;London&quot;, &quot;country&quot;: &quot;United Kingdom&quot;, &quot;lat&quot;: 51.527, &quot;lon&quot;: -0.089, &quot;blurb&quot;: &quot;Larbi runs the London office, connecting European producers and financiers with the group’s Asian markets.&quot;}, {&quot;name&quot;: &quot;Eddie Jeong&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;entity&quot;: &quot;HexaHessman South Korea&quot;, &quot;slug&quot;: &quot;eddie-jeong&quot;, &quot;office&quot;: &quot;kr&quot;, &quot;city&quot;: &quot;Seoul&quot;, &quot;country&quot;: &quot;South Korea&quot;, &quot;lat&quot;: 37.505, &quot;lon&quot;: 127.11, &quot;blurb&quot;: &quot;Eddie leads the Korean business, working with the country’s steel, chemical and shipbuilding industries.&quot;}, {&quot;name&quot;: &quot;Yani Lee&quot;, &quot;role&quot;: &quot;President Director&quot;, &quot;entity&quot;: &quot;JWHexaHessman&quot;, &quot;slug&quot;: &quot;yani-lee&quot;, &quot;office&quot;: &quot;id&quot;, &quot;city&quot;: &quot;Jakarta&quot;, &quot;country&quot;: &quot;Indonesia&quot;, &quot;lat&quot;: -6.29, &quot;lon&quot;: 106.8, &quot;blurb&quot;: &quot;Yani heads JWHexaHessman, the group’s joint venture in Indonesia, overseeing operations and local partnerships.&quot;}, {&quot;name&quot;: &quot;Ibrahim Koc&quot;, &quot;role&quot;: &quot;Principal Advisor&quot;, &quot;entity&quot;: &quot;HexaHessman Türkiye&quot;, &quot;slug&quot;: &quot;ibrahim-koc&quot;, &quot;office&quot;: &quot;tr&quot;, &quot;city&quot;: &quot;Ankara&quot;, &quot;country&quot;: &quot;Türkiye&quot;, &quot;lat&quot;: 39.91, &quot;lon&quot;: 32.8, &quot;blurb&quot;: &quot;Ibrahim advises the group on trade and government relations in Türkiye, drawing on decades in the region’s industry.&quot;}, {&quot;name&quot;: &quot;Anuar Ebrahim&quot;, &quot;role&quot;: &quot;Director of Trading&quot;, &quot;entity&quot;: &quot;HexaHessman Malaysia&quot;, &quot;slug&quot;: &quot;anuar-ebrahim&quot;, &quot;office&quot;: &quot;my&quot;, &quot;city&quot;: &quot;Kuala Lumpur&quot;, &quot;country&quot;: &quot;Malaysia&quot;, &quot;lat&quot;: 3.158, &quot;lon&quot;: 101.72, &quot;blurb&quot;: &quot;Anuar directs trading from Kuala Lumpur, managing pricing, risk and counterparties across the product groups.&quot;}, {&quot;name&quot;: &quot;Azmi Mahmood&quot;, &quot;role&quot;: &quot;Principal Advisor&quot;, &quot;entity&quot;: &quot;HexaHessman Singapore&quot;, &quot;slug&quot;: &quot;azmi-mahmood&quot;, &quot;office&quot;: &quot;sg&quot;, &quot;city&quot;: &quot;Singapore&quot;, &quot;country&quot;: &quot;Singapore&quot;, &quot;lat&quot;: 1.3005, &quot;lon&quot;: 103.859, &quot;blurb&quot;: &quot;Azmi advises the leadership on strategy, governance and new markets.&quot;}, {&quot;name&quot;: &quot;Connie Tai&quot;, &quot;role&quot;: &quot;Chief Financial Officer&quot;, &quot;entity&quot;: &quot;HexaHessman Singapore&quot;, &quot;slug&quot;: &quot;connie-tai&quot;, &quot;office&quot;: &quot;sg&quot;, &quot;city&quot;: &quot;Singapore&quot;, &quot;country&quot;: &quot;Singapore&quot;, &quot;lat&quot;: 1.3005, &quot;lon&quot;: 103.859, &quot;blurb&quot;: &quot;Connie oversees the group’s finances, trade financing and reporting across all of its offices.&quot;}, {&quot;name&quot;: &quot;Hafriz Razif&quot;, &quot;role&quot;: &quot;Chief Executive Officer&quot;, &quot;entity&quot;: &quot;HexaHessman Singapore&quot;, &quot;slug&quot;: &quot;hafriz-razif&quot;, &quot;office&quot;: &quot;sg&quot;, &quot;city&quot;: &quot;Singapore&quot;, &quot;country&quot;: &quot;Singapore&quot;, &quot;lat&quot;: 1.3005, &quot;lon&quot;: 103.859, &quot;blurb&quot;: &quot;Hafriz leads HexaHessman Global Group, setting its direction across commodities, engineering and investment.&quot;}]">
-  <div class="wrap"><div class="section-head"><p class="eyebrow">Seamless solutions across borders</p><h2 class="tl-title">Leveraging global expertise for strategic advantage</h2><p class="lead">A growing team across eight offices, from Singapore to London. Press through the line to meet some of them.</p></div></div>
+  <div class="tl-head"><h2 class="tl-title">Leveraging global expertise for strategic advantage</h2><p class="tl-fill">A growing team across eight offices, from Singapore to London. Press through the line to meet some of them.</p></div>
   <div class="tl-wrap">
     <div class="tl-stage">
       <div class="tl-globe" aria-hidden="true"><canvas></canvas><div class="tl-globe-label"></div></div>
@@ -414,10 +431,29 @@
       <div class="tl-ctrl"><span class="tl-hint">Next person</span><button class="tl-prev" type="button" aria-label="Previous person"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 12H4M11 5l-7 7 7 7"/></svg></button><button class="tl-next" type="button" aria-label="Next person"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h16M13 5l7 7-7 7"/></svg></button></div>
     </div>
   </div>
-  <noscript><div class="wrap"><ul><li><b>Adam Yeoh</b> — Business Development Manager, HexaHessman Singapore</li><li><b>Aizat Amin</b> — Business Development Manager, HexaHessman Singapore</li><li><b>Parin Udornwong</b> — Supply Chain Manager, HexaHessman Thailand</li><li><b>Ensari Inci</b> — Trade Specialist, HexaHessman Türkiye</li><li><b>Dr. Sang Joon Park</b> — Trade Specialist, HexaHessman South Korea</li><li><b>Raja Sekhar</b> — Trade Specialist, HexaHessman India</li><li><b>Thanin Amin</b> — Regional Business Director, HexaHessman Thailand</li><li><b>Cemal Koc</b> — Regional Business Director, HexaHessman Türkiye</li><li><b>Yos Rizaldy</b> — Regional Business Director, PT Hexa Hessman Indonesia</li><li><b>Krishna Hartono</b> — Regional Business Director, PT Hexa Hessman Indonesia</li><li><b>Larbi Neron</b> — Regional Business Director, HexaHessman United Kingdom</li><li><b>Eddie Jeong</b> — Regional Business Director, HexaHessman South Korea</li><li><b>Yani Lee</b> — President Director, JWHexaHessman</li><li><b>Ibrahim Koc</b> — Principal Advisor, HexaHessman Türkiye</li><li><b>Anuar Ebrahim</b> — Director of Trading, HexaHessman Malaysia</li><li><b>Azmi Mahmood</b> — Principal Advisor, HexaHessman Singapore</li><li><b>Connie Tai</b> — Chief Financial Officer, HexaHessman Singapore</li><li><b>Hafriz Razif</b> — Chief Executive Officer, HexaHessman Singapore</li></ul></div></noscript>
+  <noscript><div class="wrap"><ul><li><b>Adam Yeoh</b>: Business Development Manager, HexaHessman Singapore</li><li><b>Aizat Amin</b>: Business Development Manager, HexaHessman Singapore</li><li><b>Parin Udornwong</b>: Supply Chain Manager, HexaHessman Thailand</li><li><b>Ensari Inci</b>: Trade Specialist, HexaHessman Türkiye</li><li><b>Dr. Sang Joon Park</b>: Trade Specialist, HexaHessman South Korea</li><li><b>Raja Sekhar</b>: Trade Specialist, HexaHessman India</li><li><b>Thanin Amin</b>: Regional Business Director, HexaHessman Thailand</li><li><b>Cemal Koc</b>: Regional Business Director, HexaHessman Türkiye</li><li><b>Yos Rizaldy</b>: Regional Business Director, PT Hexa Hessman Indonesia</li><li><b>Krishna Hartono</b>: Regional Business Director, PT Hexa Hessman Indonesia</li><li><b>Larbi Neron</b>: Regional Business Director, HexaHessman United Kingdom</li><li><b>Eddie Jeong</b>: Regional Business Director, HexaHessman South Korea</li><li><b>Yani Lee</b>: President Director, JWHexaHessman</li><li><b>Ibrahim Koc</b>: Principal Advisor, HexaHessman Türkiye</li><li><b>Anuar Ebrahim</b>: Director of Trading, HexaHessman Malaysia</li><li><b>Azmi Mahmood</b>: Principal Advisor, HexaHessman Singapore</li><li><b>Connie Tai</b>: Chief Financial Officer, HexaHessman Singapore</li><li><b>Hafriz Razif</b>: Chief Executive Officer, HexaHessman Singapore</li></ul></div></noscript>
+<script>
+(() => {   // the header set like the Commodities one: the title and the text light up word by word as you scroll (client, 2026-11-07)
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const fills = [...document.querySelectorAll('.tl-title, .tl-fill')].map(p => {
+    const words = p.textContent.trim().split(/\s+/); p.textContent = '';
+    const spans = words.map((w, i) => { const s = document.createElement('span'); s.className = 'w'; s.textContent = w; p.appendChild(s); if (i < words.length - 1) p.appendChild(document.createTextNode(' ')); return s; });
+    return { p, spans, last: -1 };
+  });
+  const tick = () => { const vh = innerHeight;
+    for (const f of fills) { const b = f.p.getBoundingClientRect(); if (b.bottom < -50 || b.top > vh + 50) continue;
+      const t = Math.min(1, Math.max(0, (vh * 0.92 - b.top) / (vh * (innerWidth <= 900 ? 0.3 : 0.45) + b.height * 0.5)));
+      const n = f.spans.length, soft = 4, lit = t * (n + soft), q = Math.round(lit * 20);
+      if (q === f.last) continue; f.last = q;
+      f.spans.forEach((s, i) => { s.style.opacity = (0.16 + 0.84 * Math.min(1, Math.max(0, (lit - i) / soft))).toFixed(3); });
+    }
+    requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+})();
+</script>
 </section>
 <section class="section vy" id="timeline" aria-label="Our voyage">
-  <div class="wrap section-head vy-head"><h2>Our voyage</h2><p class="lead">From a single engineering drawing to a group trading across nine markets — the course so far.</p></div>
+  <div class="wrap section-head vy-head"><h2>Our voyage</h2><p class="lead">The course so far, from a single engineering drawing to a group trading across nine markets.</p></div>
   <div class="vy-wrap">
     <div class="vy-lane" aria-hidden="true">
       <div class="vy-ship"><video class="vy-shipvid" autoplay muted loop playsinline preload="auto" poster="/assets/about/ship-water.jpg?v=2" aria-hidden="true"><source src="/assets/about/ship-water.mp4?v=2" type="video/mp4"></video></div></div>
@@ -429,7 +465,7 @@
   <div class="vy-text"><p class="vy-year">2011</p><h3>First principals</h3><p>European manufacturers of couplings, fenders and mooring systems appoint us to represent them in Southeast Asia, and our engineers train alongside theirs at the factory.</p></div>
 </article><article class="vy-stop l">
   <figure class="vy-photo"><img src="/assets/about/tl-sulphur.jpg" alt="" loading="lazy" decoding="async"><svg class="vy-frame" aria-hidden="true"><rect class="vy-line" pathLength="100"/><rect class="vy-run" pathLength="100"/></svg></figure>
-  <div class="vy-text"><p class="vy-year">2015</p><h3>Into commodities</h3><p>The trading desk opens with sulphur and fertilizers, moving bulk cargo from producer to plant with the same discipline we bring to engineering — inspected, documented and delivered on schedule.</p></div>
+  <div class="vy-text"><p class="vy-year">2015</p><h3>Into commodities</h3><p>The trading desk opens with sulphur and fertilizers, moving bulk cargo from producer to plant with the same discipline we bring to engineering. Every cargo is inspected, documented and delivered on schedule.</p></div>
 </article><article class="vy-stop r">
   <figure class="vy-photo"><img src="/assets/about/tl-refinery.jpg" alt="" loading="lazy" decoding="async"><svg class="vy-frame" aria-hidden="true"><rect class="vy-line" pathLength="100"/><rect class="vy-run" pathLength="100"/></svg></figure>
   <div class="vy-text"><p class="vy-year">2018</p><h3>A regional network</h3><p>Offices open across Indonesia, Malaysia and Thailand, putting our people on site at the refineries, plants and terminals we serve.</p></div>
@@ -444,11 +480,11 @@
   <div class="vy-text"><p class="vy-year">2024</p><h3>Group reimagined</h3><p>HexaHessman Pte. Ltd. is incorporated in Singapore (UEN 202419032H), uniting commodities, engineering and investment under HexaHessman Global Group.</p></div>
 </article><article class="vy-stop r">
   <figure class="vy-photo"><img src="/assets/about/tl-bags.jpg" alt="" loading="lazy" decoding="async"><svg class="vy-frame" aria-hidden="true"><rect class="vy-line" pathLength="100"/><rect class="vy-run" pathLength="100"/></svg></figure>
-  <div class="vy-text"><p class="vy-year">Today</p><h3>Eight offices, nine markets</h3><p>From Singapore to London, our people keep cargo moving and equipment running for clients across Asia, the Middle East and Europe — in our own colours.</p></div>
+  <div class="vy-text"><p class="vy-year">Today</p><h3>Eight offices, nine markets</h3><p>From Singapore to London, our people keep cargo moving and equipment running for clients across Asia, the Middle East and Europe, in our own colours.</p></div>
 </article>
   </div>
 </section>
-<section class="section" id="story"><div class="wrap"><div class="section-head"><h2>Our story</h2></div><div class="story-grid"><div class="story-text"><p>Established in 2007, HexaHessman was founded on a legacy of engineering expertise and precision-driven solutions. Over time our vision expanded, turning specialised technical knowledge into a platform for the supply of fertilizers, reductants, chemicals and energy products.</p><p>Our leaders have always looked beyond the immediate horizon, combining engineering rigour with entrepreneurial insight. In 2024 HexaHessman unified these legacy strengths with fresh ambition, establishing itself as a reliable partner for structured supply and engineering solutions.</p><p>Today we are guided by operational discipline, strategic insight and people-first values — connecting trusted partners worldwide and delivering what our clients need with precision and dependability.</p></div>
+<section class="section" id="story"><div class="wrap"><div class="section-head"><h2>Our story</h2></div><div class="story-grid"><div class="story-text"><p>Established in 2007, HexaHessman was founded on a legacy of engineering expertise and precision-driven solutions. Over time our vision expanded, turning specialised technical knowledge into a platform for the supply of fertilizers, reductants, chemicals and energy products.</p><p>Our leaders have always looked beyond the immediate horizon, combining engineering rigour with entrepreneurial insight. In 2024 HexaHessman unified these legacy strengths with fresh ambition, establishing itself as a reliable partner for structured supply and engineering solutions.</p><p>Today we are guided by operational discipline, strategic insight and people-first values, connecting trusted partners worldwide and delivering what our clients need with precision and dependability.</p></div>
   <div class="story-logo" aria-hidden="true"><iframe data-src="/logo.html?embed&story&v=9" title="" tabindex="-1"></iframe></div></div>
 <script>
 (() => {
@@ -462,7 +498,7 @@
 })();
 </script></div></section>
 
-<section class="section" id="specialise"><div class="wrap"><div class="section-head"><h2>What we specialise in</h2></div><div class="grid c3"><a class="card" href="/commodities/"><h3>Commodities Supply</h3><p>Five specialist product groups — fertilizer &amp; phosphate, metallurgical reductants, industrial chemicals, petroleum &amp; oilfield products and biomass.</p><span class="more">Learn more →</span></a><a class="card" href="/engineering/"><h3>Engineering Solutions</h3><p>Fendering, mooring, fluid transfer and gas detection from world-leading principals, with project management and after-sales support.</p><span class="more">Learn more →</span></a><a class="card" href="/contact/#offices"><h3>Local presence, regional reach</h3><p>Operating footprints and partner networks supporting trade across Southeast Asia and beyond.</p><span class="more">Learn more →</span></a></div></div></section>
+<section class="section" id="specialise"><div class="wrap"><div class="section-head"><h2>What we specialise in</h2></div><div class="grid c3"><a class="card" href="/commodities/"><h3>Commodities Supply</h3><p>Five specialist product groups: fertilizer &amp; phosphate, metallurgical reductants, industrial chemicals, petroleum &amp; oilfield products and biomass.</p><span class="more">Learn more →</span></a><a class="card" href="/engineering/"><h3>Engineering Solutions</h3><p>Fendering, mooring, fluid transfer and gas detection from world-leading principals, with project management and after-sales support.</p><span class="more">Learn more →</span></a><a class="card" href="/contact/#offices"><h3>Local presence, regional reach</h3><p>Operating footprints and partner networks supporting trade across Southeast Asia and beyond.</p><span class="more">Learn more →</span></a></div></div></section>
 
 <section class="section tg" id="our-team">
   <div class="wrap section-head tg-head"><p class="eyebrow">Our team</p><h2>The people behind every delivery</h2></div>
@@ -502,7 +538,7 @@
   <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/connie-tai.webp?v=2" alt="Connie Tai" loading="lazy" decoding="async" width="900" height="781"></div></div>
   <div class="tg-meta"><b>Connie Tai</b><span>Chief Financial Officer</span><small>HexaHessman Singapore</small></div></li><li class="tg-cell"><i class="tg-x tl" aria-hidden="true"></i><i class="tg-x tr" aria-hidden="true"></i><i class="tg-x bl" aria-hidden="true"></i><i class="tg-x br" aria-hidden="true"></i>
   <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/hafriz-razif.webp?v=2" alt="Hafriz Razif" loading="lazy" decoding="async" width="900" height="781"></div></div>
-  <div class="tg-meta"><b>Hafriz Razif</b><span>Chief Executive Officer</span><small>HexaHessman Singapore</small></div></li><li class="tg-cell tg-empty" aria-hidden="true"></li><li class="tg-cell tg-empty" aria-hidden="true"></li></ul>
+  <div class="tg-meta"><b>Hafriz Razif</b><span>Chief Executive Officer</span><small>HexaHessman Singapore</small></div></li></ul>
 <script>
 (() => {   // each photo slides up into its cell as its row comes on screen, left to right along the row
   const cells = [...document.querySelectorAll('.tg-cell')], g = document.querySelector('.tg-grid');
@@ -518,8 +554,8 @@
 </main>
 <div id="site-footer"></div>
 <script src="/assets/site-header.js?v=2612e" defer></script>
-<script src="/assets/deco-lines.js?v=1" defer></script>
-<script src="/assets/words.js?v=1" defer></script>
+<script src="/assets/deco-lines.js?v=2" defer></script>
+<script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js" defer></script>
 <script src="/assets/team-lookbook.js?v=12" defer></script>
 <script src="/assets/voyage.js?v=8" defer></script>

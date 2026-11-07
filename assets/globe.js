@@ -23,6 +23,9 @@ const sec = document.getElementById('globe'); if (!sec) throw new Error('no #glo
 let TEAM = []; try { TEAM = JSON.parse(sec.dataset.people || '[]'); } catch (e) {}
 if (TEAM.length) OFFICES.forEach(o => { o.leads = TEAM.filter(p => p.office === o.id).map(p => P(p.slug, p.name, p.role)); });
 // who stands where in an office's line (the middle one stands in front): Adam Yeoh in the middle, Hafriz Razif on his right (user, 2026-11-07)
+// each cutout's head sits a little differently in its photo: dx moves the head onto its spot (in % of the figure's width),
+// s can even out a figure's size
+const FIT = { 'azmi-mahmood': { dx: -2.4 }, 'aizat-amin': { dx: -0.1 }, 'adam-yeoh': { dx: 1.1 }, 'hafriz-razif': { dx: -0.1 }, 'connie-tai': { dx: -9 } };   // Connie: Azmi's size, her shoulder tucked behind Hafriz's as Azmi's is behind Aizat's (client, 2026-11-07)
 const LINE_ORDER = { sg: ['azmi-mahmood', 'aizat-amin', 'adam-yeoh', 'hafriz-razif', 'connie-tai'] };
 OFFICES.forEach(o => { const ord = LINE_ORDER[o.id]; if (ord && o.leads) o.leads.sort((a, b) => (ord.indexOf(a.slug) + 99) % 99 - (ord.indexOf(b.slug) + 99) % 99); });
 const INK = 0xeee3c7, PAPER = 0x0F2A1E;
@@ -38,6 +41,7 @@ sec.innerHTML = `
     <div class="globe-card" aria-live="polite"></div>
   </div>`;
 const line = sec.querySelector('.gp-line');
+addEventListener('resize', () => { const n = line.querySelector('.gp-names'); if (n) n.style.bottom = `calc(2% + ${Math.max(0, ...[...n.children].map(c => c.offsetHeight)) + 4}px)`; });
 const canvas = sec.querySelector('.globe-canvas'), labelsEl = sec.querySelector('.globe-labels'), card = sec.querySelector('.globe-card'), tabs = [...sec.querySelectorAll('.globe-list button')];
 
 // ---------- scene ----------
@@ -102,13 +106,19 @@ function select(i, byUser) {
   tabs.forEach((t, k) => t.setAttribute('aria-selected', String(k === i)));
   pins.forEach((p, k) => p.label.classList.toggle('active', k === i));
   // the office's people step out in front of the globe, as in the About lineup: the first in front, the rest either side
-  const L = o.leads || [], mid = (L.length - 1) / 2;
-  line.innerHTML = L.map((l, k) => { const d = Math.abs(k - mid), side = Math.sign(k - mid);
-    return `<figure class="gp-fig" style="--x:${(side * Math.min(d, 2) * 42).toFixed(0)}%;--s:${(1 - 0.16 * d).toFixed(2)};--z:${10 - Math.round(d)};--k:${k}">
+  const L = o.leads || [], mid = (L.length - 1) / 2, GAP = 36;   // head-to-head spacing, in % of a figure's width
+  const pos = k => { const d = Math.abs(k - mid); return { d, x: Math.sign(k - mid) * Math.min(d, 2) * GAP }; };
+  line.innerHTML = L.map((l, k) => { const { d, x } = pos(k), f = FIT[l.slug] || {};
+    return `<figure class="gp-fig" style="--x:${(x + (f.dx || 0)).toFixed(1)}%;--s:${((1 - 0.16 * d) * (f.s || 1)).toFixed(3)};--z:${10 - Math.round(d)};--k:${k}">
       <img src="/assets/team/cut/${l.slug}.webp?v=2" alt="" draggable="false"></figure>`; }).join('')
-    // the names sit in one row on a shared baseline, each centred under its person
-    + `<div class="gp-names">${L.map((l, k) => { const d = Math.abs(k - mid), side = Math.sign(k - mid);
-        return `<p class="gp-name" style="--k:${k};left:${(50 + side * Math.min(d, 2) * 42 * 0.46).toFixed(1)}%"><b>${l.name}</b><span>${l.role}</span></p>`; }).join('')}</div>`;   // each name under its own person, on one baseline
+    // the names share one top line (client, 2026-11-07), each centred under its person
+    // (spread a little wider than the people, so every title has room; they needn't sit exactly under each head)
+    + `<div class="gp-names">${L.map((l, k) => { const step = Math.max(GAP * 0.46, Math.min(20, 90 / L.length));
+        return `<p class="gp-name" style="--k:${k};left:${(50 + (k - mid) * step).toFixed(1)}%;width:${Math.min(30, step - 1).toFixed(1)}%"><b>${l.name}</b><span>${l.role}</span></p>`; }).join('')}</div>`;
+  // the names hang from one top line, set high enough that the longest title (wrapped onto more lines) still shows in full
+  const names = line.querySelector('.gp-names');
+  const fitNames = () => { const h = Math.max(0, ...[...names.children].map(n => n.offsetHeight)); names.style.bottom = `calc(2% + ${h + 4}px)`; };
+  fitNames(); requestAnimationFrame(fitNames); if (document.fonts) document.fonts.ready.then(fitNames);
   line.classList.remove('in'); void line.offsetWidth; line.classList.add('in');
   const people = L.map(l => `
       <div class="lead"><div><div class="who">${l.name}</div><div class="muted">${l.role}</div></div></div>`   /* no personal emails (client, 2026-11-06) */).join('');

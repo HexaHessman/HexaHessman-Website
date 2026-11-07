@@ -1,5 +1,6 @@
 // Terminal-style lines in the big empty bands (each page's closing call-to-action, section#cta): two thin rounded
 // step lines run in from the top and the sides, and a short light travels along each. Drawn to the section's size.
+// On first view they draw themselves down from the top, then the light starts (client, 2026-11-07).
 (() => {
   const NS = 'http://www.w3.org/2000/svg';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -23,14 +24,30 @@
     const r = Math.min(70, h * 0.18), narrow = w < 760;
     const left = [[w * (narrow ? 0.46 : 0.42), -2], [w * (narrow ? 0.46 : 0.42), h * 0.2], [w * 0.1, h * 0.2], [w * 0.1, h * 0.62], [w * 0.06, h * 0.66], [-2, h * 0.66]];
     const right = [[w * (narrow ? 0.7 : 0.64), -2], [w * (narrow ? 0.7 : 0.64), h * 0.3], [w * 0.93, h * 0.3], [w * 0.93, h * 0.58], [w + 2, h * 0.58]];
+    const first = !sec.dataset.drawn && !reduce;   // the first time the band comes into view, the lines draw themselves down
+    if (first) sec._go = [];   // (a redraw before it is seen replaces the waiting lines)
     [left, right].forEach((pts, i) => {
       const d = round(pts, r);
       const base = document.createElementNS(NS, 'path'); base.setAttribute('d', d); base.setAttribute('class', 'dl-line'); svg.appendChild(base);
       if (reduce) return;
       const run = document.createElementNS(NS, 'path'); run.setAttribute('d', d); run.setAttribute('class', 'dl-run'); svg.appendChild(run);
       const L = run.getTotalLength(); run.style.strokeDasharray = `${Math.min(140, L * 0.12).toFixed(0)} ${L.toFixed(0)}`;
-      run.animate([{ strokeDashoffset: L * 0.12 + 140 }, { strokeDashoffset: -L }], { duration: 5200 + i * 1400, iterations: Infinity, easing: 'cubic-bezier(.45,.05,.4,1)', delay: i * 1600 });
+      const startRun = (wait) => run.animate([{ strokeDashoffset: L * 0.12 + 140 }, { strokeDashoffset: -L }], { duration: 5200 + i * 1400, iterations: Infinity, easing: 'cubic-bezier(.45,.05,.4,1)', delay: wait + i * 1600 });
+      if (!first) { startRun(0); return; }
+      // hidden until the band is on screen, then drawn from the top, down and across; the light starts once it is drawn
+      base.style.strokeDasharray = `${L.toFixed(1)} ${L.toFixed(1)}`; base.style.strokeDashoffset = L.toFixed(1); run.style.opacity = '0';
+      const DRAW = 1800 + i * 300;
+      sec._go.push(() => {
+        base.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], { duration: DRAW, delay: i * 250, easing: 'cubic-bezier(.45,.05,.25,1)', fill: 'forwards' })
+          .finished.then(() => { base.style.strokeDasharray = ''; base.style.strokeDashoffset = ''; });
+        run.style.opacity = ''; startRun(DRAW + i * 250);
+      });
     });
+    if (first && !sec._io) {
+      sec._io = new IntersectionObserver(([e], io) => { if (!e.isIntersecting) return; io.disconnect(); sec.dataset.drawn = '1'; (sec._go || []).forEach(f => f()); sec._go = []; },
+        { rootMargin: '0px 0px -15% 0px', threshold: 0.2 });
+      sec._io.observe(sec);
+    }
   };
   const all = () => secs.forEach(draw);
   all(); addEventListener('resize', () => { clearTimeout(all.t); all.t = setTimeout(all, 150); });

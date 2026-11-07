@@ -3,7 +3,7 @@
 // arrival headline, team lookbook, timeline, globe cards, entrance captions).
 (() => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const SKIP = '#site-header, .site-header, .site-footer, footer, form, .cscroll, .arrive, .tl-info, .tl-grid, .gp-line, .globe-side, #captions, .choice, .vy-text, .dg, .spin-row, button, .pill, .mega, .drawer';
+  const SKIP = '#site-header, .site-header, .site-footer, footer, form, .cscroll, .arrive, .tl-head, .about-hero2, .tl-info, .tl-grid, .gp-line, .globe-side, #captions, .choice, .vy-text, .dg, .spin-row, button, .pill, .mega, .drawer';
   const heads = [...document.querySelectorAll('main h1, main h2, main h3, section h1, section h2, section h3')].filter(e => !e.closest(SKIP) && !e.dataset.words);
   const paras = [...document.querySelectorAll('main p, section p, main li, section li')].filter(e => !e.closest(SKIP) && !e.closest('h1,h2,h3') && e.textContent.trim().length > 2);
   const split = el => {   // wrap each word, keeping any inline tags (e.g. the mint <em> words)

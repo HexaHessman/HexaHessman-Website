@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2612w">
+<link rel="stylesheet" href="/assets/site.css?v=2612z">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -145,13 +145,23 @@
 <div id="site-header"></div>
 <main>
 <section class="arrive eng-arrive com-arrive" aria-label="Engineering Solutions">
-  <div class="com-hero"><picture><source media="(max-width: 720px)" srcset="/assets/engineering/hero-ink-m.jpg"><img src="/assets/engineering/hero-ink.jpg" alt="A bulk terminal with its conveyor out to a ship at dusk" width="1672" height="941" fetchpriority="high"></picture>
+  <div class="com-hero"><video class="eng-hero-vid" muted loop playsinline preload="auto" poster="/assets/engineering/hero-sts-1920.jpg" aria-label="Two ships moored side by side, the sea moving between them and the pneumatic fenders bobbing, cargo hoses crossing the gap"></video>
+<script>
+(() => {   // the ship-to-ship loop: only the sea and the fenders move (client, 2026-11-07); a sharper file on big screens, a light one on phones
+  const v = document.querySelector('.eng-hero-vid'); if (!v) return;
+  const small = matchMedia('(max-width: 720px)').matches, hd = !small && screen.width * (devicePixelRatio || 1) >= 2400;
+  if (small) v.poster = '/assets/engineering/hero-sts-m.jpg';
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  v.src = '/assets/engineering/sts-loop' + (small ? '-m' : hd ? '-hd' : '') + '.mp4';
+  const go = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); }; go(); v.addEventListener('canplay', go, { once: true });
+})();
+</script>
   <div class="arrive-top com-top">
   <p class="eyebrow arrive-eyebrow">Engineering Solutions</p>
   <h1 class="arrive-title">Engineered for excellence, supported for life</h1></div></div>
   <div class="mq" aria-label="Principals we represent"><p class="mq-label">Principals we represent</p><div class="mq-view"><div class="mq-track"><ul class="mq-set"><li class="mq-cell"><a href="/engineering/shibata/" tabindex="-1"><img src="/assets/engineering/logo-shibata.svg?v=3" alt="ShibataFenderTeam" class="mq-logo mq-shibata"></a></li><li class="mq-cell"><a href="/engineering/manntek/" tabindex="-1"><img src="/assets/engineering/logo-manntek.svg?v=3" alt="MannTek" class="mq-logo mq-manntek"></a></li><li class="mq-cell"><a href="/engineering/straatman/" tabindex="-1"><img src="/assets/engineering/logo-straatman.svg?v=3" alt="Straatman" class="mq-logo mq-straatman"></a></li><li class="mq-cell"><a href="/engineering/raythink/" tabindex="-1"><img src="/assets/engineering/logo-raythink.svg?v=3" alt="Raythink" class="mq-logo mq-raythink"></a></li><li class="mq-cell"><a href="/engineering/shibata/" tabindex="-1"><img src="/assets/engineering/logo-shibata.svg?v=3" alt="ShibataFenderTeam" class="mq-logo mq-shibata"></a></li><li class="mq-cell"><a href="/engineering/manntek/" tabindex="-1"><img src="/assets/engineering/logo-manntek.svg?v=3" alt="MannTek" class="mq-logo mq-manntek"></a></li><li class="mq-cell"><a href="/engineering/straatman/" tabindex="-1"><img src="/assets/engineering/logo-straatman.svg?v=3" alt="Straatman" class="mq-logo mq-straatman"></a></li><li class="mq-cell"><a href="/engineering/raythink/" tabindex="-1"><img src="/assets/engineering/logo-raythink.svg?v=3" alt="Raythink" class="mq-logo mq-raythink"></a></li></ul><ul class="mq-set" aria-hidden="true"><li class="mq-cell"><a href="/engineering/shibata/" tabindex="-1"><img src="/assets/engineering/logo-shibata.svg?v=3" alt="ShibataFenderTeam" class="mq-logo mq-shibata"></a></li><li class="mq-cell"><a href="/engineering/manntek/" tabindex="-1"><img src="/assets/engineering/logo-manntek.svg?v=3" alt="MannTek" class="mq-logo mq-manntek"></a></li><li class="mq-cell"><a href="/engineering/straatman/" tabindex="-1"><img src="/assets/engineering/logo-straatman.svg?v=3" alt="Straatman" class="mq-logo mq-straatman"></a></li><li class="mq-cell"><a href="/engineering/raythink/" tabindex="-1"><img src="/assets/engineering/logo-raythink.svg?v=3" alt="Raythink" class="mq-logo mq-raythink"></a></li><li class="mq-cell"><a href="/engineering/shibata/" tabindex="-1"><img src="/assets/engineering/logo-shibata.svg?v=3" alt="ShibataFenderTeam" class="mq-logo mq-shibata"></a></li><li class="mq-cell"><a href="/engineering/manntek/" tabindex="-1"><img src="/assets/engineering/logo-manntek.svg?v=3" alt="MannTek" class="mq-logo mq-manntek"></a></li><li class="mq-cell"><a href="/engineering/straatman/" tabindex="-1"><img src="/assets/engineering/logo-straatman.svg?v=3" alt="Straatman" class="mq-logo mq-straatman"></a></li><li class="mq-cell"><a href="/engineering/raythink/" tabindex="-1"><img src="/assets/engineering/logo-raythink.svg?v=3" alt="Raythink" class="mq-logo mq-raythink"></a></li></ul></div></div></div>
 </section>
-<section class="section centered-head" id="services"><div class="wrap"><div class="section-head"><h2>Services</h2></div><div class="grid c3"><div class="card"><h3>Project Management &amp; EPC Support</h3><p>End-to-end support from feasibility to handover — planning, design, procurement, production oversight and execution, with a single point of accountability.</p></div><div class="card"><h3>After-sales service</h3><p>Repairs, maintenance, spares and standby services, with a face-to-face response within 48 hours.</p></div></div></div></section>
+<section class="section centered-head" id="services"><div class="wrap"><div class="section-head"><h2>Services</h2></div><div class="grid c3"><div class="card"><h3>Project Management &amp; EPC Support</h3><p>End-to-end support from feasibility to handover, covering planning, design, procurement, production oversight and execution, with a single point of accountability.</p></div><div class="card"><h3>After-sales service</h3><p>Repairs, maintenance, spares and standby services, with a face-to-face response within 48 hours.</p></div></div></div></section>
 
 <section class="eprin" id="principals" aria-label="Principals we represent"><article class="ep left" id="shibata">
   <a class="ep-photo cs-photo" href="/engineering/shibata/" data-reveal="photo" tabindex="-1" aria-hidden="true"><img src="/assets/engineering/shibata.jpg?v=1" alt="" loading="lazy" decoding="async" width="1200" height="900"><svg class="ep-run" aria-hidden="true"><rect pathLength="100"/></svg></a>
@@ -195,8 +205,8 @@
 </main>
 <div id="site-footer"></div>
 <script src="/assets/site-header.js?v=2612e" defer></script>
-<script src="/assets/deco-lines.js?v=1" defer></script>
-<script src="/assets/words.js?v=1" defer></script>
+<script src="/assets/deco-lines.js?v=2" defer></script>
+<script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
 <script src="/assets/arrive.js?v=2612a" defer></script>

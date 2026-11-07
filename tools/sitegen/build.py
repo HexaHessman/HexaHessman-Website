@@ -447,7 +447,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2612w">
+<link rel="stylesheet" href="/assets/site.css?v=2612z">
 <style>{PAGE_CSS}{extra_head}</style>
 {head_tags}</head>
 <body{f' class="{body_class}"' if body_class else ""}>
@@ -457,8 +457,8 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 </main>
 <div id="site-footer"></div>
 <script src="/assets/site-header.js?v=2612e" defer></script>
-<script src="/assets/deco-lines.js?v=1" defer></script>
-<script src="/assets/words.js?v=1" defer></script>
+<script src="/assets/deco-lines.js?v=2" defer></script>
+<script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js" defer></script>
 {body_scripts}</body>
 </html>
@@ -493,10 +493,27 @@ def build_commodities_hub():
     cells = "".join(f'<div class="pcell" data-i="{i}"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div>' for i in range(12))   # two rows (user, 2026-11-06)
     # hero: the bulk port at dusk, edge to edge, with the headline pushed to the left over the sky (user, 2026-11-06)
     body = [f'''<section class="arrive com-arrive" id="partners" aria-label="Partners">
-  <div class="com-hero"><video class="com-hero-vid" autoplay muted loop playsinline preload="auto" poster="/assets/commodities/crane-loop.jpg" aria-label="A harbour crane loading jumbo bags onto a ship at dusk"><source media="(max-width: 720px)" src="/assets/commodities/crane-loop-m.mp4" type="video/mp4"><source src="/assets/commodities/crane-loop.mp4" type="video/mp4"></video>
+  <div class="com-hero"><video class="com-hero-vid" muted playsinline preload="auto" poster="/assets/commodities/crane-loop.jpg" aria-label="A harbour crane loading jumbo bags onto a ship at dusk"><source media="(max-width: 720px)" src="/assets/commodities/crane-loop-m.mp4" type="video/mp4"><source src="/assets/commodities/crane-loop.mp4" type="video/mp4"></video>
   <div class="arrive-top com-top">
   <p class="eyebrow arrive-eyebrow">Commodities Supply</p>
   <h1 class="arrive-title">Trusted by producers and buyers across nine markets</h1></div></div>
+<script>
+(() => {{   // 3 s still, the crane swings to its left end, 3 s still there, swings back right, and round again (client, 2026-11-07)
+  const v = document.querySelector('.com-hero-vid'); if (!v || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const HOLD = 3000, RATE = 0.75, LEFT = 3.05;   // LEFT: the moment in the clip the crane reaches its left end (it rests there 2.9-3.2 s)
+  let timer = 0, held = false;
+  const start = () => {{ v.playbackRate = RATE; const p = v.play(); if (p && p.catch) p.catch(() => {{}}); watch(); }};
+  const hold = () => {{ clearTimeout(timer); timer = setTimeout(start, HOLD); }};
+  const watch = () => {{   // stop on the left end once per round
+    if (v.paused) return;
+    if (!held && v.currentTime >= LEFT) {{ held = true; v.pause(); hold(); return; }}
+    requestAnimationFrame(watch);
+  }};
+  v.addEventListener('ended', () => {{ v.pause(); v.currentTime = 0; held = false; hold(); }});
+  v.addEventListener('ratechange', () => {{ if (v.playbackRate !== RATE) v.playbackRate = RATE; }});
+  hold();
+}})();
+</script>
   <div class="pwall"><div class="pgrid">{cells}</div></div>
 </section>''', f'<section id="cscroll" class="cscroll" data-intro="{intro}"></section>']
 
@@ -505,7 +522,7 @@ def build_commodities_hub():
     body.append(section(f"""<div class="cta-band">
   <h2>{esc(H["cta_h"])}</h2><p class="lead">{esc(H["cta_p"])}</p>{buttons(H["cta_buttons"])}</div>""", id_="cta"))
 
-    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2611p" defer></script>\n<script src="/assets/cs-marks.js?v=13" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
+    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2611p" defer></script>\n<script src="/assets/cs-marks.js?v=15" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
 
 
 def build_group(g):
@@ -609,7 +626,17 @@ def build_engineering_hub():
     track = f'<ul class="mq-set">{one * 2}</ul><ul class="mq-set" aria-hidden="true">{one * 2}</ul>'
     # hero: the port photo edge to edge, the headline lower left (as Commodities; user, 2026-11-06), then the line drawing
     body = [f'''<section class="arrive eng-arrive com-arrive" aria-label="Engineering Solutions">
-  <div class="com-hero"><picture><source media="(max-width: 720px)" srcset="/assets/engineering/hero-ink-m.jpg"><img src="/assets/engineering/hero-ink.jpg" alt="A bulk terminal with its conveyor out to a ship at dusk" width="1672" height="941" fetchpriority="high"></picture>
+  <div class="com-hero"><video class="eng-hero-vid" muted loop playsinline preload="auto" poster="/assets/engineering/hero-sts-1920.jpg" aria-label="Two ships moored side by side, the sea moving between them and the pneumatic fenders bobbing, cargo hoses crossing the gap"></video>
+<script>
+(() => {{   // the ship-to-ship loop: only the sea and the fenders move (client, 2026-11-07); a sharper file on big screens, a light one on phones
+  const v = document.querySelector('.eng-hero-vid'); if (!v) return;
+  const small = matchMedia('(max-width: 720px)').matches, hd = !small && screen.width * (devicePixelRatio || 1) >= 2400;
+  if (small) v.poster = '/assets/engineering/hero-sts-m.jpg';
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  v.src = '/assets/engineering/sts-loop' + (small ? '-m' : hd ? '-hd' : '') + '.mp4';
+  const go = () => {{ const p = v.play(); if (p && p.catch) p.catch(() => {{}}); }}; go(); v.addEventListener('canplay', go, {{ once: true }});
+}})();
+</script>
   <div class="arrive-top com-top">
   <p class="eyebrow arrive-eyebrow">Engineering Solutions</p>
   <h1 class="arrive-title">{esc(H["h1"])}</h1></div></div>
@@ -724,7 +751,12 @@ ABOUT_CSS = """
 .shop-draw img { display: block; width: 100%; height: auto;   /* fades in from left to right behind a wide soft edge, no pen line (user, 2026-11-06) */
   -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 30%, transparent 70%); mask-image: linear-gradient(90deg, #000 0%, #000 30%, transparent 70%);
   -webkit-mask-size: 300% 100%; mask-size: 300% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-  -webkit-mask-position: 100% 0; mask-position: 100% 0; opacity: 0; animation: shopSweep 2.8s cubic-bezier(.4,.1,.25,1) .2s forwards, shopFade 1.4s ease .2s forwards; }
+  -webkit-mask-position: 100% 0; mask-position: 100% 0; opacity: 0; }
+.about-hero2.go .shop-draw img { animation: shopSweep 2.8s cubic-bezier(.4,.1,.25,1) forwards, shopFade 1.4s ease forwards; }   /* starts once the drawing has loaded */
+/* the words come in after the drawing (client, 2026-11-07) */
+.about-hero2 .wrap > * { opacity: 0; transform: translateY(18px); transition: opacity .9s ease, transform 1s cubic-bezier(.2,.7,.2,1); }
+.about-hero2.words .wrap > * { opacity: 1; transform: none; }
+.about-hero2.words .wrap > :nth-child(2) { transition-delay: .1s; } .about-hero2.words .wrap > :nth-child(3) { transition-delay: .2s; } .about-hero2.words .wrap > :nth-child(4) { transition-delay: .35s; }
 @keyframes shopSweep { to { -webkit-mask-position: 0 0; mask-position: 0 0; } }
 @keyframes shopFade { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .shop-draw img { animation: none; opacity: 1; -webkit-mask-image: none; mask-image: none; } }
@@ -837,10 +869,13 @@ ABOUT_CSS = """
    each (smaller, fainter, more blurred); a press walks the line forward. A part of the globe sits at the right edge. ---- */
 .tl { padding-bottom: 0; }   /* dark green (tried white 2026-11-06; user wanted it back) */
 .tl + section, .tl ~ .section { }
-.tl-title { max-width: none; }
-.tl .section-head .lead { color: var(--ink); font-size: inherit; max-width: 62ch; }   /* the same text as Our story's paragraphs, not the grey lead */   /* set like Our story: one colour, the line as wide as the text allows */
+/* the header, set like the Commodities hub's: centred, no eyebrow, a large title over text that lights up word by word (client, 2026-11-07) */
+.tl-head { display: grid; gap: clamp(28px, 4vh, 48px); justify-items: center; text-align: center; padding: clamp(20px, 6vh, 80px) var(--g) 0; margin-bottom: clamp(16px, 3vh, 36px); }
+.tl-title { max-width: 18ch; font-size: clamp(30px, 3.4vw, 50px); font-weight: 400; line-height: 1.06; letter-spacing: -.03em; }
 .tl-title em { font-style: normal; color: inherit; }
-.tl .section-head { margin-bottom: clamp(16px, 3vh, 36px); }
+.tl-fill { max-width: 32ch; font-size: clamp(17px, 1.35vw, 21px); line-height: 1.35; letter-spacing: -.01em; color: var(--ink); }
+.tl-title .w, .tl-fill .w { opacity: .16; transition: opacity .25s linear; }
+@media (prefers-reduced-motion: reduce) { .tl-title .w, .tl-fill .w { opacity: 1 !important; } }
 .tl-wrap { position: relative; }
 .tl-stage { position: relative; height: 82svh; min-height: 560px; max-height: 860px; overflow: hidden; --fw: min(50vh, 34vw); }   /* smaller (user, 2026-11-05: people, globe and name too big) */
 .tl-stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; z-index: 2; pointer-events: none; background: linear-gradient(transparent, rgba(15,42,30,.55) 60%, #0F2A1E); }
@@ -916,7 +951,7 @@ ABOUT_CSS = """
   --ink: #0F2A1E; --ink-soft: rgba(15,42,30,.8); --ink-rgb: 15,42,30; --muted: rgba(15,42,30,.58); --line: rgba(15,42,30,.13); --line-strong: rgba(15,42,30,.3);
   --tg-hi: #0F2A1E; color: var(--ink); overflow: hidden; padding-bottom: clamp(64px, 10vh, 120px); }
 .tg-head { text-align: center; justify-items: center; margin-left: auto; margin-right: auto; }
-.tg-grid { list-style: none; margin: 0 auto; padding: 0; width: min(1120px, calc(100% - 2 * var(--gutter))); display: grid; grid-template-columns: repeat(4, 1fr);   /* 4 across, smaller people (user, 2026-11-06) */
+.tg-grid { list-style: none; margin: 0 auto; padding: 0; width: min(960px, calc(100% - 2 * var(--gutter))); display: grid; grid-template-columns: repeat(3, 1fr);   /* 3 across, row for row as the client's team sheet (client, 2026-11-07) */
   border-left: 1px solid var(--line); position: relative; }
 .tg-grid::before, .tg-grid::after { content: ""; position: absolute; left: -50vw; right: -50vw; height: 1px; top: 0; background: linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent); }
 .tg-grid::after { top: auto; bottom: 0; }
@@ -972,6 +1007,15 @@ def build_about():
     <p class="lead">{esc(A["lead"])}</p>
   </div>
   <div class="about-street">{shop}</div>
+<script>
+(() => {{   // the drawing sweeps in once it has loaded, then the words follow
+  const h = document.currentScript.closest('.about-hero2'), img = h.querySelector('.shop-draw img');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {{ h.classList.add('go', 'words'); return; }}
+  let done = false;
+  const go = () => {{ if (done) return; done = true; h.classList.add('go'); setTimeout(() => h.classList.add('words'), 1600); }};
+  if (img.complete && img.naturalWidth) go(); else {{ img.addEventListener('load', go, {{ once: true }}); img.addEventListener('error', go, {{ once: true }}); setTimeout(go, 3000); }}
+}})();
+</script>
 </section>"""]
     # Our story, with the 3D drawn HexaHessman mark beside it: it draws itself on when the section comes into view and
     # turns a little as you scroll (logo.html?embed; the src is set on arrival so the drawing starts then)
@@ -996,10 +1040,10 @@ def build_about():
     people = [dict(name=n, role=r, entity=e, slug=slug, office=o, city=A["office_pins"][o][0], country=A["office_pins"][o][1],
                    lat=A["office_pins"][o][2], lon=A["office_pins"][o][3], blurb=b) for n, r, e, slug, o, b in A["team"]]
     arrow = lambda d: f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="{"M4 12h16M13 5l7 7-7 7" if d > 0 else "M20 12H4M11 5l-7 7 7 7"}"/></svg>'
-    fallback = "".join(f'<li><b>{esc(n)}</b> — {esc(r)}, {esc(e)}</li>' for n, r, e, _, _, _ in A["team"])
+    fallback = "".join(f'<li><b>{esc(n)}</b>: {esc(r)}, {esc(e)}</li>' for n, r, e, _, _, _ in A["team"])
     team_title = re.sub(r"\[(.+?)\]", r"<em>\1</em>", _html.escape(A["team_h"], quote=False))
     body.append(f'''<section class="section tl" id="team" data-people="{_html.escape(json.dumps(people, ensure_ascii=False), quote=True)}">
-  <div class="wrap"><div class="section-head"><p class="eyebrow">{esc(A.get("team_eyebrow", "Our people"))}</p><h2 class="tl-title">{team_title}</h2><p class="lead">{esc(A["team_lead"])}</p></div></div>
+  <div class="tl-head"><h2 class="tl-title">{team_title}</h2><p class="tl-fill">{esc(A["team_lead"])}</p></div>
   <div class="tl-wrap">
     <div class="tl-stage">
       <div class="tl-globe" aria-hidden="true"><canvas></canvas><div class="tl-globe-label"></div></div>
@@ -1011,6 +1055,25 @@ def build_about():
     </div>
   </div>
   <noscript><div class="wrap"><ul>{fallback}</ul></div></noscript>
+<script>
+(() => {{   // the header set like the Commodities one: the title and the text light up word by word as you scroll (client, 2026-11-07)
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const fills = [...document.querySelectorAll('.tl-title, .tl-fill')].map(p => {{
+    const words = p.textContent.trim().split(/\\s+/); p.textContent = '';
+    const spans = words.map((w, i) => {{ const s = document.createElement('span'); s.className = 'w'; s.textContent = w; p.appendChild(s); if (i < words.length - 1) p.appendChild(document.createTextNode(' ')); return s; }});
+    return {{ p, spans, last: -1 }};
+  }});
+  const tick = () => {{ const vh = innerHeight;
+    for (const f of fills) {{ const b = f.p.getBoundingClientRect(); if (b.bottom < -50 || b.top > vh + 50) continue;
+      const t = Math.min(1, Math.max(0, (vh * 0.92 - b.top) / (vh * (innerWidth <= 900 ? 0.3 : 0.45) + b.height * 0.5)));
+      const n = f.spans.length, soft = 4, lit = t * (n + soft), q = Math.round(lit * 20);
+      if (q === f.last) continue; f.last = q;
+      f.spans.forEach((s, i) => {{ s.style.opacity = (0.16 + 0.84 * Math.min(1, Math.max(0, (lit - i) / soft))).toFixed(3); }});
+    }}
+    requestAnimationFrame(tick); }};
+  requestAnimationFrame(tick);
+}})();
+</script>
 </section>''')
     story_sec = section(f'''<div class="story-grid"><div class="story-text">{story}</div>
   <div class="story-logo" aria-hidden="true"><iframe data-src="/logo.html?embed&story&v=9" title="" tabindex="-1"></iframe></div></div>
@@ -1033,7 +1096,7 @@ def build_about():
   <div class="tg-meta"><b>{esc(n)}</b><span>{esc(r)}</span><small>{esc(e)}</small></div></li>''' for n, r, e, slug, _, _ in A["team"])
     our_team = f'''<section class="section tg" id="our-team">
   <div class="wrap section-head tg-head"><p class="eyebrow">Our team</p><h2>The people behind every delivery</h2></div>
-  <ul class="tg-grid">{cells}{'<li class="tg-cell tg-empty" aria-hidden="true"></li>' * ((-len(A["team"])) % 4)}</ul>
+  <ul class="tg-grid">{cells}{'<li class="tg-cell tg-empty" aria-hidden="true"></li>' * ((-len(A["team"])) % 3)}</ul>
 <script>
 (() => {{   // each photo slides up into its cell as its row comes on screen, left to right along the row
   const cells = [...document.querySelectorAll('.tg-cell')], g = document.querySelector('.tg-grid');
@@ -1131,7 +1194,7 @@ CONTACT_JS = """
     let err = '';
     if (!v) err = 'Please enter your company email.';
     else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(v)) err = 'Please enter a valid email address.';
-    else if (freeRe.test(domain)) err = 'Please use your company email address — ' + domain + ' is a personal email provider.';
+    else if (freeRe.test(domain)) err = 'Please use your company email address. ' + domain + ' is a personal email provider.';
     email.setCustomValidity(err);
     email.classList.toggle('invalid', !!err && v !== '');
     help.textContent = err && v ? err : tip; help.classList.toggle('error', !!err && v !== '');
@@ -1188,12 +1251,13 @@ def build_contact():
     # Commodities Supply gets a WhatsApp button to Adam Yeoh (user, 2026-11-06). The number is the site's existing
     # WhatsApp line (+65 8061 9119) until a direct number for Adam is supplied.
     WA = {"Commodities Supply": ('https://wa.me/6580619119?text=Hi%2C%20I%27d%20like%20to%20ask%20about%20commodities%20supply.', "WhatsApp us")}
+    # Engineering enquiries go by email: its button sits under its own text, like Commodities' WhatsApp (client, 2026-11-07)
+    WA["Engineering Solutions"] = ("mailto:inquiry@hexahessman.com", "inquiry@hexahessman.com")
     commits = "".join(f'<div class="ca-item"><h3>{esc(h)}</h3><p>{esc(p)}</p>'
-                      + (f'<a class="pill ca-wa" href="{WA[h][0]}" target="_blank" rel="noopener">{esc(WA[h][1])}</a>' if h in WA else '')
+                      + (f'<a class="pill ca-wa" href="{WA[h][0]}"{"" if WA[h][0].startswith("mailto:") else ' target="_blank" rel="noopener"'}>{esc(WA[h][1])}</a>' if h in WA else '')
                       + '</div>' for h, p in K["commitments"])
     aside = f'''<aside class="contact-aside" id="response">
   <p class="eyebrow">Response commitments</p>{commits}
-  <div class="ca-mail"><p>Prefer email? Write to us any time.</p><a class="pill solid" href="mailto:inquiry@hexahessman.com">inquiry@hexahessman.com</a></div>
 </aside>'''
     body.append(section(f'<div class="contact-grid">{aside}<div class="contact-form">{form}</div></div>', title=K["form_h"], id_="quote"))
 
@@ -1210,7 +1274,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=15"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=18"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 

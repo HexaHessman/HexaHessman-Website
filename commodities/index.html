@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2612w">
+<link rel="stylesheet" href="/assets/site.css?v=2612z">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -145,10 +145,27 @@
 <div id="site-header"></div>
 <main>
 <section class="arrive com-arrive" id="partners" aria-label="Partners">
-  <div class="com-hero"><video class="com-hero-vid" autoplay muted loop playsinline preload="auto" poster="/assets/commodities/crane-loop.jpg" aria-label="A harbour crane loading jumbo bags onto a ship at dusk"><source media="(max-width: 720px)" src="/assets/commodities/crane-loop-m.mp4" type="video/mp4"><source src="/assets/commodities/crane-loop.mp4" type="video/mp4"></video>
+  <div class="com-hero"><video class="com-hero-vid" muted playsinline preload="auto" poster="/assets/commodities/crane-loop.jpg" aria-label="A harbour crane loading jumbo bags onto a ship at dusk"><source media="(max-width: 720px)" src="/assets/commodities/crane-loop-m.mp4" type="video/mp4"><source src="/assets/commodities/crane-loop.mp4" type="video/mp4"></video>
   <div class="arrive-top com-top">
   <p class="eyebrow arrive-eyebrow">Commodities Supply</p>
   <h1 class="arrive-title">Trusted by producers and buyers across nine markets</h1></div></div>
+<script>
+(() => {   // 3 s still, the crane swings to its left end, 3 s still there, swings back right, and round again (client, 2026-11-07)
+  const v = document.querySelector('.com-hero-vid'); if (!v || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const HOLD = 3000, RATE = 0.75, LEFT = 3.05;   // LEFT: the moment in the clip the crane reaches its left end (it rests there 2.9-3.2 s)
+  let timer = 0, held = false;
+  const start = () => { v.playbackRate = RATE; const p = v.play(); if (p && p.catch) p.catch(() => {}); watch(); };
+  const hold = () => { clearTimeout(timer); timer = setTimeout(start, HOLD); };
+  const watch = () => {   // stop on the left end once per round
+    if (v.paused) return;
+    if (!held && v.currentTime >= LEFT) { held = true; v.pause(); hold(); return; }
+    requestAnimationFrame(watch);
+  };
+  v.addEventListener('ended', () => { v.pause(); v.currentTime = 0; held = false; hold(); });
+  v.addEventListener('ratechange', () => { if (v.playbackRate !== RATE) v.playbackRate = RATE; });
+  hold();
+})();
+</script>
   <div class="pwall"><div class="pgrid"><div class="pcell" data-i="0"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="1"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="2"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="3"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="4"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="5"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="6"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="7"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="8"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="9"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="10"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div><div class="pcell" data-i="11"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div></div></div>
 </section>
 <section id="cscroll" class="cscroll" data-intro="{&quot;h2&quot;: &quot;Specialist supply across five industrial value chains&quot;, &quot;p&quot;: &quot;We concentrate on five product groups where we have direct producer relationships and technical depth. Each is built around the industries we serve, so buyers find the products, grades and documentation they need in one place.&quot;}"></section>
@@ -158,12 +175,12 @@
 </main>
 <div id="site-footer"></div>
 <script src="/assets/site-header.js?v=2612e" defer></script>
-<script src="/assets/deco-lines.js?v=1" defer></script>
-<script src="/assets/words.js?v=1" defer></script>
+<script src="/assets/deco-lines.js?v=2" defer></script>
+<script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
 <script src="/assets/cscroll.js?v=2611p" defer></script>
-<script src="/assets/cs-marks.js?v=13" defer></script>
+<script src="/assets/cs-marks.js?v=15" defer></script>
 <script src="/assets/arrive.js?v=2612a" defer></script>
 </body>
 </html>

@@ -35,7 +35,7 @@ GROUPS = [
         "slug": "fertilizer-phosphate",
         "name": "Fertilizer & Phosphate Value Chain",
         "hero3d": True,
-        "lead": "We supply the full phosphate and nitrogen chain — from raw sulphur and rock phosphate, through sulphuric and phosphoric acid, to finished MAP, DAP, urea and ammonium sulphate. Knowing every stage of fertilizer manufacture lets us match inputs to process and finished grades to crop.",
+        "lead": "We supply the full phosphate and nitrogen chain, from raw sulphur and rock phosphate, through sulphuric and phosphoric acid, to finished MAP, DAP, urea and ammonium sulphate. Knowing every stage of fertilizer manufacture lets us match inputs to process and finished grades to crop.",
         "who": "Supplying fertilizer producers, acid plants, blenders and distributors across South and Southeast Asia.",
         "serves": "Fertilizer producers, blenders and distributors",
         "hub_products": "Sulphur, Sulphuric Acid, Phosphoric Acid, Rock Phosphate, MAP, DAP, Urea, Ammonium Sulphate",
@@ -54,7 +54,7 @@ GROUPS = [
         "slug": "metallurgical-reductants",
         "name": "Metallurgical Reductants",
         "hero3d": True,
-        "lead": "Carbon reductants and carbon raisers for smelters and steelmakers — semi coke for RKEF nickel pig iron, metallurgical coke for blast furnaces, and calcined and graphitized pet coke for foundries and steel.",
+        "lead": "Carbon reductants and carbon raisers for smelters and steelmakers: semi coke for RKEF nickel pig iron, metallurgical coke for blast furnaces, and calcined and graphitized pet coke for foundries and steel.",
         "who": "Reductants for NPI, ferroalloy, steel and foundry producers, with a focus on Indonesia’s nickel smelting sector.",
         "serves": "NPI, ferroalloy, steel and foundry producers",
         "hub_products": "Semi Coke, Metallurgical Coke, Calcined Pet Coke, Graphite Pet Coke",
@@ -124,7 +124,7 @@ PRODUCTS = [
         "hero": ["Elemental sulphur in granular, prilled and lump form, produced to international standards for sulphuric acid, fertilizer, refining and industrial users."],
         "sections": [
             {"title": "Forms", "defs": [
-                ("Granular sulphur", "Formed from molten refinery sulphur into hard, uniform granules with low dust and good flow — the preferred form for long-distance bulk shipment and acid plants."),
+                ("Granular sulphur", "Formed from molten refinery sulphur into hard, uniform granules with low dust and good flow. It is the preferred form for long-distance bulk shipment and acid plants."),
                 ("Prilled sulphur [and pastilles]", "Formed sulphur with controlled particle size, high purity and low dust, widely used as feedstock for sulphuric acid, fertilizers, chemicals and rubber."),
                 ("Lump sulphur", "Crushed solid sulphur from open stockpiles, ready for melting. Lower cost, but irregular and more prone to breakage and dust, which is why the industry favours formed sulphur for cleaner handling."),
             ]},
@@ -138,8 +138,8 @@ PRODUCTS = [
                 # source: "Granular 2–6 mm · lumps [range] [confirm]" — the lump range is unconfirmed, so only the granular size is shown
                 ["Size", "Granular 2–6 mm"]]}]},
             {"title": "Packaging", "items": [
-                "Bulk — for large-scale users and port facilities with direct offloading",
-                "Jumbo bags (1 MT) — reduced dust, safe storage and inland transport"]},
+                "Bulk, for large-scale users and port facilities with direct offloading",
+                "Jumbo bags (1 MT), for reduced dust, safe storage and inland transport"]},
             {"title": "Distribution", "paras": [DIST.format("Sulphur")]},
         ],
         "related": ["Sulphuric Acid", "Phosphoric Acid", "Ammonium Sulphate"],
@@ -151,7 +151,7 @@ PRODUCTS = [
             {"title": "Applications", "items": [
                 "Phosphoric acid and phosphate fertilizer manufacture", "Ammonium sulphate production", "Nickel HPAL and copper leaching",
                 "Petroleum refining (alkylation)", "Battery acid", "Water and wastewater treatment",
-                "Chemical intermediates — detergents, dyes, pharmaceuticals"]},
+                "Chemical intermediates: detergents, dyes, pharmaceuticals"]},
             {"title": "Specifications", "spec": [{"headers": ["Parameter", "Specification", "Typical batch"], "rows": [
                 ["Purity (H₂SO₄)", "≥98.0%", "98.58%"], ["Iron (Fe)", "≤0.005%", "0.002%"], ["Arsenic (As)", "≤0.0001%", "0.00005%"],
                 ["Mercury (Hg)", "≤0.001%", "0.0003%"], ["Lead (Pb)", "≤0.005%", "0.001%"], ["Transparency", "≥80 mm", "90 mm"],
@@ -172,10 +172,10 @@ PRODUCTS = [
                 "MAP, DAP, TSP and NPK fertilizer production", "Water-soluble and liquid fertilizers", "Metal surface treatment and rust removal",
                 "Detergents, water treatment and phosphate salts", "Food and feed phosphates (food grade only)"]},
             {"title": "Specifications", "spec": [
-                {"title": "Merchant-grade acid (MGA) — typical [confirm]", "rows": [
+                {"title": "Merchant-grade acid (MGA), typical values [confirm]", "rows": [
                     ["P₂O₅", "52–54%"], ["Solids", "≤1.0%"], ["Sulphate (SO₄)", "≤4.0%"], ["Fluorine (F)", "≤1.0%"],
                     ["Iron (Fe₂O₃)", "≤1.5%"], ["Aluminium (Al₂O₃)", "≤1.2%"], ["Magnesium (MgO)", "≤1.0%"]]},
-                {"title": "Technical grade 85% — typical [confirm]", "rows": [
+                {"title": "Technical grade 85%, typical values [confirm]", "rows": [
                     ["H₃PO₄", "≥85.0%"], ["Chloride (Cl)", "≤0.0005%"], ["Sulphate (SO₄)", "≤0.005%"], ["Iron (Fe)", "≤0.002%"],
                     ["Heavy metals (as Pb)", "≤0.001%"], ["Arsenic (As)", "≤0.0001%"], ["CAS No. / UN", "7664-38-2 · UN1805, Class 8"]]}]},
             {"title": "Packaging", "items": ["Bulk stainless-steel chemical tanker", "ISO tanks", "IBC (1,000 L) and 35 kg drums (technical grade)"]},
@@ -187,13 +187,13 @@ PRODUCTS = [
         "slug": "rock-phosphate", "group": "fertilizer-phosphate", "title": "Rock Phosphate",
         "hero": ["Essential resource for agriculture and industry.",
                  "Rock phosphate is a naturally occurring mineral rich in P₂O₅. Commercial grades contain at least 25% P₂O₅ and are the primary raw material for phosphoric acid, DAP, MAP, TSP, SSP and NPK fertilizers, as well as elemental phosphorus.",
-                 "Our rock phosphate comes from high-quality sedimentary deposits with 28–31% P₂O₅ and 62–68% BPL (bone phosphate of lime). Its reactivity — 35–40% soluble in 2% citric acid and 55–65% in 2% formic acid — also makes it suitable for direct application on acidic soils."],
+                 "Our rock phosphate comes from high-quality sedimentary deposits with 28–31% P₂O₅ and 62–68% BPL (bone phosphate of lime). Its reactivity (35–40% soluble in 2% citric acid and 55–65% in 2% formic acid) also makes it suitable for direct application on acidic soils."],
         "sections": [
             {"title": "Specifications", "spec": [{"rows": [
                 ["P₂O₅", "28–31%"], ["BPL", "62–68%"], ["Solubility in 2% citric acid", "35–40%"], ["Solubility in 2% formic acid", "55–65%"],
                 # "Origin: [Country of origin]" and "Form: Soil / [granular]" are unconfirmed in the skeleton, so both rows are left out
                 ["Origin", "[Country of origin]"], ["Form", "[Soil / granular]"]]}]},
-            {"title": "Packaging", "items": ["[Packaging options — e.g. bulk, 1 MT jumbo bags, 25/50 kg bags, custom labelling]"]},
+            {"title": "Packaging", "items": ["[Packaging options, e.g. bulk, 1 MT jumbo bags, 25/50 kg bags, custom labelling]"]},
             {"title": "Distribution", "paras": [DIST.format("Rock Phosphate")]},
         ],
         "related": ["Phosphoric Acid", "MAP", "DAP"],
@@ -220,12 +220,12 @@ PRODUCTS = [
     {
         "slug": "dap", "group": "fertilizer-phosphate", "title": "Diammonium Phosphate (DAP)",
         "hero": ["Balanced crop nutrition for strong early growth.",
-                 "DAP is the world’s most widely used phosphate fertilizer — 18% ammoniacal nitrogen and 46% P₂O₅ for early root development, vigorous growth and higher yields.",
+                 "DAP is the world’s most widely used phosphate fertilizer, with 18% ammoniacal nitrogen and 46% P₂O₅ for early root development, vigorous growth and higher yields.",
                  "Produced by reacting ammonia with phosphoric acid, DAP is a dry granular fertilizer with excellent handling and storage properties, for direct application or as a base for custom NPK blends."],
         "sections": [
             {"title": "Performance in the field", "paras": ["DAP dissolves quickly in soil moisture. Its ammoniacal nitrogen drives early shoot and leaf growth, while phosphorus promotes root expansion and energy transfer. Its initial alkaline reaction (pH > 7.5) can help neutralise acidic soils early in the season; correct placement and timing avoid nitrogen loss through volatilisation."]},
             {"title": "Storage & handling", "items": ["Store cool and dry, away from moisture and direct sunlight", "Compatible with most fertilizers and micronutrients for blending", "Stable in standard storage conditions"]},
-            {"title": "Applications", "items": ["Cereals — wheat, maize, rice, barley", "Vegetables — potatoes, onions, tomatoes, carrots", "Fruit orchards — early fertilisation for root establishment", "Blended fertilizers — base input for custom NPK"]},
+            {"title": "Applications", "items": ["Cereals: wheat, maize, rice, barley", "Vegetables: potatoes, onions, tomatoes, carrots", "Fruit orchards: early fertilisation for root establishment", "Blended fertilizers: base input for custom NPK"]},
             {"title": "Specifications", "spec": [{"rows": [
                 ["Chemical formula", "(NH₄)₂HPO₄"], ["Nitrogen (N)", "18% min. (ammoniacal)"], ["Available P₂O₅", "46% min."],
                 ["Moisture", "2.5% max. [confirm]"], ["Granule size", "2–4 mm, 90% min. [confirm]"], ["Physical form", "Hard, free-flowing granules"]]}]},
@@ -237,15 +237,15 @@ PRODUCTS = [
     {
         "slug": "urea", "group": "fertilizer-phosphate", "title": "Urea",
         "hero": ["Powering agricultural productivity with precision nutrition.",
-                 "Urea (CO(NH₂)₂) is the world’s most widely used nitrogen fertilizer, delivering 46% nitrogen — the highest of any solid fertilizer — in a concentrated, readily available form. It is non-flammable, water-soluble and compatible with a wide range of fertilizers and micronutrients."],
+                 "Urea (CO(NH₂)₂) is the world’s most widely used nitrogen fertilizer, delivering 46% nitrogen, the highest of any solid fertilizer, in a concentrated, readily available form. It is non-flammable, water-soluble and compatible with a wide range of fertilizers and micronutrients."],
         "sections": [
             {"title": "Available forms", "defs": [
                 ("Prilled urea", "Smaller round particles · quick dissolution · suited to foliar application and fertigation"),
                 ("Granular urea", "Larger, harder, uniform particles · resists caking · suited to mechanical spreading and blends")]},
             {"title": "Application & agronomic value",
-             "paras": ["Suitable for cereals, fruit, vegetables, rice, corn and oilseeds — as basal fertilizer, top dressing or through fertigation. To limit nitrogen loss in warm, moist, alkaline soils:"],
+             "paras": ["Suitable for cereals, fruit, vegetables, rice, corn and oilseeds. Use it as a basal fertilizer, as a top dressing or through fertigation. To limit nitrogen loss in warm, moist, alkaline soils:"],
              "items": ["Incorporate into the soil", "Apply before rainfall or irrigation", "Use urease inhibitors where needed"]},
-            {"title": "Applications", "items": ["Agricultural fertilizer", "NPK blending", "Industrial — resins, AdBlue / DEF (technical grade), animal feed"]},
+            {"title": "Applications", "items": ["Agricultural fertilizer", "NPK blending", "Industrial: resins, AdBlue / DEF (technical grade), animal feed"]},
             {"title": "Specifications", "spec": [{"rows": [
                 ["Nitrogen", "46.0% min."], ["Biuret", "1.0% max. [confirm]"], ["Moisture", "0.5% max. [confirm]"],
                 ["Granule size", "Granular 2–4 mm, 90% min. · prilled 0.85–2.8 mm, 90% min. [confirm]"], ["Free ammonia", "150 ppm max. [confirm]"]]}]},
@@ -256,11 +256,11 @@ PRODUCTS = [
     },
     {
         "slug": "ammonium-sulphate", "group": "fertilizer-phosphate", "title": "Ammonium Sulphate",
-        "hero": ["Ammonium sulphate ((NH₄)₂SO₄) is a nitrogen-and-sulphur fertilizer and industrial chemical valued for purity, stability and versatility — promoting healthy growth, chlorophyll formation and protein synthesis.",
+        "hero": ["Ammonium sulphate ((NH₄)₂SO₄) is a nitrogen-and-sulphur fertilizer and industrial chemical valued for purity, stability and versatility. It promotes healthy growth, chlorophyll formation and protein synthesis.",
                  "We supply crystalline (fast-dissolving, ideal for fertigation and blending) and granular (free-flowing, ideal for mechanical spreading and storage) forms."],
         "sections": [
             {"title": "Key features", "items": ["Crystalline and granular forms", "21% nitrogen and 24% sulphur, readily available", "Acidifying effect improves nutrient uptake in alkaline soils", "Excellent solubility and compatibility with other fertilizers"]},
-            {"title": "Applications", "items": ["Agricultural fertilizer — rice, maize, oilseeds, palm oil, fruit and vegetables", "Soil amendment — improves uptake of P, Fe and Zn in alkaline soils", "Industrial — water treatment, textiles, food acidity regulator, flame retardants"]},
+            {"title": "Applications", "items": ["Agricultural fertilizer: rice, maize, oilseeds, palm oil, fruit and vegetables", "Soil amendment: improves uptake of P, Fe and Zn in alkaline soils", "Industrial: water treatment, textiles, food acidity regulator, flame retardants"]},
             {"title": "Specifications", "spec": [{"rows": [
                 ["Chemical formula", "(NH₄)₂SO₄"], ["Nitrogen", "21.0% min."], ["Sulphur", "24.0% min."],
                 ["Moisture", "0.5% max. (granular) / 1.0% max. (crystalline) [confirm]"], ["Free acidity (as H₂SO₄)", "0.05% max. [confirm]"],
@@ -273,11 +273,11 @@ PRODUCTS = [
     # ---------------- 1.2 Metallurgical Reductants
     {
         "slug": "semi-coke", "group": "metallurgical-reductants", "title": "Semi Coke",
-        "hero": ["Semi coke (兰炭) is a critical input in nickel ferroalloy production, particularly the Rotary Kiln–Electric Furnace (RKEF) process widely used across Indonesia. Acting as both reducing agent and energy source, it enables efficient conversion of nickel ore into nickel pig iron (NPI) for stainless steel.",
+        "hero": ["Semi coke (兰炭) is a critical input in nickel ferroalloy production, particularly the Rotary Kiln-Electric Furnace (RKEF) process widely used across Indonesia. Acting as both reducing agent and energy source, it enables efficient conversion of nickel ore into nickel pig iron (NPI) for stainless steel.",
                  "Its cost efficiency, high reactivity and stable performance make semi coke the preferred alternative to metallurgical coke for large-scale smelters."],
         "sections": [
             {"title": "Key features", "items": ["High fixed carbon content", "Low ash and sulphur", "High reactivity and combustion efficiency", "Lower cost than metallurgical coke"]},
-            {"title": "Applications", "items": ["RKEF nickel pig iron (NPI) smelting", "Ferroalloy production — ferrosilicon, silicomanganese", "Calcium carbide manufacture", "Partial replacement for anthracite"]},
+            {"title": "Applications", "items": ["RKEF nickel pig iron (NPI) smelting", "Ferroalloy production: ferrosilicon, silicomanganese", "Calcium carbide manufacture", "Partial replacement for anthracite"]},
             {"title": "Specifications", "spec": [{"rows": [
                 ["Fixed carbon", "80–88%"], ["Ash", "8–15%"], ["Volatile matter", "5–10%"], ["Sulphur", "≤0.5%"], ["Moisture", "≤12% [confirm]"], ["Size", "10–30 mm / 30–80 mm"]]}]},
             {"title": "Packaging", "items": ["Bulk vessel", "1 MT jumbo bags [confirm]"]},
@@ -328,7 +328,7 @@ PRODUCTS = [
     # ---------------- 1.3 Industrial Chemicals
     {
         "slug": "methanol", "group": "industrial-chemicals", "title": "Methanol",
-        "hero": ["Methanol (CH₃OH) is one of the world’s most traded chemicals — a building block for formaldehyde, acetic acid and olefins, a fuel and fuel additive, and a fast-growing low-carbon marine fuel.",
+        "hero": ["Methanol (CH₃OH) is one of the world’s most traded chemicals. It is a building block for formaldehyde, acetic acid and olefins, a fuel and fuel additive, and a fast-growing low-carbon marine fuel.",
                  "We supply IMPCA-grade methanol in bulk and ISO tanks, inspected at load port by independent surveyors."],
         "sections": [
             {"title": "Key features", "items": ["Purity 99.85% wt min., meeting the IMPCA reference specification", "Also available to ASTM D1152 / US Federal O-M-232 Grade AA on request", "Independent load-port inspection (SGS / Intertek / BV)", "Bulk parcels and ISO-tank shipments"]},
@@ -352,11 +352,11 @@ PRODUCTS = [
     },
     {
         "slug": "caustic-soda", "group": "industrial-chemicals", "title": "Caustic Soda",
-        "hero": ["Caustic soda (sodium hydroxide, NaOH) is one of the most essential industrial chemicals — a strong alkali for chemical synthesis, neutralisation and pH control.",
+        "hero": ["Caustic soda (sodium hydroxide, NaOH) is one of the most essential industrial chemicals: a strong alkali for chemical synthesis, neutralisation and pH control.",
                  "We supply membrane-grade flakes, pearls and liquid lye, quality-tested for consistent reactivity in alumina refining, chemical processing, pulp and paper, textiles, water treatment and soap manufacture."],
         "sections": [
-            {"title": "Key features", "items": ["Membrane-process grade, NaOH 99% min. (solid)", "Flakes, pearls (prills) and liquid lye 32% / 48–50%", "Low chloride and iron for sensitive processes", "Highly reactive and hygroscopic — supplied in moisture-proof packaging"]},
-            {"title": "Applications", "items": ["Alumina refining (Bayer process)", "Chemical manufacture — solvents, plastics, dyes", "Pulp & paper — pulping and bleaching", "Soap and detergent production", "Textiles — mercerisation of cotton", "Water treatment — pH regulation", "Biodiesel and petroleum refining"]},
+            {"title": "Key features", "items": ["Membrane-process grade, NaOH 99% min. (solid)", "Flakes, pearls (prills) and liquid lye 32% / 48–50%", "Low chloride and iron for sensitive processes", "Highly reactive and hygroscopic, so supplied in moisture-proof packaging"]},
+            {"title": "Applications", "items": ["Alumina refining (Bayer process)", "Chemical manufacture: solvents, plastics, dyes", "Pulp & paper: pulping and bleaching", "Soap and detergent production", "Textiles: mercerisation of cotton", "Water treatment: pH regulation", "Biodiesel and petroleum refining"]},
             {"title": "Specifications", "spec": [
                 {"headers": ["Parameter", "Flakes / pearls 99%", "Liquid lye 48–50%", "Liquid lye 32%"], "rows": [
                     ["NaOH", "≥99.0%", "≥48.0%", "≥32.0%"], ["Sodium carbonate (Na₂CO₃)", "≤0.5%", "≤0.2%", "≤0.1%"],
@@ -366,7 +366,7 @@ PRODUCTS = [
                 {"title": "Product data", "rows": [
                     ["Chemical formula", "NaOH"], ["CAS No.", "1310-73-2"], ["Standard", "GB/T 209-2018 (or equivalent) [confirm]"],
                     ["UN number / class", "Solid UN1823 · liquid UN1824 · Class 8 · PG II"], ["Melting point", "318°C (solid)"],
-                    ["Safety", "Corrosive — causes severe skin burns and eye damage; reacts exothermically with water and acids; store sealed and dry; use full PPE"]]}]},
+                    ["Safety", "Corrosive: causes severe skin burns and eye damage; reacts exothermically with water and acids; store sealed and dry; use full PPE"]]}]},
             {"title": "Packaging", "items": ["25 kg PP woven bags with PE liner", "1 MT jumbo bags", "ISO tanks and bulk chemical tanker (liquid lye)"]},
             {"title": "Distribution", "paras": [DIST.format("Caustic Soda")]},
         ],
@@ -378,7 +378,7 @@ PRODUCTS = [
                  "We supply dense and light grades of [synthetic (Solvay / Hou process) / natural (trona)] soda ash, as an odourless white granulate or powder with consistent quality across batches."],
         "sections": [
             {"title": "Key features", "items": ["Na₂CO₃ 99.2% min.", "Dense grade for glass and bulk handling; light grade for detergents and chemicals", "Low chloride and iron", "Not classified as dangerous goods for transport"]},
-            {"title": "Applications", "items": ["Flat, container and specialty glass", "Soaps, detergents and cleaning products", "Sodium silicate, sodium bicarbonate and other chemicals", "Water treatment — pH adjustment and softening", "Mining and flue-gas desulphurisation"]},
+            {"title": "Applications", "items": ["Flat, container and specialty glass", "Soaps, detergents and cleaning products", "Sodium silicate, sodium bicarbonate and other chemicals", "Water treatment: pH adjustment and softening", "Mining and flue-gas desulphurisation"]},
             {"title": "Specifications", "spec": [
                 {"headers": ["Parameter", "Dense", "Light"], "rows": [
                     ["Na₂CO₃ (dry basis)", "≥99.2%", "≥99.2%"], ["Sodium chloride (NaCl)", "≤0.70%", "≤0.70%"], ["Iron (Fe)", "≤0.0035%", "≤0.0035%"],
@@ -396,10 +396,10 @@ PRODUCTS = [
     # ---------------- 1.4 Petroleum & Oilfield
     {
         "slug": "bitumen", "group": "petroleum-oilfield", "title": "Bitumen",
-        "hero": ["Penetration, viscosity, performance and oxidised bitumen grades for road construction, roofing, waterproofing and industrial use — packed to suit every route to site."],
+        "hero": ["Penetration, viscosity, performance and oxidised bitumen grades for road construction, roofing, waterproofing and industrial use, packed to suit every route to site."],
         "sections": [
             {"title": "Penetration grade",
-             "paras": ["Common grades 40/50, 60/70 and 80/100 — classified by the depth, in tenths of a millimetre, a standard needle penetrates the sample. 40/50 suits warmer climates, 60/70 moderate climates and 80/100 cooler regions."],
+             "paras": ["Common grades are 40/50, 60/70 and 80/100, classified by the depth (in tenths of a millimetre) that a standard needle penetrates the sample. 40/50 suits warmer climates, 60/70 moderate climates and 80/100 cooler regions."],
              "spec": [{"rows": [["Penetration at 25°C", "By grade"], ["Softening point", "42–52°C typical"], ["Ductility at 25°C", "100 cm min."]]}]},
             {"title": "Viscosity grade (VG)", "defs": [
                 ("VG-10", "800–1,200 poise · spraying and surface dressing in cold climates"), ("VG-20", "1,600–2,400 poise · paving in cold regions"),
@@ -410,7 +410,7 @@ PRODUCTS = [
             {"title": "Oxidised bitumen (blown asphalt)",
              "paras": ["Produced by blowing air through penetration-grade bitumen at high temperature, for roofing felts, damp-proofing, pipe coatings and adhesives."],
              "defs": [("85/25", "Softening point ≈85°C · penetration ≈25 dmm"), ("90/40", "Softening point ≈90°C · penetration ≈40 dmm")]},
-            {"title": "Packaging", "items": ["New steel drums — 150 to 200 kg", "Polymer jumbo bags — 1 MT", "Kraft paper bags — 25 to 50 kg", "PolyCube containers — 1 to 1.5 MT", "Bulk — heated tankers for large projects"]},
+            {"title": "Packaging", "items": ["New steel drums, 150 to 200 kg", "Polymer jumbo bags, 1 MT", "Kraft paper bags, 25 to 50 kg", "PolyCube containers, 1 to 1.5 MT", "Bulk in heated tankers for large projects"]},
             {"title": "Distribution", "paras": [DIST.format("Bitumen")]},
         ],
         "related": ["Base Oil", "Barite Powder"],
@@ -435,7 +435,7 @@ PRODUCTS = [
     {
         "slug": "barite-powder", "group": "petroleum-oilfield", "title": "Barite Powder",
         "hero": ["Barite (barium sulphate, BaSO₄) is a high-density, chemically inert mineral essential to drilling, chemical and manufacturing applications.",
-                 "We supply powder and lump forms processed for consistent particle size and purity — in API 13A drilling grade for oil & gas, and specialised grades for chemical and filler applications."],
+                 "We supply powder and lump forms processed for consistent particle size and purity, in API 13A drilling grade for oil & gas and in specialised grades for chemical and filler applications."],
         "sections": [
             {"title": "Key features", "items": ["Specific gravity 4.1–4.5 for weighting drilling fluids", "API 13A drilling grade (SG 4.1 / 4.2) available", "Chemically inert and resistant to most acids", "Customisable grades and particle sizes"]},
             {"title": "Applications", "items": ["Weighting agent in oil & gas drilling fluids", "Filler in paints, rubber and plastics", "Radiation shielding", "Barium chemicals"]},
@@ -453,7 +453,7 @@ PRODUCTS = [
         "hero": ["Bentonite is a natural clay composed mainly of montmorillonite, known for exceptional water absorption and swelling. We supply powder and lump forms, grades Sec 9, 10 and 11, for drilling, foundry and environmental applications."],
         "sections": [
             {"title": "Key features", "items": ["Superior swelling and water retention", "High cation exchange capacity", "Non-toxic and environmentally friendly", "Grades Sec 9, 10 and 11"]},
-            {"title": "Applications", "items": ["Drilling muds for oil, gas and water wells", "Foundry sands and casting", "Iron ore pelletising", "Civil engineering — piling and diaphragm walls", "Sealants, cat litter and environmental containment"]},
+            {"title": "Applications", "items": ["Drilling muds for oil, gas and water wells", "Foundry sands and casting", "Iron ore pelletising", "Civil engineering: piling and diaphragm walls", "Sealants, cat litter and environmental containment"]},
             {"title": "Specifications", "spec": [{"rows": [
                 ["Composition", "SiO₂ 55–65% · Al₂O₃ 15–20% · Na₂O 2–5%"], ["Swelling index", "24–30 mL/2 g"], ["Moisture", "≤10%"], ["pH", "8–10"],
                 ["Bulk density (powder)", "0.7–1.0 g/cm³"], ["Particle size (powder)", "2–250 µm"], ["CAS No.", "1302-78-9"]]}]},
@@ -473,14 +473,14 @@ PRODUCTS = [
                 ["Species", "Eucalyptus / acacia / pine", "Mixed plantation hardwood"],
                 ["Chip size", "[e.g. 15–35 mm length, 2–8 mm thick]", "[e.g. ≤50 mm]"], ["Moisture", "[e.g. 35–45%]", "[e.g. ≤35%]"],
                 ["Bark content", "[e.g. ≤1%]", "[e.g. ≤5%]"], ["Ash", "—", "[e.g. ≤3%]"], ["Calorific value (as received)", "—", "[e.g. 2,800–3,300 kcal/kg]"]]}]},
-            {"title": "Packaging", "items": ["Bulk — dedicated wood chip carriers", "Containerised (40 ft HC) for smaller lots"]},
+            {"title": "Packaging", "items": ["Bulk, in dedicated wood chip carriers", "Containerised (40 ft HC) for smaller lots"]},
             {"title": "Distribution", "paras": [DIST.format("Wood Chips")]},
         ],
         "related": ["Coconut Shell Charcoal"],
     },
     {
         "slug": "coconut-shell-charcoal", "group": "biomass", "title": "Coconut Shell Charcoal",
-        "hero": ["Charcoal carbonised from coconut shells — a renewable, high-carbon, low-ash material and the preferred feedstock for coconut-shell activated carbon."],
+        "hero": ["Charcoal carbonised from coconut shells: a renewable, high-carbon, low-ash material and the preferred feedstock for coconut-shell activated carbon."],
         "sections": [
             {"title": "Key features", "items": ["High fixed carbon and low ash", "Hard, dense structure suited to activation", "Renewable by-product of coconut processing", "Lump, granular and crushed sizes"]},
             {"title": "Applications", "items": ["Activated carbon production", "Metallurgical and chemical reductant", "Industrial and household fuel", "Briquettes and shisha charcoal"]},
@@ -514,7 +514,7 @@ COMMODITIES_HUB = {
     "lead": "We concentrate on five product groups where we have direct producer relationships and technical depth. Each is built around the industries we serve, so buyers find the products, grades and documentation they need in one place.",
     "buttons": ["Request a quote", "Talk to the supply desk"],
     "how": [
-        ["Origins", "[e.g. China, Middle East, Indonesia, India — confirm]"],
+        ["Origins", "[e.g. China, Middle East, Indonesia, India; confirm]"],
         ["Terms", "FOB, CFR, CIF and DAP; bulk, containerised and ISO-tank shipments"],
         ["Documentation", "CoA, SGS / BV / Intertek inspection, certificate of origin, SDS, phytosanitary certificates where required"],
         ["Payment", "Documentary L/C and TT, subject to counterparty onboarding"],
@@ -533,38 +533,37 @@ ABOUT = {
     "story": [
         "Established in 2007, HexaHessman was founded on a legacy of engineering expertise and precision-driven solutions. Over time our vision expanded, turning specialised technical knowledge into a platform for the supply of fertilizers, reductants, chemicals and energy products.",
         "Our leaders have always looked beyond the immediate horizon, combining engineering rigour with entrepreneurial insight. In 2024 HexaHessman unified these legacy strengths with fresh ambition, establishing itself as a reliable partner for structured supply and engineering solutions.",
-        "Today we are guided by operational discipline, strategic insight and people-first values — connecting trusted partners worldwide and delivering what our clients need with precision and dependability.",
+        "Today we are guided by operational discipline, strategic insight and people-first values, connecting trusted partners worldwide and delivering what our clients need with precision and dependability.",
     ],
     # the voyage timeline: (year, title, text, photo). 2007 and 2024 are the client's facts; the years between and their
     # words are PLACEHOLDER copy written for the layout (user, 2026-11-05: "find filler words") — confirm with the client.
     "timeline_h": "Our voyage",
-    "timeline_lead": "From a single engineering drawing to a group trading across nine markets — the course so far.",
+    "timeline_lead": "The course so far, from a single engineering drawing to a group trading across nine markets.",
     "timeline": [
         ("2007", "The first drawing", "HexaHessman is founded on a legacy of precision engineering: specifying, sourcing and commissioning equipment for marine and industrial clients who needed it done right the first time.", "/assets/about/tl-coupling.jpg"),
         ("2011", "First principals", "European manufacturers of couplings, fenders and mooring systems appoint us to represent them in Southeast Asia, and our engineers train alongside theirs at the factory.", "/assets/about/tl-team.jpg"),
-        ("2015", "Into commodities", "The trading desk opens with sulphur and fertilizers, moving bulk cargo from producer to plant with the same discipline we bring to engineering — inspected, documented and delivered on schedule.", "/assets/about/tl-sulphur.jpg"),
+        ("2015", "Into commodities", "The trading desk opens with sulphur and fertilizers, moving bulk cargo from producer to plant with the same discipline we bring to engineering. Every cargo is inspected, documented and delivered on schedule.", "/assets/about/tl-sulphur.jpg"),
         ("2018", "A regional network", "Offices open across Indonesia, Malaysia and Thailand, putting our people on site at the refineries, plants and terminals we serve.", "/assets/about/tl-refinery.jpg"),
         ("2021", "Cleaner fuels", "As shipping turns to LNG, methanol and ammonia, we commission our principals’ dry-disconnect and emergency-release couplings on board, side by side with the crews.", "/assets/about/tl-commissioning.jpg"),
         ("2023", "Sharing what we know", "Technical seminars for terminal operators and shipowners on safe transfer, PERC control units and bunkering practice, across the region.", "/assets/about/tl-perc-talk.jpg"),
         ("2024", "Group reimagined", "HexaHessman Pte. Ltd. is incorporated in Singapore (UEN 202419032H), uniting commodities, engineering and investment under HexaHessman Global Group.", "/assets/about/tl-sulphur-talk.jpg"),
-        ("Today", "Eight offices, nine markets", "From Singapore to London, our people keep cargo moving and equipment running for clients across Asia, the Middle East and Europe — in our own colours.", "/assets/about/tl-bags.jpg"),
+        ("Today", "Eight offices, nine markets", "From Singapore to London, our people keep cargo moving and equipment running for clients across Asia, the Middle East and Europe, in our own colours.", "/assets/about/tl-bags.jpg"),
     ],
     "group_h": "HexaHessman Global Group",
     "group_p": "HexaHessman Global Group (HHGG) is the holding company overseeing operating entities across multiple countries, delivering diversified solutions across commodities, engineering and strategic investments. Its investment arm, HexaHessman Asset Management (HHAM), identifies and manages high-value opportunities for long-term value creation.",
     "specialise": [
-        ("Commodities Supply", "Five specialist product groups — fertilizer & phosphate, metallurgical reductants, industrial chemicals, petroleum & oilfield products and biomass.", "/commodities/"),
+        ("Commodities Supply", "Five specialist product groups: fertilizer & phosphate, metallurgical reductants, industrial chemicals, petroleum & oilfield products and biomass.", "/commodities/"),
         ("Engineering Solutions", "Fendering, mooring, fluid transfer and gas detection from world-leading principals, with project management and after-sales support.", "/engineering/"),
         ("Local presence, regional reach", "Operating footprints and partner networks supporting trade across Southeast Asia and beyond.", "/contact/#offices"),
     ],
     "values": ["Operational discipline", "Strategic insight", "People-first", "Integrity, excellence, performance"],
     "reach_h": "Global reach, local impact",
-    "reach_p": "Headquartered in Singapore, HexaHessman has a presence in Malaysia, Thailand, Indonesia, India, South Korea, Türkiye, the United Kingdom and the United States — delivering solutions tailored to regional markets while drawing on global expertise.",
+    "reach_p": "Headquartered in Singapore, HexaHessman has a presence in Malaysia, Thailand, Indonesia, India, South Korea, Türkiye, the United Kingdom and the United States, delivering solutions tailored to regional markets while drawing on global expertise.",
     "markets": ["Singapore", "Malaysia", "Thailand", "Indonesia", "India", "South Korea", "Türkiye", "United Kingdom", "United States"],
     # the people, in the order of the customer's team sheet (left to right, top to bottom; cutout portraits in
     # /assets/team/cut/<slug>.webp): (name, role, entity, photo slug, office, blurb). The blurbs are placeholder
     # copy written by us for the customer to replace. Yani Lee's JWHexaHessman office is Indonesia (confirmed by the user).
     "team_h": "Leveraging global expertise for strategic advantage",   # one colour, like Our story (user, 2026-11-06)
-    "team_eyebrow": "Seamless solutions across borders",
     "team_lead": "A growing team across eight offices, from Singapore to London. Press through the line to meet some of them.",   # no head count: the team is bigger (user)
     "team": [
         ("Adam Yeoh", "Business Development Manager", "HexaHessman Singapore", "adam-yeoh", "sg",
@@ -619,7 +618,7 @@ ABOUT = {
 ENGINEERING_HUB = {
     "eyebrow": "Engineering Solutions Division",
     "h1": "Engineered for excellence, supported for life",
-    "lead": "With deep consultancy expertise in project identification, strategic development and stakeholder engagement, we deliver marine and energy systems from world-leading principals — and stand behind them with local after-sales service across Southeast Asia.",
+    "lead": "With deep consultancy expertise in project identification, strategic development and stakeholder engagement, we deliver marine and energy systems from world-leading principals and stand behind them with local after-sales service across Southeast Asia.",
     "buttons": ["Discuss a project", "Request service / maintenance"],
     "principals": [
         ("shibata", "ShibataFenderTeam", "Cone, element, cylindrical, pneumatic, foam and parallel-motion fender systems."),
@@ -627,9 +626,9 @@ ENGINEERING_HUB = {
         ("straatman", "Straatman", "Quick release mooring hooks, ship-to-shore links, smart bollards and berthing aid systems."),
         ("raythink", "Raythink", "AR, optical and AI-driven gas-leak detection and real-time hazard monitoring."),
     ],
-    "territories": "Territories: MannTek — Singapore, Malaysia, Indonesia, Vietnam, Thailand · Straatman — Indonesia, Thailand",
+    "territories": "Territories: MannTek in Singapore, Malaysia, Indonesia, Vietnam and Thailand · Straatman in Indonesia and Thailand",
     # the word-by-word statement between the logo carousel and the principals
-    "statement": "With deep consultancy expertise in project identification, strategic development and stakeholder engagement, we deliver marine and energy systems from world-leading principals — and stand behind them with local after-sales service across Southeast Asia.",
+    "statement": "With deep consultancy expertise in project identification, strategic development and stakeholder engagement, we deliver marine and energy systems from world-leading principals and stand behind them with local after-sales service across Southeast Asia.",
     # key products shown on each principal's stop in the hub scroll (from the principal pages and the company profile PDF)
     "principal_tags": {
         "shibata": ["SPC cone fenders", "Element fenders", "Cylindrical fenders", "Parallel motion fenders", "Pneumatic fenders", "Foam fenders"],
@@ -649,9 +648,9 @@ ENGINEERING_HUB = {
     ],
     # S3: the skeleton leaves the components line as a placeholder; the home-page H8 "Marine & Energy
     # Solutions" line is the only skeleton copy that describes the components range, so it is reused here.
-    "components": "Fit-for-purpose systems for offshore, shipping and energy infrastructure — fenders, mooring hooks, breakaway couplings and fluid transfer technologies.",
+    "components": "Fit-for-purpose systems for offshore, shipping and energy infrastructure: fenders, mooring hooks, breakaway couplings and fluid transfer technologies.",
     "services": [
-        ("Project Management & EPC Support", "End-to-end support from feasibility to handover — planning, design, procurement, production oversight and execution, with a single point of accountability."),
+        ("Project Management & EPC Support", "End-to-end support from feasibility to handover, covering planning, design, procurement, production oversight and execution, with a single point of accountability."),
         # ("Storage Tank Solutions" removed with its menu item, client 2026-11-06)
         ("After-sales service", "Repairs, maintenance, spares and standby services, with a face-to-face response within 48 hours."),
     ],
@@ -684,7 +683,7 @@ PRINCIPALS = [
                        ("Applications", ["Container & bulk terminals", "General cargo terminals", "RoRo terminals", "Navy", "Barges"])]},
             {"title": "Cylindrical Fender", "drawing": "/assets/engineering/shibata/cylindrical-drawing.webp", "media": {"image": "/assets/engineering/shibata/cylindrical.jpg"}, "side": "left",
              "paras": ["The first rubber fender type produced with a defined performance. It installs simply with chains, bars, ropes or ladder brackets, and its reaction force and energy rise in proportion to deflection for softer berthing.",
-                       "Extruded or wrapped depending on size: outside diameters up to 2,700 mm, inside diameters 50–1,300 mm, lengths up to 20 m. Supplied with the matching fixings — chains, brackets, support bar or ladder brackets."]},
+                       "Extruded or wrapped depending on size: outside diameters up to 2,700 mm, inside diameters 50–1,300 mm, lengths up to 20 m. Supplied with the matching fixings: chains, brackets, support bar or ladder brackets."]},
             {"title": "Pneumatic Fender", "drawing": "/assets/engineering/shibata/pneumatic-drawing.webp", "media": {"loop": "/assets/engineering/shibata/pneumatic-float"}, "side": "right",
              "paras": ["An abrasion-resistant rubber fender filled with high-pressure air. It deflates easily for simple, low-cost relocation and re-commissioning elsewhere.",
                        "Diameters from 300 mm to 4,500 mm and lengths from 500 mm to 9,000 mm, plus special sizes."],
@@ -692,7 +691,7 @@ PRINCIPALS = [
                        ("Applications", ["Ports with extreme tidal variations", "Ship-to-ship lightering", "Oil & gas (typically FSRU)", "Temporary berthing"])]},
             {"title": "Parallel Motion Fenders", "drawing": "/assets/engineering/shibata/parallel-motion-drawing.webp", "media": {"image": "/assets/engineering/shibata/parallel-motion.jpg"}, "side": "left",
              "paras": ["Individually engineered systems. A torsion arm between the back structure and the steel front panel lets the panel move only parallel to its mounting, whatever the impact level and angle."],
-             "lists": [("Characteristics", ["Equal energy absorption at any impact level", "Only parallel panel movement — no second ship/panel contact", "Substantially lower reaction forces with back-to-back rubber units",
+             "lists": [("Characteristics", ["Equal energy absorption at any impact level", "Only parallel panel movement, so no second ship/panel contact", "Substantially lower reaction forces with back-to-back rubber units",
                                             "Lower hull pressures and a lighter substructure, cutting project cost"]),
                        ("Applications", ["Bulk terminals", "Oil & gas terminals", "Ferry & RoRo terminals", "Monopiles", "Load-sensitive structures"])]},
             {"title": "Hydropneumatic Fender", "media": {"image": "/assets/engineering/shibata/hydropneumatic.jpg"}, "side": "right",
@@ -736,19 +735,19 @@ PRINCIPALS = [
                 ("Fall arrest", 1190, 770, 1300, 600), ("Vessel Separation Device (VSD)", 1380, 870, 1470, 622), ("PERC control unit", 1330, 320, 1530, 382),
                 ("Alternative placement CBC", 1430, 170, 1600, 428), ("Ship manifold", 1540, 520, 1645, 432)]}},
             {"title": "Dry Cryogenic Couplings (DCC)", "media": {"video": "/assets/engineering/spin/dcc"}, "side": "left",
-             "paras": ["MannTek QCDC couplings load and unload cryogenic liquefied gases — LNG, nitrogen, oxygen, argon, ethylene — down to –196°C, connecting quickly and safely with minimal product loss and no re-tightening during cool-down. Built to ISO 21593 and ISO TS 18683."],
+             "paras": ["MannTek QCDC couplings load and unload cryogenic liquefied gases (LNG, nitrogen, oxygen, argon, ethylene) down to −196°C, connecting quickly and safely with minimal product loss and no re-tightening during cool-down. Built to ISO 21593 and ISO TS 18683."],
              "spec": [{"rows": [["Size", "1\" to 8\""], ["Material", "Stainless steel"], ["Seals", "PTFE"]]}]},
             {"title": "Cryogenic Breakaway Couplings (CBC)", "media": {"video": "/assets/engineering/spin/cbc"}, "side": "right",
              "paras": ["Designed as the weakest link of the hose line or loading arm, CBCs prevent spillage and damage from drive-away or pull-away incidents. Available in breaking-pin and cable-release versions."],
              "spec": [{"rows": [["Size", "1\"–8\" breaking pin · 2\"–8\" cable release"], ["Material", "Stainless steel"], ["Seals", "PTFE"], ["Working pressure", "25 bar"]]}]},
             {"title": "Powered Emergency Release Coupling (PERC)", "media": {"video": "/assets/engineering/spin/perc"}, "side": "left",
-             "paras": ["The highest safety level, with three ways to release — by ESD signal, by manual override, or by reverting to a passive breaking pin. In a blackout it falls back to a passive breakaway coupling, protecting the manifold in any situation."]},
+             "paras": ["The highest safety level, with three ways to release: by ESD signal, by manual override, or by reverting to a passive breaking pin. In a blackout it falls back to a passive breakaway coupling, protecting the manifold in any situation."]},
             {"title": "Vessel Separation Device (VSD)", "media": {"image": "/assets/engineering/manntek-vsd.webp"}, "side": "right",
-             "items": ["Three-wire system with pendants of different lengths", "First wire: alarm on vessel movement", "Second wire: initiates ESD 1 — pumps stop, ESD valves close", "Third wire: initiates ESD 2, activating the PERC"]},
+             "items": ["Three-wire system with pendants of different lengths", "First wire: alarm on vessel movement", "Second wire: initiates ESD 1, stopping the pumps and closing the ESD valves", "Third wire: initiates ESD 2, activating the PERC"]},
             {"title": "PERC control unit", "media": {"image": "/assets/engineering/manntek-pcu.webp"}, "side": "left", "defs": [
                 ("PLC version", "Monitors the whole transfer operation and ensures every step and periodic test is carried out"),
                 ("SIL2 version", "Assessed by DNV and certified to SIL2 under IEC 61511 and IEC 61508")]},
-            {"title": "Videos", "videos": [("MannTek (QCDC) Design 2.0 — DGC", "kSuzHS0QLxM"), ("Safety Breakaway Couplings", "ruqJJZ1Y6Qk"),
+            {"title": "Videos", "videos": [("MannTek (QCDC) Design 2.0: DGC", "kSuzHS0QLxM"), ("Safety Breakaway Couplings", "ruqJJZ1Y6Qk"),
                                            ("Connections: Liquid Hydrogen", "xwyUOaJOzM8"), ("MannTek LNG / cryogenic couplings", "VYfQASPLDGM")]},
         ],
         "cta_h": "After-sales",
@@ -771,7 +770,7 @@ PRINCIPALS = [
                 ("Smart Bollard", "bollard", "A bollard that measures the load on every mooring line in real time and logs it, so nobody has to assume the worst.", "#smart-bollard"),
                 ("Berthing Aid Systems", "bas", "Speed, distance and angle of an approaching vessel, measured and shown on large displays for a safe berthing.", "#berthing-aid-system-bas"),
             ]},
-            {"title": "Videos", "videos": [("Quick release mooring hooks — electric release", "9ibN4cYJUJo"), ("Smart Bollard explained", "HUaGkqjp3RY"),
+            {"title": "Videos", "videos": [("Quick release mooring hooks with electric release", "9ibN4cYJUJo"), ("Smart Bollard explained", "HUaGkqjp3RY"),
                                            ("Straatman company film", "gaFLosB-x_o"), ("Quick release hooks with solar power, Port of Rotterdam", "n8tIGkDgjsc")]},
             {"title": "Quick Release Mooring Hooks", "drawing": "/assets/engineering/straatman/qrh-drawing.svg?v=1", "drawing_w": "92%", "media": {"image": "/assets/engineering/straatman/qrh-terminal.jpg"}, "side": "left",
              "paras": ["Quick release mooring hooks are a key safety feature for oil and gas tankers, FSRUs, FPSOs and other vessels: they can be released quickly and easily, even under load, when the situation at the berth demands it.",
@@ -810,7 +809,7 @@ CONTACT_PAGE = {
     "h1": "Navigating with Excellence",
     "lead": "We are pleased to offer our full assistance and address any queries you may have.",
     "commitments": [
-        ("Commodities Supply", "Our supply team is accessible 24/7 — real-time market responsiveness and support across all time zones."),
+        ("Commodities Supply", "Our supply team is accessible 24/7, with real-time market responsiveness and support across all time zones."),
         ("Engineering Solutions", "A face-to-face response within 48 hours for all servicing and maintenance enquiries."),
     ],
     "form_h": "Drop us a line",
@@ -873,11 +872,11 @@ def _apply_profile():
         ["Acidity (wt%)", "0.0001% max.", "0.02% max.", "ASTM D-1613"], ["Mechanical impurities", "0.01% max.", "—", "—"],
         ["Hydrocarbons (wt%)", "—", "0.05% max.", "ASTM D-2360"]]}]
     pk = _s(p, "Packaging")
-    pk["items"] = ["Loose bulk — break-bulk or direct vessel loading", "Jumbo bags (FIBC / big bags) and bulk containers", "Palletised bagging, shrink-wrapped"]
+    pk["items"] = ["Loose bulk, for break-bulk or direct vessel loading", "Jumbo bags (FIBC / big bags) and bulk containers", "Palletised bagging, shrink-wrapped"]
     pk["img"] = PDF + "sulphur-bag-stack.webp"
-    _add(p, {"title": "How we supply", "paras": ["Recovered from natural-gas purification and crude-oil refining, sulphur is the feedstock for sulphuric acid, phosphate fertilisers and metal leaching. Our supply is built on direct access to end buyers and a network of trading professionals with more than 30 years in the industry — reliable execution, consistent quality and competitive terms through compliant channels."]})
+    _add(p, {"title": "How we supply", "paras": ["Recovered from natural-gas purification and crude-oil refining, sulphur is the feedstock for sulphuric acid, phosphate fertilisers and metal leaching. Our supply is built on direct access to end buyers and a network of trading professionals with more than 30 years in the industry. That means reliable execution, consistent quality and competitive terms through compliant channels."]})
     _add(p, {"title": "Industries served", "items": ["Fertilizer producers", "Steel and metallurgy", "Energy and power generation", "Mining and chemical industries"]})
-    _add(p, {"title": "Commercial terms", "items": ["Flexible pricing — formula pricing or Argus-linked index", "Contracting options to suit each buyer"]})
+    _add(p, {"title": "Commercial terms", "items": ["Flexible pricing: formula pricing or an Argus-linked index", "Contracting options to suit each buyer"]})
     _add(p, {"title": "Quality assurance", "items": ["Inspection and certification", "Specification compliance", "Sampling and quality-control processes"]})
 
     # Sulphuric acid (p.7): grades, our own production
@@ -909,7 +908,7 @@ def _apply_profile():
     p = _p("barite-powder")
     sp = _s(p, "Specifications")
     sp["spec"][0]["title"] = "General properties"
-    sp["spec"].insert(0, {"title": "By API grade — typical", "headers": ["Parameter", "API grade 4.0", "API grade 4.1", "API grade 4.2", "Test method"], "rows": [
+    sp["spec"].insert(0, {"title": "Typical values by API grade", "headers": ["Parameter", "API grade 4.0", "API grade 4.1", "API grade 4.2", "Test method"], "rows": [
         ["Density", "4.01 g/cc min.", "4.124 g/cc min.", "4.205 g/cc min.", "API 13A / ISO 13500:2009"],
         ["Water-soluble alkaline earth metals (as Ca)", "36 mg/kg", "36 mg/kg", "252 mg/kg", "API 13A / ISO 13500:2009"],
         ["Residue > 75 µm", "1.7% (w/w)", "1.7% (w/w)", "3% (w/w)", "API 13A / ISO 13500:2009"],
@@ -922,7 +921,7 @@ def _apply_profile():
     _s(p, "Packaging")["img"] = PDF + "barite-bag.jpg"
 
     # Semi coke and metallurgical coke (p.11): Shaanxi supply, extra features and uses
-    supply = {"title": "How we supply", "paras": ["We supply semi coke and metallurgical coke from Shaanxi, China, to clients in Asia, the Middle East and beyond — consistent quality, reliable sourcing and every shipment to specification."]}
+    supply = {"title": "How we supply", "paras": ["We supply semi coke and metallurgical coke from Shaanxi, China, to clients in Asia, the Middle East and beyond, with consistent quality, reliable sourcing and every shipment to specification."]}
     p = _p("semi-coke")
     _s(p, "Key features")["items"].append("Environmentally favourable alternative fuel")
     _s(p, "Key features")["img"] = PDF + "semi-coke-lumps.jpg"
