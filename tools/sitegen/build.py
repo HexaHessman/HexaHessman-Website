@@ -447,7 +447,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2612u">
+<link rel="stylesheet" href="/assets/site.css?v=2612w">
 <style>{PAGE_CSS}{extra_head}</style>
 {head_tags}</head>
 <body{f' class="{body_class}"' if body_class else ""}>
@@ -638,7 +638,7 @@ def build_engineering_hub():
     body.append(section(f'<div class="cta-band"><h2>{esc(H["cta_h"])}</h2>{buttons(H["cta_buttons"])}</div>', id_="cta"))
     # (the cone fender line drawing under the hero was tried and removed, user 2026-11-06; eng-draw.html is kept, unused)
     scripts = ('<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n'
-               '<script src="/assets/arrive.js?v=2612a" defer></script>\n<script src="/assets/eng.js?v=2610k" defer></script>\n')
+               '<script src="/assets/arrive.js?v=2612a" defer></script>\n<script src="/assets/eng.js?v=2611a" defer></script>\n')
     write("/engineering/index.html", page("Engineering Solutions", meta_desc(H["lead"]), "\n".join(body), body_scripts=scripts, body_class="eng"))
 
 
@@ -1050,7 +1050,7 @@ def build_about():
     body.append(section(f'<div class="cta-band plain"><p class="eyebrow">{esc(A["cta_eyebrow"])}</p><h2>{esc(A["cta_h"])}</h2><p class="lead">{esc(A["cta_p"])}</p>{buttons(A["cta_buttons"])}</div>', id_="cta"))
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=8" defer></script>\n<script type="module" src="/assets/team-globe.js?v=12"></script>\n'
+    scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=8" defer></script>\n<script type="module" src="/assets/team-globe.js?v=15"></script>\n'
     write("/about/index.html", page("About", meta_desc(A["story"][0]), "\n".join(body), extra_head=ABOUT_CSS, head_tags=head_tags, body_scripts=scripts))
 
 
@@ -1210,7 +1210,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=12"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=15"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 

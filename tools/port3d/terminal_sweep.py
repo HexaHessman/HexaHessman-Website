@@ -124,5 +124,5 @@ with tempfile.TemporaryDirectory() as tmp:
                 o = 255 - (255 - base) * (255 - np.clip(lines + DOT * np.clip(dots, 0, 1)[..., None], 0, 255)) / 255
         cv2.imwrite(os.path.join(tmp, f'f{i:04d}.png'), np.clip(o, 0, 255).astype(np.uint8))
         if i % 24 == 0: print('frame', i)
-    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '24', '-i', os.path.join(tmp, 'f%04d.png'), '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out], check=True)
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '24', '-i', os.path.join(tmp, 'f%04d.png'), '-c:v', 'libx264', '-preset', 'slow', '-crf', '12', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out], check=True)
 print('done', out)

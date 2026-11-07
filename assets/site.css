@@ -195,7 +195,8 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .gp-fig figcaption b { font-size: 15px; font-weight: 500; color: var(--ink); }
 .gp-fig figcaption span { font-size: 12.5px; color: var(--ink-soft); }
 .gp-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(transparent, rgba(15,42,30,.85)); pointer-events: none; z-index: 11; }
-.gp-names { position: absolute; left: 6%; right: 6%; bottom: 2%; z-index: 12; display: flex; justify-content: space-evenly; gap: 12px; }
+.gp-names { position: absolute; left: 0; right: 0; bottom: 2%; height: 0; z-index: 12; }
+.gp-names .gp-name { position: absolute; bottom: 0; width: 19%; transform: translateX(-50%); }   /* under its own person (globe.js sets left) */
 .gp-name { flex: 1 1 0; min-width: 0; text-align: center; display: grid; gap: 3px; opacity: 0; }
 .gp-name b { font-size: 15px; font-weight: 500; color: var(--ink); }
 .gp-name span { font-size: 12.5px; line-height: 1.3; color: var(--ink-soft); }
@@ -330,7 +331,8 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .ep.right .ep-photo { grid-column: 7 / span 6; } .ep.right .ep-copy { grid-column: 1 / span 5; }
 .ep .ep-photo { margin: 0; border-radius: 8px; } .ep .ep-photo img { border-radius: 8px; }
 .ep .ep-photo::after { display: none; }   /* no frame line; just the light running round the photo's own edge */
-.ep-run { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.ep-run { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; opacity: 0; transition: opacity .6s ease; }
+.ep-photo.in .ep-run { opacity: 1; transition-delay: 1s; }   /* the line comes in after the photo has wiped in (client, 2026-11-07) */
 .ep-run rect { x: 1px; y: 1px; width: calc(100% - 2px); height: calc(100% - 2px); rx: 8px; fill: none; stroke: #0F2A1E; stroke-width: 2.6; stroke-linecap: round;   /* HexaHessman green (client, 2026-11-06) */
   stroke-dasharray: 8 92; filter: drop-shadow(0 0 3px rgba(15,42,30,.55)); animation: epRun 8s linear infinite; }
 .ep.right .ep-run rect { animation-delay: -4s; }
@@ -456,6 +458,7 @@ body.eng, .vy, .cscroll { --accent: #1F7A4A; }
 .card { position: relative; }
 .card h3, .card p, .card .more { transition: color .35s ease; }
 .card:not(a)::after { display: none; }   /* the arrow only where the card is a link (user, 2026-11-06) */
+.card:has(.more)::after { content: none; }   /* no extra arrow under "Learn more →" (client, 2026-11-07) */
 .card::after { content: "\2197"; display: block; height: 0; margin-top: 0; overflow: visible; font: 400 22px/1 var(--sans); color: var(--accent); opacity: 0; transform: translate(-6px, 6px); transition: opacity .35s ease, transform .35s ease, height .35s ease, margin .35s ease; }
 .card:hover h3, .card:focus-visible h3 { color: var(--accent); }
 .card:hover::after, .card:focus-visible::after { opacity: 1; transform: none; height: 22px; margin-top: 14px; }

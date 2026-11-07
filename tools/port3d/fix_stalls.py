@@ -11,11 +11,13 @@ g = lambda x: cv2.cvtColor(cv2.resize(x, (480, 270), interpolation=cv2.INTER_ARE
 def mid(a, b):
     ga, gb = [cv2.cvtColor(x, cv2.COLOR_BGR2GRAY) for x in (a, b)]
     dis = cv2.DISOpticalFlow_create(cv2.DISOPTICAL_FLOW_PRESET_MEDIUM)
+    sc = 0.5 if a.shape[1] >= 3000 else 1.0   # flow at half size on 4K, scaled back up
+    if sc != 1: ga, gb = [cv2.resize(x, None, fx=sc, fy=sc, interpolation=cv2.INTER_AREA) for x in (ga, gb)]
     fab = dis.calc(ga, gb, None); fba = dis.calc(gb, ga, None)
+    if sc != 1: fab = cv2.resize(fab, (a.shape[1], a.shape[0])) / sc; fba = cv2.resize(fba, (a.shape[1], a.shape[0])) / sc
+    ga = ga if sc == 1 else cv2.resize(ga, (a.shape[1], a.shape[0]))
     H, W = ga.shape; yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
-    wa = cv2.remap(a, xx + fba[..., 0] * 0.5, yy + fba[..., 1] * 0.5, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-    wb = cv2.remap(b, xx + fab[..., 0] * 0.5, yy + fab[..., 1] * 0.5, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-    return cv2.addWeighted(wa, 0.5, wb, 0.5, 0)
+    return cv2.remap(a, xx + fba[..., 0] * 0.5, yy + fba[..., 1] * 0.5, cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)   # one side only: no blend softness
 for _ in range(8):
     d = np.array([np.abs(g(F[i]) - g(F[i - 1])).mean() for i in range(1, len(F))])   # d[i-1] = motion into frame i
     loc = lambda i: np.median(d[max(0, i - 8):i + 8])

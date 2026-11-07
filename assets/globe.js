@@ -22,6 +22,9 @@ const sec = document.getElementById('globe'); if (!sec) throw new Error('no #glo
 // the people for each office come from the About team (data-people), everyone in that office
 let TEAM = []; try { TEAM = JSON.parse(sec.dataset.people || '[]'); } catch (e) {}
 if (TEAM.length) OFFICES.forEach(o => { o.leads = TEAM.filter(p => p.office === o.id).map(p => P(p.slug, p.name, p.role)); });
+// who stands where in an office's line (the middle one stands in front): Adam Yeoh in the middle, Hafriz Razif on his right (user, 2026-11-07)
+const LINE_ORDER = { sg: ['azmi-mahmood', 'aizat-amin', 'adam-yeoh', 'hafriz-razif', 'connie-tai'] };
+OFFICES.forEach(o => { const ord = LINE_ORDER[o.id]; if (ord && o.leads) o.leads.sort((a, b) => (ord.indexOf(a.slug) + 99) % 99 - (ord.indexOf(b.slug) + 99) % 99); });
 const INK = 0xeee3c7, PAPER = 0x0F2A1E;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -101,10 +104,11 @@ function select(i, byUser) {
   // the office's people step out in front of the globe, as in the About lineup: the first in front, the rest either side
   const L = o.leads || [], mid = (L.length - 1) / 2;
   line.innerHTML = L.map((l, k) => { const d = Math.abs(k - mid), side = Math.sign(k - mid);
-    return `<figure class="gp-fig" style="--x:${(side * Math.min(d, 2) * 34).toFixed(0)}%;--s:${(1 - 0.16 * d).toFixed(2)};--z:${10 - Math.round(d)};--k:${k}">
+    return `<figure class="gp-fig" style="--x:${(side * Math.min(d, 2) * 42).toFixed(0)}%;--s:${(1 - 0.16 * d).toFixed(2)};--z:${10 - Math.round(d)};--k:${k}">
       <img src="/assets/team/cut/${l.slug}.webp?v=2" alt="" draggable="false"></figure>`; }).join('')
     // the names sit in one row on a shared baseline, each centred under its person
-    + `<div class="gp-names">${L.map((l, k) => `<p class="gp-name" style="--k:${k}"><b>${l.name}</b><span>${l.role}</span></p>`).join('')}</div>`;   // one evenly spaced row
+    + `<div class="gp-names">${L.map((l, k) => { const d = Math.abs(k - mid), side = Math.sign(k - mid);
+        return `<p class="gp-name" style="--k:${k};left:${(50 + side * Math.min(d, 2) * 42 * 0.46).toFixed(1)}%"><b>${l.name}</b><span>${l.role}</span></p>`; }).join('')}</div>`;   // each name under its own person, on one baseline
   line.classList.remove('in'); void line.offsetWidth; line.classList.add('in');
   const people = L.map(l => `
       <div class="lead"><div><div class="who">${l.name}</div><div class="muted">${l.role}</div></div></div>`   /* no personal emails (client, 2026-11-06) */).join('');
@@ -155,8 +159,7 @@ function tick() {
   // turn towards the chosen office; tour the offices until someone takes over
   if (!drag) {
     globe.quaternion.slerp(targetQ, 1 - Math.pow(0.0025, dt));
-    if (!userTouched && now - lastAuto > 5200) select((active + 1) % OFFICES.length, false);
-    else if (userTouched && now - lastAuto > 14000) { userTouched = false; lastAuto = now; }
+    // (no automatic switching between countries, user 2026-11-07: the globe stays on the office that was picked)
   }
   // pins and labels: stronger when facing us, hidden on the far side
   camera.getWorldDirection(camDir);

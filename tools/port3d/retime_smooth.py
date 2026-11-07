@@ -29,11 +29,14 @@ def at(t):
     if a < 1e-3 or i >= N - 1: return F[min(i, N - 1)]
     A, B = F[i], F[i + 1]
     ga, gb = cv2.cvtColor(A, cv2.COLOR_BGR2GRAY), cv2.cvtColor(B, cv2.COLOR_BGR2GRAY)
+    sc = 0.5 if A.shape[1] >= 3000 else 1.0   # flow at half size on 4K, scaled back up
+    if sc != 1: ga, gb = [cv2.resize(x, None, fx=sc, fy=sc, interpolation=cv2.INTER_AREA) for x in (ga, gb)]
     fab = dis.calc(ga, gb, None); fba = dis.calc(gb, ga, None)
+    if sc != 1: fab = cv2.resize(fab, (A.shape[1], A.shape[0])) / sc; fba = cv2.resize(fba, (A.shape[1], A.shape[0])) / sc
+    ga = ga if sc == 1 else cv2.resize(ga, (A.shape[1], A.shape[0]))
     H, W = ga.shape; yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
-    wa = cv2.remap(A, xx + fba[..., 0] * a, yy + fba[..., 1] * a, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-    wb = cv2.remap(B, xx + fab[..., 0] * (1 - a), yy + fab[..., 1] * (1 - a), cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-    return cv2.addWeighted(wa, 1 - a, wb, a, 0)
+    if a <= 0.5: return cv2.remap(A, xx + fba[..., 0] * a, yy + fba[..., 1] * a, cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)   # nearer frame only
+    return cv2.remap(B, xx + fab[..., 0] * (1 - a), yy + fab[..., 1] * (1 - a), cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
 with tempfile.TemporaryDirectory() as tmp:
     for j, t in enumerate(s): cv2.imwrite(os.path.join(tmp, f'f{j:04d}.png'), at(t))
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', '24', '-i', os.path.join(tmp, 'f%04d.png'), '-c:v', 'libx264', '-crf', '10', '-pix_fmt', 'yuv420p', out], check=True)

@@ -22,7 +22,10 @@
   window.__csJump = jump;
   if (location.hash) setTimeout(() => jump(location.hash, false), 60);
 
-  const io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } },
+  // a photo only reveals once it has loaded, so the running line never shows round an empty box (client, 2026-11-07)
+  const show = el => { const img = el.querySelector('img'); if (!img || img.complete) return el.classList.add('in');
+    img.loading = 'eager'; const go = () => el.classList.add('in'); img.addEventListener('load', go, { once: true }); img.addEventListener('error', go, { once: true }); };
+  const io = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } },
     { rootMargin: '0px 0px -12% 0px', threshold: 0.01 });
   document.querySelectorAll('.eprin [data-reveal]').forEach(el => io.observe(el));
 

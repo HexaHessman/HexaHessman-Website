@@ -30,6 +30,14 @@ d = np.array([0.0] + [float(np.abs(G[i] - G[i - 1]).mean()) for i in range(1, N)
 k = np.arange(-6, 7); ker = np.exp(-0.5 * (k / 2.5) ** 2); ker /= ker.sum()
 d = np.convolve(np.pad(d, 6, mode='edge'), ker, mode='valid')          # no jitter in the speed curve
 w = FLOOR * d.mean() + d
+# --head N0 N1 F: source frames before N0 play F times faster (easing back to normal by N1); the rest keeps its pace
+head = opt('--head', 3)
+if head:
+    n0, n1, fac = int(head[0]), int(head[1]), float(head[2])
+    x = np.clip((np.arange(N) - n0) / max(1, n1 - n0), 0, 1); x = x * x * (3 - 2 * x)
+    r = np.clip(np.arange(N) / 14.0, 0, 1); r = r * r * (3 - 2 * r)          # the speed-up itself eases in over the first 14 source frames
+    m = 1 / fac + (1 - 1 / fac) * x; m = 1 - (1 - m) * r
+    Cold = np.sum(w[1:]); w = w * m; secs = secs * np.sum(w[1:]) / Cold
 C = np.concatenate([[0], np.cumsum(w[1:])])
 M = int(round(secs * 24))
 s = np.interp(np.linspace(0, C[-1], M), C, np.arange(N, dtype=np.float64))
@@ -46,9 +54,9 @@ def at(t):
     fab = dis.calc(sa, sb, None); fba = dis.calc(sb, sa, None)
     if SC != 1: fab = cv2.resize(fab, (W0, H0)) / SC; fba = cv2.resize(fba, (W0, H0)) / SC
     yy, xx = np.mgrid[0:H0, 0:W0].astype(np.float32)
-    wa = cv2.remap(A, xx + fba[..., 0] * a, yy + fba[..., 1] * a, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-    wb = cv2.remap(B, xx + fab[..., 0] * (1 - a), yy + fab[..., 1] * (1 - a), cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-    return cv2.addWeighted(wa, 1 - a, wb, a, 0)
+    # warp only the nearer real frame (a 50/50 blend of two frames smears detail); cubic keeps edges crisp
+    if a <= 0.5: return cv2.remap(A, xx + fba[..., 0] * a, yy + fba[..., 1] * a, cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    return cv2.remap(B, xx + fab[..., 0] * (1 - a), yy + fab[..., 1] * (1 - a), cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
 frames = [at(v) for v in s]
 
 def ease(n, i): x = (i + 1) / n; return x * x * (3 - 2 * x)
@@ -66,8 +74,9 @@ def write(path, width, crf, extra=()):
                           '-an', '-c:v', 'libx264', '-preset', 'slow', '-crf', str(crf), *extra, '-pix_fmt', 'yuv420p', '-movflags', '+faststart', path], stdin=subprocess.PIPE)
     for f in frames: p.stdin.write(cv2.resize(f, (width, h), interpolation=cv2.INTER_AREA if width < W0 else cv2.INTER_CUBIC).tobytes())
     p.stdin.close(); p.wait()
-write(out + '.mp4', 1920, 21)
-write(out + '-m.mp4', 1280, 24)
-if W0 >= 3840: write(out + '-4k.mp4', 3840, 20)
+write(out + '.mp4', 1920, 18)
+write(out + '-m.mp4', 1280, 22)
+if W0 >= 2560: write(out + '-hd.mp4', 2560, 19)
+if W0 >= 3840: write(out + '-4k.mp4', 3840, 16)
 cv2.imwrite(out + '-first.jpg', frames[0], [cv2.IMWRITE_JPEG_QUALITY, 93]); cv2.imwrite(out + '-last.jpg', frames[-1], [cv2.IMWRITE_JPEG_QUALITY, 93])
 print(f'{src}: {N} frames -> {M} ({secs}s), source used {idx[0]}..{idx[-1]}')
