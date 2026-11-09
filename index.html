@@ -25,6 +25,10 @@
   .film { position: absolute; inset: 0; overflow: hidden; background: var(--paper); }
   .film video, .film img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
   .film .live { opacity: 1; }
+  .film #water { opacity: 0; transition: opacity 1.2s ease; pointer-events: none;
+    -webkit-mask: url(/assets/entrance/water-mask.png) center / cover no-repeat; mask: url(/assets/entrance/water-mask.png) center / cover no-repeat; }
+  .film #water.on { opacity: 1; }
+  .film #water.off { transition: opacity .4s ease-out; }
   /* the intro fades in from the preloader; every later swap (intro -> held frame -> branch) is an instant cut on identical frames */
   .film #intro.live { transition: opacity .4s; }
   .film::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1s;
@@ -37,7 +41,7 @@
   /* a thin loading bar under the mark that fills while it draws (user, 2026-11-06) */
   .loader .pl-bar { position: absolute; left: 50%; top: 81vh; width: min(240px, 27vh); height: 2px; translate: -50% 0; border-radius: 2px; background: rgba(238,227,199,.16); overflow: hidden; z-index: 1; transition: opacity .25s; }
   .loader .pl-bar i { position: absolute; inset: 0; background: var(--ink); transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 8px rgba(238,227,199,.6); }
-  .loader.filling .pl-bar i { transform: scaleX(.92); transition: transform .5s cubic-bezier(.3,.1,.3,1); }   /* fills with the drawing */
+  .loader.filling .pl-bar i { transform: scaleX(.92); transition: transform 2.4s cubic-bezier(.3,.1,.3,1); }   /* fills with the drawing (2.4 s, client 2026-11-08) */
   .loader.full .pl-bar i { transform: scaleX(1); transition: transform .12s ease-out; }
   .loader.spin .pl-bar { opacity: 0; }
   @media (orientation: portrait) { .loader .pl-bar { top: calc(50% + min(46vw, 30vh)); width: 38vw; } }
@@ -53,7 +57,7 @@
   .site-header { opacity: 0; transform: translateY(-10px); transition: opacity 1s .3s, transform 1s .3s; }
   body:not(.ready) .site-header * { pointer-events: none !important; }
   body.ready .site-header { opacity: 1; transform: none; }
-  .choice { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 90px 52px 40px; opacity: 0; transform: translateY(16px); transition: opacity .9s .4s, transform .9s .4s; pointer-events: none; }
+  .choice { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 90px 52px 40px; opacity: 0; transform: translateY(16px); transition: opacity .7s, transform .7s; pointer-events: none; }
   .stage.ready .choice { opacity: 1; transform: none; pointer-events: auto; }
   .choice .eyebrow { margin-bottom: 18px; }
   .choice h1 { max-width: 760px; text-wrap: balance; font-size: clamp(30px, 3.6vw, 48px); font-weight: 400; margin-bottom: 14px; text-shadow: 0 2px 30px rgba(0,0,0,.45); }
@@ -121,6 +125,8 @@
     <img id="hold" src="/assets/entrance/choice-v5.jpg" srcset="/assets/entrance/choice-v5.jpg 1920w, /assets/entrance/choice-v5-hd.jpg 2560w" sizes="100vw" alt="" />
     <video id="vc" muted playsinline preload="none"></video>
     <video id="ve" muted playsinline preload="none"></video>
+    <!-- gentle water on the held frame: only the sea shows through its mask (ship, ropes, cranes stay the photo); fades out as a door's clip starts -->
+    <video id="water" muted playsinline loop preload="none" aria-hidden="true"></video>
   </div>
 
   <div class="choice" id="choice">
@@ -146,7 +152,7 @@
 
   <div class="loader mark" id="loader" role="img" aria-label="HexaHessman">
     <!-- the 3D drawing of the mark: draws itself on, then spins out while the loader fades onto the port -->
-    <iframe class="pl-logo" src="/logo.html?preloader&v=12" title="" aria-hidden="true" tabindex="-1"></iframe>
+    <iframe class="pl-logo" src="/logo.html?preloader&v=13" title="" aria-hidden="true" tabindex="-1"></iframe>
     <div class="pl-bar" aria-hidden="true"><i></i></div>
   </div>
 </div>
@@ -186,7 +192,7 @@
   const frame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
   const introReady = canPlay(intro);
   // the drawing tells us when it has finished; if it never loads (offline CDN), carry on after a few seconds
-  const drawn = new Promise(r => { addEventListener('message', e => { if (e.data === 'logo-drawn') r(); }); setTimeout(r, 1200); });
+  const drawn = new Promise(r => { addEventListener('message', e => { if (e.data === 'logo-drawn') r(); }); setTimeout(r, 3200); });
   (async function preload() {
     if (reduce) { await introReady; loader.classList.add('done'); return settle(); }
     await frame(); loader.classList.add('mark');
@@ -200,7 +206,10 @@
     plLogo.contentWindow && plLogo.contentWindow.postMessage({ type: 'logo-spinout' }, '*');
     await wait(60);                                     // the turn gets going, then the port shows through (2x faster, user 2026-11-06)
     if (ok) {
-      intro.addEventListener('ended', settle, { once: true }); playVisible(intro).catch(settle);
+      // the zoom plays at 1.25x (2 s clip -> 1.6 s) and the doors start fading in 0.3 s before it lands: logo to doors in ~2 s (client, 2026-11-08; was ~3 s)
+      intro.defaultPlaybackRate = intro.playbackRate = 1.25;
+      intro.addEventListener('ended', settle, { once: true }); playVisible(intro).then(() => intro.playbackRate = 1.25).catch(settle);
+      const early = setInterval(() => { if (settled) return clearInterval(early); if (intro.duration && intro.currentTime >= intro.duration - 0.375) { clearInterval(early); stage.classList.add('ready'); document.body.classList.add('ready'); } }, 30);
       setTimeout(() => { if (intro.paused || intro.currentTime < 0.05) settle(); }, 2500);   // never stuck on the poster if playback stalls
       setTimeout(settle, 6000);
     } else settle();
@@ -214,6 +223,25 @@
     want = hold; show(hold);
     stage.classList.add('ready'); document.body.classList.add('ready');
     vc.preload = ve.preload = 'auto'; vc.load(); ve.load();
+    if (!reduce) startWater();
+  }
+  // ---- the sea moves gently on the held frame (2026-11-08): a masked loop over the still, everything else stays the photo ----
+  const water = document.getElementById('water');
+  function startWater() {
+    water.src = '/assets/entrance/water-v1' + (small ? '-m' : hd ? '-hd' : '') + '.mp4';
+    water.preload = 'auto'; water.load();
+    canPlay(water).then(ok => {
+      if (!ok || leaving) return;
+      const p = water.play(); if (p && p.catch) p.catch(() => {});
+      const on = () => { if (!leaving) water.classList.add('on'); };   // fades in, so the first ripple never pops
+      if ('requestVideoFrameCallback' in water) water.requestVideoFrameCallback(on); else water.addEventListener('playing', on, { once: true });
+    });
+  }
+  // a door was pressed: the clip underneath now starts on the same frame, so only the sea blends across (0.4 s)
+  function stopWater() {
+    if (!water.classList.contains('on')) { water.pause(); return; }
+    water.classList.add('off'); water.classList.remove('on');
+    setTimeout(() => water.pause(), 450);
   }
 
   // ---- captions over the zoom: [start, end] as fractions of the clip; letters light up across the first 55% of each line ----
@@ -251,10 +279,12 @@
     stage.classList.add('leaving');
     let gone = false;
     const go = () => { if (gone) return; gone = true; want = null; stage.classList.add('dark');
+      try { sessionStorage.setItem('hx-enter', '1'); } catch (e) {}   // the next page opens on this same green and fades in (client, 2026-11-08)
       setTimeout(() => { if (arrive) arrive(); else location.href = href; }, arrive ? 700 : 900); };
     if (reduce) return go();
-    if (!(await canPlay(v))) return go();
-    try { await playVisible(v); } catch (e) { return go(); }
+    if (!(await canPlay(v))) { stopWater(); return go(); }
+    try { await playVisible(v); } catch (e) { stopWater(); return go(); }
+    stopWater();
     runCaptions(v, LINES[v.id]);
     const lead = 0.9;   // start the green veil just before the end so the last wireframe frames melt into the page colour
     const t = setInterval(() => { if (v.duration && v.currentTime >= v.duration - lead) { clearInterval(t); go(); } }, 50);

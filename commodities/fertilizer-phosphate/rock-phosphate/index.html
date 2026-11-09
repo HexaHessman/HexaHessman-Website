@@ -140,6 +140,11 @@
 .steps .card .n { font-family: var(--mono); font-size: 12px; letter-spacing: .15em; color: var(--muted); margin-bottom: 10px; display: block; }
 @media (max-width: 640px) { .spec th, .spec td { padding: 10px 8px; font-size: 14px; } .spec td:first-child { width: auto; } }
 </style>
+<script>try{if(sessionStorage.getItem('hx-enter')){sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}catch(e){}</script>
+<style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
+html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;background:#0F2A1E;pointer-events:none;animation:hxEnter 1s .15s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes hxEnter{to{opacity:0;visibility:hidden}}
+@media (prefers-reduced-motion: reduce){html.hx-enter body::after{animation-duration:.01s}}</style>
 </head>
 <body>
 <div id="site-header"></div>
@@ -165,6 +170,6 @@
 <script src="/assets/deco-lines.js?v=2" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js" defer></script>
-<script src="/assets/back-btn.js?v=2" data-up="/commodities/" data-spot="rock-phosphate" defer></script>
+<script src="/assets/back-btn.js?v=3" data-up="/commodities/" data-spot="rock-phosphate" defer></script>
 </body>
 </html>

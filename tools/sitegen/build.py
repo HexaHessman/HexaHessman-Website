@@ -449,6 +449,11 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="stylesheet" href="/assets/header.css?v=2611d">
 <link rel="stylesheet" href="/assets/site.css?v=2613c">
 <style>{PAGE_CSS}{extra_head}</style>
+<script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
+<style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
+html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;background:#0F2A1E;pointer-events:none;animation:hxEnter 1s .15s cubic-bezier(.4,0,.2,1) forwards}}
+@keyframes hxEnter{{to{{opacity:0;visibility:hidden}}}}
+@media (prefers-reduced-motion: reduce){{html.hx-enter body::after{{animation-duration:.01s}}}}</style>
 {head_tags}</head>
 <body{f' class="{body_class}"' if body_class else ""}>
 <div id="site-header"></div>
@@ -475,7 +480,7 @@ def back_btn(up, spot=None):
     """the floating Back button on product and principal pages (user, 2026-11-06); `up` is where it goes with no history.
     `spot` (a commodity's slug): Back always returns to the main Commodities page where the visitor left off (client, 2026-11-07)"""
     extra = f' data-spot="{spot}"' if spot else ''
-    return f'<script src="/assets/back-btn.js?v=2" data-up="{up}"{extra} defer></script>\n'
+    return f'<script src="/assets/back-btn.js?v=3" data-up="{up}"{extra} defer></script>\n'
 
 
 def write(relpath, html):
@@ -530,7 +535,7 @@ def build_commodities_hub():
     body.append(section(f"""<div class="cta-band">
   <h2>{esc(H["cta_h"])}</h2><p class="lead">{esc(H["cta_p"])}</p>{buttons(H["cta_buttons"])}</div>""", id_="cta"))
 
-    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2613a" defer></script>\n<script src="/assets/cs-marks.js?v=19" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
+    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2613a" defer></script>\n<script src="/assets/cs-marks.js?v=20" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
 
 
 def build_group(g):
@@ -1130,7 +1135,7 @@ def build_about():
     body.append(section(f'<div class="cta-band plain"><p class="eyebrow">{esc(A["cta_eyebrow"])}</p><h2>{esc(A["cta_h"])}</h2><p class="lead">{esc(A["cta_p"])}</p>{buttons(A["cta_buttons"])}</div>', id_="cta"))
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=8" defer></script>\n<script type="module" src="/assets/team-globe.js?v=15"></script>\n'
+    scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=10" defer></script>\n<script type="module" src="/assets/team-globe.js?v=15"></script>\n'
     write("/about/index.html", page("About", meta_desc(A["story"][0]), "\n".join(body), extra_head=ABOUT_CSS, head_tags=head_tags, body_scripts=scripts))
 
 

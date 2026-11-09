@@ -189,6 +189,11 @@
 .hours .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 16px 0; border-top: 1px solid var(--line); }
 .hours .row:last-child { border-bottom: 1px solid var(--line); }
 </style>
+<script>try{if(sessionStorage.getItem('hx-enter')){sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}catch(e){}</script>
+<style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
+html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;background:#0F2A1E;pointer-events:none;animation:hxEnter 1s .15s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes hxEnter{to{opacity:0;visibility:hidden}}
+@media (prefers-reduced-motion: reduce){html.hx-enter body::after{animation-duration:.01s}}</style>
 <script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
 </head>
 <body>
