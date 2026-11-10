@@ -447,8 +447,13 @@ PAGE_CSS = """
 """
 
 
+MAIN_PAGES = ("Commodities Supply", "Engineering Solutions", "About", "Contact")
+
+
 def page(title, description, body, extra_head="", head_tags="", body_scripts="", body_class=""):
     """extra_head: CSS appended to the page <style>; head_tags: raw tags for <head>; body_scripts: raw tags before </body>."""
+    if title in MAIN_PAGES:   # the main pages get a Back-to-top button; product / principal pages have Back instead (client, 2026-11-10)
+        body_scripts += '<script src="/assets/top-btn.js?v=1" defer></script>\n'
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -461,7 +466,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=1110a">
-<link rel="stylesheet" href="/assets/site.css?v=1110a">
+<link rel="stylesheet" href="/assets/site.css?v=1110c">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -478,7 +483,7 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 <script src="/assets/site-header.js?v=1110a" defer></script>
 <script src="/assets/deco-lines.js?v=2" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js?v=1110a" defer></script>
+<script src="/assets/site-footer.js?v=1110b" defer></script>
 {body_scripts}</body>
 </html>
 """
@@ -548,7 +553,7 @@ def build_commodities_hub():
 
     body.append(cta(H["cta_h"], H["cta_p"], "commodities"))
 
-    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1110a" defer></script>\n<script src="/assets/cs-marks.js?v=20" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
+    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1110b" defer></script>\n<script src="/assets/cs-marks.js?v=20" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
 
 
 def build_group(g):

@@ -386,11 +386,13 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .cs-rule { height: 1px; background: var(--line-strong); margin-bottom: clamp(40px, 7vh, 80px); transform-origin: left center; transform: scaleX(0); transition: transform 1.2s cubic-bezier(.2,.7,.2,1); }
 .cs-rule.in { transform: scaleX(1); }
 .cs-category { font-size: clamp(26px, 2.6vw, 40px); font-weight: 500; line-height: 1.05; letter-spacing: -.01em; text-transform: none; max-width: 22ch; }
-.text-right .cs-category { margin-left: calc(50% + 7vw); text-align: left; }   /* starts where its products start (client, 2026-11-10) */
+.text-right .cs-category { margin-left: calc(62vw - var(--g)); text-align: left; }   /* starts where its products start (client, 2026-11-10) */
 .cs-title a, .cs-category a { text-decoration: none; color: inherit; }
 /* the pinned pair: window on one side (sticky), the products scrolling on the other */
 .cs-pin { display: grid; grid-template-columns: 1fr 1fr; }
-.cs-stick { position: sticky; top: 0; height: 100vh; align-self: start; padding: max(104px, 13vh) 0 7vh; }   /* smaller window, inside the page (user, 2026-11-05) */
+.text-left .cs-pin { grid-template-columns: 42fr 58fr; } .text-right .cs-pin { grid-template-columns: 58fr 42fr; }   /* the window takes more of the width (client, 2026-11-10) */
+.cs-items { -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+.cs-stick { position: sticky; top: 0; height: 100vh; align-self: start; padding: 110px 0 4vh; }   /* bigger window, nearly the full height under the header (client, 2026-11-10, like terminal-industries.com) */   /* smaller window, inside the page (user, 2026-11-05) */
 .cs-panel { height: 100%; position: relative; }
 /* the window's outline: filled with the scene green, stroked cream; the scene / video cover the inner half of the line */
 .cs-outline { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
@@ -402,8 +404,8 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .text-right .cs-items { grid-column: 2; grid-row: 1; }
 .text-right .cs-stick { grid-column: 1; grid-row: 1; padding-left: var(--g); }
 .cs-item { min-height: 30vh; display: flex; align-items: center; }   /* tighter again (client, 2026-11-06: products felt too far apart; was 40vh) */
-.text-left .cs-item { padding: 24px 5vw 24px var(--g); }   /* the product lines up under its group heading (client, 2026-11-10) */
-.text-right .cs-item { padding: 24px var(--g) 24px 7vw; }
+.text-left .cs-item { padding: 24px 4vw 24px var(--g); }   /* the product lines up under its group heading (client, 2026-11-10) */
+.text-right .cs-item { padding: 24px var(--g) 24px 4vw; }
 .cs-text { display: grid; gap: clamp(14px, 2.2vh, 24px); max-width: 640px; }
 .cs-num { display: none; }
 .cs-item .cs-text { position: relative; z-index: 1; }
@@ -420,7 +422,8 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .cs-view:hover { background: var(--ink); color: var(--cs-bg); }
 /* phones: the window pins under the header, the products scroll up beneath it */
 @media (max-width: 900px) {
-  .cs-pin { grid-template-columns: 1fr; }
+  .cs-pin, .text-left .cs-pin, .text-right .cs-pin { grid-template-columns: 1fr; }
+  .cs-item .cs-text { z-index: 0; }   /* the products slide under the pinned window, never over it */
   .cs-stick, .text-left .cs-stick, .text-right .cs-stick { grid-column: 1; grid-row: 1; z-index: 1; height: auto; margin: 0; padding: 84px 0 14px 16px; background: var(--cs-bg); }
   .cs-panel { height: 44vh; }
   .cs-items, .text-left .cs-items, .text-right .cs-items { grid-column: 1; grid-row: 2; }

@@ -174,7 +174,6 @@ c-64 3 -72 1 -66 -14z"/>
 </g>
 </svg></a>
         <p class="foot-tag">Navigating with Excellence in Consultancy, Energy and Engineering.</p>
-        <p class="foot-desc">HexaHessman Global Group is an international holding and investment platform overseeing a portfolio of operating companies across diverse sectors, with a presence in key global markets and a focus on visionary leadership, innovation and sustainable value creation.</p>
       </div>
       <div class="foot-col"><h4>Company</h4><a href="/about/">About</a><a href="/about/#reach">Global Presence</a><a href="/contact/">Contact</a></div>
       <div class="foot-col"><h4>Divisions</h4><a href="/commodities/">Commodities Supply</a><a href="/engineering/">Engineering Solutions</a></div>

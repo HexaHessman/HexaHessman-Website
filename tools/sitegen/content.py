@@ -17,7 +17,6 @@ BUTTONS = {
     "Request service / maintenance": CONTACT + "#service",
     "Message us on WhatsApp": WHATSAPP,
     "Message us on WhatsApp (+65 8061 9119)": WHATSAPP,
-    "Email Krishna Hartono": "mailto:Krishna.Hartono@HexaHessman.com",
     "Contact the Engineering team": CONTACT + "#quote",
     "Request fender sizing / quotation": CONTACT + "#quote",
     "Book a service visit": CONTACT + "#service",

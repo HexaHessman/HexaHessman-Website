@@ -147,7 +147,7 @@
   let acc = 0;
   const groups = [...sec.querySelectorAll('.cs-chapter')].map((ch, gi) => {
     const n = data[gi].products.length, from = acc / total; acc += n;
-    return { ch, gi, pin: ch.querySelector('.cs-pin'), panel: ch.querySelector('.cs-panel'), video: ch.querySelector('.cs-vid'), from, to: acc / total, copy: gi % 2 };
+    return { ch, gi, pin: ch.querySelector('.cs-pin'), panel: ch.querySelector('.cs-panel'), items: ch.querySelector('.cs-items'), video: ch.querySelector('.cs-vid'), from, to: acc / total, copy: gi % 2 };
   });
   // the inner (text-facing) edge: on phones the window sits above the text, so its indent faces left
   const innerOf = g => innerWidth <= 900 ? 'left' : (g.ch.classList.contains('text-left') ? 'left' : 'right');
@@ -214,6 +214,17 @@
         if (jump) { delete f.dataset.jump; setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => { if (sized[c] === g) f.style.visibility = 'visible'; })), 60); }   // show it once the cut has rendered
       }
     });
+    // desktop: the products only show between the top and bottom edges of their window, fading in and out at those
+    // edges, so everything beside the window lines up with it (client, 2026-11-10, after terminal-industries.com)
+    if (near) for (const g of groups) {
+      const it = g.items; if (!it) continue;
+      if (innerWidth <= 900) { if (it._band) { it._band = ''; it.style.webkitMaskImage = it.style.maskImage = ''; } continue; }
+      const ib = it.getBoundingClientRect(); if (ib.bottom < -vh || ib.top > vh * 2) continue;
+      const pb = g.panel.getBoundingClientRect();
+      const a = Math.round(pb.top - ib.top), z = Math.round(pb.bottom - ib.top), soft = 56;
+      const m = `linear-gradient(180deg, transparent ${a}px, #000 ${a + soft}px, #000 ${z - soft}px, transparent ${z}px)`;
+      if (m !== it._band) { it._band = m; it.style.webkitMaskImage = it.style.maskImage = m; }
+    }
     // words: a paragraph lights up as it rises from the bottom of the screen to a little above the middle
     if (near && !reduce) for (const f of fills) {
       const b = f.p.getBoundingClientRect(); if (b.bottom < -50 || b.top > vh + 50) continue;
