@@ -367,7 +367,7 @@ const BAG_H = 4.1;
 // the row slants across to the right (less depth), so a few bags cover the width
 const PATH = { from: new THREE.Vector3(-9.5, 0.0, 6.5), to: new THREE.Vector3(24, 5.6, -14) };
 const PATH_LEN = PATH.from.distanceTo(PATH.to);
-const GAP = 11.5, S0 = PATH_LEN * 0.3, DRIFT = reduce ? 0.08 : 0.2, SCROLL_GAIN = 2.2;   // fewer bags, further apart, drifting slowly (user, 2026-11-06)
+const GAP = 7, S0 = PATH_LEN * 0.3, DRIFT = reduce ? 0.08 : 0.2, SCROLL_GAIN = 2.2;   // bags closer together (client, 2026-11-10; was 11.5), drifting slowly
 const POOL = Math.ceil(PATH_LEN / GAP) + 2;
 const bags = [];
 const hash = k => { const x = Math.sin(k * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };

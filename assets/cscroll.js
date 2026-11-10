@@ -42,7 +42,7 @@
             <div class="cs-text">
               <h3 class="cs-title" data-reveal="split"><a href="/commodities/${g.slug}/${p.slug}/">${esc(p.name)}</a></h3>
               <p class="cs-fill">${esc(p.lead || p.short)}</p>
-              <a class="cs-view" data-reveal="fade" href="/commodities/${g.slug}/${p.slug}/">View product →</a>
+              <a class="cs-view" data-reveal="fade" href="/commodities/${g.slug}/${p.slug}/">View product</a>
             </div>
           </article>`).join('')}
         </div>
@@ -51,8 +51,8 @@
 
   sec.innerHTML = `
     <div class="cs-wins" aria-hidden="true">
-      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=2612a" title="" tabindex="-1"></iframe>
-      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=2612a" title="" tabindex="-1"></iframe>
+      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=1110a" title="" tabindex="-1"></iframe>
+      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=1110a" title="" tabindex="-1"></iframe>
     </div>
     <div class="cs-flow">
       <div class="cs-intro">

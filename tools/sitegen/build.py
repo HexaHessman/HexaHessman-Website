@@ -101,6 +101,20 @@ def buttons(labels, first_solid=True):
     return '<div class="btn-row">' + "".join(out) + "</div>"
 
 
+# every closing call-to-action, on every page (client, 2026-11-10): a heading, one line under it and ONE contact button —
+# WhatsApp on the Commodities side, email on the Engineering side (and for the general pages).
+WA_URL = "https://wa.me/6580619119"
+MAIL_URL = "mailto:inquiry@hexahessman.com"
+def cta(h, p, side):
+    href, label = (WA_URL, "WhatsApp us") if side == "commodities" else (MAIL_URL, "Email us")
+    extra = ' target="_blank" rel="noopener"' if href.startswith("http") else ""
+    return section(f'<div class="cta-band"><h2>{esc(h)}</h2><p class="lead">{esc(p)}</p>'
+                   f'<div class="btn-row"><a class="pill solid" href="{href}"{extra}>{label}</a></div></div>', id_="cta")
+
+ENG_CTA_H = "Engineered for excellence, supported for life."
+ENG_CTA_P = "A face-to-face response within 48 hours for servicing and maintenance enquiries."
+
+
 def crumbs(items):
     """items: list of (label, href or None for current)."""
     parts = []
@@ -363,14 +377,14 @@ PAGE_CSS = """
 .hero.has-logo .crumbs { justify-content: center; }
 .hero.has-logo .lead, .hero.has-logo .coverage { margin-left: auto; margin-right: auto; }
 /* solutions by fuel: four photo tiles in one line; they rise (1st, 3rd) and drop (2nd, 4th) into place when the row scrolls in; a tile opens its drop-down */
-.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 1.6vw, 22px); }
-.fuel-tile { position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
+.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1vw, 14px); width: min(1500px, 100vw - 2 * var(--gutter)); position: relative; left: 50%; transform: translateX(-50%); }   /* wider than the text column, tiles taller (client, 2026-11-10) */
+.fuel-tile { position: relative; aspect-ratio: 3 / 4; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
   opacity: 0; transform: translateY(70px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * .12s); }
 .fuel-tile:nth-child(even) { transform: translateY(-70px); }
 .fuel-row.in .fuel-tile { opacity: 1; transform: none; }
-.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-.fuel-tile:hover img { transform: scale(1.05); }
-.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.45); transition: background .3s; }
+.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.06); transform: scale(1.18); transition: transform .6s cubic-bezier(.2,.7,.2,1); }   /* black and white, closer in (client, 2026-11-10) */
+.fuel-tile:hover img { transform: scale(1.24); }
+.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.38); transition: background .3s; }
 .fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
 .fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
@@ -446,8 +460,8 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2613c">
+<link rel="stylesheet" href="/assets/header.css?v=1110a">
+<link rel="stylesheet" href="/assets/site.css?v=1110a">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -461,10 +475,10 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 {body}
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=2612e" defer></script>
+<script src="/assets/site-header.js?v=1110a" defer></script>
 <script src="/assets/deco-lines.js?v=2" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js" defer></script>
+<script src="/assets/site-footer.js?v=1110a" defer></script>
 {body_scripts}</body>
 </html>
 """
@@ -480,7 +494,7 @@ def back_btn(up, spot=None):
     """the floating Back button on product and principal pages (user, 2026-11-06); `up` is where it goes with no history.
     `spot` (a commodity's slug): Back always returns to the main Commodities page where the visitor left off (client, 2026-11-07)"""
     extra = f' data-spot="{spot}"' if spot else ''
-    return f'<script src="/assets/back-btn.js?v=3" data-up="{up}"{extra} defer></script>\n'
+    return f'<script src="/assets/back-btn.js?v=4" data-up="{up}"{extra} defer></script>\n'
 
 
 def write(relpath, html):
@@ -532,10 +546,9 @@ def build_commodities_hub():
 
     # (Product groups and How we supply removed, user 2026-11-06)
 
-    body.append(section(f"""<div class="cta-band">
-  <h2>{esc(H["cta_h"])}</h2><p class="lead">{esc(H["cta_p"])}</p>{buttons(H["cta_buttons"])}</div>""", id_="cta"))
+    body.append(cta(H["cta_h"], H["cta_p"], "commodities"))
 
-    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=2613a" defer></script>\n<script src="/assets/cs-marks.js?v=20" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
+    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1110a" defer></script>\n<script src="/assets/cs-marks.js?v=20" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
 
 
 def build_group(g):
@@ -547,7 +560,7 @@ def build_group(g):
     body.append(section(f'<p class="who">{esc(g["who"])}</p>', eyebrow="Who it’s for", id_="who"))
     cards = [card(name, desc, href=f"{group_url(g['slug'])}{slug}/", more="View product →") for slug, name, desc in g["products"]]
     body.append(section(grid(cards, "c3"), title="Products", id_="products"))
-    body.append(section(f'<div class="cta-band"><p class="lead">{esc(C.GROUP_CTA)}</p>{buttons(C.GROUP_CTA_BUTTONS)}</div>', id_="cta"))
+    body.append(cta(C.COMMODITIES_HUB["cta_h"], C.GROUP_CTA, "commodities"))
     # hero3d-embed.js mounts a sticky scroll-driven scene in #hero-3d and lifts the breadcrumb/eyebrow/h1
     # out of the .hero.plain that directly follows it.
     scripts = '<script src="/assets/hero3d-embed.js" defer></script>\n' if g.get("hero3d") else ""
@@ -588,10 +601,13 @@ def product_sections(p):
             for h, its in x.get("sublists", []):
                 inner += f'<h4 class="trio-sub">{esc(h)}</h4>{ul_list(its)}'
             if inner.strip():
-                items.append(f'<div class="trio-col" id="{slugify(x.get("title", "")) or ""}"><h3>{esc(x.get("title", ""))}</h3>{inner}{col_img(x.get("img"), x.get("title", ""))}</div>')
+                items.append(f'<div class="trio-col" id="{slugify(x.get("title", "")) or ""}"><h3>{esc(x.get("title", ""))}</h3>{inner}</div>')   # no pictures under packaging & co (client, 2026-11-10)
         out.append(section(f'<div class="trio">{"".join(items)}</div>', id_="details"))
     for x in rest:
-        out.append(render_section(x))
+        html = render_section(x)
+        if x.get("spec"):   # the spec charts sit on white (client, 2026-11-10)
+            html = html.replace('<section class="section', '<section class="section spec-white', 1)
+        out.append(html)
     return out
 
 
@@ -624,7 +640,7 @@ def build_product(p):
     rel = [card(short_name(slug), HUB_LEADS.get(slug) or descriptor(slug), href=product_url(slug), more="View product →") for slug in slugs[:3]]
     if rel:
         body.append(section(grid(rel, "c3"), title="Related products", id_="related"))
-    body.append(enquiry_block())
+    body.append(cta(C.ENQUIRY["h2"], C.ENQUIRY["p"], "commodities"))
     write(f"{product_url(p['slug'])}index.html", page(short_name(p["slug"]), meta_desc(p["hero"][-1] if len(p["hero"]) > 1 and len(clean(p["hero"][0])) < 70 else p["hero"][0]), "\n".join(body), body_scripts=back_btn("/commodities/", p["slug"])))
 
 
@@ -664,7 +680,7 @@ def build_engineering_hub():
   <h1 class="arrive-title">{esc(H["h1"])}</h1></div></div>
   <div class="mq" aria-label="Principals we represent"><p class="mq-label">Principals we represent</p><div class="mq-view"><div class="mq-track">{track}</div></div></div>
 </section>''']
-    body.append(section(grid([card(h, d) for h, d in H["services"]], "c3"), title="Services", id_="services", cls="section centered-head"))   # moved up, in place of the long statement (user, 2026-11-05)
+    # Services removed (client, 2026-11-10)   # moved up, in place of the long statement (user, 2026-11-05)
 
     stops = []
     n = len(H["principals"])
@@ -684,7 +700,7 @@ def build_engineering_hub():
 </article>''')
     body.append(f'<section class="eprin" id="principals" aria-label="Principals we represent">{"".join(stops)}</section>')
 
-    body.append(section(f'<div class="cta-band"><h2>{esc(H["cta_h"])}</h2>{buttons(H["cta_buttons"])}</div>', id_="cta"))
+    body.append(cta(H["cta_h"], ENG_CTA_P, "engineering"))
     # (the cone fender line drawing under the hero was tried and removed, user 2026-11-06; eng-draw.html is kept, unused)
     scripts = ('<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n'
                '<script src="/assets/arrive.js?v=2612a" defer></script>\n<script src="/assets/eng.js?v=2611a" defer></script>\n')
@@ -709,13 +725,7 @@ def build_principal(pr):
         body.append(f'<div class="wrap pr-media"><video autoplay muted loop playsinline preload="metadata" poster="{v}.jpg" aria-label="{esc_attr(pr["name"])} product, turning"><source src="{v}.mp4" type="video/mp4"></video></div>')
     for s in pr["sections"]:
         body.append(render_section(s))
-    cta = ""
-    if pr.get("cta_h"):
-        cta += f"<h2>{esc(pr['cta_h'])}</h2>"
-    if pr.get("cta_p"):
-        cta += f'<p class="lead">{esc(pr["cta_p"])}</p>'
-    cta += buttons(pr["cta_buttons"])
-    body.append(section(f'<div class="cta-band">{cta}</div>', id_="cta"))
+    body.append(cta(pr.get("cta_h") or ENG_CTA_H, pr.get("cta_p") or ENG_CTA_P, "engineering"))
     scripts = '<script src="/assets/spin-row.js?v=6" defer></script>' if any(s.get("fuels") or s.get("media") or s.get("diagram") for s in pr["sections"]) else ""
     write(f"/engineering/{pr['slug']}/index.html", page(pr["name"], meta_desc(pr["hero"][0]), "\n".join(body), body_scripts=scripts + back_btn("/engineering/"), body_class="eng"))
 
@@ -809,6 +819,8 @@ ABOUT_CSS = """
 .vy { --vy-fg: #0F2A1E; --vy-fg-rgb: 15,42,30; background: #FFFFFF; color: var(--vy-fg);   /* pure white, the same as the ship clip's ground */
   --paper: #FFFFFF; --ink: #0F2A1E; --ink-soft: rgba(15,42,30,.78); --muted: rgba(15,42,30,.58); --line: rgba(15,42,30,.14); --line-strong: rgba(15,42,30,.3); }
 .vy-head { text-align: center; margin-left: auto; margin-right: auto; justify-items: center; }
+.vy-head h2 { font-size: clamp(40px, 5vw, 76px); }   /* Our voyage bigger, its line smaller (client, 2026-11-10) */
+.vy-head .lead { font-size: clamp(15px, 1.1vw, 17px); }
 .vy-wrap { position: relative; width: min(var(--max), 100% - 2 * var(--gutter)); margin: 0 auto; padding: 40px 0 120px; }
 .vy-lane { position: absolute; left: 50%; top: 0; bottom: 0; width: 240px; transform: translateX(-50%); pointer-events: none; }
 .vy-water { position: absolute; inset: 0; overflow: hidden;   /* a drawn river: wobbly banks, ripples that drift past the ship */
@@ -994,8 +1006,8 @@ ABOUT_CSS = """
 /* the photo: a square that fills the cell, the person standing in it; it slides up into the cell when its row arrives */
 .tg-pic { padding: 8px; }
 .tg-slide { aspect-ratio: 1 / 1; overflow: hidden; position: relative; border-radius: 2px;
-  background: radial-gradient(ellipse 85% 75% at 50% 80%, #12261b, #0a1610 62%, #050b08); }   /* almost black, a dark-dark green (user, 2026-11-06) */
-.tg-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 100%; display: block;
+  background: radial-gradient(ellipse 85% 75% at 50% 80%, #dcdedb, #cbcec9 62%, #b9bcb7); }   /* grey (client, 2026-11-10; was a dark green) */
+.tg-slide img { position: absolute; left: 50%; bottom: 0; height: calc(var(--s, 1) * 100%); width: auto; max-width: none; translate: -50% 0; display: block;   /* heads level (--s set per person) */
   transform: translateY(101%); filter: saturate(.15) contrast(1.02); transition: transform .9s cubic-bezier(.645,.045,.355,1), filter .5s ease, scale .6s cubic-bezier(.2,.7,.2,1);
   transition-delay: calc(var(--c, 0) * .12s), 0s, 0s; }
 .tg-cell.in .tg-slide img { transform: none; }
@@ -1057,7 +1069,7 @@ def build_about():
     {stops}
   </div>
 </section>''')
-    specialise = section(grid([card(h, p, href=href, more="Learn more →") for h, p, href in A["specialise"]], "c3"), title="What we specialise in", id_="specialise")
+    specialise = section(grid([card(h, p, href=href, more="Learn more →") for h, p, href in A["specialise"]], "c2"), title="What we specialise in", id_="specialise")
     # the team lookbook: everyone in one line (team-lookbook.js), a part of the globe at the side (team-globe.js)
     people = [dict(name=n, role=r, entity=e, slug=slug, office=o, city=A["office_pins"][o][0], country=A["office_pins"][o][1],
                    lat=A["office_pins"][o][2], lon=A["office_pins"][o][3], blurb=b) for n, r, e, slug, o, b in A["team"]]
@@ -1113,9 +1125,20 @@ def build_about():
     # Our team: everyone in a white Terminal-style grid (terminal-industries.com/about "Our Leaders"): hairline cells with
     # corner crosses, square photos that slide up into their cells, the cell lights up green on hover (client, 2026-11-06)
     cross = lambda pos: f'<i class="tg-x {pos}" aria-hidden="true"></i>'
+    # every head at the same height in its square and a little smaller (client, 2026-11-10): each cutout is scaled from
+    # the bottom so the top of the head lands 15% down the square (head_top = where the head starts in that cutout)
+    def head_scale(slug):
+        try:
+            import numpy as _np
+            from PIL import Image as _Im
+            a = _np.array(_Im.open(os.path.join(ROOT, f"assets/team/cut/{slug}.webp")).convert("RGBA"))[..., 3]
+            top = _np.where((a > 128).sum(1) > 8)[0][0] / a.shape[0]
+        except Exception:
+            top = 0.05
+        return round(0.85 / (1 - top), 3)
     cells = "".join(f'''<li class="tg-cell">{cross("tl")}{cross("tr")}{cross("bl")}{cross("br")}
-  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/{slug}.webp?v=2" alt="{esc_attr(n)}" loading="lazy" decoding="async" width="900" height="781"></div></div>
-  <div class="tg-meta"><b>{esc(n)}</b><span>{esc(r)}</span><small>{esc(e)}</small></div></li>''' for n, r, e, slug, _, _ in A["team"])
+  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/{slug}.webp?v=2" alt="{esc_attr(n)}" loading="lazy" decoding="async" width="900" height="781" style="--s:{head_scale(slug)}"></div></div>
+  <div class="tg-meta"><b>{esc(n)}</b><span>{esc(r)}</span></div></li>''' for n, r, e, slug, _, _ in A["team"])   # two lines: name and title (client, 2026-11-10)
     our_team = f'''<section class="section tg" id="our-team">
   <div class="wrap section-head tg-head"><p class="eyebrow">Our team</p><h2>The people behind every delivery</h2></div>
   <ul class="tg-grid">{cells}{'<li class="tg-cell tg-empty" aria-hidden="true"></li>' * ((-len(A["team"])) % 3)}</ul>
@@ -1132,7 +1155,7 @@ def build_about():
     # order (client, 2026-11-06): Seamless solutions across borders (the lookbook), Our voyage, Our story, What we specialise in, Our team
     body += [voyage, story_sec, specialise, our_team]
     # the closing call: no card, centred, about working with the people above
-    body.append(section(f'<div class="cta-band plain"><p class="eyebrow">{esc(A["cta_eyebrow"])}</p><h2>{esc(A["cta_h"])}</h2><p class="lead">{esc(A["cta_p"])}</p>{buttons(A["cta_buttons"])}</div>', id_="cta"))
+    body.append(cta(A["cta_h"], A["cta_p"], "general"))
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
     scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=10" defer></script>\n<script type="module" src="/assets/team-globe.js?v=15"></script>\n'
@@ -1158,8 +1181,9 @@ CONTACT_CSS = """
 .contact-grid { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
 .contact-aside { position: sticky; top: 110px; display: grid; gap: 22px; padding: clamp(24px, 2.6vw, 34px); border: 1px solid var(--line-strong); border-radius: 16px; background: rgba(var(--ink-rgb), .035); }
 .contact-aside .ca-item { display: grid; gap: 6px; padding-top: 18px; border-top: 1px solid var(--line); }
-.contact-aside h3 { font-size: 18px; font-weight: 500; }
-.contact-aside p { font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+.contact-aside h3 { font-size: 23px; font-weight: 500; letter-spacing: -.015em; }   /* the two division titles bigger, their lines smaller (client, 2026-11-10) */
+.contact-aside p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+#quote .section-head h2 { font-size: clamp(38px, 4.4vw, 64px); }   /* Drop us a line bigger */
 .contact-aside .ca-mail { display: grid; gap: 14px; padding-top: 20px; border-top: 1px solid var(--line); }
 .contact-aside .ca-mail .pill { justify-self: start; font-size: 14.5px; }
 .contact-aside .ca-wa { justify-self: start; margin-top: 8px; font-size: 14.5px; }
@@ -1235,7 +1259,7 @@ CONTACT_JS = """
 def build_contact():
     K = C.CONTACT_PAGE
     body = []
-    body.append(f"""<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg" alt="The HexaHessman office" fetchpriority="high"></div>
+    body.append(f"""<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg?v=2" alt="The HexaHessman office" fetchpriority="high"></div>
 <div class="wrap">{crumbs([("Home", "/"), ("Contact", None)])}<p class="eyebrow">{esc(K["eyebrow"])}</p><h1>{esc(K["h1"])}</h1><p class="lead">{esc(K["lead"])}</p></div></section>""")   # their office photo (from hexahessman.com's about page)
     team = [{"name": n, "role": r, "slug": s, "office": o} for n, r, e, s, o, _ in C.ABOUT["team"]]   # everyone in each office, Singapore included (user, 2026-11-06)
     body.append(f'<section id="globe" class="globe" data-people="{_html.escape(json.dumps(team, ensure_ascii=False), quote=True)}"></section>')   # the office globe, under the photo hero
@@ -1296,7 +1320,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=18"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=19"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 

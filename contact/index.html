@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2613c">
+<link rel="stylesheet" href="/assets/header.css?v=1110a">
+<link rel="stylesheet" href="/assets/site.css?v=1110a">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -72,14 +72,14 @@
 .hero.has-logo .crumbs { justify-content: center; }
 .hero.has-logo .lead, .hero.has-logo .coverage { margin-left: auto; margin-right: auto; }
 /* solutions by fuel: four photo tiles in one line; they rise (1st, 3rd) and drop (2nd, 4th) into place when the row scrolls in; a tile opens its drop-down */
-.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 1.6vw, 22px); }
-.fuel-tile { position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
+.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1vw, 14px); width: min(1500px, 100vw - 2 * var(--gutter)); position: relative; left: 50%; transform: translateX(-50%); }   /* wider than the text column, tiles taller (client, 2026-11-10) */
+.fuel-tile { position: relative; aspect-ratio: 3 / 4; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
   opacity: 0; transform: translateY(70px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * .12s); }
 .fuel-tile:nth-child(even) { transform: translateY(-70px); }
 .fuel-row.in .fuel-tile { opacity: 1; transform: none; }
-.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-.fuel-tile:hover img { transform: scale(1.05); }
-.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.45); transition: background .3s; }
+.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.06); transform: scale(1.18); transition: transform .6s cubic-bezier(.2,.7,.2,1); }   /* black and white, closer in (client, 2026-11-10) */
+.fuel-tile:hover img { transform: scale(1.24); }
+.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.38); transition: background .3s; }
 .fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
 .fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
@@ -158,8 +158,9 @@
 .contact-grid { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
 .contact-aside { position: sticky; top: 110px; display: grid; gap: 22px; padding: clamp(24px, 2.6vw, 34px); border: 1px solid var(--line-strong); border-radius: 16px; background: rgba(var(--ink-rgb), .035); }
 .contact-aside .ca-item { display: grid; gap: 6px; padding-top: 18px; border-top: 1px solid var(--line); }
-.contact-aside h3 { font-size: 18px; font-weight: 500; }
-.contact-aside p { font-size: 15px; line-height: 1.55; color: var(--ink-soft); }
+.contact-aside h3 { font-size: 23px; font-weight: 500; letter-spacing: -.015em; }   /* the two division titles bigger, their lines smaller (client, 2026-11-10) */
+.contact-aside p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+#quote .section-head h2 { font-size: clamp(38px, 4.4vw, 64px); }   /* Drop us a line bigger */
 .contact-aside .ca-mail { display: grid; gap: 14px; padding-top: 20px; border-top: 1px solid var(--line); }
 .contact-aside .ca-mail .pill { justify-self: start; font-size: 14.5px; }
 .contact-aside .ca-wa { justify-self: start; margin-top: 8px; font-size: 14.5px; }
@@ -199,7 +200,7 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 <body>
 <div id="site-header"></div>
 <main>
-<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg" alt="The HexaHessman office" fetchpriority="high"></div>
+<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg?v=2" alt="The HexaHessman office" fetchpriority="high"></div>
 <div class="wrap"><p class="eyebrow">Contact</p><h1>Navigating with Excellence</h1><p class="lead">We are pleased to offer our full assistance and address any queries you may have.</p></div></section>
 <section id="globe" class="globe" data-people="[{&quot;name&quot;: &quot;Adam Yeoh&quot;, &quot;role&quot;: &quot;Business Development Manager&quot;, &quot;slug&quot;: &quot;adam-yeoh&quot;, &quot;office&quot;: &quot;sg&quot;}, {&quot;name&quot;: &quot;Aizat Amin&quot;, &quot;role&quot;: &quot;Business Development Manager&quot;, &quot;slug&quot;: &quot;aizat-amin&quot;, &quot;office&quot;: &quot;sg&quot;}, {&quot;name&quot;: &quot;Parin Udornwong&quot;, &quot;role&quot;: &quot;Supply Chain Manager&quot;, &quot;slug&quot;: &quot;parin-udornwong&quot;, &quot;office&quot;: &quot;th&quot;}, {&quot;name&quot;: &quot;Ensari Inci&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;slug&quot;: &quot;ensari-inci&quot;, &quot;office&quot;: &quot;tr&quot;}, {&quot;name&quot;: &quot;Dr. Sang Joon Park&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;slug&quot;: &quot;sang-joon-park&quot;, &quot;office&quot;: &quot;kr&quot;}, {&quot;name&quot;: &quot;Raja Sekhar&quot;, &quot;role&quot;: &quot;Trade Specialist&quot;, &quot;slug&quot;: &quot;raja-sekhar&quot;, &quot;office&quot;: &quot;in&quot;}, {&quot;name&quot;: &quot;Thanin Amin&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;thanin-amin&quot;, &quot;office&quot;: &quot;th&quot;}, {&quot;name&quot;: &quot;Cemal Koc&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;cemal-koc&quot;, &quot;office&quot;: &quot;tr&quot;}, {&quot;name&quot;: &quot;Yos Rizaldy&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;yos-rizaldy&quot;, &quot;office&quot;: &quot;id&quot;}, {&quot;name&quot;: &quot;Krishna Hartono&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;krishna-hartono&quot;, &quot;office&quot;: &quot;id&quot;}, {&quot;name&quot;: &quot;Larbi Neron&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;larbi-neron&quot;, &quot;office&quot;: &quot;uk&quot;}, {&quot;name&quot;: &quot;Eddie Jeong&quot;, &quot;role&quot;: &quot;Regional Business Director&quot;, &quot;slug&quot;: &quot;eddie-jeong&quot;, &quot;office&quot;: &quot;kr&quot;}, {&quot;name&quot;: &quot;Yani Lee&quot;, &quot;role&quot;: &quot;President Director&quot;, &quot;slug&quot;: &quot;yani-lee&quot;, &quot;office&quot;: &quot;id&quot;}, {&quot;name&quot;: &quot;Ibrahim Koc&quot;, &quot;role&quot;: &quot;Principal Advisor&quot;, &quot;slug&quot;: &quot;ibrahim-koc&quot;, &quot;office&quot;: &quot;tr&quot;}, {&quot;name&quot;: &quot;Anuar Ebrahim&quot;, &quot;role&quot;: &quot;Director of Trading&quot;, &quot;slug&quot;: &quot;anuar-ebrahim&quot;, &quot;office&quot;: &quot;my&quot;}, {&quot;name&quot;: &quot;Azmi Mahmood&quot;, &quot;role&quot;: &quot;Principal Advisor&quot;, &quot;slug&quot;: &quot;azmi-mahmood&quot;, &quot;office&quot;: &quot;sg&quot;}, {&quot;name&quot;: &quot;Connie Tai&quot;, &quot;role&quot;: &quot;Chief Financial Officer&quot;, &quot;slug&quot;: &quot;connie-tai&quot;, &quot;office&quot;: &quot;sg&quot;}, {&quot;name&quot;: &quot;Hafriz Razif&quot;, &quot;role&quot;: &quot;Chief Executive Officer&quot;, &quot;slug&quot;: &quot;hafriz-razif&quot;, &quot;office&quot;: &quot;sg&quot;}]"></section>
 <section class="section" id="quote"><div class="wrap"><div class="section-head"><h2>Drop us a line</h2></div><div class="contact-grid"><aside class="contact-aside" id="response">
@@ -271,10 +272,10 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 </script>
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=2612e" defer></script>
+<script src="/assets/site-header.js?v=1110a" defer></script>
 <script src="/assets/deco-lines.js?v=2" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js" defer></script>
-<script type="module" src="/assets/globe.js?v=18"></script>
+<script src="/assets/site-footer.js?v=1110a" defer></script>
+<script type="module" src="/assets/globe.js?v=19"></script>
 </body>
 </html>

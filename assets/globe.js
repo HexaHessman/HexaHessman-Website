@@ -26,8 +26,15 @@ if (TEAM.length) OFFICES.forEach(o => { o.leads = TEAM.filter(p => p.office === 
 // each cutout's head sits a little differently in its photo: dx moves the head onto its spot (in % of the figure's width),
 // s can even out a figure's size
 const FIT = { 'azmi-mahmood': { dx: -2.4 }, 'aizat-amin': { dx: -0.1 }, 'adam-yeoh': { dx: 1.1 }, 'hafriz-razif': { dx: -0.1 }, 'connie-tai': { dx: -9 } };   // Connie: Azmi's size, her shoulder tucked behind Hafriz's as Azmi's is behind Aizat's (client, 2026-11-07)
-const LINE_ORDER = { sg: ['azmi-mahmood', 'aizat-amin', 'adam-yeoh', 'hafriz-razif', 'connie-tai'] };
-OFFICES.forEach(o => { const ord = LINE_ORDER[o.id]; if (ord && o.leads) o.leads.sort((a, b) => (ord.indexOf(a.slug) + 99) % 99 - (ord.indexOf(b.slug) + 99) % 99); });
+// (client, 2026-11-10) Singapore's line is Aizat, Azmi (in the middle) and Adam only; Yos stands in the middle for Indonesia;
+// Thanin and Parin swap places. The office's list in the card keeps everyone, with Connie and Hafriz switched.
+const LINE_ORDER = { sg: ['aizat-amin', 'azmi-mahmood', 'adam-yeoh'], id: ['krishna-hartono', 'yos-rizaldy', 'yani-lee'], th: ['thanin-amin', 'parin-udornwong'] };
+const LIST_ORDER = { sg: ['azmi-mahmood', 'aizat-amin', 'adam-yeoh', 'connie-tai', 'hafriz-razif'] };
+const byOrder = ord => (a, b) => (ord.indexOf(a.slug) + 99) % 99 - (ord.indexOf(b.slug) + 99) % 99;
+OFFICES.forEach(o => { if (!o.leads) return;
+  const lo = LIST_ORDER[o.id], li = LINE_ORDER[o.id];
+  o.list = lo ? o.leads.slice().sort(byOrder(lo)) : o.leads.slice();
+  if (li) { o.leads = o.leads.filter(p => li.includes(p.slug) || o.id !== 'sg').sort(byOrder(li)); } });
 const INK = 0xeee3c7, PAPER = 0x0F2A1E;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -120,7 +127,7 @@ function select(i, byUser) {
   const fitNames = () => { const h = Math.max(0, ...[...names.children].map(n => n.offsetHeight)); names.style.bottom = `calc(2% + ${h + 4}px)`; };
   fitNames(); requestAnimationFrame(fitNames); if (document.fonts) document.fonts.ready.then(fitNames);
   line.classList.remove('in'); void line.offsetWidth; line.classList.add('in');
-  const people = L.map(l => `
+  const people = (o.list || L).map(l => `
       <div class="lead"><div><div class="who">${l.name}</div><div class="muted">${l.role}</div></div></div>`   /* no personal emails (client, 2026-11-06) */).join('');
   card.innerHTML = `
     <div class="globe-card-head"><span class="eyebrow">${o.entity}</span><h3>${o.country}</h3></div>

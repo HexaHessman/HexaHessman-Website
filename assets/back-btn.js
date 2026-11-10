@@ -21,6 +21,10 @@
   b.type = 'button'; b.className = 'back-btn'; b.setAttribute('aria-label', 'Go back');
   b.innerHTML = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M16 10H4M9 5l-5 5 5 5"/></svg><span>Back</span>';
   document.body.appendChild(b);
+  // its right edge lines up with the header bar's right edge (client, 2026-11-10)
+  const align = () => { const bar = document.querySelector('.site-header .bar'); if (!bar) return;
+    const r = bar.getBoundingClientRect(); if (r.width) b.style.right = Math.max(10, document.documentElement.clientWidth - r.right) + 'px'; };
+  align(); addEventListener('resize', align); addEventListener('load', align); setTimeout(align, 400);
   requestAnimationFrame(() => setTimeout(() => b.classList.add('on'), 300));
 
   // Commodities products (data-spot = the product's slug): Back always returns to the main Commodities page, at the

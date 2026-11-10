@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2613c">
+<link rel="stylesheet" href="/assets/header.css?v=1110a">
+<link rel="stylesheet" href="/assets/site.css?v=1110a">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -72,14 +72,14 @@
 .hero.has-logo .crumbs { justify-content: center; }
 .hero.has-logo .lead, .hero.has-logo .coverage { margin-left: auto; margin-right: auto; }
 /* solutions by fuel: four photo tiles in one line; they rise (1st, 3rd) and drop (2nd, 4th) into place when the row scrolls in; a tile opens its drop-down */
-.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 1.6vw, 22px); }
-.fuel-tile { position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
+.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1vw, 14px); width: min(1500px, 100vw - 2 * var(--gutter)); position: relative; left: 50%; transform: translateX(-50%); }   /* wider than the text column, tiles taller (client, 2026-11-10) */
+.fuel-tile { position: relative; aspect-ratio: 3 / 4; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
   opacity: 0; transform: translateY(70px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * .12s); }
 .fuel-tile:nth-child(even) { transform: translateY(-70px); }
 .fuel-row.in .fuel-tile { opacity: 1; transform: none; }
-.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-.fuel-tile:hover img { transform: scale(1.05); }
-.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.45); transition: background .3s; }
+.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.06); transform: scale(1.18); transition: transform .6s cubic-bezier(.2,.7,.2,1); }   /* black and white, closer in (client, 2026-11-10) */
+.fuel-tile:hover img { transform: scale(1.24); }
+.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.38); transition: background .3s; }
 .fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
 .fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
@@ -159,22 +159,18 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 
 <section class="section" id="pneumatic-fender"><div class="wrap"><div class="zig right"><figure class="zig-media zig-photo"><video autoplay muted loop playsinline preload="metadata" poster="/assets/engineering/shibata/pneumatic-float.jpg" aria-label="Pneumatic Fender"><source src="/assets/engineering/shibata/pneumatic-float.mp4" type="video/mp4"></video></figure><div class="zig-text has-drawing"><img class="zig-drawing" src="/assets/engineering/shibata/pneumatic-drawing.webp" alt="" aria-hidden="true" loading="lazy"><h2>Pneumatic Fender</h2><p>An abrasion-resistant rubber fender filled with high-pressure air. It deflates easily for simple, low-cost relocation and re-commissioning elsewhere.</p><p>Diameters from 300 mm to 4,500 mm and lengths from 500 mm to 9,000 mm, plus special sizes.</p><h3 class="zig-sub">Characteristics</h3><ul class="list"><li>Proportional increase of energy and reaction</li><li>Low hull pressure</li><li>Economical</li><li>Deflates for use in other locations or storage on deck</li><li>Built to ISO 17357-1:2014</li></ul><h3 class="zig-sub">Applications</h3><ul class="list"><li>Ports with extreme tidal variations</li><li>Ship-to-ship lightering</li><li>Oil &amp; gas (typically FSRU)</li><li>Temporary berthing</li></ul></div></div></div></section>
 
-<section class="section" id="parallel-motion-fenders"><div class="wrap"><div class="zig left"><figure class="zig-media zig-photo"><img src="/assets/engineering/shibata/parallel-motion.jpg" alt="Parallel Motion Fenders" loading="lazy" decoding="async"></figure><div class="zig-text has-drawing"><img class="zig-drawing" src="/assets/engineering/shibata/parallel-motion-drawing.webp" alt="" aria-hidden="true" loading="lazy"><h2>Parallel Motion Fenders</h2><p>Individually engineered systems. A torsion arm between the back structure and the steel front panel lets the panel move only parallel to its mounting, whatever the impact level and angle.</p><h3 class="zig-sub">Characteristics</h3><ul class="list"><li>Equal energy absorption at any impact level</li><li>Only parallel panel movement, so no second ship/panel contact</li><li>Substantially lower reaction forces with back-to-back rubber units</li><li>Lower hull pressures and a lighter substructure, cutting project cost</li></ul><h3 class="zig-sub">Applications</h3><ul class="list"><li>Bulk terminals</li><li>Oil &amp; gas terminals</li><li>Ferry &amp; RoRo terminals</li><li>Monopiles</li><li>Load-sensitive structures</li></ul></div></div></div></section>
-
-<section class="section" id="hydropneumatic-fender"><div class="wrap"><div class="zig right"><figure class="zig-media zig-photo"><img src="/assets/engineering/shibata/hydropneumatic.jpg" alt="Hydropneumatic Fender" loading="lazy" decoding="async"></figure><div class="zig-text"><h2>Hydropneumatic Fender</h2><p>A version of the Pneumatic Fender developed for submarines: partly filled with water and air and counterweighted to stay vertical, so the submerged hull is protected at all times. Performance depends on the air-to-water ratio and initial pressure.</p><h3 class="zig-sub">Characteristics</h3><ul class="list"><li>Submerged contact area</li><li>Low hull pressure</li><li>Adjustable draft</li><li>Movable</li></ul><h3 class="zig-sub">Applications</h3><ul class="list"><li>Submarine jetties</li><li>Certain ferry types</li><li>Oil rigs</li></ul></div></div></div></section>
-
 <section class="section" id="ocean-guard-foam-fender"><div class="wrap"><div class="zig left"><figure class="zig-media zig-photo"><video autoplay muted loop playsinline preload="metadata" poster="/assets/engineering/shibata/ocean-guard-float.jpg" aria-label="Ocean Guard Foam Fender"><source src="/assets/engineering/shibata/ocean-guard-float.mp4" type="video/mp4"></video></figure><div class="zig-text has-drawing"><img class="zig-drawing" src="/assets/engineering/shibata/ocean-guard-drawing.webp" alt="" aria-hidden="true" loading="lazy"><h2>Ocean Guard Foam Fender</h2><p>A heat-laminated, 100% closed-cell foam core under a thick, nylon-reinforced polyurethane skin with embedded end fittings: high energy absorption, hull-conforming, non-marking and low maintenance.</p><p>Diameters from 500 mm to 4,500 mm and lengths from 800 mm to 10,600 mm, in several foam grades and special shapes, with two- or four-point mounting.</p><h3 class="zig-sub">Characteristics</h3><ul class="list"><li>Proportional increase of energy and reaction</li><li>Extremely robust</li><li>No performance loss and unsinkable even if damaged</li><li>Small skin damage repairable on site</li><li>Low hull pressure, non-marking skin</li></ul><h3 class="zig-sub">Applications</h3><ul class="list"><li>Navy berths and cruise terminals</li><li>Ship-to-ship operations</li><li>Ship-to-shore operations</li><li>Oil &amp; gas terminals</li></ul></div></div></div></section>
 
-<section class="section" id="roller-wheel-fender"><div class="wrap"><div class="zig right"><figure class="zig-media zig-photo"><img src="/assets/engineering/shibata/roller.jpg" alt="Roller / Wheel Fender" loading="lazy" decoding="async"></figure><div class="zig-text has-drawing"><img class="zig-drawing" src="/assets/engineering/shibata/roller-drawing.webp" alt="" aria-hidden="true" loading="lazy"><h2>Roller / Wheel Fender</h2><p>An energy-absorbing elastomer unit on a single rotating shaft with maintenance-free stainless and composite bearings.</p><h3 class="zig-sub">Installed as</h3><ul class="list"><li>Stacked double or triple to cover tidal heights</li><li>Side by side to guide vessels through narrow passages</li><li>At an angle to suit the hull's flare</li></ul><h3 class="zig-sub">Applications</h3><ul class="list"><li>Entrances to locks, dry docks and other narrow or exposed areas</li></ul></div></div></div></section>
+<section class="section" id="roller-wheel-fender"><div class="wrap"><div class="zig right"><figure class="zig-media zig-photo"><video autoplay muted loop playsinline preload="metadata" poster="/assets/engineering/shibata/roller-float.jpg" aria-label="Roller / Wheel Fender"><source src="/assets/engineering/shibata/roller-float.mp4" type="video/mp4"></video></figure><div class="zig-text has-drawing"><img class="zig-drawing" src="/assets/engineering/shibata/roller-drawing.webp" alt="" aria-hidden="true" loading="lazy"><h2>Roller / Wheel Fender</h2><p>An energy-absorbing elastomer unit on a single rotating shaft with maintenance-free stainless and composite bearings.</p><h3 class="zig-sub">Installed as</h3><ul class="list"><li>Stacked double or triple to cover tidal heights</li><li>Side by side to guide vessels through narrow passages</li><li>At an angle to suit the hull's flare</li></ul><h3 class="zig-sub">Applications</h3><ul class="list"><li>Entrances to locks, dry docks and other narrow or exposed areas</li></ul></div></div></div></section>
 
-<section class="section" id="cta"><div class="wrap"><div class="cta-band"><p class="lead">Backed by local support for sizing, supply, installation and after-sales service.</p><div class="btn-row"><a class="pill solid" href="/contact/#quote">Request fender sizing / quotation</a><a class="pill" href="/contact/#service">Book a service visit</a></div></div></div></section>
+<section class="section" id="cta"><div class="wrap"><div class="cta-band"><h2>Engineered for excellence, supported for life.</h2><p class="lead">Backed by local support for sizing, supply, installation and after-sales service.</p><div class="btn-row"><a class="pill solid" href="mailto:inquiry@hexahessman.com">Email us</a></div></div></div></section>
 
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=2612e" defer></script>
+<script src="/assets/site-header.js?v=1110a" defer></script>
 <script src="/assets/deco-lines.js?v=2" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js" defer></script>
-<script src="/assets/spin-row.js?v=6" defer></script><script src="/assets/back-btn.js?v=3" data-up="/engineering/" defer></script>
+<script src="/assets/site-footer.js?v=1110a" defer></script>
+<script src="/assets/spin-row.js?v=6" defer></script><script src="/assets/back-btn.js?v=4" data-up="/engineering/" defer></script>
 </body>
 </html>

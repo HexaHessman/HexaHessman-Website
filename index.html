@@ -8,8 +8,8 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/header.css?v=2611d" />
-<link rel="stylesheet" href="/assets/site.css?v=2613c" />
+<link rel="stylesheet" href="/assets/header.css?v=1110a" />
+<link rel="stylesheet" href="/assets/site.css?v=1110a" />
 <!-- warm the cache for the preloader drawing (logo.html) so it can start sooner -->
 <link rel="preload" href="/assets/vendor/three.module.js?v=160" as="script" crossorigin>
 <link rel="preload" href="/assets/vendor/three-addons/lines/LineSegments2.js" as="script" crossorigin>
@@ -38,13 +38,6 @@
 
   /* preloader: the 3D drawing of the mark (logo.html?preloader) draws on, spins out, and the loader fades onto the port */
   .loader { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: var(--paper); transition: opacity .3s cubic-bezier(.4,0,.2,1); }
-  /* a thin loading bar under the mark that fills while it draws (user, 2026-11-06) */
-  .loader .pl-bar { position: absolute; left: 50%; top: 81vh; width: min(240px, 27vh); height: 2px; translate: -50% 0; border-radius: 2px; background: rgba(238,227,199,.16); overflow: hidden; z-index: 1; transition: opacity .25s; }
-  .loader .pl-bar i { position: absolute; inset: 0; background: var(--ink); transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 8px rgba(238,227,199,.6); }
-  .loader.filling .pl-bar i { transform: scaleX(.92); transition: transform 2.4s cubic-bezier(.3,.1,.3,1); }   /* fills with the drawing (2.4 s, client 2026-11-08) */
-  .loader.full .pl-bar i { transform: scaleX(1); transition: transform .12s ease-out; }
-  .loader.spin .pl-bar { opacity: 0; }
-  @media (orientation: portrait) { .loader .pl-bar { top: calc(50% + min(46vw, 30vh)); width: 38vw; } }
   .loader .pl-logo { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; opacity: 0; transition: opacity .2s; }
   .loader.mark .pl-logo { opacity: 1; }
   .loader.out { opacity: 0; }
@@ -153,12 +146,11 @@
   <div class="loader mark" id="loader" role="img" aria-label="HexaHessman">
     <!-- the 3D drawing of the mark: draws itself on, then spins out while the loader fades onto the port -->
     <iframe class="pl-logo" src="/logo.html?preloader&v=13" title="" aria-hidden="true" tabindex="-1"></iframe>
-    <div class="pl-bar" aria-hidden="true"><i></i></div>
   </div>
 </div>
 
 <div id="site-header"></div>
-<script src="/assets/site-header.js?v=2612e" defer></script>
+<script src="/assets/site-header.js?v=1110a" defer></script>
 
 <script>
 (() => {
@@ -196,11 +188,7 @@
   (async function preload() {
     if (reduce) { await introReady; loader.classList.add('done'); return settle(); }
     await frame(); loader.classList.add('mark');
-    // the bar fills as the drawing runs: it starts when the drawing page has loaded, and completes when it says it is done
-    const fill = () => loader.classList.add('filling');
-    try { if (plLogo.contentDocument && plLogo.contentDocument.readyState === 'complete') fill(); else plLogo.addEventListener('load', fill, { once: true }); } catch (e) { fill(); }
-    setTimeout(fill, 500);
-    await drawn; loader.classList.add('filling', 'full');   // the drawing finishes, then it opens straight away
+    await drawn;   // the drawing finishes, then it opens straight away
     const ok = await Promise.race([introReady, wait(1500).then(() => intro.readyState >= 2)]);   // give the 4 s intro up to 1.5 s to be ready, so a first visit still sees the fly-in (2026-11-07)
     loader.classList.add('spin');
     plLogo.contentWindow && plLogo.contentWindow.postMessage({ type: 'logo-spinout' }, '*');

@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=2611d">
-<link rel="stylesheet" href="/assets/site.css?v=2613c">
+<link rel="stylesheet" href="/assets/header.css?v=1110a">
+<link rel="stylesheet" href="/assets/site.css?v=1110a">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -72,14 +72,14 @@
 .hero.has-logo .crumbs { justify-content: center; }
 .hero.has-logo .lead, .hero.has-logo .coverage { margin-left: auto; margin-right: auto; }
 /* solutions by fuel: four photo tiles in one line; they rise (1st, 3rd) and drop (2nd, 4th) into place when the row scrolls in; a tile opens its drop-down */
-.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(10px, 1.6vw, 22px); }
-.fuel-tile { position: relative; aspect-ratio: 4 / 3; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
+.fuel-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1vw, 14px); width: min(1500px, 100vw - 2 * var(--gutter)); position: relative; left: 50%; transform: translateX(-50%); }   /* wider than the text column, tiles taller (client, 2026-11-10) */
+.fuel-tile { position: relative; aspect-ratio: 3 / 4; overflow: hidden; display: grid; place-items: center; align-content: center; gap: 16px; padding: 0; border: 0; background: #0F2A1E; color: #fff; font: inherit; cursor: pointer;
   opacity: 0; transform: translateY(70px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * .12s); }
 .fuel-tile:nth-child(even) { transform: translateY(-70px); }
 .fuel-row.in .fuel-tile { opacity: 1; transform: none; }
-.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-.fuel-tile:hover img { transform: scale(1.05); }
-.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.45); transition: background .3s; }
+.fuel-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.06); transform: scale(1.18); transition: transform .6s cubic-bezier(.2,.7,.2,1); }   /* black and white, closer in (client, 2026-11-10) */
+.fuel-tile:hover img { transform: scale(1.24); }
+.fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.38); transition: background .3s; }
 .fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
 .fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
@@ -158,9 +158,9 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=2612e" defer></script>
+<script src="/assets/site-header.js?v=1110a" defer></script>
 <script src="/assets/deco-lines.js?v=2" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js" defer></script>
+<script src="/assets/site-footer.js?v=1110a" defer></script>
 </body>
 </html>

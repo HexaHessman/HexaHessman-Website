@@ -33,6 +33,7 @@ html { scroll-padding-top: 120px; }
 /* logo */
 .logo-link { display: inline-flex; align-items: center; gap: 9px; color: inherit; text-decoration: none; min-width: 0; }
 .logo-link svg { width: 26px; height: 26px; flex: none; display: block; }
+.logo-link svg.hh-lockup { width: auto; height: 36px; aspect-ratio: 3.55; }   /* the client's lockup: mark + HEXA / HESSMAN (2026-11-10) */
 .logo-link .word {
   font-family: var(--hdr-sans); font-weight: 600; font-size: 20px; letter-spacing: -0.03em; line-height: 1;
   white-space: nowrap;
@@ -78,6 +79,7 @@ html { scroll-padding-top: 120px; }
   .nav, .actions { display: none; }
   .menu-btn { display: block; }
   .logo-link svg { width: 28px; height: 28px; }
+  .logo-link svg.hh-lockup { width: auto; height: 34px; }
   .logo-link .word { font-size: 21px; }
 }
 @media (max-width: 480px) {
@@ -85,6 +87,7 @@ html { scroll-padding-top: 120px; }
   .site-header.scrolled { padding-top: 10px; }
   .bar { padding: 16px 18px; gap: 16px; }
   .logo-link svg { width: 24px; height: 24px; }
+  .logo-link svg.hh-lockup { width: auto; height: 30px; }
   .logo-link .word { font-size: 18px; }
   .menu-btn { width: 34px; }
 }

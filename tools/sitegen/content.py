@@ -501,7 +501,7 @@ RELATED_ALIASES = {
 
 ENQUIRY = {
     "h2": "Let’s connect",
-    "p": "Our team is ready to support your needs. For technical datasheets, pricing details or sample requests, contact us today.",
+    "p": "For technical datasheets, pricing or samples, message our supply team on WhatsApp.",
     "buttons": ["Request datasheet / SDS", "Request pricing", "Request a sample"],
     "partner_h": "Your partner in quality",
     "partner_p": "We source high-grade materials, apply strict quality control and inspect every shipment. Our dedicated support team ensures reliability and a seamless post-sale partnership.",
@@ -511,7 +511,7 @@ ENQUIRY = {
 COMMODITIES_HUB = {
     "eyebrow": "Commodities Supply Division",
     "h1": "Specialist supply across five industrial value chains",
-    "lead": "We concentrate on five product groups where we have direct producer relationships and technical depth. Each is built around the industries we serve, so buyers find the products, grades and documentation they need in one place.",
+    "lead": "Five product groups where we have direct producer relationships and technical depth.",   # one sentence (client, 2026-11-10)
     "buttons": ["Request a quote", "Talk to the supply desk"],
     "how": [
         ["Origins", "[e.g. China, Middle East, Indonesia, India; confirm]"],
@@ -554,7 +554,7 @@ ABOUT = {
     "specialise": [
         ("Commodities Supply", "Five specialist product groups: fertilizer & phosphate, metallurgical reductants, industrial chemicals, petroleum & oilfield products and biomass.", "/commodities/"),
         ("Engineering Solutions", "Fendering, mooring, fluid transfer and gas detection from world-leading principals, with project management and after-sales support.", "/engineering/"),
-        ("Local presence, regional reach", "Operating footprints and partner networks supporting trade across Southeast Asia and beyond.", "/contact/#offices"),
+        # "Local presence, regional reach" removed: the two divisions only (client, 2026-11-10)
     ],
     "values": ["Operational discipline", "Strategic insight", "People-first", "Integrity, excellence, performance"],
     "reach_h": "Global reach, local impact",
@@ -621,7 +621,7 @@ ENGINEERING_HUB = {
     "lead": "With deep consultancy expertise in project identification, strategic development and stakeholder engagement, we deliver marine and energy systems from world-leading principals and stand behind them with local after-sales service across Southeast Asia.",
     "buttons": ["Discuss a project", "Request service / maintenance"],
     "principals": [
-        ("shibata", "ShibataFenderTeam", "Cone, element, cylindrical, pneumatic, foam and parallel-motion fender systems."),
+        ("shibata", "ShibataFenderTeam", "Cone, element, cylindrical, pneumatic, foam and roller fender systems."),
         ("manntek", "MannTek", "Dry cryogenic couplings, breakaway couplings and emergency release systems for LNG, ammonia, methanol and hydrogen."),
         ("straatman", "Straatman", "Quick release mooring hooks, ship-to-shore links, smart bollards and berthing aid systems."),
         ("raythink", "Raythink", "AR, optical and AI-driven gas-leak detection and real-time hazard monitoring."),
@@ -631,7 +631,7 @@ ENGINEERING_HUB = {
     "statement": "With deep consultancy expertise in project identification, strategic development and stakeholder engagement, we deliver marine and energy systems from world-leading principals and stand behind them with local after-sales service across Southeast Asia.",
     # key products shown on each principal's stop in the hub scroll (from the principal pages and the company profile PDF)
     "principal_tags": {
-        "shibata": ["SPC cone fenders", "Element fenders", "Cylindrical fenders", "Parallel motion fenders", "Pneumatic fenders", "Foam fenders"],
+        "shibata": ["SPC cone fenders", "Element fenders", "Cylindrical fenders", "Pneumatic fenders", "Foam fenders"],
         "manntek": ["Dry cryogenic couplings", "Breakaway couplings", "Powered emergency release (PERC)", "Vessel separation device"],
         "straatman": ["Quick release mooring hooks", "Ship-to-shore link", "Smart bollard", "Berthing aid system"],
         "raythink": ["Optical gas imaging", "Explosion-proof gas imaging PTZ", "Handheld thermal cameras", "Online thermal monitoring"],
@@ -660,7 +660,7 @@ ENGINEERING_HUB = {
                   ("Procure", "Sourcing, logistics and production oversight"), ("Execute", "Installation, testing and commissioning"),
                   ("Support", "Training, maintenance and spares for life")],
     "cta_h": "Engineered for excellence, supported for life.",
-    "cta_buttons": ["Contact the Engineering team", "Email Krishna Hartono"],
+    "cta_buttons": ["Contact the Engineering team"],   # one button on every engineering page (client, 2026-11-10)
 }
 
 PRINCIPALS = [
@@ -689,32 +689,24 @@ PRINCIPALS = [
                        "Diameters from 300 mm to 4,500 mm and lengths from 500 mm to 9,000 mm, plus special sizes."],
              "lists": [("Characteristics", ["Proportional increase of energy and reaction", "Low hull pressure", "Economical", "Deflates for use in other locations or storage on deck", "Built to ISO 17357-1:2014"]),
                        ("Applications", ["Ports with extreme tidal variations", "Ship-to-ship lightering", "Oil & gas (typically FSRU)", "Temporary berthing"])]},
-            {"title": "Parallel Motion Fenders", "drawing": "/assets/engineering/shibata/parallel-motion-drawing.webp", "media": {"image": "/assets/engineering/shibata/parallel-motion.jpg"}, "side": "left",
-             "paras": ["Individually engineered systems. A torsion arm between the back structure and the steel front panel lets the panel move only parallel to its mounting, whatever the impact level and angle."],
-             "lists": [("Characteristics", ["Equal energy absorption at any impact level", "Only parallel panel movement, so no second ship/panel contact", "Substantially lower reaction forces with back-to-back rubber units",
-                                            "Lower hull pressures and a lighter substructure, cutting project cost"]),
-                       ("Applications", ["Bulk terminals", "Oil & gas terminals", "Ferry & RoRo terminals", "Monopiles", "Load-sensitive structures"])]},
-            {"title": "Hydropneumatic Fender", "media": {"image": "/assets/engineering/shibata/hydropneumatic.jpg"}, "side": "right",
-             "paras": ["A version of the Pneumatic Fender developed for submarines: partly filled with water and air and counterweighted to stay vertical, so the submerged hull is protected at all times. Performance depends on the air-to-water ratio and initial pressure."],
-             "lists": [("Characteristics", ["Submerged contact area", "Low hull pressure", "Adjustable draft", "Movable"]),
-                       ("Applications", ["Submarine jetties", "Certain ferry types", "Oil rigs"])]},
+            # Parallel Motion Fenders and Hydropneumatic Fender removed (client, 2026-11-10)
             {"title": "Ocean Guard Foam Fender", "drawing": "/assets/engineering/shibata/ocean-guard-drawing.webp", "media": {"loop": "/assets/engineering/shibata/ocean-guard-float"}, "side": "left",
              "paras": ["A heat-laminated, 100% closed-cell foam core under a thick, nylon-reinforced polyurethane skin with embedded end fittings: high energy absorption, hull-conforming, non-marking and low maintenance.",
                        "Diameters from 500 mm to 4,500 mm and lengths from 800 mm to 10,600 mm, in several foam grades and special shapes, with two- or four-point mounting."],
              "lists": [("Characteristics", ["Proportional increase of energy and reaction", "Extremely robust", "No performance loss and unsinkable even if damaged", "Small skin damage repairable on site", "Low hull pressure, non-marking skin"]),
                        ("Applications", ["Navy berths and cruise terminals", "Ship-to-ship operations", "Ship-to-shore operations", "Oil & gas terminals"])]},
-            {"title": "Roller / Wheel Fender", "drawing": "/assets/engineering/shibata/roller-drawing.webp", "media": {"image": "/assets/engineering/shibata/roller.jpg"}, "side": "right",
+            {"title": "Roller / Wheel Fender", "drawing": "/assets/engineering/shibata/roller-drawing.webp", "media": {"loop": "/assets/engineering/shibata/roller-float"}, "side": "right",   # Seedance: the pontoon floats, the tyres turn on their shafts (client, 2026-11-10)
              "paras": ["An energy-absorbing elastomer unit on a single rotating shaft with maintenance-free stainless and composite bearings."],
              "lists": [("Installed as", ["Stacked double or triple to cover tidal heights", "Side by side to guide vessels through narrow passages", "At an angle to suit the hull's flare"]),
                        ("Applications", ["Entrances to locks, dry docks and other narrow or exposed areas"])]},
         ],
         "cta_p": "Backed by local support for sizing, supply, installation and after-sales service.",
-        "cta_buttons": ["Request fender sizing / quotation", "Book a service visit"],
+        "cta_buttons": ["Contact the Engineering team"],
     },
     {
         "slug": "manntek", "name": "MannTek", "h1": "MannTek Solutions", "eyebrow": "Principal · Marine & energy transfer",
         "logo": "/assets/engineering/logo-manntek.svg?v=3",
-        "hero_img": "/assets/engineering/manntek-hero.jpg",   # MannTek couplings at a methanol bunkering (from the principal's page on hexahessman.com)
+        "hero_img": "/assets/engineering/manntek-hero.jpg?v=2",   # upscaled 4K (client, 2026-11-10). MannTek couplings at a methanol bunkering (from the principal's page on hexahessman.com)
         "subhead": "Dry cryogenic couplings, breakaway couplings and emergency release systems for LNG, methanol, hydrogen and ammonia.",   # the principal's own logo, centred over the intro like their site
         # The skeleton offers "[exclusive / official]"; "official" is used, matching the other principals.
         "hero": ["HexaHessman is the official representative of MannTek Solutions in Southeast Asia, delivering tailored solutions with comprehensive after-sales service, including repairs and maintenance."],
@@ -727,10 +719,10 @@ PRINCIPALS = [
                 ("Hydrogen", "hydrogen", "Couplings and breakaways for liquid hydrogen transfer, built for –253°C and the tightest tolerances in cryogenic handling.", "https://www.manntek.se/"),
                 ("Ammonia", "ammonia", "Dry disconnect couplings, breakaways and emergency release couplings for ammonia transfer, with spill-free connection for a toxic product.", "https://www.manntek.se/"),
             ]},
-            # the whole ship-to-ship transfer line, labels popping out one by one (label x, y → part x, y, in the image's 1672×941 pixels)
+            # the whole ship-to-ship transfer line, labels popping out one by one; the left-hand tags share one column, clear of the edge (client, 2026-11-10) (label x, y → part x, y, in the image's 1672×941 pixels)
             {"title": "A complete transfer system", "diagram": {"img": "/assets/engineering/manntek-system.webp", "w": 1672, "h": 941, "labels": [
-                ("Dry Disconnect Coupling (DDC)", 150, 330, 378, 410), ("Insulation flange", 250, 240, 403, 406), ("Hose tail", 470, 300, 455, 410),
-                ("PERC", 560, 520, 552, 414), ("Cryogenic breakaway coupling (CBC)", 190, 560, 510, 412), ("Hose saddle", 640, 650, 760, 470),
+                ("Dry Disconnect Coupling (DDC)", 270, 330, 378, 410), ("Insulation flange", 270, 230, 403, 406), ("Hose tail", 470, 300, 455, 410),
+                ("PERC", 560, 520, 552, 414), ("Cryogenic breakaway coupling (CBC)", 270, 560, 510, 412), ("Hose saddle", 640, 650, 760, 470),
                 ("Transfer hose", 820, 330, 930, 498), ("PERC activation line", 1040, 280, 995, 522), ("VSD wire", 980, 690, 1060, 603),
                 ("Fall arrest", 1190, 770, 1300, 600), ("Vessel Separation Device (VSD)", 1380, 870, 1470, 622), ("PERC control unit", 1330, 320, 1530, 382),
                 ("Alternative placement CBC", 1430, 170, 1600, 428), ("Ship manifold", 1540, 520, 1645, 432)]}},
@@ -752,7 +744,7 @@ PRINCIPALS = [
         ],
         "cta_h": "After-sales",
         "cta_p": "Repairs, maintenance and spares across the region, with a face-to-face response within 48 hours.",
-        "cta_buttons": ["Request a quotation", "Book a service visit"],
+        "cta_buttons": ["Contact the Engineering team"],
     },
     {
         "slug": "straatman", "name": "Straatman", "h1": "Straatman Mooring Systems", "eyebrow": "Principal · Mooring & berthing",
@@ -776,20 +768,17 @@ PRINCIPALS = [
              "paras": ["Quick release mooring hooks are a key safety feature for oil and gas tankers, FSRUs, FPSOs and other vessels: they can be released quickly and easily, even under load, when the situation at the berth demands it.",
                        "Straatman hooks are built for oil, gas, chemical, iron ore, coal and grain terminals, with options for electric-hydraulic release, load monitoring, remote control and rope keepers."],
              "items": ["Single, double, triple and quadruple hook assemblies", "FPSO / FLNG and offshore hooks (FPSO and FSRU)", "Quick release towing hooks", "Strainstall and AMTS hooks and spares"]},
-            {"title": "Ship-to-Shore Link (SSL)", "media": {"image": "/assets/engineering/straatman/ssl.jpg"}, "side": "right",
+            {"title": "Ship-to-Shore Link (SSL)", "drawing": "/assets/engineering/straatman/ssl-drawing.svg?v=1", "drawing_w": "84%", "media": {"image": "/assets/engineering/straatman/ssl.jpg?v=2"}, "side": "right",   # drawings behind every product like the hook (client, 2026-11-10; tools/drawings/straatman_more.py)
              "paras": ["During LNG, oil and chemical transfers the ship-shore link guards against fire, explosion and spills. Its job is to shut down ship and shore at the same moment whenever the Safety Instrumented System on either side detects an issue.",
                        "Straatman’s SafeCom Ship-to-Shore Link is built to each client’s needs, in a range of sizes and configurations, with standby services for extra reliability."]},
-            {"title": "Smart Bollard", "media": {"image": "/assets/engineering/straatman/smart-bollard.jpg"}, "side": "left",
+            {"title": "Smart Bollard", "drawing": "/assets/engineering/straatman/bollard-drawing.svg?v=1", "drawing_w": "84%", "media": {"image": "/assets/engineering/straatman/smart-bollard.jpg"}, "side": "left",
              "paras": ["Without load data, ports have to assume maximum mooring loads. In high waves, strong currents and gusts an overloaded line can part and a ship can break away from the quay.",
                        "Smart Bollards measure the load on each mooring line in real time and log it, giving the port and the terminal a clear picture of the mooring forces and the warning they need."]},
-            {"title": "Berthing Aid System (BAS)", "media": {"image": "/assets/engineering/straatman/bas.jpg"}, "side": "right",
+            {"title": "Berthing Aid System (BAS)", "drawing": "/assets/engineering/straatman/bas-drawing.svg?v=1", "drawing_w": "92%", "media": {"image": "/assets/engineering/straatman/bas.jpg"}, "side": "right",
              "paras": ["Lasers on the quay measure an approaching vessel’s speed, distance and angle, and large displays show them to the pilot and crew so every berthing stays within safe limits. Available with a carry-on-board system for the mooring master."]},
-            {"title": "Full product range", "items": [
-                "Quick release mooring hooks", "FPSO / FLNG and offshore quick release hooks", "Quick release towing hooks", "Portal smart bollards for LNG terminals",
-                "Strainstall / AMTS hooks and spares", "Ship-to-Shore Link (SSL)", "Mooring Load Monitoring System (MLMS)", "Environmental Monitoring System (EMS)",
-                "Berthing Aid System (BAS)", "Carry-on-board mooring system", "Solar power systems for dredging, ports and terminals"]},
+            # "Full product range" removed (client, 2026-11-10)
         ],
-        "cta_buttons": ["Request a quotation", "Book a service visit"],
+        "cta_buttons": ["Contact the Engineering team"],
     },
     {
         "slug": "raythink", "name": "Raythink", "h1": "Raythink", "eyebrow": "Principal · Gas detection & hazard monitoring",
@@ -798,7 +787,7 @@ PRINCIPALS = [
         "sections": [
             {"title": "Applications", "items": ["Gas-leak detection at terminals, refineries and FSRUs", "Real-time hazard monitoring"]},
         ],
-        "cta_buttons": ["Request a demo", "Request a quotation"],
+        "cta_buttons": ["Contact the Engineering team"],
     },
 ]
 
