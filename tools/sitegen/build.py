@@ -55,6 +55,8 @@ def meta_desc(text, n=158):
 
 
 # ------------------------------------------------------------------ url helpers
+import product_pages as PP
+PP.enrich(C.PRODUCTS)   # more from the client's PDF and website (2026-11-11)
 PRODUCT_BY_SLUG = {p["slug"]: p for p in C.PRODUCTS}
 GROUP_BY_SLUG = {g["slug"]: g for g in C.GROUPS}
 PRODUCT_NAME_TO_SLUG = {}
@@ -453,7 +455,7 @@ MAIN_PAGES = ("Commodities Supply", "Engineering Solutions", "About", "Contact")
 def page(title, description, body, extra_head="", head_tags="", body_scripts="", body_class=""):
     """extra_head: CSS appended to the page <style>; head_tags: raw tags for <head>; body_scripts: raw tags before </body>."""
     if title in MAIN_PAGES:   # the main pages get a Back-to-top button; product / principal pages have Back instead (client, 2026-11-10)
-        body_scripts += '<script src="/assets/top-btn.js?v=1" defer></script>\n'
+        body_scripts += '<script src="/assets/top-btn.js?v=2" defer></script>\n'
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -465,8 +467,8 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=1110a">
-<link rel="stylesheet" href="/assets/site.css?v=1110c">
+<link rel="stylesheet" href="/assets/header.css?v=1111a">
+<link rel="stylesheet" href="/assets/site.css?v=1111g">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -500,6 +502,13 @@ def back_btn(up, spot=None):
     `spot` (a commodity's slug): Back always returns to the main Commodities page where the visitor left off (client, 2026-11-07)"""
     extra = f' data-spot="{spot}"' if spot else ''
     return f'<script src="/assets/back-btn.js?v=4" data-up="{up}"{extra} defer></script>\n'
+
+
+def product_contact(up, spot):
+    """the floating Back circle and Contact pill on product pages (client's PDF, 2026-11-11); opens the contact card"""
+    c = PP.CONTACT
+    attrs = "".join(f' data-{k}="{esc_attr(v)}"' for k, v in c.items() if v)
+    return f'<script src="/assets/product-contact.js?v=1" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n'
 
 
 def write(relpath, html):
@@ -547,13 +556,16 @@ def build_commodities_hub():
 }})();
 </script>
   <div class="pwall"><div class="pgrid">{cells}</div></div>
-</section>''', f'<section id="cscroll" class="cscroll" data-intro="{intro}"></section>']
+</section>''', f'<section id="cscroll" class="cscroll" data-intro="{intro}"></section>', '<section id="markets" class="markets" aria-label="Market prices"></section>']   # market prices (markets.js, client 2026-11-11)
 
     # (Product groups and How we supply removed, user 2026-11-06)
 
     body.append(cta(H["cta_h"], H["cta_p"], "commodities"))
 
-    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body), body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1110b" defer></script>\n<script src="/assets/cs-marks.js?v=20" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n'))
+    write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
+        # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
+        head_tags='<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Inter:wght@400;500&family=Courier+Prime&display=swap" rel="stylesheet">\n',
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1111c" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
 
 
 def build_group(g):
@@ -616,18 +628,267 @@ def product_sections(p):
     return out
 
 
+# ------------------------------------------------------------------ product pages in the client's format (2026-11-11)
+PRODUCT_FONTS = '<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">\n'
+
+PRODUCT_CSS = """
+/* product pages after the client's own layout (Hafriz's PDF, 2026-11-11): white page, wide photo hero, League Spartan
+   capitals for headings, Montserrat words, Barlow charts with a dark green header row, dark green drop-down pills */
+.pp { --pp-green: #142B21; --pp-ink: #0C1410; --pp-soft: #5F6964; --pp-line: #56635D; background: #fff; color: var(--pp-ink); font-family: 'Montserrat', var(--sans); }
+.pp-w { width: min(1280px, calc(100% - 2 * var(--gutter))); margin: 0 auto; }
+.pp-hero { position: relative; min-height: clamp(430px, 36vw, 600px); padding-top: 150px; box-sizing: border-box; display: flex; align-items: flex-end; overflow: hidden; background: #0B0F0D; color: #fff; }
+.pp-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
+.pp-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.42) 45%, rgba(0,0,0,.1) 78%), linear-gradient(180deg, rgba(0,0,0,.42), transparent 38%, rgba(0,0,0,.4)); }
+.pp-hero .pp-w { position: relative; z-index: 1; padding-bottom: clamp(24px, 3vw, 44px); }
+.pp-hero h1 { margin: 0; max-width: 11ch; font-family: 'League Spartan', var(--sans); font-weight: 800; text-transform: uppercase; font-size: clamp(48px, 6.6vw, 104px); line-height: .84; letter-spacing: -.035em; color: #fff; }
+.pp-hero h1.long { max-width: 17ch; font-size: clamp(36px, 4.6vw, 72px); line-height: .9; }
+.pp-hero p { margin: 16px 0 0; max-width: 52ch; font-weight: 600; font-size: clamp(15px, 1.25vw, 19px); line-height: 1.38; color: #fff; }
+.pp-sec { padding: clamp(40px, 5vw, 66px) 0; border-bottom: 1px solid var(--pp-line); }
+.pp-sec:last-child { border-bottom: 0; }
+.pp-h { margin: 0 0 clamp(22px, 2.8vw, 36px); font-family: 'League Spartan', var(--sans); font-weight: 700; text-transform: uppercase; font-size: clamp(28px, 2.9vw, 42px); line-height: 1; letter-spacing: -.03em; color: #000; }
+.pp-over p { max-width: 78ch; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.6; color: #2B332F; margin: 0 0 14px; }
+.pp-over p:last-child { margin-bottom: 0; }
+/* product types: three photos with rounded corners, the name and a short line under each */
+.pp-types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4.4vw, 68px); align-items: start; }
+.pp-types.n2 { grid-template-columns: repeat(2, minmax(0, 400px)); justify-content: center; }
+.pp-types.n1 { grid-template-columns: minmax(0, 400px); justify-content: center; }
+.pp-type img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 26px; background: #EEF0EE; }
+.pp-type h3 { margin: 22px 0 0; text-align: center; font-weight: 600; font-size: clamp(16px, 1.4vw, 20px); letter-spacing: 0; }
+.pp-type p { margin: 6px auto 0; max-width: 36ch; text-align: center; font-size: 13.5px; line-height: 1.45; color: var(--pp-soft); }
+.pp-types.text { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; justify-content: stretch; }
+.pp-types.text.n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pp-types.text.n4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pp-types.text .pp-type { height: 100%; box-sizing: border-box; background: #F1F3F1; border-radius: 22px; padding: 26px 22px 24px; }
+.pp-types.text .pp-type h3 { margin-top: 0; }
+.pp-feats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.pp-feats li { background: #F1F3F1; border-radius: 20px; padding: 20px 22px; font-weight: 500; font-size: 15px; line-height: 1.4; }
+/* charts */
+.pp-tt { margin: 26px 0 10px; font-weight: 600; font-size: 15px; letter-spacing: 0; }
+.pp-h + .pp-tt { margin-top: 0; }
+.pp-tw + .pp-tt, .pp-note + .pp-tt { margin-top: 34px; }
+.pp-tw { overflow-x: auto; margin: 0 0 14px; }
+.pp-t { width: 100%; min-width: 560px; border-collapse: collapse; font-family: 'Barlow', var(--sans); font-size: 14.5px; }
+.pp-t thead th { background: var(--pp-green); color: #fff; text-align: left; text-transform: uppercase; font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 9px 12px; }
+.pp-t tbody th { text-align: left; font-weight: 600; padding: 11px 12px; vertical-align: top; }
+.pp-t td { padding: 11px 12px; font-style: italic; color: #2B332F; vertical-align: top; }
+.pp-t tbody tr { border-bottom: 1px solid #C5CCC8; }
+.pp-t tbody tr:last-child { border-bottom: 2px solid #7D8A84; }
+.pp-t.c2 th:first-child, .pp-t.c3 th:first-child { width: 40%; }
+.pp-t.apps th:first-child { width: 27%; } .pp-t.apps td:nth-child(2) { width: 13%; white-space: nowrap; text-align: center; } .pp-t.apps thead th:nth-child(2) { text-align: center; }
+.pp-note { margin: 4px 0 18px; font-size: 13.5px; line-height: 1.5; color: var(--pp-soft); max-width: 86ch; }
+.pp-apps { margin-top: 30px; }
+.pp-apps-h { background: var(--pp-green); color: #fff; font-family: 'Barlow', var(--sans); text-transform: uppercase; font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 9px 12px; }
+.pp-apps ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: 34px; border-bottom: 2px solid #7D8A84; }
+.pp-apps li { font-family: 'Barlow', var(--sans); font-weight: 600; font-size: 14.5px; padding: 11px 12px; border-bottom: 1px solid #C5CCC8; }
+/* product resources: big figures, two pictures, the "where it comes from" bar */
+.pp-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; margin-bottom: 30px; }
+.pp-stat b { font-family: 'League Spartan', var(--sans); font-weight: 700; font-size: clamp(40px, 4.4vw, 62px); line-height: 1; letter-spacing: .015em; }
+.pp-stat sup { position: relative; top: -.2em; margin-left: 8px; vertical-align: baseline; font-weight: 500; font-size: 13px; color: #B98A14; }
+.pp-stat span { display: block; margin-top: 10px; max-width: 21ch; font-size: 15px; line-height: 1.45; }
+.pp-pics { display: grid; grid-template-columns: 3fr 4fr; gap: 14px; }
+.pp-pics.n1 { grid-template-columns: 1fr; }
+.pp-pics img { display: block; width: 100%; height: clamp(230px, 26vw, 390px); object-fit: cover; background: #111; }
+.pp-pics img[src*='.svg'] { object-fit: contain; background: #161613; }
+.pp-mix { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 6vw, 90px); align-items: center; margin-top: 34px; }
+.pp-bar-t { margin: 0; text-transform: uppercase; letter-spacing: .22em; font-weight: 500; font-size: 12px; color: #1D4A3B; }
+.pp-bar { display: flex; height: 13px; margin: 12px 0 16px; border: 1px solid #56635D; }
+.pp-bar span { display: block; height: 100%; }
+.pp-legend { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 15px; }
+.pp-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 8px; }
+.pp-legend b { font-weight: 500; margin-left: 6px; }
+.pp-total { margin: 14px 0 0; font-size: 15px; }
+.pp-call { margin: 0; padding-left: 18px; border-left: 3px solid #E6CF2E; max-width: 38ch; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.5; }
+/* drop-downs: dark green pills with a plus in a circle */
+.pp-drops { display: grid; grid-template-columns: 1fr 1fr; gap: 26px clamp(22px, 2.6vw, 36px); align-items: start; }
+.pp-res .pp-drops { margin-top: 36px; padding-top: 30px; border-top: 1px solid var(--pp-line); }
+.pp-res .pp-h + .pp-drops { margin-top: 0; padding-top: 0; border-top: 0; }
+.pp-drop summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 14px; background: #263C34; color: #F4EFE0; border: 1.5px solid #CFC9AE; border-radius: 999px;
+  padding: 9px 12px 9px 24px; text-transform: uppercase; font-weight: 400; font-size: clamp(15px, 1.3vw, 19px); letter-spacing: .02em; box-shadow: 0 2px 7px rgba(0,0,0,.28); transition: background .25s; }
+.pp-drop summary::-webkit-details-marker { display: none; }
+.pp-drop summary:hover { background: #1C3028; }
+.pp-drop summary i { flex: none; position: relative; width: 30px; height: 30px; border: 2px solid #fff; border-radius: 50%; transition: transform .3s; }
+.pp-drop summary i::before, .pp-drop summary i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 14px; height: 2px; background: #fff; transform: translate(-50%, -50%); }
+.pp-drop summary i::after { transform: translate(-50%, -50%) rotate(90deg); }
+.pp-drop[open] summary i { transform: rotate(45deg); }
+.pp-drop-b { padding: 22px 14px 4px; font-size: 13.5px; line-height: 1.58; color: #1B221F; }
+.pp-drop-b p { margin: 0 0 14px; }
+.pp-drop-b h4 { margin: 0 0 8px; font-weight: 700; font-size: 13.5px; letter-spacing: 0; text-transform: none; color: var(--pp-ink); text-align: left; }
+.pp-tt, .pp-type h3, .pp-drop-b b { color: var(--pp-ink); }
+.pp-drop-b .ph { margin: 18px 0 6px; text-transform: uppercase; }
+.pp-drop-b .ph:first-child { margin-top: 0; }
+.pp-drop-b ol, .pp-drop-b ul { margin: 0 0 14px; padding-left: 20px; }
+.pp-drop-b li { margin: 0 0 3px; }
+.pp-drop-b em { color: var(--pp-soft); }
+@media (max-width: 900px) {
+  .pp-hero { padding-top: 120px; min-height: 400px; }
+  .pp-types, .pp-types.text, .pp-types.text.n4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 18px; }
+  .pp-types.text, .pp-types.text.n4 { gap: 12px; }
+  .pp-feats { grid-template-columns: 1fr 1fr; }
+  .pp-stats { grid-template-columns: 1fr 1fr; gap: 26px 18px; }
+  .pp-pics, .pp-mix, .pp-drops { grid-template-columns: 1fr; }
+  .pp-apps ul { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .pp-types, .pp-types.n2, .pp-types.text, .pp-types.text.n2, .pp-types.text.n4 { grid-template-columns: 1fr; }
+  .pp-type img { max-width: 340px; margin: 0 auto; }
+  .pp-feats { grid-template-columns: 1fr; }
+}
+"""
+
+
+def pp_table(block, cls=""):
+    """a chart with a dark green header row; the first column is the row's name"""
+    rows = []
+    for r in block["rows"]:
+        cells = list(r)
+        if all(is_placeholder(c) or c in ("—", "") for c in cells[1:]):
+            continue
+        tds = [f'<th scope="row">{esc(cells[0])}</th>'] + ["<td>—</td>" if is_placeholder(c) else f"<td>{esc(c)}</td>" for c in cells[1:]]
+        rows.append("<tr>" + "".join(tds) + "</tr>")
+    if not rows:
+        return ""
+    n = max(len(r) for r in block["rows"])
+    heads = block.get("headers") or (["Parameter", "Specification"] + [""] * (n - 2))
+    thead = "<thead><tr>" + "".join(f"<th>{esc(h)}</th>" for h in heads) + "</tr></thead>"
+    title = f'<h3 class="pp-tt">{esc(block["title"])}</h3>' if block.get("title") else ""
+    return f'{title}<div class="pp-tw"><table class="pp-t c{len(heads)} {cls}">{thead}<tbody>{"".join(rows)}</tbody></table></div>'
+
+
+def pp_exists(src):
+    return bool(src) and os.path.exists(os.path.join(ROOT, src.split("?")[0].lstrip("/")))
+
+
+def pp_drop(title, html):
+    return f'<details class="pp-drop"><summary>{esc(title)}<i aria-hidden="true"></i></summary><div class="pp-drop-b">{html}</div></details>'
+
+
+def pp_section_html(x):
+    """a leftover section of the product's content, as the inside of a drop-down"""
+    out = "".join(f"<p>{esc(t)}</p>" for t in x.get("paras", []) if not is_placeholder(t))
+    items = [i for i in x.get("items", []) if not is_placeholder(i)]
+    if items:
+        out += "<ul>" + "".join(f"<li>{esc(i)}</li>" for i in items) + "</ul>"
+    for h, its in x.get("sublists", []):
+        out += f"<h4>{esc(h)}</h4><ul>" + "".join(f"<li>{esc(i)}</li>" for i in its) + "</ul>"
+    for t, d in x.get("defs", []):
+        if not is_placeholder(d):
+            out += f"<p><b>{esc(t)}</b><br>{esc(d)}</p>"
+    return out
+
+
+def product_body(p):
+    """the white part of a product page, in the client's order: hero, product types, specifications, resources"""
+    P = PP.PAGES.get(p["slug"], {})
+    skip = set(P.get("skip", []))
+    secs = [x for x in p["sections"] if x.get("title") not in skip]
+    # ---- hero: the name in capitals and one bold line; anything longer becomes the overview under it
+    paras = [clean(x) for x in p["hero"] if not is_placeholder(x)]
+    lead, over = (paras[0], paras[1:]) if paras else ("", [])
+    if len(lead) > 250:
+        lead, over = (HUB_LEADS.get(p["slug"]) or descriptor(p["slug"]) or lead), paras
+    title = P.get("title") or short_name(p["slug"])
+    hero_img = f"/assets/products/hero/{p['slug']}.jpg"
+    if not pp_exists(hero_img):
+        hero_img = f"/assets/products/{p['slug']}.jpg"
+    pos = f' style="--pos:{P["hero_pos"]}"' if P.get("hero_pos") else ""
+    out = [f'<section class="pp-hero"><img src="{hero_img}?v=3" alt="" fetchpriority="high"{pos}><div class="pp-w"><h1{" class=" + chr(34) + "long" + chr(34) if len(title) > 15 else ""}>{esc(title)}</h1><p>{esc(lead)}</p></div></section>']
+    blocks = []
+    if over:
+        blocks.append('<section class="pp-sec pp-over">' + "".join(f"<p>{esc(t)}</p>" for t in over) + "</section>")
+    # ---- product types (photos), or the key features where a product has no separate types
+    types = P.get("types")
+    forms = next((x for x in secs if x.get("defs") and not x.get("spec") and not x.get("paras")), None)
+    if not types and forms:
+        imgs = forms.get("imgs", {})
+        types = [(t, d, imgs.get(t)) for t, d in forms["defs"] if not is_placeholder(d)]
+    feats = next((x for x in secs if x.get("title") == "Key features"), None)
+    used = {id(forms)} if forms else set()
+    if types:
+        has_img = all(pp_exists(t[2]) for t in types)
+        cards = "".join((f'<article class="pp-type"><img src="{t[2]}?v=1" alt="{esc_attr(t[0])}" loading="lazy" decoding="async">' if has_img else '<article class="pp-type">') + f"<h3>{esc(t[0])}</h3><p>{esc(t[1])}</p></article>" for t in types)
+        blocks.append(f'<section class="pp-sec" id="types"><h2 class="pp-h">{esc(P.get("types_title", "Product types"))}</h2><div class="pp-types n{len(types)}{"" if has_img else " text"}">{cards}</div></section>')
+    elif feats:
+        used.add(id(feats))
+        blocks.append('<section class="pp-sec" id="features"><h2 class="pp-h">Key features</h2><ul class="pp-feats">' + "".join(f"<li>{esc(i)}</li>" for i in feats["items"] if not is_placeholder(i)) + "</ul></section>")
+    # ---- product specifications: every chart, then the applications chart
+    spec_html = ""
+    if P.get("specs"):
+        spec_html = "".join(pp_table(b) for b in P["specs"])
+        used |= {id(x) for x in secs if x.get("spec")}
+    else:
+        for x in secs:
+            if not x.get("spec"):
+                continue
+            used.add(id(x))
+            for b in x["spec"]:
+                b = dict(b)
+                if not b.get("title") and x.get("title") not in ("Specifications", None):
+                    b["title"] = x["title"]
+                spec_html += pp_table(b)
+            for t in x.get("paras", []) + ([x["note"]] if x.get("note") else []):
+                if not is_placeholder(t):
+                    spec_html += f'<p class="pp-note">{esc(t)}</p>'
+            for t, d in x.get("defs", []):
+                if not is_placeholder(d):
+                    spec_html += f'<p class="pp-note"><b>{esc(t)}</b>: {esc(d)}</p>'
+    if spec_html and P.get("spec_note"):
+        spec_html += f'<p class="pp-note">{esc(P["spec_note"])}</p>'
+    apps = next((x for x in secs if x.get("title") == "Applications"), None)
+    if P.get("apps"):
+        spec_html += pp_table(P["apps"], "apps")
+    elif apps:
+        spec_html += '<div class="pp-apps"><div class="pp-apps-h">Industry / Application</div><ul>' + "".join(f"<li>{esc(i)}</li>" for i in apps["items"] if not is_placeholder(i)) + "</ul></div>"
+    if apps:
+        used.add(id(apps))
+    if spec_html:
+        blocks.append(f'<section class="pp-sec" id="specifications"><h2 class="pp-h">Product specifications</h2>{spec_html}</section>')
+    # ---- product resources: key figures and pictures (where the client has supplied them), then the drop-downs
+    res = ""
+    Rs = P.get("resources")
+    if Rs:
+        if Rs.get("stats"):
+            res += '<div class="pp-stats">' + "".join(f'<div class="pp-stat"><b>{esc(a)}</b>{f"<sup>{esc(u)}</sup>" if u else ""}<span>{esc(l)}</span></div>' for a, u, l in Rs["stats"]) + "</div>"
+        pics = [(s, a) for s, a in Rs.get("images", []) if pp_exists(s)]
+        if pics:
+            res += f'<div class="pp-pics n{len(pics)}">' + "".join(f'<img src="{s}?v=1" alt="{esc_attr(a)}" loading="lazy" decoding="async">' for s, a in pics) + "</div>"
+        bar = Rs.get("bar")
+        if bar:
+            segs = "".join(f'<span style="width:{v}%;background:{c}"></span>' for _, v, c in bar["parts"])
+            legend = "".join(f'<span><i style="background:{c}"></i>{esc(n)}<b>{v}%</b></span>' for n, v, c in bar["parts"])
+            call = f'<p class="pp-call">{esc(Rs["note"])}</p>' if Rs.get("note") else ""
+            res += f'<div class="pp-mix"><div><p class="pp-bar-t">{esc(bar["title"])}</p><div class="pp-bar" role="img" aria-label="{esc_attr(", ".join(f"{n} {v}%" for n, v, _ in bar["parts"]))}">{segs}</div><div class="pp-legend">{legend}</div><p class="pp-total">{esc(bar["total"])}</p></div>{call}</div>'
+    drops = [(0 if t == "Source of origin" else 1, t, h) for t, h in P.get("drops", [])]
+    proc = ""
+    for ph, steps in PP.PROCEDURES:
+        proc += f'<h4 class="ph">{esc(ph)}</h4><ol>' + "".join(f"<li>{esc(a)} · {esc(b.format(loading=P.get('loading', '')))}</li>" for a, b in steps) + "</ol>"
+    proc += f"<p><em>{esc(PP.PROCEDURES_NOTE)}</em></p>"
+    drops.append((2, "Procedures", proc))
+    rename = {"Our production": "Source of origin", **P.get("rename", {})}
+    dist = " ".join(clean(t) for x in secs if x.get("title") == "Distribution" for t in x.get("paras", []) if not is_placeholder(t))
+    for x in secs:
+        if id(x) in used or x.get("title") == "Distribution":
+            continue
+        html = pp_section_html(x)
+        if not html.strip():
+            continue
+        t = rename.get(x.get("title"), x.get("title") or "More")
+        if t == "Packaging" and dist:
+            html += f"<p>{esc(dist)}</p>"; dist = ""
+        if t == "Source of origin" and any(d[1] == t for d in drops):
+            continue
+        drops.append((0 if t == "Source of origin" else .5 if t == "How we supply" else 3 if t == "Packaging" else 4, t, html))
+    if dist:
+        drops.append((3, "Distribution", f"<p>{esc(dist)}</p>"))
+    drops.sort(key=lambda d: d[0])
+    res += '<div class="pp-drops">' + "".join(pp_drop(t, h) for _, t, h in drops) + "</div>"
+    blocks.append(f'<section class="pp-sec pp-res" id="resources"><h2 class="pp-h">Product resources</h2>{res}</section>')
+    return '<div class="pp">' + out[0] + '<div class="pp-w">' + "".join(blocks) + "</div></div>"
+
+
 def build_product(p):
     g = GROUP_BY_SLUG[p["group"]]
     # a photo hero like the old site's product pages: the product's photo (from the 2026 profile where it has one), the
     # name and its intro over it (user, 2026-11-06)
-    hero_img = f"/assets/products/hero/{p['slug']}.jpg" if os.path.exists(os.path.join(ROOT, f"assets/products/hero/{p['slug']}.jpg")) else f"/assets/products/{p['slug']}.jpg"
-    intro = "".join(f'<p class="lead">{esc(x)}</p>' for x in p["hero"] if not is_placeholder(x))
-    # the Distribution line sits under the intro instead of being a section of its own (user, 2026-11-06)
-    dist = " ".join(clean(x) for d in p["sections"] if d.get("title") == "Distribution" for x in d.get("paras", []) if not is_placeholder(x))
-    dist = f'<p class="pr-cov">{esc(dist)}</p>' if dist else ""
-    body = [f"""<section class="hero pr-hero product-hero"><div class="media"><img src="{hero_img}" alt="{esc_attr(short_name(p["slug"]))}" fetchpriority="high"></div>
-<div class="wrap"><p class="eyebrow">{esc(g["name"])}</p><h1>{esc(p["title"])}</h1>{intro}{dist}</div></section>"""]
-    body += product_sections(p)
+    body = [product_body(p)]
     # related products
     # always three, each with the same plain one-liner as the main Commodities page, not the spec (client, 2026-11-07)
     slugs = []
@@ -646,7 +907,7 @@ def build_product(p):
     if rel:
         body.append(section(grid(rel, "c3"), title="Related products", id_="related"))
     body.append(cta(C.ENQUIRY["h2"], C.ENQUIRY["p"], "commodities"))
-    write(f"{product_url(p['slug'])}index.html", page(short_name(p["slug"]), meta_desc(p["hero"][-1] if len(p["hero"]) > 1 and len(clean(p["hero"][0])) < 70 else p["hero"][0]), "\n".join(body), body_scripts=back_btn("/commodities/", p["slug"])))
+    write(f"{product_url(p['slug'])}index.html", page(short_name(p["slug"]), meta_desc(p["hero"][-1] if len(p["hero"]) > 1 and len(clean(p["hero"][0])) < 70 else p["hero"][0]), "\n".join(body), extra_head=PRODUCT_CSS, head_tags=PRODUCT_FONTS, body_scripts=product_contact("/commodities/", p["slug"])))
 
 
 ARRIVE_LOGO = ('<svg class="arrive-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">'

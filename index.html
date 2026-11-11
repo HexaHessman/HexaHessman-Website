@@ -8,8 +8,8 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/header.css?v=1110a" />
-<link rel="stylesheet" href="/assets/site.css?v=1110c" />
+<link rel="stylesheet" href="/assets/header.css?v=1111a" />
+<link rel="stylesheet" href="/assets/site.css?v=1111g" />
 <!-- warm the cache for the preloader drawing (logo.html) so it can start sooner -->
 <link rel="preload" href="/assets/vendor/three.module.js?v=160" as="script" crossorigin>
 <link rel="preload" href="/assets/vendor/three-addons/lines/LineSegments2.js" as="script" crossorigin>
@@ -162,7 +162,7 @@
   const small = Math.min(screen.width, screen.height) < 820 || (navigator.connection && /2g|3g/.test(navigator.connection.effectiveType || ''));
   // sharper 2560 px files for big and retina screens (a 1920 file is upscaled there and looks soft)
   const hd = !small && screen.width * (devicePixelRatio || 1) >= 2400;
-  const VER = { commodities: 'v8b', intro: 'v10' };   // v8b: faster opening push. Intro versions for the client to pick (2026-11-07): 1 = v8 original, 2 = v9 doors copied from the end frame, 3 = v10 steadied from its own neighbouring frames (posters: intro-vN-poster in the img/video tags above)
+  const VER = { commodities: 'v8c', intro: 'v10' };   // v8c (2026-11-11): starts moving at once, wireframe spreads in 0.5 s (tools/port3d/speed_curve.py). v8b: faster opening push. Intro versions for the client to pick (2026-11-07): 1 = v8 original, 2 = v9 doors copied from the end frame, 3 = v10 steadied from its own neighbouring frames (posters: intro-vN-poster in the img/video tags above)
   const src = (n) => '/assets/entrance/' + n + '-' + (VER[n] || 'v8') + (small ? '-m' : hd ? '-hd' : '') + '.mp4';   // v8 (2026-11-07): native 4K; the held frame is cut from the intro footage itself, so nothing switches where the videos meet it
   intro.src = src('intro'); vc.src = src('commodities'); ve.src = src('engineering');
   const layers = [still, intro, hold, vc, ve];

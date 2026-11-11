@@ -1,0 +1,26 @@
+{
+  "_how_to_update": "One entry per card. Cards show only when 'price' has a value, so you can keep entries ready and fill them in when you have a figure. 'change' is the move since the previous figure (a number, or null). Keep 'date' and 'source' accurate: these are reference prices, not offers.",
+  "updated": "2026-11-11",
+  "live": [
+    { "symbol": "TVC:UKOIL", "title": "Brent crude" },
+    { "symbol": "TVC:USOIL", "title": "WTI crude" },
+    { "symbol": "CAPITALCOM:NATURALGAS", "title": "Natural gas" },
+    { "symbol": "ZCE:UR1!", "title": "Urea (China futures)" },
+    { "symbol": "ZCE:MA1!", "title": "Methanol (China futures)" },
+    { "symbol": "ZCE:SH1!", "title": "Caustic soda (China futures)" },
+    { "symbol": "ZCE:SA1!", "title": "Soda ash (China futures)" }
+  ],
+  "cards": [
+    { "product": "Urea", "href": "/commodities/fertilizer-phosphate/urea/", "basis": "Prilled, spot FOB Middle East", "price": 420, "unit": "USD/t", "change": 12.5, "date": "October 2026 average", "source": "World Bank Pink Sheet", "source_url": "https://www.worldbank.org/en/research/commodity-markets" },
+    { "product": "Diammonium Phosphate (DAP)", "href": "/commodities/fertilizer-phosphate/dap/", "basis": "Spot FOB US Gulf", "price": 803.1, "unit": "USD/t", "change": 2.5, "date": "October 2026 average", "source": "World Bank Pink Sheet", "source_url": "https://www.worldbank.org/en/research/commodity-markets" },
+    { "product": "Rock Phosphate", "href": "/commodities/fertilizer-phosphate/rock-phosphate/", "basis": "FOB North Africa", "price": 170, "unit": "USD/t", "change": 0, "date": "October 2026 average", "source": "World Bank Pink Sheet", "source_url": "https://www.worldbank.org/en/research/commodity-markets" },
+    { "product": "Sulphur", "href": "/commodities/fertilizer-phosphate/sulphur/", "basis": "Granular, FOB Middle East", "price": null, "unit": "USD/t", "change": null, "date": "", "source": "" },
+    { "product": "Sulphuric Acid", "href": "/commodities/fertilizer-phosphate/sulphuric-acid/", "basis": "98%, FOB Asia", "price": null, "unit": "USD/t", "change": null, "date": "", "source": "" },
+    { "product": "Metallurgical Coke", "href": "/commodities/metallurgical-reductants/metallurgical-coke/", "basis": "First grade, FOB China", "price": null, "unit": "USD/t", "change": null, "date": "", "source": "" },
+    { "product": "Calcined Pet Coke", "href": "/commodities/metallurgical-reductants/calcined-pet-coke/", "basis": "Anode grade, FOB China", "price": null, "unit": "USD/t", "change": null, "date": "", "source": "" },
+    { "product": "Methanol", "href": "/commodities/industrial-chemicals/methanol/", "basis": "CFR China", "price": null, "unit": "USD/t", "change": null, "date": "", "source": "" },
+    { "product": "Caustic Soda", "href": "/commodities/industrial-chemicals/caustic-soda/", "basis": "Flakes 99%, FOB China", "price": null, "unit": "USD/t", "change": null, "date": "", "source": "" },
+    { "product": "Bitumen", "href": "/commodities/petroleum-oilfield/bitumen/", "basis": "60/70, FOB Singapore", "price": null, "unit": "USD/t", "change": null, "date": "", "source": "" },
+    { "product": "Wood Chips", "href": "/commodities/biomass/wood-chips/", "basis": "Acacia, FOB Southeast Asia", "price": null, "unit": "USD/BDMT", "change": null, "date": "", "source": "" }
+  ]
+}

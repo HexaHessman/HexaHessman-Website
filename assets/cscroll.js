@@ -25,26 +25,21 @@
   };
   const vidTag = v => v ? `<video class="cs-vid" muted loop playsinline preload="none" poster="${v.poster}" data-src="${innerWidth <= 900 ? v.m : v.d}"${v.pos ? ` style="object-position:${v.pos}"` : ''}></video>` : '';
 
-  // "… Value Chain" goes on its own line under the rest of the name
-  const catLines = name => { const m = /^(.*?)\s+(Value Chain)$/i.exec(name); return m ? m.slice(1).map(t => `<span class="mask"><span class="line">${esc(t)}</span></span>`).join('') : esc(name); };
-
+  // one screen per group (client, 2026-11-11): the window, and beside it the group's name with all its products
   const chapters = data.map((g, gi) => `
-    <div class="cs-chapter ${gi % 2 ? 'text-right' : 'text-left'}" data-g="${gi}" id="${g.slug}">
-      <div class="cs-head">
-        <div class="cs-rule" data-reveal="line"></div>
-        <h2 class="cs-category" data-reveal="split"><a href="/commodities/${g.slug}/">${catLines(g.name)}</a></h2>
-      </div>
+    <div class="cs-chapter ${gi % 2 ? 'text-right' : 'text-left'}" data-g="${gi}" id="${g.slug}" style="--n:${g.products.length}">
       <div class="cs-pin">
         <div class="cs-stick"><div class="cs-panel" aria-hidden="true">${vidTag(VIDEOS[g.slug])}</div></div>
-        <div class="cs-items">
-          ${g.products.map((p, pi) => `
-          <article class="cs-item" id="${p.slug}">
-            <div class="cs-text">
-              <h3 class="cs-title" data-reveal="split"><a href="/commodities/${g.slug}/${p.slug}/">${esc(p.name)}</a></h3>
-              <p class="cs-fill">${esc(p.lead || p.short)}</p>
-              <a class="cs-view" data-reveal="fade" href="/commodities/${g.slug}/${p.slug}/">View product</a>
-            </div>
-          </article>`).join('')}
+        <div class="cs-copy" data-reveal="copy">
+          <h2 class="cs-category"><a href="/commodities/${g.slug}/">${esc(g.name)}</a></h2>
+          <div class="cs-list"><div class="cs-track">
+            ${g.products.map((p, pi) => `
+            <article class="cs-item" id="${p.slug}" style="--i:${pi}">
+              <h3 class="cs-title"><a href="/commodities/${g.slug}/${p.slug}/">${esc(p.name)}</a></h3>
+              <p class="cs-lead">${esc(p.lead || p.short)}</p>
+              <a class="cs-view" href="/commodities/${g.slug}/${p.slug}/">View product <span aria-hidden="true">→</span></a>
+            </article>`).join('')}
+          </div></div>
         </div>
       </div>
     </div>`).join('');
@@ -99,11 +94,13 @@
     const el = hash && hash.length > 1 && document.getElementById(decodeURIComponent(hash.slice(1)));
     if (!el || !sec.contains(el)) return false;
     const item = el.classList.contains('cs-item');
-    // a product lands with its text in the middle of the screen; a group lands on its heading
-    const b = (item ? el.querySelector('.cs-text') : el).getBoundingClientRect();
-    // (on phones the window is pinned above the text, so a product lands just below it)
-    const below = innerWidth <= 900 && item ? el.closest('.cs-pin').querySelector('.cs-stick').offsetHeight + 16 : 0;
-    const y = Math.max(0, item ? b.top + scrollY - (below || (innerHeight - b.height) / 2) : b.top + scrollY - (innerWidth <= 860 ? 90 : 120));
+    const ch = item ? el.closest('.cs-chapter') : el;
+    // desktop: a group or a product lands on its group's screen; phones: a product lands just below the pinned window
+    let y = ch.getBoundingClientRect().top + scrollY;
+    const g = groups.find(x => x.ch === ch);
+    if (innerWidth > 900 && item && g && g.travel) y += innerHeight * DWELL_IN + Math.min(g.travel, Math.max(0, el.offsetTop - 26));
+    if (innerWidth <= 900 && item) y = el.getBoundingClientRect().top + scrollY - ch.querySelector('.cs-stick').offsetHeight - 16;
+    y = Math.max(0, Math.round(y));
     if (window.__lenis) window.__lenis.scrollTo(y, smooth ? { duration: 1.4 } : { immediate: true });
     else scrollTo({ top: y, behavior: smooth ? 'smooth' : 'auto' });
     if (!smooth) setTimeout(() => sec.querySelectorAll('[data-reveal]:not(.in)').forEach(r => { const rb = r.getBoundingClientRect(); if (rb.bottom > 0 && rb.top < innerHeight) { r.classList.add('in'); io.unobserve(r); } }), 60);
@@ -147,7 +144,7 @@
   let acc = 0;
   const groups = [...sec.querySelectorAll('.cs-chapter')].map((ch, gi) => {
     const n = data[gi].products.length, from = acc / total; acc += n;
-    return { ch, gi, pin: ch.querySelector('.cs-pin'), panel: ch.querySelector('.cs-panel'), items: ch.querySelector('.cs-items'), video: ch.querySelector('.cs-vid'), from, to: acc / total, copy: gi % 2 };
+    return { ch, gi, pin: ch, panel: ch.querySelector('.cs-panel'), txt: ch.querySelector('.cs-copy'), video: ch.querySelector('.cs-vid'), from, to: acc / total, copy: gi % 2 };
   });
   // the inner (text-facing) edge: on phones the window sits above the text, so its indent faces left
   const innerOf = g => innerWidth <= 900 ? 'left' : (g.ch.classList.contains('text-left') ? 'left' : 'right');
@@ -214,17 +211,7 @@
         if (jump) { delete f.dataset.jump; setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => { if (sized[c] === g) f.style.visibility = 'visible'; })), 60); }   // show it once the cut has rendered
       }
     });
-    // desktop: the products only show between the top and bottom edges of their window, fading in and out at those
-    // edges, so everything beside the window lines up with it (client, 2026-11-10, after terminal-industries.com)
-    if (near) for (const g of groups) {
-      const it = g.items; if (!it) continue;
-      if (innerWidth <= 900) { if (it._band) { it._band = ''; it.style.webkitMaskImage = it.style.maskImage = ''; } continue; }
-      const ib = it.getBoundingClientRect(); if (ib.bottom < -vh || ib.top > vh * 2) continue;
-      const pb = g.panel.getBoundingClientRect();
-      const a = Math.round(pb.top - ib.top), z = Math.round(pb.bottom - ib.top), soft = 56;
-      const m = `linear-gradient(180deg, transparent ${a}px, #000 ${a + soft}px, #000 ${z - soft}px, transparent ${z}px)`;
-      if (m !== it._band) { it._band = m; it.style.webkitMaskImage = it.style.maskImage = m; }
-    }
+    if (near) scrollLists();
     // words: a paragraph lights up as it rises from the bottom of the screen to a little above the middle
     if (near && !reduce) for (const f of fills) {
       const b = f.p.getBoundingClientRect(); if (b.bottom < -50 || b.top > vh + 50) continue;
@@ -244,8 +231,42 @@
   } }, { rootMargin: '50% 0px' });
   sec.querySelectorAll('.cs-vid').forEach(v => vio.observe(v));
 
-  shapePanels();
-  addEventListener('resize', shapePanels);
-  document.fonts && document.fonts.ready.then(shapePanels);
+  // desktop (client, 2026-11-11): the group's name stays at the window's top edge; under it the products scroll past
+  // at their full size, spaced as before, but only inside the window's height: nothing shows above the name's line or
+  // below the window's bottom edge. Each group's screen stays pinned for as long as its list takes to scroll through.
+  const DWELL_IN = 0.12, DWELL_OUT = 0.28;   // screens of scrolling before the list moves, and after it ends
+  function fit() {
+    // one size for every group's name (client, 2026-11-11): the size that lets the longest word ("Metallurgical") fit
+    let kh = 1;
+    if (innerWidth > 900) for (const g of groups) {
+      const c = g.txt, h = c.querySelector('.cs-category'); c.style.setProperty('--kh', 1);
+      for (let k = 1; k > 0.5 && h.scrollWidth > h.clientWidth + 1; ) { k -= 0.02; c.style.setProperty('--kh', k.toFixed(3)); }
+      kh = Math.min(kh, parseFloat(c.style.getPropertyValue('--kh')));
+    }
+    for (const g of groups) {
+      const c = g.txt;
+      g.list = c.querySelector('.cs-list'); g.track = c.querySelector('.cs-track');
+      c.style.setProperty('--kh', innerWidth > 900 ? kh.toFixed(3) : 1); g.ch.style.height = ''; g.track.style.transform = ''; g.travel = 0;
+      if (innerWidth <= 900) continue;
+      const room = g.list.clientHeight, need = g.track.offsetHeight;
+      g.travel = Math.max(0, need - room);
+      g.base = need < room ? room - need : 0;   // a short list sits on the window's bottom edge
+      g.ch.style.height = Math.round(innerHeight * (1 + DWELL_IN + DWELL_OUT) + g.travel) + 'px';
+      g.lastY = null;
+    }
+  }
+  function scrollLists() {
+    if (innerWidth <= 900) return;
+    for (const g of groups) {
+      if (!g.track) continue;
+      const r = g.ch.getBoundingClientRect(); if (r.bottom < -innerHeight || r.top > innerHeight * 2) continue;
+      const y = g.base - Math.min(g.travel, Math.max(0, -r.top - innerHeight * DWELL_IN));
+      if (y !== g.lastY) { g.lastY = y; g.track.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`; }
+    }
+  }
+  const layout = () => { fit(); shapePanels(); };
+  layout();
+  addEventListener('resize', layout);
+  document.fonts && document.fonts.ready.then(layout);
   requestAnimationFrame(tick);
 })();
