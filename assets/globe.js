@@ -11,7 +11,7 @@ const OFFICES = [
     leads: [P('krishna-hartono', 'Krishna Hartono', 'Regional Business Director'), P('yos-rizaldy', 'Yos Rizaldy', 'Regional Business Director')] },
   { id: 'kr', country: 'South Korea', entity: 'HexaHessman Korea', address: '#619, 87 Ogeum-ro, Songpa-gu, Seoul 05542', lat: 37.505, lon: 127.11, leads: [P('eddie-jeong', 'Eddie Jeong', 'Regional Business Director')] },
   { id: 'my', country: 'Malaysia', entity: 'HexaHessman Sdn Bhd', address: 'Unit 9-6, Binjai 8 Premium Soho, 2 Lorong Binjai, 50450 Kuala Lumpur', lat: 3.158, lon: 101.72, leads: [P('anuar-ebrahim', 'Anuar Ebrahim', 'Director of Trading'), P('zulkurnain-rahman', 'Zulkurnain Rahman', 'Principal Advisor')] },
-  { id: 'th', country: 'Thailand', entity: 'HexaHessman Thailand', address: '118/3 Moo 7, Tambon Bang Sao Thong, Amphoe Bang Sao Thong, Samut Prakan 10570', lat: 13.56, lon: 100.80, leads: [P('thanin-amin', 'Thanin Amin', 'Regional Business Director')] },
+  { id: 'th', country: 'Thailand', entity: 'HexaHessman Thailand', address: '118/3 Moo 7, Tambon Bang Sao Thong, Amphoe Bang Sao Thong, Samut Prakan 10570', lat: 13.56, lon: 100.80, leads: [P('hasareeyan-amin', 'Hasareeyan Amin', 'Regional Business Director')] },
   { id: 'in', country: 'India', entity: 'HexaHessman India', address: '129/1, Lal Bagh Main Road, Bengaluru 560027', lat: 12.955, lon: 77.59 },
   { id: 'uk', country: 'United Kingdom', entity: 'HexaHessman UK', address: '128 City Road, London EC1V 2NX', lat: 51.527, lon: -0.089, leads: [P('nigel-edwards', 'Nigel Edwards', 'Principal Advisor')] },
   { id: 'tr', country: 'Türkiye', entity: 'HexaHessman Turkey', address: 'Gökçe Apartmanı No: 22/12, Mustafa Kemal Mahallesi, 2124. Cadde, Çankaya, Ankara 06530', lat: 39.91, lon: 32.80, leads: [P('cemal-koc', 'Cemal Koc', 'Regional Business Director')] },
@@ -27,9 +27,11 @@ if (TEAM.length) OFFICES.forEach(o => { o.leads = TEAM.filter(p => p.office === 
 // s can even out a figure's size
 const FIT = { 'azmi-mahmood': { dx: -2.4 }, 'aizat-amin': { dx: -0.1 }, 'adam-yeoh': { dx: 1.1 }, 'hafriz-razif': { dx: -0.1 }, 'connie-tai': { dx: -9 } };   // Connie: Azmi's size, her shoulder tucked behind Hafriz's as Azmi's is behind Aizat's (client, 2026-11-07)
 // (client, 2026-11-10) Singapore's line is Aizat, Azmi (in the middle) and Adam only; Yos stands in the middle for Indonesia;
-// Thanin and Parin swap places. The office's list in the card keeps everyone, with Connie and Hafriz switched.
-const LINE_ORDER = { sg: ['aizat-amin', 'azmi-mahmood', 'adam-yeoh'], id: ['krishna-hartono', 'yos-rizaldy', 'yani-lee'], th: ['thanin-amin', 'parin-udornwong'] };
-const LIST_ORDER = { sg: ['azmi-mahmood', 'aizat-amin', 'adam-yeoh', 'connie-tai', 'hafriz-razif'] };
+// Thailand: Hasareeyan Amin (he replaces Thanin, client 2026-11-12) stands in front, Parin beside him. The office's list in the card keeps everyone, with Connie and Hafriz switched.
+const LINE_ORDER = { sg: ['aizat-amin', 'azmi-mahmood', 'adam-yeoh'], id: ['krishna-hartono', 'yos-rizaldy', 'yani-lee'], th: ['hasareeyan-amin', 'parin-udornwong'] };
+// an office with two people has no middle: the one named here stands in front, the other a step back beside them
+const FRONT = { th: 'hasareeyan-amin' };
+const LIST_ORDER = { sg: ['azmi-mahmood', 'aizat-amin', 'adam-yeoh', 'connie-tai', 'hafriz-razif'], th: ['hasareeyan-amin', 'parin-udornwong'] };
 const byOrder = ord => (a, b) => (ord.indexOf(a.slug) + 99) % 99 - (ord.indexOf(b.slug) + 99) % 99;
 OFFICES.forEach(o => { if (!o.leads) return;
   const lo = LIST_ORDER[o.id], li = LINE_ORDER[o.id];
@@ -114,7 +116,9 @@ function select(i, byUser) {
   pins.forEach((p, k) => p.label.classList.toggle('active', k === i));
   // the office's people step out in front of the globe, as in the About lineup: the first in front, the rest either side
   const L = o.leads || [], mid = (L.length - 1) / 2, GAP = 36;   // head-to-head spacing, in % of a figure's width
-  const pos = k => { const d = Math.abs(k - mid); return { d, x: Math.sign(k - mid) * Math.min(d, 2) * GAP }; };
+  const fk = L.length === 2 ? L.findIndex(l => l.slug === FRONT[o.id]) : -1;
+  const pos = k => { if (fk >= 0) return { d: k === fk ? 0 : 1, x: (k - mid) * GAP };
+    const d = Math.abs(k - mid); return { d, x: Math.sign(k - mid) * Math.min(d, 2) * GAP }; };
   line.innerHTML = L.map((l, k) => { const { d, x } = pos(k), f = FIT[l.slug] || {};
     return `<figure class="gp-fig" style="--x:${(x + (f.dx || 0)).toFixed(1)}%;--s:${((1 - 0.16 * d) * (f.s || 1)).toFixed(3)};--z:${10 - Math.round(d)};--k:${k}">
       <img src="/assets/team/cut/${l.slug}.webp?v=2" alt="" draggable="false"></figure>`; }).join('')

@@ -577,8 +577,8 @@ ABOUT = {
          "Dr. Park brings a technical background to the Korean trade desk, advising steel and chemical customers on product grades."),
         ("Raja Sekhar", "Trade Specialist", "HexaHessman India", "raja-sekhar", "in",
          "Raja covers the Indian subcontinent, linking fertilizer and reductant demand with reliable origins."),
-        ("Thanin Amin", "Regional Business Director", "HexaHessman Thailand", "thanin-amin", "th",
-         "Thanin leads the Thai business, building long-term supply agreements with agricultural and industrial buyers."),
+        ("Hasareeyan Amin", "Regional Business Director", "HexaHessman Thailand", "hasareeyan-amin", "th",   # replaces Thanin Amin (client, 2026-11-12)
+         "Hasareeyan leads the Thai business, building long-term supply agreements with agricultural and industrial buyers."),
         ("Cemal Koc", "Regional Business Director", "HexaHessman Türkiye", "cemal-koc", "tr",
          "Cemal heads the Ankara office, developing trade between Türkiye, the Middle East and Southeast Asia."),
         ("Yos Rizaldy", "Regional Business Director", "PT Hexa Hessman Indonesia", "yos-rizaldy", "id",
