@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/header.css?v=1112a" />
-<link rel="stylesheet" href="/assets/site.css?v=1112e" />
+<link rel="stylesheet" href="/assets/site.css?v=1112j" />
 <!-- warm the cache for the preloader drawing (logo.html) so it can start sooner -->
 <link rel="preload" href="/assets/vendor/three.module.js?v=160" as="script" crossorigin>
 <link rel="preload" href="/assets/vendor/three-addons/lines/LineSegments2.js" as="script" crossorigin>
@@ -62,7 +62,7 @@
   /* the words in the site's heading face, larger and in white with a deeper shade so they read on the photo; the words and
      the two doors now span the header bar's width, so they fill a wide screen (client, 2026-11-12) */
   .choice .intro { width: min(1280px, 100%); margin-bottom: clamp(22px, 3.4vh, 38px); text-align: left; }   /* a short header and one line over the doors (user, 2026-11-06) */
-  .choice .intro h1 { max-width: none; margin: 0 0 12px; font-family: var(--display); font-size: clamp(40px, 5.2vw, 88px); font-weight: 800; text-transform: uppercase; letter-spacing: -.03em; line-height: .88; color: #FCFCFC; text-shadow: 0 2px 24px rgba(0,0,0,.7), 0 0 60px rgba(0,0,0,.45); }
+  .choice .intro h1 { max-width: none; margin: 0 0 10px; font-family: var(--display); font-size: clamp(26px, 2.7vw, 44px); font-weight: 700; text-transform: uppercase; letter-spacing: -.025em; line-height: .92;   /* the same size and weight as the names inside the two doors (client, 2026-11-12; was up to 88px) */ color: #FCFCFC; text-shadow: 0 2px 24px rgba(0,0,0,.7), 0 0 60px rgba(0,0,0,.45); }
   .choice .intro p { max-width: 60ch; margin: 0; font-size: clamp(15px, 1.25vw, 20px); font-weight: 600; line-height: 1.4; color: #FCFCFC; text-wrap: balance; text-shadow: 0 1px 14px rgba(0,0,0,.8), 0 0 36px rgba(0,0,0,.5); }
   .choice .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(18px, 2.4vw, 34px); width: min(1280px, 100%); }
@@ -102,7 +102,11 @@
   @media (max-width: 860px) {
     .choice { padding: 80px 20px 28px; }
     .doors { grid-template-columns: 1fr; gap: 14px; }
-    .door { min-height: 136px; padding: 26px 24px; }
+    .door { min-height: 118px; padding: 24px 22px; gap: 8px; }
+    /* phones: each door's name on ONE line and its line smaller (client, 2026-11-12: the names were too big and wrapped) */
+    .door .t { font-size: clamp(15px, 5.6vw, 24px); white-space: nowrap; }
+    .choice .intro h1 { font-size: clamp(22px, 7.4vw, 34px); }   /* phones: one step above the door names, so it still reads as the heading */
+    .door .d { font-size: clamp(12.5px, 3.5vw, 14.5px); line-height: 1.4; }
     .choice p { font-size: 15px; margin-bottom: 20px; }
     .loader .pct { left: 20px; bottom: 28px; }
     .film::after { background: linear-gradient(180deg, rgba(0,0,0,.32), transparent 18%, transparent 40%, rgba(0,0,0,.5)); }
@@ -148,12 +152,12 @@
 
   <div class="loader mark" id="loader" role="img" aria-label="HexaHessman">
     <!-- the 3D drawing of the mark: draws itself on, then spins out while the loader fades onto the port -->
-    <iframe class="pl-logo" src="/logo.html?preloader&v=13" title="" aria-hidden="true" tabindex="-1"></iframe>
+    <iframe class="pl-logo" src="/logo.html?preloader&v=14" title="" aria-hidden="true" tabindex="-1"></iframe>
   </div>
 </div>
 
 <div id="site-header"></div>
-<script src="/assets/site-header.js?v=1112a" defer></script>
+<script src="/assets/site-header.js?v=1112b" defer></script>
 
 <script>
 (() => {
@@ -187,7 +191,7 @@
   const frame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
   const introReady = canPlay(intro);
   // the drawing tells us when it has finished; if it never loads (offline CDN), carry on after a few seconds
-  const drawn = new Promise(r => { addEventListener('message', e => { if (e.data === 'logo-drawn') r(); }); setTimeout(r, 3200); });
+  const drawn = new Promise(r => { addEventListener('message', e => { if (e.data === 'logo-drawn') r(); }); setTimeout(r, 2600); });
   (async function preload() {
     if (reduce) { await introReady; loader.classList.add('done'); return settle(); }
     await frame(); loader.classList.add('mark');

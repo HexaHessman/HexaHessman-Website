@@ -298,7 +298,7 @@ const constructLines = fatLines(toArray(construct), matConstruct);
 
 // ---------- draw-on animation ----------
 for (const l of drawables) l.geometry.instanceCount = 0;
-const drawStart = performance.now(), DRAW_MS = PRELOADER ? 2400 : 2800;   // the preloader draws over ~2.4 s: the whole loading screen is ~3 s (client, 2026-11-08; was ~1 s)
+const drawStart = performance.now(), DRAW_MS = PRELOADER ? 1700 : 2800;   // the preloader draws in 1.7 s (client, 2026-11-12: quicker, and the last stretch of line no longer lingers; was 2.4 s)
 const STORY = new URLSearchParams(location.search).has('seq'), STORY_MS = 5200;   // ?seq: piece by piece; ?story only frames the mark bigger and keeps the preloader's draw (user, 2026-11-06)
 // the plan: faint construction lines, then each piece in turn — its outline, inner frame and hidden edges drawn together
 // as one pen path — the front upright, the back one, the diamond between them, and last the dimensions, one by one
@@ -357,7 +357,9 @@ function tick(now) {
       for (const l of st.sets) l.geometry.instanceCount = Math.ceil(l.userData.total * e);
     }
   } else {
-    const e = 1 - Math.pow(1 - k, 3);
+    // the preloader eases out gently, so the lines finish at a steady pace: with the stronger ease the last 3% of
+    // every line took the final third of the time and read as one long last line
+    const e = PRELOADER ? 1 - Math.pow(1 - k, 1.7) : 1 - Math.pow(1 - k, 3);
     for (const l of drawables) l.geometry.instanceCount = Math.floor(l.userData.total * e);
   }
   if (PRELOADER && k >= 1 && !tick.sent) { tick.sent = true; parent.postMessage('logo-drawn', '*'); }

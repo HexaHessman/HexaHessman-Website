@@ -119,9 +119,10 @@ m2351 268 l412 -1067 -419 -3 c-230 -1 -607 -1 -838 0 l-419 3 422 1071 c231
   }
   function drawer() {
     // each division opens its own list in the small-screen menu, with a link to its main page (client, 2026-11-12: the drop-downs were missing here)
-    const sec = (key) => { const d = SITE[key]; return `<details><summary>${d.title}<i aria-hidden="true"></i></summary><div class="drawer-sub">
+    // the word opens the division's main page; only the plus beside it opens the list (client, 2026-11-12)
+    const sec = (key) => { const d = SITE[key]; return `<div class="drawer-sec"><div class="drawer-row"><a href="${d.href}">${d.title}</a><button type="button" class="drawer-plus" aria-expanded="false" aria-label="Show the ${d.title} list"><i aria-hidden="true"></i></button></div><div class="drawer-sub" hidden>
       ${d.groups.map(g => `<div class="drawer-group">${g.title ? `<div class="drawer-group-title">${g.href ? `<a href="${g.jump || g.href}">${g.title}</a>` : g.title}</div>` : ''}${g.items.map(([l, h]) => link(l, h, g.href ? g : null)).join('')}</div>`).join('')}
-      <a class="drawer-all" href="${d.href}">${d.footerLink[0]} →</a></div></details>`; };
+      <a class="drawer-all" href="${d.href}">${d.footerLink[0]} →</a></div></div>`; };
     return `<div class="drawer" data-lenis-prevent hidden>
       <a href="/">Home</a>${sec('commodities')}${sec('engineering')}<a href="/about/">About</a><a href="/contact/">Contact</a>
       <a class="btn primary drawer-cta" href="/contact/#quote"><span>Request</span><span>a quote</span></a></div>`;
@@ -174,5 +175,7 @@ m2351 268 l412 -1067 -419 -3 c-230 -1 -607 -1 -838 0 l-419 3 422 1071 c231
 
   // mobile drawer
   const btn = header.querySelector('.menu-btn'), dr = header.querySelector('.drawer');
+  dr.addEventListener('click', (e) => { const b = e.target.closest('.drawer-plus'); if (!b) return;
+    const sub = b.closest('.drawer-sec').querySelector('.drawer-sub'), on = sub.hidden; sub.hidden = !on; b.setAttribute('aria-expanded', String(on)); b.closest('.drawer-sec').classList.toggle('open', on); });
   btn.addEventListener('click', () => { const on = dr.hidden; dr.hidden = !on; btn.setAttribute('aria-expanded', String(on)); header.classList.toggle('drawer-open', on); document.documentElement.classList.toggle('no-scroll', on); });
 })();

@@ -128,7 +128,10 @@
   function shape(w, h, inner) {
     const d = Math.max(18, Math.min(30, w * 0.04)), far = innerWidth <= 900 ? w + 120 : w;   // desktop: the window closes inside the page; phone: it still bleeds off the edge
     let pts = [[0, 0], [w * 0.5, 0], [w * 0.5 + d, d], [far, d], [far, h], [0, h], [0, h * 0.82], [d, h * 0.82 - d], [d, h * 0.43 + d], [0, h * 0.43]];
-    if (inner === 'right') pts = pts.map(([px, py]) => [w - px, py]);
+    // phones (client, 2026-11-12): no curve on the side. Both sides run straight off the screen, and the step sits on
+    // the top edge and, mirrored, on the bottom edge
+    if (innerWidth <= 900) pts = [[-40, 0], [w * 0.5, 0], [w * 0.5 + d, d], [w + 40, d], [w + 40, h], [w * 0.5, h], [w * 0.5 - d, h - d], [-40, h - d]];
+    else if (inner === 'right') pts = pts.map(([px, py]) => [w - px, py]);
     const n = pts.length, r = 16; let out = '';
     for (let i = 0; i < n; i++) {
       const p = pts[i], a = pts[(i + n - 1) % n], b = pts[(i + 1) % n];

@@ -116,15 +116,18 @@ function select(i, byUser) {
   pins.forEach((p, k) => p.label.classList.toggle('active', k === i));
   // the office's people step out in front of the globe, as in the About lineup: the first in front, the rest either side
   const L = o.leads || [], mid = (L.length - 1) / 2, GAP = 36;   // head-to-head spacing, in % of a figure's width
-  const fk = L.length === 2 ? L.findIndex(l => l.slug === FRONT[o.id]) : -1;
-  const pos = k => { if (fk >= 0) return { d: k === fk ? 0 : 1, x: (k - mid) * GAP };
-    const d = Math.abs(k - mid); return { d, x: Math.sign(k - mid) * Math.min(d, 2) * GAP }; };
-  line.innerHTML = L.map((l, k) => { const { d, x } = pos(k), f = FIT[l.slug] || {};
-    return `<figure class="gp-fig" style="--x:${(x + (f.dx || 0)).toFixed(1)}%;--s:${((1 - 0.16 * d) * (f.s || 1)).toFixed(3)};--z:${10 - Math.round(d)};--k:${k}">
+  // an office of two: both the same size, standing a little further apart, so neither is the bigger one (client, 2026-11-12).
+  // FRONT only decides who overlaps whom where their shoulders meet.
+  const pair = L.length === 2, PAIR_GAP = 52, fk = pair ? L.findIndex(l => l.slug === FRONT[o.id]) : -1;
+  const pos = k => { if (pair) return { d: 0.5, x: (k - mid) * PAIR_GAP, z: k === fk ? 10 : 9 };
+    const d = Math.abs(k - mid); return { d, x: Math.sign(k - mid) * Math.min(d, 2) * GAP, z: 10 - Math.round(d) }; };
+  line.innerHTML = L.map((l, k) => { const { d, x, z } = pos(k), f = FIT[l.slug] || {};
+    return `<figure class="gp-fig" style="--x:${(x + (f.dx || 0)).toFixed(1)}%;--s:${((1 - 0.16 * d) * (f.s || 1)).toFixed(3)};--z:${z};--k:${k}">
       <img src="/assets/team/cut/${l.slug}.webp?v=2" alt="" draggable="false"></figure>`; }).join('')
     // the names share one top line (client, 2026-11-07), each centred under its person
     // (spread a little wider than the people, so every title has room; they needn't sit exactly under each head)
-    + `<div class="gp-names">${L.map((l, k) => { const step = Math.max(GAP * 0.46, Math.min(20, 90 / L.length));
+    // (a pair's names sit exactly under the two heads; long names wrap onto a second line and never run into each other)
+    + `<div class="gp-names">${L.map((l, k) => { const step = pair ? PAIR_GAP * 0.46 : Math.max(GAP * 0.46, Math.min(20, 90 / L.length));
         return `<p class="gp-name" style="--k:${k};left:${(50 + (k - mid) * step).toFixed(1)}%;width:${Math.min(30, step - 1).toFixed(1)}%"><b>${l.name}</b><span>${l.role}</span></p>`; }).join('')}</div>`;
   // the names hang from one top line, set high enough that the longest title (wrapped onto more lines) still shows in full
   const names = line.querySelector('.gp-names');

@@ -468,7 +468,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=1112a">
-<link rel="stylesheet" href="/assets/site.css?v=1112e">
+<link rel="stylesheet" href="/assets/site.css?v=1112j">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -482,7 +482,7 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 {body}
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=1112a" defer></script>
+<script src="/assets/site-header.js?v=1112b" defer></script>
 <script src="/assets/deco-lines.js?v=3" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js?v=1110b" defer></script>
@@ -508,7 +508,7 @@ def product_contact(up, spot):
     """the floating Back circle and Contact pill on product pages (client's PDF, 2026-11-11); opens the contact card"""
     c = PP.CONTACT
     attrs = "".join(f' data-{k}="{esc_attr(v)}"' for k, v in c.items() if v)
-    return f'<script src="/assets/product-contact.js?v=2" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=5" defer></script>\n'
+    return f'<script src="/assets/product-contact.js?v=2" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=5" defer></script>\n<script src="/assets/related-folders.js?v=1" defer></script>\n'
 
 
 def write(relpath, html):
@@ -572,7 +572,7 @@ def build_commodities_hub():
     write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
         # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
         head_tags='<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">\n',
-        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112b" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112c" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112c" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112c" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
 
 
 def build_group(g):
@@ -754,6 +754,30 @@ PRODUCT_CSS = """
   .pp-grades .pp-type { flex-basis: calc((100% - 16px) / 2); }
   .pp-apps ul { grid-template-columns: 1fr; }
 }
+/* charts on phones (client, 2026-11-12): two and three column charts fit the screen; wider ones are swiped sideways with
+   the row names pinned; the applications chart becomes one block per row */
+.pp-swipe { display: none; }
+@media (max-width: 700px) {
+  .pp-t { min-width: 0; font-size: 13.5px; table-layout: fixed; }
+  .pp-t thead th { font-size: 11.5px; padding: 9px 9px; overflow-wrap: anywhere; }
+  .pp-t tbody th, .pp-t td { padding: 10px 9px; overflow-wrap: anywhere; }
+  .pp-t.c2 th:first-child { width: 46%; } .pp-t.c3 th:first-child { width: 38%; }
+  .pp-tw.wide { margin-right: calc(-1 * var(--gutter)); scrollbar-width: thin; -webkit-overflow-scrolling: touch; }   /* runs to the screen edge, so it reads as cut off = there is more */
+  .pp-tw.wide .pp-t { table-layout: auto; width: max-content; min-width: 100%; }
+  .pp-tw.wide .pp-t th, .pp-tw.wide .pp-t td { min-width: 76px; white-space: nowrap; overflow-wrap: normal; }
+  .pp-tw.wide .pp-t th:first-child { position: sticky; left: 0; z-index: 1; width: 138px; min-width: 138px; max-width: 138px; white-space: normal; background: #fff; box-shadow: 1px 0 0 #C5CCC8, 8px 0 10px -8px rgba(0,0,0,.18); }
+  .pp-tw.wide .pp-t thead th:first-child { background: var(--pp-green); }
+  .pp-swipe { display: block; margin: 0 0 8px; font-size: 12px; font-weight: 500; color: var(--pp-soft); }
+  .pp-swipe span { display: inline-block; animation: ppSwipe 1.6s ease-in-out infinite; }
+  .pp-t.apps, .pp-t.apps thead, .pp-t.apps tbody, .pp-t.apps tr, .pp-t.apps th, .pp-t.apps td { display: block; width: auto !important; }
+  .pp-t.apps thead th { display: none; } .pp-t.apps thead th:first-child { display: block; }
+  .pp-t.apps tbody tr { padding: 12px 0 13px; }
+  .pp-t.apps tbody th { padding: 0 9px 4px; font-size: 14.5px; }
+  .pp-t.apps td { padding: 2px 9px; text-align: left !important; white-space: normal !important; }
+  .pp-t.apps td[data-l]:nth-child(2)::before { content: attr(data-l) ": "; font-style: normal; font-weight: 600; color: var(--pp-ink); }
+}
+@keyframes ppSwipe { 50% { transform: translateX(5px); } }
+@media (prefers-reduced-motion: reduce) { .pp-swipe span { animation: none; } }
 @media (max-width: 560px) {
   .pp-types, .pp-types.n2, .pp-types.text, .pp-types.text.n2, .pp-types.text.n4 { grid-template-columns: 1fr; }
   .pp-type img { max-width: 340px; margin: 0 auto; }
@@ -771,15 +795,41 @@ def pp_table(block, cls=""):
         cells = list(r)
         if all(is_placeholder(c) or c in ("—", "") for c in cells[1:]):
             continue
-        tds = [f'<th scope="row">{esc(cells[0])}</th>'] + ["<td>—</td>" if is_placeholder(c) else f"<td>{esc(c)}</td>" for c in cells[1:]]
-        rows.append("<tr>" + "".join(tds) + "</tr>")
+        rows.append(cells)
     if not rows:
         return ""
     n = max(len(r) for r in block["rows"])
     heads = block.get("headers") or (["Parameter", "Specification"] + [""] * (n - 2))
+    # each cell carries its column's name (data-l): on a phone the applications chart stacks into one block per row and
+    # shows that name before the value
+    body = ""
+    for cells in rows:
+        tds = [f'<th scope="row">{esc(cells[0])}</th>']
+        for k, c in enumerate(cells[1:], 1):
+            lab = f' data-l="{esc_attr(heads[k])}"' if k < len(heads) and heads[k] else ""
+            tds.append(f"<td{lab}>—</td>" if is_placeholder(c) else f"<td{lab}>{esc(c)}</td>")
+        body += "<tr>" + "".join(tds) + "</tr>"
     thead = "<thead><tr>" + "".join(f"<th>{esc(h)}</th>" for h in heads) + "</tr></thead>"
     title = f'<h3 class="pp-tt">{esc(block["title"])}</h3>' if block.get("title") else ""
-    return f'{title}<div class="pp-tw"><table class="pp-t c{len(heads)} {cls}">{thead}<tbody>{"".join(rows)}</tbody></table></div>'
+    # phones: up to three columns fit the screen; four or more keep their columns, with the row names pinned on the left
+    # while the rest is swiped sideways (a hint says so); the applications chart stacks
+    wide = len(heads) >= 4 and "apps" not in cls
+    hint = '<p class="pp-swipe" aria-hidden="true">Swipe sideways for every column <span>→</span></p>' if wide else ""
+    return f'{title}{hint}<div class="pp-tw{" wide" if wide else ""}"{" tabindex=" + chr(34) + "0" + chr(34) if wide else ""}><table class="pp-t c{len(heads)} {cls}">{thead}<tbody>{body}</tbody></table></div>'
+
+
+def phone_srcset(src):
+    """srcset for a big photo that has a 1200px "-m" copy beside it (lighter on phones); "" when it has none"""
+    path, _, q = src.partition("?"); base, ext = os.path.splitext(path); m = base + "-m" + ext
+    if not os.path.exists(os.path.join(ROOT, m.lstrip("/"))):
+        return ""
+    try:
+        from PIL import Image as _Im
+        w = _Im.open(os.path.join(ROOT, path.lstrip("/"))).size[0]
+    except Exception:
+        w = 2400
+    q = "?" + q if q else ""
+    return f' srcset="{m}{q} 1200w, {path}{q} {w}w" sizes="100vw"'
 
 
 def pp_exists(src):
@@ -819,7 +869,9 @@ def product_body(p):
     if not pp_exists(hero_img):
         hero_img = f"/assets/products/{p['slug']}.jpg"
     pos = f' style="--pos:{P["hero_pos"]}"' if P.get("hero_pos") else ""
-    out = [f'<section class="pp-hero"><img src="{hero_img}?v=3" alt="" fetchpriority="high"{pos}><div class="pp-w"><h1{" class=" + chr(34) + "long" + chr(34) if len(title) > 15 else ""}>{esc(title)}</h1><p>{esc(lead)}</p></div></section>']
+    hero_m = hero_img[:-4] + "-m.jpg"   # a 1200px copy for phones (tools: made with PIL from the 2400px file)
+    srcset = f' srcset="{hero_m}?v=3 1200w, {hero_img}?v=3 2400w" sizes="100vw"' if pp_exists(hero_m) else ""
+    out = [f'<section class="pp-hero"><img src="{hero_img}?v=3"{srcset} alt="" fetchpriority="high"{pos}><div class="pp-w"><h1{" class=" + chr(34) + "long" + chr(34) if len(title) > 15 else ""}>{esc(title)}</h1><p>{esc(lead)}</p></div></section>']
     blocks = []
     side = P.get("side")   # the client's own words beside the photos (their mock-ups, 2026-11-12): they stand in for the overview
     if over and not side:
@@ -1013,7 +1065,7 @@ def build_engineering_hub():
     <h2 class="ep-short" data-reveal="fade">{esc(short)}</h2>
     <p class="ep-brief" data-reveal="fade">{esc(pr["hero"][0])}</p>
     <p class="ep-tags" data-reveal="fade">{tags}</p>
-    <div class="ep-foot" data-reveal="fade">{cov}<a class="pill solid" href="/engineering/{slug}/">Read more about {esc(name)} →</a></div>
+    <div class="ep-foot" data-reveal="fade">{cov}<a class="pill solid" href="/engineering/{slug}/" aria-label="Read more about {esc_attr(name)}">Read more</a></div>
   </div>
 </article>''')
     body.append(f'<section class="eprin" id="principals" aria-label="Principals we represent">{"".join(stops)}</section>')
@@ -1033,7 +1085,7 @@ def build_principal(pr):
         # title and subheader on the photo; the intro and coverage are the subheader (user, 2026-11-06: no breadcrumbs, no logo block)
         cov = f'<p class="pr-cov">{esc(pr["coverage"])}</p>' if pr.get("coverage") else ""
         logo = f'<img class="pr-logo mq-{pr["slug"]}" src="{pr["logo"]}" alt="{esc_attr(pr["name"])}">' if pr.get("logo") else ""   # the principal's logo, top right of its photo (user, 2026-11-06)
-        hero = f"""<section class="hero pr-hero pr-photo"><div class="media"><img src="{pr["hero_img"]}" alt="" fetchpriority="high"></div>
+        hero = f"""<section class="hero pr-hero pr-photo"><div class="media"><img src="{pr["hero_img"]}"{phone_srcset(pr["hero_img"])} alt="" fetchpriority="high"></div>
 <div class="wrap"><h1>{esc(pr["h1"])}</h1><p class="lead">{esc(pr["hero"][0])}</p>{cov}</div>{logo}</section>"""
     if pr.get("hero_draw"):
         hero = hero.replace('<section class="hero plain">', '<section class="hero plain has-draw">', 1).replace('<div class="wrap">', f'<img class="bg-draw" src="{pr["hero_draw"]}" alt="" aria-hidden="true"><div class="wrap">', 1)
@@ -1503,7 +1555,8 @@ CONTACT_CSS = """
 .contact-aside .ca-mail { display: grid; gap: 14px; padding-top: 20px; border-top: 1px solid var(--line); }
 .contact-aside .ca-mail .pill { justify-self: start; font-size: 14.5px; }
 .contact-aside .ca-wa { justify-self: start; margin-top: 8px; font-size: 14.5px; }
-.form { display: grid; gap: 20px; }
+.form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }   /* (a long option in a drop-down used to widen the form past a narrow phone screen) */
+.form label, .form .two > * { min-width: 0; }
 .form .two { display: grid; gap: 20px; grid-template-columns: 1fr 1fr; }
 .form label { display: grid; gap: 8px; font-family: var(--sans); font-size: 13.5px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); }
 .form input, .form select, .form textarea { width: 100%; height: 50px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line-strong); background: rgba(var(--ink-rgb), .05); color: var(--ink); font: 500 15px/1.4 var(--sans); transition: border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
@@ -1517,7 +1570,8 @@ CONTACT_CSS = """
 .form .btn-row .pill { min-width: 200px; }
 .form .help-row { margin-top: -10px; }
 .form .two { align-items: end; }
-@media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } .contact-aside { position: static; order: 2; } .form .two { grid-template-columns: 1fr; } }
+.contact-form { min-width: 0; }
+@media (max-width: 900px) { .contact-grid { grid-template-columns: minmax(0, 1fr); } .contact-aside { position: static; order: 2; } .form .two { grid-template-columns: minmax(0, 1fr); } }
 .form .help.error { color: #f0b49a; }
 .form input.invalid { border-color: #f0b49a; }
 .contact-card h3 { margin-bottom: 6px; }
@@ -1575,7 +1629,7 @@ CONTACT_JS = """
 def build_contact():
     K = C.CONTACT_PAGE
     body = []
-    body.append(f"""<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg?v=2" alt="The HexaHessman office" fetchpriority="high"></div>
+    body.append(f"""<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg?v=2"{phone_srcset("/assets/contact-office.jpg?v=2")} alt="The HexaHessman office" fetchpriority="high"></div>
 <div class="wrap">{crumbs([("Home", "/"), ("Contact", None)])}<p class="eyebrow">{esc(K["eyebrow"])}</p><h1>{esc(K["h1"])}</h1><p class="lead">{esc(K["lead"])}</p></div></section>""")   # their office photo (from hexahessman.com's about page)
     team = [{"name": n, "role": r, "slug": s, "office": o} for n, r, e, s, o, _ in C.ABOUT["team"]]   # everyone in each office, Singapore included (user, 2026-11-06)
     body.append(f'<section id="globe" class="globe" data-people="{_html.escape(json.dumps(team, ensure_ascii=False), quote=True)}"></section>')   # the office globe, under the photo hero
@@ -1636,7 +1690,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=20"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=21"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 

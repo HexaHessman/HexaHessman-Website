@@ -59,7 +59,10 @@ body.eng #services { border-top: 0; }   /* no divider between the logo strip and
 .hero .media img, .hero .media video { width: 100%; height: 100%; object-fit: cover; filter: saturate(.7) contrast(1.02); }
 .hero .media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(var(--paper-rgb),.35), rgba(var(--paper-rgb),.78) 70%, var(--paper)); }
 .hero .wrap { position: relative; z-index: 1; display: grid; gap: 22px; justify-items: start; }   /* on the header bar's left edge, on any screen width (client, 2026-11-12) */
+.hero .wrap { grid-template-columns: minmax(0, 1fr); }   /* (one long word, e.g. SHIBATAFENDERTEAM, used to widen the column and push the words off a phone screen) */
 .hero .wrap > * { max-width: min(820px, 100%); }
+h1, h2, .arrive-title { overflow-wrap: break-word; }
+@media (max-width: 600px) { h1, .h1, .arrive-title { font-size: clamp(24px, 7.8vw, 34px); } h2, .h2 { font-size: clamp(22px, 6.6vw, 28px); } .lead { font-size: 15px; } }
 .hero.plain { min-height: 0; padding-top: 170px; }
 .hero.plain .media { display: none; }
 
@@ -134,16 +137,18 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .site-header .bar { position: relative; z-index: 70; }   /* above the phone drawer, so its close button stays reachable */
 .drawer { position: fixed; inset: 0; z-index: 60; background: var(--paper-2); color: var(--ink); overflow: auto; padding: 110px 28px 40px; display: grid; gap: 4px; align-content: start; }
 .drawer[hidden] { display: none; }
-.drawer > a, .drawer summary { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: 24px; line-height: 1; letter-spacing: -.02em; padding: 16px 0 13px; border-bottom: 1px solid var(--line); text-decoration: none; cursor: pointer; list-style: none; }
-.drawer summary::-webkit-details-marker { display: none; }
-/* the two divisions open their own lists in the small-screen menu (client, 2026-11-12) */
-.drawer summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.drawer summary i { flex: none; position: relative; width: 26px; height: 26px; border: 1.5px solid currentColor; border-radius: 50%; margin-top: -4px; transition: transform .3s; }
-.drawer summary i::before, .drawer summary i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 11px; height: 1.5px; background: currentColor; transform: translate(-50%, -50%); }
-.drawer summary i::after { transform: translate(-50%, -50%) rotate(90deg); }
-.drawer details[open] summary i { transform: rotate(45deg); }
-.drawer details[open] summary { border-bottom-color: transparent; }
-.drawer details[open] { border-bottom: 1px solid var(--line); }
+.drawer > a, .drawer-row > a { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(20px, 6.2vw, 24px); line-height: 1; letter-spacing: -.02em; padding: 16px 0 13px; border-bottom: 1px solid var(--line); text-decoration: none; cursor: pointer; color: inherit; }
+/* the two divisions in the small-screen menu (client, 2026-11-12): the word opens the division's page, the plus opens its list */
+.drawer-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); }
+.drawer-row > a { flex: 1 1 auto; min-width: 0; border-bottom: 0; }
+.drawer-plus { flex: none; width: 44px; height: 44px; margin: 0 -9px 0 0; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; display: grid; place-items: center; }
+.drawer-plus i { position: relative; width: 26px; height: 26px; border: 1.5px solid currentColor; border-radius: 50%; transition: transform .3s; }
+.drawer-plus i::before, .drawer-plus i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 11px; height: 1.5px; background: currentColor; transform: translate(-50%, -50%); }
+.drawer-plus i::after { transform: translate(-50%, -50%) rotate(90deg); }
+.drawer-sec.open .drawer-plus i { transform: rotate(45deg); }
+.drawer-sec.open .drawer-row { border-bottom-color: transparent; }
+.drawer-sec.open { border-bottom: 1px solid var(--line); }
+.drawer-sub[hidden] { display: none; }
 .drawer-sub { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 4px 28px; padding: 2px 0 20px; }
 .drawer-group { padding: 8px 0 8px; display: grid; gap: 9px; align-content: start; }
 .drawer-group-title { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); margin: 6px 0 2px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
@@ -151,7 +156,7 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .drawer-group a { font-size: 14.5px; font-weight: 500; color: var(--ink-soft); text-decoration: none; }
 .drawer-all { grid-column: 1 / -1; display: block; padding: 10px 0 0; font-family: var(--sans); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; text-decoration: none; }
 .drawer-cta { margin-top: 22px; justify-self: start; }
-.drawer > a.drawer-cta { font-family: var(--sans); font-weight: 600; font-size: 14.5px; letter-spacing: 0; padding: 10px 26px; border-bottom: 0; text-transform: none; }   /* a button, same type as the header's (user, 2026-11-06) */
+.drawer > a.drawer-cta { color: #0F2A1E; font-family: var(--sans); font-weight: 600; font-size: 14.5px; letter-spacing: 0; padding: 10px 26px; border-bottom: 0; text-transform: none; }   /* a button, same type as the header's (user, 2026-11-06) */
 .drawer-meta { margin-top: 20px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
 .site-header.drawer-open .bar { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
 .site-header.drawer-open .menu-btn span:first-child { transform: translateY(4px) rotate(45deg); }
@@ -212,12 +217,14 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .gp-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(transparent, rgba(15,42,30,.85)); pointer-events: none; z-index: 11; }
 .gp-names { position: absolute; left: 0; right: 0; bottom: calc(2% + 50px); height: 0; z-index: 12; }   /* the names hang from one shared top line */
 .gp-names .gp-name { position: absolute; top: 0; transform: translateX(-50%); }   /* under its own person (globe.js sets left and width) */
-.gp-name b { white-space: nowrap; }
+.gp-name b { white-space: normal; text-wrap: balance; line-height: 1.15; }   /* a long name wraps inside its own column, never over the next name (client, 2026-11-12) */
 .gp-name { flex: 1 1 0; min-width: 0; text-align: center; display: grid; gap: 3px; opacity: 0; }
-.gp-name b { font-size: 18px; font-weight: 500; color: var(--ink); }   /* names bigger, titles smaller (client, 2026-11-10) */
-.gp-name span { font-size: 11.5px; line-height: 1.3; color: var(--ink-soft); }
+.gp-name b { font-size: 16.5px; font-weight: 600; letter-spacing: 0; color: var(--ink); }   /* names bigger, titles smaller (client, 2026-11-10) */
+.gp-name span { font-size: 11px; line-height: 1.3; color: var(--ink-soft); text-wrap: balance; }
 .gp-line.in .gp-name { animation: gpCap .6s ease forwards; animation-delay: calc(.45s + var(--k) * .14s); }
-@media (max-width: 900px) { .gp-name b { font-size: 15px; } .gp-name span { font-size: 10.5px; } }
+@media (max-width: 900px) { .gp-name b { font-size: 13.5px; } .gp-name span { font-size: 10px; } }
+.gp-name b, .gp-name span { overflow-wrap: anywhere; }
+@media (max-width: 420px) { .gp-name b { font-size: 12px; } .gp-name span { font-size: 9px; } }
 .gp-line.in .gp-fig img { animation: gpIn .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--k) * .14s); }
 .gp-line.in .gp-fig figcaption { animation: gpCap .6s ease forwards; animation-delay: calc(.45s + var(--k) * .14s); }
 @keyframes gpIn { to { opacity: 1; transform: none; } }
@@ -455,10 +462,10 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 @media (max-width: 900px) {
   .cs-chapter { height: auto; }
   .cs-pin, .text-left .cs-pin, .text-right .cs-pin { position: relative; height: auto; grid-template-columns: 1fr; grid-template-rows: auto; padding: 0; }
-  .cs-stick, .text-left .cs-stick, .text-right .cs-stick { grid-column: 1; grid-row: 1; position: sticky; top: 0; z-index: 2; padding: 84px 0 14px 16px; background: var(--cs-bg); }
+  .cs-stick, .text-left .cs-stick, .text-right .cs-stick { grid-column: 1; grid-row: 1; position: sticky; top: 0; z-index: 2; padding: 84px 0 14px; background: var(--cs-bg); overflow: hidden; }   /* edge to edge: both sides run off the screen (client, 2026-11-12) */
   .cs-panel { height: 44vh; }
   .cs-copy, .text-left .cs-copy, .text-right .cs-copy { grid-column: 1; grid-row: 2; z-index: 0; padding: 30px 20px 90px; }
-  .cs-category { font-size: min(44px, 11vw); }
+  .cs-category { font-size: min(40px, 9.6vw); text-align: center; text-wrap: balance; }   /* each group's name centred on phones (client, 2026-11-12) */
   .cs-list { overflow: visible; -webkit-mask-image: none; mask-image: none; margin-top: 0; }
   .cs-track { gap: 40px; padding: 30px 0 0; transform: none !important; }
   .cs-title { font-size: min(32px, 8.4vw); }
@@ -565,6 +572,21 @@ body.eng, .vy, .cscroll { --accent: #1F7A4A; }
 #related .card p { align-self: start; }
 #related .card .more { align-self: end; margin-top: 8px; }
 @media (max-width: 900px) { #related .grid.c3 { grid-template-columns: 1fr; row-gap: 16px; } #related .card { grid-row: auto; grid-template-rows: auto; } }
+/* Related products on the commodity pages: a black band with three green folders, the homepage doors' shape
+   (client, 2026-11-12; related-folders.js cuts the fill and draws the outline) */
+section#related { background: #000; border-top: 0; color: #eee3c7;
+  --paper: #000000; --paper-2: #000000; --paper-rgb: 0,0,0; --ink: #eee3c7; --ink-soft: #d2c6aa; --ink-rgb: 238,227,199; --muted: rgba(238,227,199,.7); --line: rgba(238,227,199,.16); --line-strong: rgba(238,227,199,.32); }
+#related .card.rf { isolation: isolate; border: 0; border-radius: 0; background: none; padding: clamp(46px, 3.8vw, 58px) clamp(22px, 2vw, 30px) clamp(42px, 3.4vw, 52px); }
+#related .card.rf:hover { background: none; }
+#related .rf-bg { position: absolute; inset: 0; z-index: -1; background: #0F2A1E; transition: background .3s; }
+#related .card.rf:hover .rf-bg { background: #16392a; }
+#related .rf-line { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+#related .rf-line path { fill: none; stroke: rgba(238,227,199,.4); stroke-width: 1.2; transition: stroke .3s; }
+#related .card.rf:hover .rf-line path { stroke: rgba(238,227,199,.8); }
+#related .card.rf h3 { color: #FCFCFC; font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(20px, 1.7vw, 26px); letter-spacing: -.02em; line-height: 1; }
+#related .card.rf:hover h3 { color: #FCFCFC; }
+#related .card.rf p { color: rgba(244,239,224,.82); }
+#related .card.rf .more { color: #eee3c7; }
 
 /* every closing call-to-action is the footer's dark green, on every page, and runs straight into the footer with no line
    between them (client, 2026-11-10). One colour for both: change --cta-ground to change them together. */
