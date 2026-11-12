@@ -468,7 +468,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=1112a">
-<link rel="stylesheet" href="/assets/site.css?v=1112d">
+<link rel="stylesheet" href="/assets/site.css?v=1112e">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -508,7 +508,7 @@ def product_contact(up, spot):
     """the floating Back circle and Contact pill on product pages (client's PDF, 2026-11-11); opens the contact card"""
     c = PP.CONTACT
     attrs = "".join(f' data-{k}="{esc_attr(v)}"' for k, v in c.items() if v)
-    return f'<script src="/assets/product-contact.js?v=2" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=4" defer></script>\n'
+    return f'<script src="/assets/product-contact.js?v=2" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=5" defer></script>\n'
 
 
 def write(relpath, html):
@@ -536,7 +536,9 @@ def build_commodities_hub():
     # Aidreo's site was unreachable, so its mark is still the one traced from the client's sheet, in our green.
     PARTNERS = [("jewe-wani.png", "Jewe Wani Holdings"), ("vale.svg", "Vale"), ("pertamina.svg", "Pertamina"), ("harita.png", "Harita Group"), ("burgaz.png", "Burgaz Ventures"), ("petronas.svg", "Petronas"),
                 ("wijaya-pura.png", "PT. Wijaya Pura"), ("indevco.png", "Indevco"), ("pvfcco.png", "PetroVietnam PVFCCo"), ("hessman-energy.png", "Hessman Energy"), ("arkema.svg", "Arkema"), ("aidreo.svg", "Aidreo")]
-    cells = "".join(f'<div class="pcell" data-i="{i}"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><img class="plogo plogo-{f.split(".")[0]}" src="/assets/partners/{f}?v=2" alt="{esc_attr(name)}" loading="lazy" decoding="async"></div>' for i, (f, name) in enumerate(PARTNERS))   # two rows (user, 2026-11-06)
+    # five across, two rows (client, 2026-11-12): ten show at a time and the other two swap in at random (arrive.js reads data-logos)
+    cells = "".join(f'<div class="pcell" data-i="{i}"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><img class="plogo plogo-{f.split(".")[0]}" src="/assets/partners/{f}?v=2" alt="{esc_attr(name)}" loading="lazy" decoding="async"></div>' for i, (f, name) in enumerate(PARTNERS[:10]))
+    all_logos = _html.escape(_json.dumps([[f, name] for f, name in PARTNERS], ensure_ascii=False), quote=True)
     # hero: the bulk port at dusk, edge to edge, with the headline pushed to the left over the sky (user, 2026-11-06)
     body = [f'''<section class="arrive com-arrive" id="partners" aria-label="Partners">
   <div class="com-hero"><video class="com-hero-vid" muted playsinline preload="auto" poster="/assets/commodities/crane-loop.jpg" aria-label="A harbour crane loading jumbo bags onto a ship at dusk"><source media="(max-width: 720px)" src="/assets/commodities/crane-loop-m.mp4" type="video/mp4"><source src="/assets/commodities/crane-loop.mp4" type="video/mp4"></video>
@@ -560,7 +562,7 @@ def build_commodities_hub():
   hold();
 }})();
 </script>
-  <div class="pwall"><div class="pgrid">{cells}</div></div>
+  <div class="pwall"><div class="pgrid" data-logos="{all_logos}">{cells}</div></div>
 </section>''', f'<section id="cscroll" class="cscroll" data-intro="{intro}"></section>', '<section id="markets" class="markets" aria-label="Market prices"></section>']   # market prices (markets.js, client 2026-11-11)
 
     # (Product groups and How we supply removed, user 2026-11-06)
@@ -570,7 +572,7 @@ def build_commodities_hub():
     write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
         # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
         head_tags='<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">\n',
-        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112a" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112a" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112b" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112c" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
 
 
 def build_group(g):
@@ -1019,7 +1021,7 @@ def build_engineering_hub():
     body.append(cta(H["cta_h"], ENG_CTA_P, "engineering"))
     # (the cone fender line drawing under the hero was tried and removed, user 2026-11-06; eng-draw.html is kept, unused)
     scripts = ('<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n'
-               '<script src="/assets/arrive.js?v=1112a" defer></script>\n<script src="/assets/eng.js?v=2611a" defer></script>\n')
+               '<script src="/assets/arrive.js?v=1112c" defer></script>\n<script src="/assets/eng.js?v=2611a" defer></script>\n')
     write("/engineering/index.html", page("Engineering Solutions", meta_desc(H["lead"]), "\n".join(body), body_scripts=scripts, body_class="eng"))
 
 

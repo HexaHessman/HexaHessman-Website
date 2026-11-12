@@ -51,7 +51,7 @@
     </div>
     <div class="cs-flow">
       <div class="cs-intro">
-        <h2 class="cs-h2" data-reveal="split">${esc(hub.h2)}</h2>
+        <h2 class="cs-h2 cs-lit">${esc(hub.h2)}</h2>
         ${hub.p ? `<p class="cs-fill">${esc(hub.p)}</p>` : ''}
       </div>
       ${chapters}
@@ -75,7 +75,8 @@
   sec.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
 
   // ---- paragraphs that light up word by word ----
-  const fills = [...sec.querySelectorAll('.cs-fill')].map(p => {
+  // (the intro heading lights up the same way as its line: client, 2026-11-12)
+  const fills = [...sec.querySelectorAll('.cs-lit, .cs-fill')].map(p => {
     const words = p.textContent.trim().split(/\s+/); p.textContent = '';
     const spans = words.map((w, i) => { const s = document.createElement('span'); s.className = 'w'; s.textContent = w; p.appendChild(s); if (i < words.length - 1) p.appendChild(document.createTextNode(' ')); return s; });
     return { p, spans, last: -1 };

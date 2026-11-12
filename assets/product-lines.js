@@ -49,8 +49,7 @@
     tell(xl, xr);
     const lines = [
       round([[-2, y1], [xl, y1], [xl, yb], [xr, yb], [xr, y1], [W + 2, y1]], r),   // the one line, left to right
-      `M${xl.toFixed(1)},${(yb - r).toFixed(1)}L${xl.toFixed(1)},${H + 2}`,          // the two drops to the closing band's lines
-      `M${xr.toFixed(1)},${(yb - r).toFixed(1)}L${xr.toFixed(1)},${H + 2}`,
+      // (the two straight drops from its corners down to the bottom of the section were removed: client, 2026-11-12)
     ];
     lines.forEach((d, i) => {
       const base = document.createElementNS(NS, 'path'); base.setAttribute('d', d); base.setAttribute('class', 'ppl-line'); svg.appendChild(base);

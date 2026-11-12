@@ -273,10 +273,10 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .arrive-title .ch { opacity: .16; transition: opacity .3s; }
 .arrive-title .ch.lit { opacity: 1; }
 .pwall { width: 100%; margin-top: clamp(64px, 11vh, 130px); padding: 0 var(--gutter) clamp(40px, 8vh, 100px); }   /* more green around the wall (user, 2026-11-06) */
-.pgrid { --gl: rgba(var(--ink-rgb),.13); --gx: rgba(var(--ink-rgb),.5); width: min(920px, 100%); margin: 0 auto; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.pgrid { --gl: rgba(var(--ink-rgb),.13); --gx: rgba(var(--ink-rgb),.5); width: min(800px, 100%); margin: 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .pcell { position: relative; aspect-ratio: 1 / 1; display: grid; place-items: center; border-top: 1px solid var(--gl); border-left: 1px solid var(--gl); opacity: 0; transform: translateY(18px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1), background-color .5s; }
-.pcell:nth-child(6n) { border-right: 1px solid var(--gl); }
-.pcell:nth-last-child(-n+6) { border-bottom: 1px solid var(--gl); }
+.pcell:nth-child(5n) { border-right: 1px solid var(--gl); }
+.pcell:nth-last-child(-n+5) { border-bottom: 1px solid var(--gl); }
 .arrive.listed .pcell { opacity: 1; transform: none; }
 .pcell:hover { background: rgba(var(--ink-rgb),.06); }
 .pcell .x { position: absolute; width: 11px; height: 11px; pointer-events: none; z-index: 2; display: none; }
@@ -285,13 +285,18 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .pcell .x::after { top: 5px; left: 0; width: 11px; height: 1px; }
 .pcell .x.tl { top: -6px; left: -6px; display: block; }
 .pcell .x.tr { top: -6px; right: -6px; } .pcell .x.bl { bottom: -6px; left: -6px; } .pcell .x.br { bottom: -6px; right: -6px; }
-.pcell:nth-child(6n) .x.tr, .pcell:nth-last-child(-n+6) .x.bl, .pcell:nth-last-child(-n+6):nth-child(6n) .x.br { display: block; }
+.pcell:nth-child(5n) .x.tr, .pcell:nth-last-child(-n+5) .x.bl, .pcell:nth-last-child(-n+5):nth-child(5n) .x.br { display: block; }
 /* the client's logos in their own colours, so the wall under the Commodities hero is white with green hairlines
    (dark lettering would vanish on the green); each lifts a little under the pointer (client, 2026-11-12) */
 .com-arrive:not(.eng-arrive) { background: #FCFCFC; --paper: #FCFCFC; --paper-rgb: 252,252,252; --ink: #0F2A1E; --ink-rgb: 15,42,30; }
 .com-arrive:not(.eng-arrive) .pcell:hover { background: rgba(15,42,30,.035); }
 .plogo { display: block; width: auto; height: auto; max-width: 68%; max-height: 54%; object-fit: contain; transition: transform .4s cubic-bezier(.2,.7,.2,1); }
 .pcell:hover .plogo { transform: scale(1.05); }
+/* five across (client, 2026-11-12), so two of the twelve logos wait off the wall: every few seconds the two waiting ones
+   take the place of two random ones (arrive.js): the old logo lifts away, the new one comes up */
+.pcell .plogo.swap-out { opacity: 0; transform: translateY(-10px) scale(.96); transition: opacity .45s ease, transform .45s ease; }
+.pcell .plogo.swap-in { opacity: 0; transform: translateY(10px) scale(.96); transition: none; }
+.plogo { transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
 .plogo-arkema, .plogo-hessman-energy, .plogo-wijaya-pura, .plogo-burgaz, .plogo-indevco, .plogo-pertamina, .plogo-aidreo { max-width: 76%; }
 .plogo-vale { max-width: 70%; }
 .ph { display: grid; justify-items: center; gap: 10px; color: rgba(var(--ink-rgb),.5); transition: color .3s; transform: scale(.88); }
@@ -305,9 +310,9 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .ph b { font: 500 12px/1.3 var(--sans); letter-spacing: -.01em; text-transform: none; }
 @media (max-width: 760px) {
   .pgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .pcell:nth-child(6n) { border-right: 0; } .pcell:nth-child(3n) { border-right: 1px solid var(--gl); }
+  .pcell:nth-child(5n) { border-right: 0; } .pcell:nth-child(3n) { border-right: 1px solid var(--gl); }
   .pcell:nth-child(n+7) { display: none; }   /* two rows on phones too (user, 2026-11-06) */
-  .pcell:nth-last-child(-n+6) { border-bottom: 0; } .pcell:nth-child(n+4) { border-bottom: 1px solid var(--gl); }
+  .pcell:nth-last-child(-n+5) { border-bottom: 0; } .pcell:nth-child(n+4) { border-bottom: 1px solid var(--gl); }
   .pcell .x.tr, .pcell .x.bl, .pcell .x.br { display: none; }
   .pcell:nth-child(3n) .x.tr, .pcell:nth-child(n+4) .x.bl, .pcell:nth-child(6) .x.br { display: block; }
 }
@@ -411,8 +416,8 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .cs-intro .cs-h2 { font-family: var(--cs-display); font-weight: 700; letter-spacing: -.025em; line-height: .95; }
 .cs-intro .cs-fill { font-family: var(--cs-body); }
 .cs-fill { font-size: clamp(15.5px, 1.1vw, 17.5px); font-weight: 500; line-height: 1.45; letter-spacing: 0; color: var(--ink); max-width: 44ch; }
-.cs-fill .w { opacity: .16; transition: opacity .25s linear; }
-.cscroll.still .cs-fill .w { opacity: 1; }
+.cs-fill .w, .cs-lit .w { opacity: .16; transition: opacity .25s linear; }
+.cscroll.still .cs-fill .w, .cscroll.still .cs-lit .w { opacity: 1; }
 .cs-chapter { position: relative; height: calc(150vh + var(--n) * 8vh); }
 .cs-pin { position: sticky; top: 0; height: 100vh; box-sizing: border-box; display: grid; grid-template-rows: 100%; column-gap: clamp(28px, 4vw, 72px); padding: 110px var(--g) 22px; }   /* the window and the words run down to the bottom of the screen (client, 2026-11-11) */
 .text-left .cs-pin { grid-template-columns: 40fr 58fr; } .text-right .cs-pin { grid-template-columns: 58fr 40fr; }
