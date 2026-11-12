@@ -7,9 +7,10 @@
 <meta name="description" content="Singapore-headquartered commodity supply and engineering solutions, built on a legacy of precision engineering and delivered through trusted partners across nine markets." />
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/header.css?v=1111a" />
-<link rel="stylesheet" href="/assets/site.css?v=1111g" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/header.css?v=1112a" />
+<link rel="stylesheet" href="/assets/site.css?v=1112d" />
 <!-- warm the cache for the preloader drawing (logo.html) so it can start sooner -->
 <link rel="preload" href="/assets/vendor/three.module.js?v=160" as="script" crossorigin>
 <link rel="preload" href="/assets/vendor/three-addons/lines/LineSegments2.js" as="script" crossorigin>
@@ -32,7 +33,7 @@
   /* the intro fades in from the preloader; every later swap (intro -> held frame -> branch) is an instant cut on identical frames */
   .film #intro.live { transition: opacity .4s; }
   .film::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 1s;
-    background: linear-gradient(180deg, rgba(0,0,0,.32), transparent 20%, transparent 50%, rgba(0,0,0,.42)); }   /* no green tint on the photo (client, 2026-11-06): only a light neutral shade top and bottom so the header and doors read */
+    background: linear-gradient(180deg, rgba(0,0,0,.32), transparent 20%, transparent 42%, rgba(0,0,0,.62)); }   /* no green tint on the photo (client, 2026-11-06): only a light neutral shade top and bottom so the header and doors read */
   .stage.ready .film::after { opacity: 1; }
   .stage.leaving .film::after { opacity: 0; transition: opacity .8s; }
 
@@ -58,16 +59,18 @@
   /* the two doors, Terminal-style (user, 2026-11-06): no headline over the port, just two notched outline panels with a light
      running round each line; the outline and the frosted fill share one shape, drawn by shapeDoors() below */
   .choice { justify-content: flex-end; padding-bottom: clamp(48px, 12vh, 140px); }
-  .choice .intro { width: min(980px, 100%); margin-bottom: clamp(22px, 3.4vh, 38px); text-align: left; }   /* a short header and one line over the doors (user, 2026-11-06) */
-  .choice .intro h1 { max-width: none; margin: 0 0 10px; font-size: clamp(30px, 3.4vw, 48px); font-weight: 400; letter-spacing: -.03em; line-height: 1.06; text-shadow: 0 2px 28px rgba(0,0,0,.45); }
-  .choice .intro p { max-width: 52ch; margin: 0; font-size: clamp(15px, 1.2vw, 18px); color: var(--ink-soft); text-wrap: balance; text-shadow: 0 1px 18px rgba(0,0,0,.45); }
+  /* the words in the site's heading face, larger and in white with a deeper shade so they read on the photo; the words and
+     the two doors now span the header bar's width, so they fill a wide screen (client, 2026-11-12) */
+  .choice .intro { width: min(1280px, 100%); margin-bottom: clamp(22px, 3.4vh, 38px); text-align: left; }   /* a short header and one line over the doors (user, 2026-11-06) */
+  .choice .intro h1 { max-width: none; margin: 0 0 12px; font-family: var(--display); font-size: clamp(40px, 5.2vw, 88px); font-weight: 800; text-transform: uppercase; letter-spacing: -.03em; line-height: .88; color: #FCFCFC; text-shadow: 0 2px 24px rgba(0,0,0,.7), 0 0 60px rgba(0,0,0,.45); }
+  .choice .intro p { max-width: 60ch; margin: 0; font-size: clamp(15px, 1.25vw, 20px); font-weight: 600; line-height: 1.4; color: #FCFCFC; text-wrap: balance; text-shadow: 0 1px 14px rgba(0,0,0,.8), 0 0 36px rgba(0,0,0,.5); }
   .choice .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .doors { display: grid; grid-template-columns: repeat(2, minmax(0, 470px)); gap: clamp(18px, 2.4vw, 34px); width: min(980px, 100%); }
-  .door { position: relative; display: grid; gap: 12px; align-content: end; justify-items: start; min-height: clamp(190px, 26vh, 250px); padding: 40px clamp(28px, 3vw, 44px);
-    background: none; border: 0; text-decoration: none; color: var(--ink); text-align: left; cursor: pointer; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+  .doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(18px, 2.4vw, 34px); width: min(1280px, 100%); }
+  .door { position: relative; display: grid; gap: 12px; align-content: end; justify-items: start; min-height: clamp(190px, 27vh, 300px); padding: 40px clamp(28px, 3vw, 48px);
+    background: none; border: 0; font-family: var(--sans); text-decoration: none; color: var(--ink); text-align: left; cursor: pointer; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
   .door:hover { transform: translateY(-3px); }
-  .door-bg { position: absolute; inset: 0; z-index: -1; background: rgba(12,34,24,.46); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); transition: background .35s; }
-  .door:hover .door-bg { background: rgba(12,34,24,.62); }
+  .door-bg { position: absolute; inset: 0; z-index: -1; background: rgba(12,34,24,.6); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); transition: background .35s; }
+  .door:hover .door-bg { background: rgba(12,34,24,.74); }
   .door-line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .door-line path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
   .door-line .edge { stroke: rgba(238,227,199,.42); stroke-width: 1.2; transition: stroke .35s; }
@@ -75,8 +78,8 @@
   .door-line .run { stroke: #F4ECD6; stroke-width: 2; filter: drop-shadow(0 0 5px rgba(244,236,214,.95)) drop-shadow(0 0 14px rgba(244,236,214,.5)); }
   @media (prefers-reduced-motion: reduce) { .door-line .run { display: none; } }
   .door .k { font-family: var(--sans); font-size: 14px; letter-spacing: -.01em; text-transform: none; color: var(--muted); }
-  .door .t { font-size: clamp(22px, 2.1vw, 30px); font-weight: 400; letter-spacing: -.03em; line-height: 1.08; }
-  .door .d { max-width: 34ch; font-size: clamp(14px, 1.1vw, 16px); line-height: 1.5; color: var(--ink-soft); }
+  .door .t { font-family: var(--display); font-size: clamp(26px, 2.7vw, 44px); font-weight: 700; text-transform: uppercase; letter-spacing: -.025em; line-height: .92; color: #FCFCFC; }
+  .door .d { max-width: 42ch; font-size: clamp(14px, 1.1vw, 17px); font-weight: 500; line-height: 1.45; color: #F4EFE0; }
   .stage.leaving .choice { opacity: 0; transform: translateY(10px); transition: opacity .5s, transform .5s; pointer-events: none; }
 
   /* captions during the zoom (Terminal-style): one big centred line at a time, letters light up from grey to cream */
@@ -84,8 +87,8 @@
   .captions::before { content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .6s;
     background: radial-gradient(ellipse 62% 42% at 50% 52%, rgba(0,0,0,.5), rgba(0,0,0,.22) 55%, transparent 80%); }
   .captions.on::before { opacity: 1; }
-  .cap { grid-area: 1 / 1; max-width: 18ch; margin: 0; text-align: center; font-weight: 400; color: var(--ink);
-    font-size: clamp(28px, 3.2vw, 46px); line-height: 1.08; letter-spacing: -.03em; text-wrap: balance;   /* the site's heading size and weight (user, 2026-11-06) */
+  .cap { grid-area: 1 / 1; max-width: 18ch; margin: 0; text-align: center; font-family: var(--display); font-weight: 700; text-transform: uppercase; color: var(--ink);
+    font-size: clamp(30px, 3.4vw, 52px); line-height: .95; letter-spacing: -.03em; text-wrap: balance;   /* the site's heading size and weight (user, 2026-11-06) */
     text-shadow: 0 2px 22px rgba(0,0,0,.5); transition: opacity .55s, transform .7s cubic-bezier(.2,.7,.2,1), filter .55s; }
   .cap.out { opacity: 0; transform: translateY(-18px); filter: blur(6px); }
   .cap .ch { opacity: .22; transition: opacity .35s; }
@@ -150,7 +153,7 @@
 </div>
 
 <div id="site-header"></div>
-<script src="/assets/site-header.js?v=1110a" defer></script>
+<script src="/assets/site-header.js?v=1112a" defer></script>
 
 <script>
 (() => {
@@ -162,7 +165,7 @@
   const small = Math.min(screen.width, screen.height) < 820 || (navigator.connection && /2g|3g/.test(navigator.connection.effectiveType || ''));
   // sharper 2560 px files for big and retina screens (a 1920 file is upscaled there and looks soft)
   const hd = !small && screen.width * (devicePixelRatio || 1) >= 2400;
-  const VER = { commodities: 'v8c', intro: 'v10' };   // v8c (2026-11-11): starts moving at once, wireframe spreads in 0.5 s (tools/port3d/speed_curve.py). v8b: faster opening push. Intro versions for the client to pick (2026-11-07): 1 = v8 original, 2 = v9 doors copied from the end frame, 3 = v10 steadied from its own neighbouring frames (posters: intro-vN-poster in the img/video tags above)
+  const VER = { commodities: 'v8b', intro: 'v10' };   // back on v8b (client, 2026-11-12: v8c was too fast; its files are in masters/entrance-v8c). v8c (2026-11-11): started moving at once, wireframe spread in 0.5 s (tools/port3d/speed_curve.py). v8b: faster opening push. Intro versions for the client to pick (2026-11-07): 1 = v8 original, 2 = v9 doors copied from the end frame, 3 = v10 steadied from its own neighbouring frames (posters: intro-vN-poster in the img/video tags above)
   const src = (n) => '/assets/entrance/' + n + '-' + (VER[n] || 'v8') + (small ? '-m' : hd ? '-hd' : '') + '.mp4';   // v8 (2026-11-07): native 4K; the held frame is cut from the intro footage itself, so nothing switches where the videos meet it
   intro.src = src('intro'); vc.src = src('commodities'); ve.src = src('engineering');
   const layers = [still, intro, hold, vc, ve];

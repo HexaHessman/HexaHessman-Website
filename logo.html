@@ -56,6 +56,8 @@
   html.embed .ui, html.embed .paper, html.embed .grain { display: none; }
 </style>
 <link rel="stylesheet" href="assets/header.css" />
+<script>/* embedded copies hide the page words at once, even if the 3D script is slow or fails to load (2026-11-12) */
+if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");</script>
 </head>
 <body>
 <canvas id="scene"></canvas>

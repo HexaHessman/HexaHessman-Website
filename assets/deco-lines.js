@@ -22,8 +22,10 @@
     if (!svg) { svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'deco-lines'); svg.setAttribute('aria-hidden', 'true'); sec.prepend(svg); }
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.innerHTML = '';
     const r = Math.min(70, h * 0.18), narrow = w < 760;
-    const left = [[w * (narrow ? 0.46 : 0.42), -2], [w * (narrow ? 0.46 : 0.42), h * 0.2], [w * 0.1, h * 0.2], [w * 0.1, h * 0.62], [w * 0.06, h * 0.66], [-2, h * 0.66]];
-    const right = [[w * (narrow ? 0.7 : 0.64), -2], [w * (narrow ? 0.7 : 0.64), h * 0.3], [w * 0.93, h * 0.3], [w * 0.93, h * 0.58], [w + 2, h * 0.58]];
+    // the two lines start at 42% and 64% of the width, or where the page says (product pages: under the Product types line, product-lines.js)
+    const x1 = +sec.dataset.x1 || w * (narrow ? 0.46 : 0.42), x2 = +sec.dataset.x2 || w * (narrow ? 0.7 : 0.64);
+    const left = [[x1, -2], [x1, h * 0.2], [w * 0.1, h * 0.2], [w * 0.1, h * 0.62], [w * 0.06, h * 0.66], [-2, h * 0.66]];
+    const right = [[x2, -2], [x2, h * 0.3], [w * 0.93, h * 0.3], [w * 0.93, h * 0.58], [w + 2, h * 0.58]];
     const first = !sec.dataset.drawn && !reduce;   // the first time the band comes into view, the lines draw themselves down
     if (first) sec._go = [];   // (a redraw before it is seen replaces the waiting lines)
     [left, right].forEach((pts, i) => {
@@ -50,5 +52,6 @@
     }
   };
   const all = () => secs.forEach(draw);
+  window.__decoLines = all;
   all(); addEventListener('resize', () => { clearTimeout(all.t); all.t = setTimeout(all, 150); });
 })();

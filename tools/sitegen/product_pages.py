@@ -17,6 +17,11 @@ PAGES[slug] keys (all optional):
   resources    {"stats": [(figure, unit, label)], "images": [(src, alt)], "bar": {...}, "note": str}
   drops        [(title, html)] drop-downs that come first (the rest are built from the product's sections)
   loading      the loading rate in the Procedures drop-down ("at about 2,000 MT per day")
+  side         the client's own words beside the photos in PRODUCT TYPES (their mock-ups, 2026-11-12): a list of
+               paragraphs; a (label, text) pair is a paragraph that opens with a bold label. With it, the page has no
+               separate overview block under the hero.
+  pics         [(picture, alt)] two photos without captions beside those words, for a product whose types are grades
+               (sulphuric acid, bitumen: the grade cards follow underneath) or that has none (methanol)
 """
 T = "/assets/products/types/"
 R = "/assets/products/resources/"
@@ -60,11 +65,13 @@ PAGES = {
             ("Pastilles Sulphur", "Formed sulphur with controlled particle size, high purity and low dust, widely used as feedstock for sulphuric acid, fertilizers, chemicals and rubber.", T + "sulphur-pastilles.jpg"),
         ],
         "specs": [{"headers": ["Parameter", "9998", "9995", "9990", "9950", "9920"], "rows": [
-            ["Sulphur Content (S), % min", "99.98", "99.95", "99.9", "99.5", "99.2"],
-            ["Ash Content, % max", "0.02", "0.03", "0.05", "0.2", "0.4"],
-            ["Organic Matter, % max", "0.01", "0.03", "0.06", "0.25", "0.5"],
-            ["Acidity (as H₂SO₄), % max", "0.0015", "0.003", "0.004", "0.01", "0.02"],
-            ["Moisture Content, % max", "0.2", "0.2", "0.2", "0.2", "1"],
+            # every figure to two decimal places (client, 2026-11-12). Acidity is the exception: its limits are thousandths of a
+            # percent (0.0015, 0.003, 0.004), which two places would turn into 0.00, so that row keeps four places.
+            ["Sulphur Content (S), % min", "99.98", "99.95", "99.90", "99.50", "99.20"],
+            ["Ash Content, % max", "0.02", "0.03", "0.05", "0.20", "0.40"],
+            ["Organic Matter, % max", "0.01", "0.03", "0.06", "0.25", "0.50"],
+            ["Acidity (as H₂SO₄), % max", "0.0015", "0.0030", "0.0040", "0.0100", "0.0200"],
+            ["Moisture Content, % max", "0.20", "0.20", "0.20", "0.20", "1.00"],
             ["Mechanical Impurities", "None", "None", "None", "None", "None"]]}],
         "apps": {"headers": ["Industry / Application", "Sulphur purity", "Technical & commercial considerations"], "rows": [
             ["Phosphate Fertilizers (DAP, MAP, TSP)", "99.50–99.90%", "Sulphur is converted into sulphuric acid for phosphate rock processing. Grade 9950 can offer cost savings where plant specifications permit."],
@@ -101,7 +108,11 @@ PAGES = {
     },
 
     # ------------------------------------------------------------------ the others: types from what the site already says
-    "sulphuric-acid": {"types": [
+    "sulphuric-acid": {
+        "pics": [(T + "sulphuric-acid-1.jpg", "Sulphuric acid in an ISO tank container"), (T + "sulphuric-acid-2.jpg", "A storage tank of 98% sulphuric acid")],
+        "side": ["Sulfuric acid (H₂SO₄) is a highly corrosive industrial chemical widely used in fertilizer production, mineral processing, petroleum refining, and chemical manufacturing. It is primarily produced from elemental sulfur through the Contact Process, with commercial concentrations typically ranging from 93% to 98%.",
+                 "Global demand is driven largely by phosphate fertilizer production and mining operations, particularly nickel extraction through high-pressure acid leaching (HPAL). Due to its hazardous nature, sulfuric acid requires specialized storage, transportation, and handling procedures to ensure safety and regulatory compliance."],
+        "types": [
         ("Industrial Grade", "93–98% H₂SO₄ for fertilizer, mining and chemical plants.", None),
         ("Battery Grade", "35–38% H₂SO₄, diluted for lead-acid batteries.", None),
         ("Technical Grade", "90–98% H₂SO₄ for general industrial use.", None),
@@ -110,25 +121,74 @@ PAGES = {
     "phosphoric-acid": {"types": [
         ("Merchant-Grade Acid (MGA)", "52–54% P₂O₅ for MAP, DAP, TSP and NPK fertilizer manufacture.", None),
         ("Technical Grade 85%", "Purified 85% H₃PO₄ for industrial use and metal treatment.", None)]},
-    "map": {"types": [
+    "map": {
+        "side": ["Monoammonium Phosphate (MAP) is a concentrated, water-soluble fertilizer that provides essential nitrogen and phosphorus for healthy crop development. Its high phosphorus content and mildly acidic properties promote strong root establishment, early plant growth, and efficient nutrient uptake, making it widely used in field crops, horticulture, and plantation agriculture.",
+                 "MAP is suitable for direct soil application, fertilizer blending, and precision fertilization programmes. Its consistent nutrient composition, excellent solubility, and compatibility with various agricultural practices make it a preferred choice for commercial farming."],
+        "types": [
         ("Granular MAP 11-52-0", "Granular grade with 11% nitrogen and 52% P₂O₅.", T + "map-granular.jpg"),
         ("Water-Soluble MAP 12-61-0", "Water-soluble grade with 12% nitrogen and 61% P₂O₅.", T + "map-soluble.jpg")]},
-    "urea": {"types": [
+    "dap": {
+        "side": ["Diammonium Phosphate (DAP) is the most widely used phosphate-based fertilizer in global agriculture. DAP is a dual-nutrient source fertilizer that contains 18% ammoniacal nitrogen (N) and 46% phosphorus pentoxide (P₂O₅), making it an essential input for promoting early root development, vigorous growth, and enhanced crop yields.",
+                 "DAP is produced through the chemical reaction of anhydrous ammonia (NH₃) and phosphoric acid (H₃PO₄). The result is a dry, granular fertilizer with excellent handling and storage properties, suitable for both direct application and blending in customized NPK formulas."],
+        "types": [
+        ("Agricultural Grade DAP Granules", "", T + "dap-1.jpg"),
+        ("Technical Grade DAP Powder", "", T + "dap-2.jpg")]},
+    "urea": {
+        "side": ["Urea (CO(NH₂)₂), the most widely used nitrogen fertilizer in the world, delivering 46% nitrogen in a highly concentrated, readily available form. As a cost-effective and efficient nutrient source, urea supports vigorous crop growth and improved yields across a broad spectrum of farming systems.",
+                 "Urea is a white crystalline compound composed of 46% nitrogen, making it the highest nitrogen-content solid fertilizer available. It is non-flammable, water-soluble, and compatible with a wide variety of other fertilizers and micronutrients. Urea plays a critical role in protein synthesis in plants and is especially important during the vegetative growth phase."],
+        "types": [
         ("Prilled Urea", "Smaller round particles that dissolve quickly, suited to foliar application and fertigation.", T + "urea-prilled.jpg"),
         ("Granular Urea", "Larger, harder, uniform particles that resist caking, suited to mechanical spreading and blending.", T + "urea-granular.jpg")]},
-    "ammonium-sulphate": {"types": [
+    "ammonium-sulphate": {
+        "side": ["Ammonium Sulphate ((NH₄)₂SO₄) is a premium nitrogen-based fertilizer and industrial chemical valued for its versatility, purity, and stability. As one of the most widely used inorganic fertilizers, it provides an efficient source of nitrogen and sulfur, two essential nutrients that promote healthy plant growth, chlorophyll formation, and protein synthesis. Beyond agriculture, its balanced composition and high solubility make it suitable for a range of industrial and laboratory applications.",
+                 "Both crystalline and granular forms, offering users flexibility based on their specific handling and application needs. The crystalline form dissolves rapidly, ideal for fertigation and blending, while the granular form provides superior flow characteristics for mechanical spreading and storage stability."],
+        "types": [
         ("Crystalline", "Fast-dissolving crystals, ideal for fertigation and blending.", T + "as-crystalline.jpg"),
         ("Granular", "Free-flowing granules, ideal for mechanical spreading and storage.", T + "as-granular.jpg")]},
     "caustic-soda": {"types": [
         ("Flakes", "Membrane-grade solid, NaOH 99% min., in moisture-proof bags.", T + "caustic-flakes.jpg"),
         ("Pearls", "Free-flowing prills, NaOH 99% min., in moisture-proof bags.", T + "caustic-pearls.jpg"),
         ("Liquid Lye", "32% and 48–50% solutions in ISO tanks and bulk chemical tankers.", T + "caustic-lye.jpg")]},
-    "soda-ash": {"types": [
+    "soda-ash": {
+        "side": ["Sodium carbonate (Na₂CO₃), commonly known as soda ash, is a versatile chemical utilized broadly across industries for pH modification, detergent formulation, and chemical processing.",
+                 "Our Soda Ash represents a shift from conventional mineral-based sources by being derived entirely from the renewable raw material, wood. It is a purified, odorless, white granulate, supplied in two product grades: soda ash light and soda ash dense.",
+                 ("Safety Information:", "Avoid inhalation; use PPE; store in dry, ventilated area")],
+        "types": [
         ("Dense Soda Ash", "Coarse granulate for glass making and bulk handling.", T + "soda-dense.jpg"),
         ("Light Soda Ash", "Fine powder for detergents and chemicals.", T + "soda-light.jpg")]},
-    "semi-coke": {"rename": {"How we supply": "Source of origin"}},
-    "metallurgical-coke": {"rename": {"How we supply": "Source of origin"}},
-    "bitumen": {"types": [
+    "semi-coke": {"rename": {"How we supply": "Source of origin"},
+        "side": ["Semi-coke is a critical input in nickel ferroalloy production, particularly within the Rotary Kiln–Electric Furnace (RKEF) process widely used across Asia. Acting as both a reducing agent and energy source, it enables the efficient conversion of nickel ore into nickel pig iron (NPI), a key material in stainless steel manufacturing.",
+                 "Its cost efficiency, high reactivity, and stable performance make semi-coke the preferred alternative to metallurgical coke for large-scale smelters. As Indonesia continues to lead global nickel production, demand for reliable semi-coke supply remains strong across major industrial hubs."],
+        "types": [
+        ("Lumps", "Large, porous, dull black lumps designed for use in nickel smelting furnaces.", T + "semi-coke-1.jpg"),
+        ("Granular / Nut Coke", "Small, black granular pieces ideal for smelting applications.", T + "semi-coke-2.jpg")]},
+    "metallurgical-coke": {"rename": {"How we supply": "Source of origin"},
+        "side": ["Metallurgical coke (met coke) is produced through the high-temperature carbonization of coking coal in the absence of oxygen. It is a key raw material in blast furnace ironmaking, where it functions as both a high-energy fuel and a structural support medium, ensuring proper gas flow and furnace permeability during smelting.",
+                 "In blast furnace operations, met coke enables the reduction of iron ore into molten iron by generating the intense heat required while also acting as the primary carbon source for chemical reduction reactions. Its strength, low impurity levels, and high carbon content make it essential for stable and efficient steel production, directly impacting furnace productivity and output quality."],
+        "types": [
+        ("Lumps", "Large, hard, and porous greyish-black lumps used primarily for blast furnaces and foundries.", T + "metallurgical-coke-1.jpg"),
+        ("Breeze / Fine Powder", "Fine, dark metallic powder (breeze) for industrial factory processes.", T + "metallurgical-coke-2.jpg")]},
+    "calcined-pet-coke": {
+        "side": ["Calcined petroleum coke (CPC) is a crucial raw material in both the aluminum smelting and steelmaking industries. In the aluminum sector, it serves as the primary carbon source for manufacturing the consumable anodes required in the Hall-Héroult electrolysis process. For steel and foundry applications, particularly in Electric Arc Furnaces (EAF), low-sulphur CPC acts as a highly efficient carbon raiser to precisely control the carbon content of the final alloy.",
+                 "Its high carbon purity, low electrical resistance, and minimal impurities (such as sulphur and ash) make calcined pet coke vital for producing high-quality metals. As global demand accelerates for lightweight aluminum in electric vehicles and sustainable EAF steel production, the reliance on a consistent, premium supply of calcined pet coke continues to grow across heavy industries."],
+        "types": [
+        ("Sponge / Granules", "Dark grey, porous granules featuring low-sulphur content for anodes and carbon raising.", T + "calcined-pet-coke-1.jpg"),
+        ("Fine Powder", "A fine, dark black powder used for carbon raising.", T + "calcined-pet-coke-2.jpg")]},
+    "graphite-pet-coke": {
+        "side": ["Graphitized petroleum coke (GPC) is a premium carbon additive utilized extensively in the production of high-quality steel, ductile iron, and specialized iron castings. Manufactured by heating high-grade petroleum coke to extreme temperatures, its molecular structure is transformed into artificial graphite, ensuring rapid carbon dissolution and exceptionally high carbon recovery during the melting process.",
+                 "Its ultra-high carbon purity, superior absorption rate, and negligible sulphur and nitrogen content make it the preferred carbon raiser for precision metallurgy and high-end automotive components. As foundries and advanced manufacturing sectors increasingly require strict metallurgical control to reduce casting defects, the strategic demand for high-grade graphite pet coke remains robust."],
+        "types": [
+        ("Granular", "Shiny, metallic grey graphitized granules used as a carbon raiser for steel and ductile iron.", T + "graphite-pet-coke-1.jpg"),
+        ("Powder / Dust", "A highly reflective, fine metallic grey graphitized dust.", T + "graphite-pet-coke-2.jpg")]},
+    "methanol": {
+        "pics": [(T + "methanol-1.jpg", "Methanol in an ISO tank container"), (T + "methanol-2.jpg", "Methanol in steel drums on a pallet")],
+        "side": ["Methanol (CH₃OH) is a critical chemical input and versatile solvent used extensively across the global chemical, energy, and manufacturing sectors. Primarily produced from natural gas or biomass, it acts as a fundamental building block for producing formaldehydes, plastics, synthetic fibers, and fuel additives like MTBE, which are essential for countless everyday consumer and industrial products. As a clean-burning fuel and a key agent in wastewater denitrification, its utility as an eco-friendly energy source has seen rapid global adoption.",
+                 "Its high chemical reactivity, ease of transport, and function as a precursor for biodiesel and marine fuels make methanol indispensable for modern industrial hubs. As international markets prioritize low-carbon energy transition and chemical diversification, the consistent and safe global distribution of methanol, via both heavy-duty drums for precision manufacturing and massive ISO tanks for large-scale operations, remains a cornerstone of the global industrial supply chain."]},
+    "bitumen": {
+        "pics": [(T + "bitumen-1.jpg", "Bitumen in IBC containers"), (T + "bitumen-2.jpg", "Bitumen in steel drums on a pallet")],
+        "side": ["Bitumen is a critical, highly viscous material and key binding agent used extensively across the global infrastructure, construction, and manufacturing sectors. Primarily obtained through the refinery process of heavy crude oil, it acts as the essential binder in asphalt, which is required for paving highways, airport runways, and parking lots. Because of its excellent waterproofing and adhesive properties, it also serves as a fundamental material in manufacturing roofing felts, sealing compounds, and protective coatings for industrial pipelines.",
+                 "Its remarkable durability, resistance to wear and water, and capacity to withstand heavy vehicular loads make bitumen indispensable for modern infrastructure and transit networks. As international markets prioritize robust, climate-resilient transport networks and urban development, the consistent and safe global distribution of bitumen, via specially insulated ISO tanks for heated bulk transport and heavy-duty steel drums for versatile site delivery, remains a cornerstone of the global industrial supply chain."],
+        "types": [
         ("Penetration Grade", "40/50, 60/70 and 80/100, chosen by climate from hot to cold.", None),
         ("Viscosity Grade", "VG-10 to VG-40, from cold-region roads to heavy-duty pavements.", None),
         ("Performance Grade", "PG 58-22, PG 64-22 and PG 70-28 for highways and extreme climates.", None),
@@ -140,10 +200,16 @@ PAGES = {
         ("Group II", "Hydro-processed base oil.", None),
         ("SN150", "Light neutral viscosity grade.", None),
         ("SN500", "Heavy neutral viscosity grade.", None)]},
-    "barite-powder": {"types": [
+    "barite-powder": {
+        "side": ["Barite, or Barium Sulfate (BaSO₄), is more than just a mineral, it is a high-performance solution for industries that demand precision, reliability, and efficiency. Known for its exceptional density, chemical inertness, and non-toxic nature, barite enables companies to optimize processes, improve product performance, and maintain safety standards. Its versatility makes it an indispensable material across drilling, chemical, and manufacturing applications.",
+                 "High-grade barite ensures consistent particle size and purity, giving customers the confidence that their drilling fluids remain stable, paints maintain desired density, and plastics or rubber products achieve uniform quality. By delivering a product that combines natural strength with industrial precision, we help businesses streamline operations and reduce variability."],
+        "types": [
         ("Barite Powder", "Milled to a consistent particle size, in API 13A drilling grade and filler grades.", T + "barite-powder.jpg"),
         ("Barite Lumps", "Lump form, supplied in bulk.", T + "barite-lumps.jpg")]},
-    "bentonite": {"types": [
+    "bentonite": {
+        "side": ["Bentonite is a highly versatile, absorbent clay consisting primarily of montmorillonite, typically formed from the weathering of volcanic ash in seawater. It is utilized extensively across heavy industries, construction, and manufacturing due to its unique physical properties. Its primary industrial applications include serving as a critical lubricating and cooling agent in drilling muds for the oil and gas sector, a powerful binding agent in the production of iron ore pellets for steelmaking, and a crucial structural component in foundry sand molds for metal casting.",
+                 "The remarkable characteristics of bentonite, specifically its ability to swell up to several times its original volume when exposed to water, its high viscosity, and its superior absorption capabilities, make it an indispensable sealant in civil engineering, tunneling, and environmental protection projects such as landfill liners. As global infrastructure expands and the demand for efficient, safe resource extraction continues, the reliance on a stable, high-quality supply of bentonite remains vital for ensuring operational efficiency across a diverse range of industrial hubs."],
+        "types": [
         ("Bentonite Powder", "Milled grades Sec 9, 10 and 11 for drilling, foundry and civil works.", T + "bentonite-powder.jpg"),
         ("Bentonite Lumps", "Lump form, supplied in bulk.", T + "bentonite-lumps.jpg")]},
     "wood-chips": {"types": [

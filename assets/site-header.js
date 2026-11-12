@@ -26,8 +26,8 @@
       footer: '48-hour face-to-face response for servicing and maintenance enquiries.', footerLink: ['View Engineering Solutions', '/engineering/'],
       groups: [
         { title: '', items: [   // names only, as on the old site's menu (user, 2026-11-06); Storage Tank Fabrication removed (client, 2026-11-06)
-          ['Straatman Mooring Systems', '/engineering/straatman/'],
-          ['MannTek Solutions', '/engineering/manntek/'], ['Shibata Fenders Team', '/engineering/shibata/'], ['Raythink', '/engineering/raythink/']] },
+          // the client's order (2026-11-12): Shibata, MannTek, Straatman. Raythink is hidden from the menu for now (its page is still built)
+          ['Shibata Fenders Team', '/engineering/shibata/'], ['MannTek Solutions', '/engineering/manntek/'], ['Straatman Mooring Systems', '/engineering/straatman/']] },
       ],
     },
   };
@@ -118,12 +118,13 @@ m2351 268 l412 -1067 -419 -3 c-230 -1 -607 -1 -838 0 l-419 3 422 1071 c231
       </div></div>`;
   }
   function drawer() {
-    const sec = (key) => { const d = SITE[key]; return `<details><summary>${d.title}</summary>
+    // each division opens its own list in the small-screen menu, with a link to its main page (client, 2026-11-12: the drop-downs were missing here)
+    const sec = (key) => { const d = SITE[key]; return `<details><summary>${d.title}<i aria-hidden="true"></i></summary><div class="drawer-sub">
       ${d.groups.map(g => `<div class="drawer-group">${g.title ? `<div class="drawer-group-title">${g.href ? `<a href="${g.jump || g.href}">${g.title}</a>` : g.title}</div>` : ''}${g.items.map(([l, h]) => link(l, h, g.href ? g : null)).join('')}</div>`).join('')}
-      <a class="drawer-all" href="${d.href}">${d.footerLink[0]} →</a></details>`; };
-    return `<div class="drawer" hidden>
-      <a href="/">Home</a><a href="${SITE.commodities.href}">${SITE.commodities.title}</a><a href="${SITE.engineering.href}">${SITE.engineering.title}</a><a href="/about/">About</a><a href="/contact/">Contact</a>
-      <a class="btn primary drawer-cta" href="/contact/#quote"><span>Request</span><span>a quote</span></a></div>`;   // each division goes straight to its page; no contact line (user, 2026-11-06)
+      <a class="drawer-all" href="${d.href}">${d.footerLink[0]} →</a></div></details>`; };
+    return `<div class="drawer" data-lenis-prevent hidden>
+      <a href="/">Home</a>${sec('commodities')}${sec('engineering')}<a href="/about/">About</a><a href="/contact/">Contact</a>
+      <a class="btn primary drawer-cta" href="/contact/#quote"><span>Request</span><span>a quote</span></a></div>`;
   }
 
   const html = `<header class="site-header">

@@ -732,9 +732,15 @@ PRINCIPALS = [
              "paras": ["Designed as the weakest link of the hose line or loading arm, CBCs prevent spillage and damage from drive-away or pull-away incidents. Available in breaking-pin and cable-release versions."],
              "spec": [{"rows": [["Size", "1\"–8\" breaking pin · 2\"–8\" cable release"], ["Material", "Stainless steel"], ["Seals", "PTFE"], ["Working pressure", "25 bar"]]}]},
             {"title": "Powered Emergency Release Coupling (PERC)", "media": {"video": "/assets/engineering/spin/perc"}, "side": "left",
-             "paras": ["The highest safety level, with three ways to release: by ESD signal, by manual override, or by reverting to a passive breaking pin. In a blackout it falls back to a passive breakaway coupling, protecting the manifold in any situation."]},
+             # PERC and VSD as charts, like the couplings above (client, 2026-11-12); the same words as before, row by row
+             "paras": ["The highest safety level, with three ways to release."],
+             "spec": [{"headers": ["Function", "Description"], "rows": [
+                 ["Release 1", "By ESD signal"], ["Release 2", "By manual override"], ["Release 3", "By reverting to a passive breaking pin"],
+                 ["In a blackout", "Falls back to a passive breakaway coupling, protecting the manifold in any situation"]]}]},
             {"title": "Vessel Separation Device (VSD)", "media": {"image": "/assets/engineering/manntek-vsd.webp"}, "side": "right",
-             "items": ["Three-wire system with pendants of different lengths", "First wire: alarm on vessel movement", "Second wire: initiates ESD 1, stopping the pumps and closing the ESD valves", "Third wire: initiates ESD 2, activating the PERC"]},
+             "spec": [{"headers": ["Function", "Description"], "rows": [
+                 ["System", "Three wires with pendants of different lengths"], ["First wire", "Alarm on vessel movement"],
+                 ["Second wire", "Initiates ESD 1, stopping the pumps and closing the ESD valves"], ["Third wire", "Initiates ESD 2, activating the PERC"]]}]},
             {"title": "PERC control unit", "media": {"image": "/assets/engineering/manntek-pcu.webp"}, "side": "left", "defs": [
                 ("PLC version", "Monitors the whole transfer operation and ensures every step and periodic test is carried out"),
                 ("SIL2 version", "Assessed by DNV and certified to SIL2 under IEC 61511 and IEC 61508")]},

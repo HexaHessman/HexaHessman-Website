@@ -250,7 +250,7 @@
       if (innerWidth <= 900) continue;
       const room = g.list.clientHeight, need = g.track.offsetHeight;
       g.travel = Math.max(0, need - room);
-      g.base = need < room ? room - need : 0;   // a short list sits on the window's bottom edge
+      g.base = 0;   // a short list starts right under the group's name, like the long ones (client, 2026-11-12)
       g.ch.style.height = Math.round(innerHeight * (1 + DWELL_IN + DWELL_OUT) + g.travel) + 'px';
       g.lastY = null;
     }

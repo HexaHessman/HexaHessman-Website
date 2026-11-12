@@ -8,9 +8,9 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=1111a">
-<link rel="stylesheet" href="/assets/site.css?v=1111g">
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=1112a">
+<link rel="stylesheet" href="/assets/site.css?v=1112d">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -32,7 +32,7 @@
 .card ul.list { margin-top: 6px; }
 .who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
 .cta-band { display: grid; gap: 22px; padding: clamp(24px, 6vh, 72px) 0 clamp(16px, 3vh, 32px); justify-items: center; text-align: center; }   /* no box: the user wants no cards anywhere */
-.cta-band h2 { max-width: 18ch; font-size: clamp(28px, 3.2vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
+.cta-band h2 { max-width: 20ch; font-size: clamp(30px, 3.4vw, 52px); line-height: .95; text-wrap: balance; }
 .cta-band .lead { max-width: 46ch; }
 .cta-band .btn-row { justify-content: center; margin-top: 10px; }
 .related { display: grid; gap: 18px; }
@@ -53,11 +53,11 @@
 .contact-hero .media::after { background: linear-gradient(90deg, rgba(10,22,16,.78), rgba(10,22,16,.35) 55%, rgba(10,22,16,.1)), linear-gradient(180deg, transparent 50%, rgba(0,0,0,.5)); }
 .pr-hero .wrap, .pr-hero .crumbs, .pr-hero .crumbs a, .pr-hero .eyebrow { color: #fff; }
 .pr-hero .crumbs, .pr-hero .eyebrow { opacity: .85; }
-.pr-hero h1 { color: #fff; font-size: clamp(34px, 4.2vw, 60px); }
-.pr-hero .lead { color: rgba(255,255,255,.9); max-width: 58ch; }
+.pr-hero h1 { color: #fff; max-width: 17ch; }   /* the sulphur page's name style, on the bar's left edge */
+.pr-hero .lead { color: #fff; font-weight: 600; max-width: 58ch; }
 .pr-hero .pr-cov { font-size: 15px; color: rgba(255,255,255,.72); }
 .pr-photo .media::after { background: linear-gradient(180deg, rgba(15,42,30,.5) 0%, rgba(15,42,30,.58) 45%, rgba(15,42,30,.86) 100%); }   /* a dark HexaHessman-green veil so the words read on any photo */
-.pr-logo { position: absolute; z-index: 2; right: var(--gutter); top: clamp(150px, 20vh, 200px); width: auto; height: 54px; max-width: 34vw; object-fit: contain; filter: brightness(0) invert(1); opacity: .92; }   /* in white, so every part reads on the photo */
+.pr-logo { position: absolute; z-index: 2; right: var(--edge); top: clamp(150px, 20vh, 200px); width: auto; height: 54px; max-width: 34vw; object-fit: contain; filter: brightness(0) invert(1); opacity: .92; }   /* in white, so every part reads on the photo */
 .pr-logo.mq-shibata { height: 46px; } .pr-logo.mq-manntek { height: 70px; } .pr-logo.mq-straatman { height: 58px; } .pr-logo.mq-raythink { height: 60px; }
 @media (max-width: 720px) { .pr-logo { top: 104px; height: 34px; } .pr-logo.mq-manntek { height: 44px; } }
 .product-hero { min-height: 74vh; }
@@ -81,7 +81,7 @@
 .fuel-tile:hover img { transform: scale(1.24); }
 .fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.38); transition: background .3s; }
 .fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
-.fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.fuel-label { position: relative; font-family: var(--display); font-size: clamp(22px, 2.5vw, 38px); font-weight: 700; letter-spacing: 0; line-height: .95; text-transform: uppercase; }
 .fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
 .fuel-tile[aria-expanded="true"] .fuel-more { background: #fff; color: #0F2A1E; }
 .spin-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.2,.7,.2,1); }
@@ -112,7 +112,7 @@
 .zig-layers .pl { position: absolute; display: block; max-height: none; margin: 0; clip-path: inset(100% 0 0 0); }
 .zig-layers.in .pl { clip-path: inset(0 0 0 0); transition: clip-path .9s cubic-bezier(.2,.7,.2,1) calc(.3s + var(--i) * .45s); }
 @media (prefers-reduced-motion: reduce) { .zig-layers .pl { clip-path: none; } }
-.zig-sub { margin: 26px 0 8px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+.zig-sub { margin: 26px 0 8px; font-size: 16px; font-weight: 600; letter-spacing: 0; }
 .zig-text > p + p { margin-top: 14px; }
 /* a product with its picture: picture one side, text the other, alternating down the page (as on the principal's own site) */
 .zig { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 80px); align-items: center; }
@@ -148,8 +148,8 @@
 .pp-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
 .pp-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.42) 45%, rgba(0,0,0,.1) 78%), linear-gradient(180deg, rgba(0,0,0,.42), transparent 38%, rgba(0,0,0,.4)); }
 .pp-hero .pp-w { position: relative; z-index: 1; padding-bottom: clamp(24px, 3vw, 44px); }
-.pp-hero h1 { margin: 0; max-width: 11ch; font-family: 'League Spartan', var(--sans); font-weight: 800; text-transform: uppercase; font-size: clamp(48px, 6.6vw, 104px); line-height: .84; letter-spacing: -.035em; color: #fff; }
-.pp-hero h1.long { max-width: 17ch; font-size: clamp(36px, 4.6vw, 72px); line-height: .9; }
+/* every product's name at one size, not too big (client, 2026-11-12; short names used to run to 104px) */
+.pp-hero h1, .pp-hero h1.long { margin: 0; max-width: 18ch; font-family: 'League Spartan', var(--sans); font-weight: 800; text-transform: uppercase; font-size: clamp(34px, 4.2vw, 64px); line-height: .9; letter-spacing: -.03em; color: #fff; }
 .pp-hero p { margin: 16px 0 0; max-width: 52ch; font-weight: 600; font-size: clamp(15px, 1.25vw, 19px); line-height: 1.38; color: #fff; }
 .pp-sec { padding: clamp(40px, 5vw, 66px) 0; border-bottom: 1px solid var(--pp-line); }
 .pp-sec:last-child { border-bottom: 0; }
@@ -163,18 +163,37 @@
 .pp-type img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 26px; background: #EEF0EE; }
 .pp-type h3 { margin: 22px 0 0; text-align: center; font-weight: 600; font-size: clamp(16px, 1.4vw, 20px); letter-spacing: 0; }
 .pp-type p { margin: 6px auto 0; max-width: 36ch; text-align: center; font-size: 13.5px; line-height: 1.45; color: var(--pp-soft); }
+/* the client's layout (mock-ups, 2026-11-12): two photos on the left, their words on the right, grade cards centred below */
+.pp-duo { display: grid; grid-template-columns: minmax(0, 1.86fr) minmax(0, 1fr); gap: clamp(24px, 3.4vw, 52px); align-items: start; }
+.pp-duo .pp-types, .pp-duo .pp-types.n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(18px, 3.2vw, 48px); justify-content: stretch; }
+.pp-side p { margin: 0 0 1.5em; max-width: none; font-size: clamp(14px, 1.08vw, 16.5px); line-height: 1.62; color: var(--pp-soft); }
+.pp-side p:last-child { margin-bottom: 0; }
+.pp-side b { font-weight: 700; color: var(--pp-ink); }
+.pp-grades { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: clamp(28px, 3.4vw, 46px); }
+.pp-grades .pp-type { flex: 0 1 calc((100% - 32px) / 3); box-sizing: border-box; background: #F1F3F1; border-radius: 22px; padding: 24px 20px 22px; }
+.pp-grades .pp-type h3 { margin-top: 0; }
 .pp-types.text { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; justify-content: stretch; }
 .pp-types.text.n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pp-types.text.n4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .pp-types.text .pp-type { height: 100%; box-sizing: border-box; background: #F1F3F1; border-radius: 22px; padding: 26px 22px 24px; }
 .pp-types.text .pp-type h3 { margin-top: 0; }
 .pp-feats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .pp-feats li { background: #F1F3F1; border-radius: 20px; padding: 20px 22px; font-weight: 500; font-size: 15px; line-height: 1.4; }
+/* two glowing lines in our green come in from the sides and run down between the cards to the bottom of the section,
+   landing where the closing band's lines start (product-lines.js). The cards sit above them. */
+.pp-lined { position: relative; }
+.pp-lined > * { position: relative; z-index: 1; }
+.pp-lines { position: absolute; z-index: 0; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }   /* product-lines.js stretches it to the full page width */
+.pp-lines path { fill: none; vector-effect: non-scaling-stroke; }
+.pp-lines .ppl-line { stroke: rgba(15,42,30,.22); stroke-width: 1.3; }
+.pp-lines .ppl-run { stroke: #0F2A1E; stroke-width: 2.4; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(15,42,30,.6)) drop-shadow(0 0 10px rgba(15,42,30,.3)); }
+.pp-lined .pp-type img { position: relative; }
+@media (max-width: 900px) { .pp-lines { display: none; } }
 /* charts */
 .pp-tt { margin: 26px 0 10px; font-weight: 600; font-size: 15px; letter-spacing: 0; }
 .pp-h + .pp-tt { margin-top: 0; }
 .pp-tw + .pp-tt, .pp-note + .pp-tt { margin-top: 34px; }
 .pp-tw { overflow-x: auto; margin: 0 0 14px; }
-.pp-t { width: 100%; min-width: 560px; border-collapse: collapse; font-family: 'Barlow', var(--sans); font-size: 14.5px; }
+.pp-t { width: 100%; min-width: 560px; border-collapse: collapse; font-family: var(--chart); font-size: 14.5px; }
 .pp-t thead th { background: var(--pp-green); color: #fff; text-align: left; text-transform: uppercase; font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 9px 12px; }
 .pp-t tbody th { text-align: left; font-weight: 600; padding: 11px 12px; vertical-align: top; }
 .pp-t td { padding: 11px 12px; font-style: italic; color: #2B332F; vertical-align: top; }
@@ -184,9 +203,9 @@
 .pp-t.apps th:first-child { width: 27%; } .pp-t.apps td:nth-child(2) { width: 13%; white-space: nowrap; text-align: center; } .pp-t.apps thead th:nth-child(2) { text-align: center; }
 .pp-note { margin: 4px 0 18px; font-size: 13.5px; line-height: 1.5; color: var(--pp-soft); max-width: 86ch; }
 .pp-apps { margin-top: 30px; }
-.pp-apps-h { background: var(--pp-green); color: #fff; font-family: 'Barlow', var(--sans); text-transform: uppercase; font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 9px 12px; }
+.pp-apps-h { background: var(--pp-green); color: #fff; font-family: var(--chart); text-transform: uppercase; font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 9px 12px; }
 .pp-apps ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: 34px; border-bottom: 2px solid #7D8A84; }
-.pp-apps li { font-family: 'Barlow', var(--sans); font-weight: 600; font-size: 14.5px; padding: 11px 12px; border-bottom: 1px solid #C5CCC8; }
+.pp-apps li { font-family: var(--chart); font-weight: 600; font-size: 14.5px; padding: 11px 12px; border-bottom: 1px solid #C5CCC8; }
 /* product resources: big figures, two pictures, the "where it comes from" bar */
 .pp-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; margin-bottom: 30px; }
 .pp-stat b { font-family: 'League Spartan', var(--sans); font-weight: 700; font-size: clamp(40px, 4.4vw, 62px); line-height: 1; letter-spacing: .015em; }
@@ -232,12 +251,15 @@
   .pp-types.text, .pp-types.text.n4 { gap: 12px; }
   .pp-feats { grid-template-columns: 1fr 1fr; }
   .pp-stats { grid-template-columns: 1fr 1fr; gap: 26px 18px; }
-  .pp-pics, .pp-mix, .pp-drops { grid-template-columns: 1fr; }
+  .pp-pics, .pp-mix, .pp-drops, .pp-duo { grid-template-columns: 1fr; }
+  .pp-grades .pp-type { flex-basis: calc((100% - 16px) / 2); }
   .pp-apps ul { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
   .pp-types, .pp-types.n2, .pp-types.text, .pp-types.text.n2, .pp-types.text.n4 { grid-template-columns: 1fr; }
   .pp-type img { max-width: 340px; margin: 0 auto; }
+  .pp-grades .pp-type { flex-basis: 100%; }
+  .pp-duo .pp-type h3 { font-size: 14.5px; margin-top: 14px; } .pp-duo .pp-type p { font-size: 12.5px; }
   .pp-feats { grid-template-columns: 1fr; }
 }
 </style>
@@ -246,22 +268,22 @@
 html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;background:#0F2A1E;pointer-events:none;animation:hxEnter 1s .15s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes hxEnter{to{opacity:0;visibility:hidden}}
 @media (prefers-reduced-motion: reduce){html.hx-enter body::after{animation-duration:.01s}}</style>
-<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="site-header"></div>
 <main>
-<div class="pp"><section class="pp-hero"><img src="/assets/products/hero/wood-chips.jpg?v=3" alt="" fetchpriority="high"><div class="pp-w"><h1>Wood Chips</h1><p>Wood chips from plantation-grown eucalyptus, acacia and pine in Indonesia and the wider region, supplied as fibre grade for pulp and panel-board mills and as fuel grade for biomass boilers and industrial furnaces.</p></div></section><div class="pp-w"><section class="pp-sec" id="types"><h2 class="pp-h">Product types</h2><div class="pp-types n3"><article class="pp-type"><img src="/assets/products/types/chips-eucalyptus.jpg?v=1" alt="Eucalyptus" loading="lazy" decoding="async"><h3>Eucalyptus</h3><p>Plantation-grown hardwood chips, supplied in fibre and fuel grades.</p></article><article class="pp-type"><img src="/assets/products/types/chips-acacia.jpg?v=1" alt="Acacia" loading="lazy" decoding="async"><h3>Acacia</h3><p>Plantation-grown hardwood chips, supplied in fibre and fuel grades.</p></article><article class="pp-type"><img src="/assets/products/types/chips-pine.jpg?v=1" alt="Pine" loading="lazy" decoding="async"><h3>Pine</h3><p>Plantation-grown softwood chips, supplied in fibre and fuel grades.</p></article></div></section><section class="pp-sec" id="specifications"><h2 class="pp-h">Product specifications</h2><div class="pp-tw"><table class="pp-t c3 "><thead><tr><th>Parameter</th><th>Fibre grade</th><th>Fuel grade</th></tr></thead><tbody><tr><th scope="row">Species</th><td>Eucalyptus / acacia / pine</td><td>Mixed plantation hardwood</td></tr></tbody></table></div><div class="pp-apps"><div class="pp-apps-h">Industry / Application</div><ul><li>Pulp and paper</li><li>MDF and particleboard</li><li>Biomass power and CHP plants</li><li>Industrial furnace and boiler fuel</li></ul></div></section><section class="pp-sec pp-res" id="resources"><h2 class="pp-h">Product resources</h2><div class="pp-drops"><details class="pp-drop"><summary>How we supply<i aria-hidden="true"></i></summary><div class="pp-drop-b"><p>By leveraging decades of industry experience and a vast international network of trusted partners, HexaHessman anticipates and responds to the evolving energy and feedstock needs of clients worldwide, with solutions that are both precise and dependable.</p></div></details><details class="pp-drop"><summary>Procedures<i aria-hidden="true"></i></summary><div class="pp-drop-b"><h4 class="ph">Phase I · Pre-contract</h4><ol><li>LOI · Buyer states intent, including any broker commission details. The LOI must come from the entity that will open the L/C.</li><li>FCO · Seller sends the offer with KYC documents.</li><li>ICPO · Buyer sends the purchase order with KYC documents.</li><li>SPA · Seller issues the agreement; Buyer signs it and sends it back.</li><li>Proforma Invoice · Seller issues it; Buyer signs it.</li></ol><h4 class="ph">Phase II · L/C and loading</h4><ol><li>L/C Issuance · Buyer’s bank opens a 100% irrevocable MT700 L/C at sight that matches the SPA and PI.</li><li>L/C Verification · Seller’s bank confirms the L/C, and loading preparations begin.</li><li>Insurance · Seller insures the cargo before the vessel sails.</li><li>Vessel and Loading · Seller nominates the vessel and loads.</li><li>SGS Inspection · Seller pays for SGS to certify quantity and quality at the loading port. Buyer approves the inspector.</li><li>B/L and Title · A Clean On Board B/L is issued. Title passes to the Buyer at the loading port.</li><li>Documents · Seller sends the full set of shipping documents, and the vessel sails.</li></ol><h4 class="ph">Phase III · Payment</h4><ol><li>L/C Payment · Buyer’s bank pays at sight when compliant documents are presented.</li><li>Discharge Inspection (Optional) · Buyer may inspect at the discharge port at its own cost. This cannot delay payment.</li></ol><p><em>Any change to these terms needs written agreement from both parties.</em></p></div></details><details class="pp-drop"><summary>Packaging<i aria-hidden="true"></i></summary><div class="pp-drop-b"><ul><li>Bulk, in dedicated wood chip carriers</li><li>Containerised (40 ft HC) for smaller lots</li></ul><p>Wood Chips supplier in Southeast Asia: Singapore, Malaysia, Thailand, Vietnam and Indonesia.</p></div></details><details class="pp-drop"><summary>Key features<i aria-hidden="true"></i></summary><div class="pp-drop-b"><ul><li>Plantation-grown, traceable origins</li><li>Fibre and fuel grades</li><li>Screened for uniform size and low bark</li><li>Phytosanitary certification and fumigation where required</li></ul></div></details></div></section></div></div>
+<div class="pp"><section class="pp-hero"><img src="/assets/products/hero/wood-chips.jpg?v=3" alt="" fetchpriority="high"><div class="pp-w"><h1>Wood Chips</h1><p>Wood chips from plantation-grown eucalyptus, acacia and pine in Indonesia and the wider region, supplied as fibre grade for pulp and panel-board mills and as fuel grade for biomass boilers and industrial furnaces.</p></div></section><div class="pp-w"><section class="pp-sec pp-lined" data-pp-lines id="types"><h2 class="pp-h">Product types</h2><div class="pp-types n3"><article class="pp-type"><img src="/assets/products/types/chips-eucalyptus.jpg?v=1" alt="Eucalyptus" loading="lazy" decoding="async"><h3>Eucalyptus</h3><p>Plantation-grown hardwood chips, supplied in fibre and fuel grades.</p></article><article class="pp-type"><img src="/assets/products/types/chips-acacia.jpg?v=1" alt="Acacia" loading="lazy" decoding="async"><h3>Acacia</h3><p>Plantation-grown hardwood chips, supplied in fibre and fuel grades.</p></article><article class="pp-type"><img src="/assets/products/types/chips-pine.jpg?v=1" alt="Pine" loading="lazy" decoding="async"><h3>Pine</h3><p>Plantation-grown softwood chips, supplied in fibre and fuel grades.</p></article></div></section><section class="pp-sec" id="specifications"><h2 class="pp-h">Product specifications</h2><div class="pp-tw"><table class="pp-t c3 "><thead><tr><th>Parameter</th><th>Fibre grade</th><th>Fuel grade</th></tr></thead><tbody><tr><th scope="row">Species</th><td>Eucalyptus / acacia / pine</td><td>Mixed plantation hardwood</td></tr></tbody></table></div><div class="pp-apps"><div class="pp-apps-h">Industry / Application</div><ul><li>Pulp and paper</li><li>MDF and particleboard</li><li>Biomass power and CHP plants</li><li>Industrial furnace and boiler fuel</li></ul></div></section><section class="pp-sec pp-res" id="resources" data-standin="sulphur"><h2 class="pp-h">Product resources</h2><div class="pp-stats"><div class="pp-stat"><b>39–40</b><sup>Mt/yr</sup><span>global seaborne sulphur trade</span></div><div class="pp-stat"><b>~47</b><sup>%</sup><span>of seaborne trade loads in the Middle East</span></div><div class="pp-stat"><b>5.13</b><sup>Mt</sup><span>projected global deficit in 2026 (HDIN Research)</span></div><div class="pp-stat"><b>4</b><span>export restrictions in twelve months</span></div></div><div class="pp-pics n2"><img src="/assets/products/resources/sulphur-source.jpg?v=1" alt="The Galkynyş gas field plant in Turkmenistan, seen from above" loading="lazy" decoding="async"><img src="/assets/products/resources/sulphur-trade-map.svg?v=1" alt="World map of sulphur export sources and major import markets" loading="lazy" decoding="async"></div><div class="pp-mix"><div><p class="pp-bar-t">Where the world’s sulphur comes from</p><div class="pp-bar" role="img" aria-label="Oil refining 65%, Gas processing 32%, Mining &amp; other 3%"><span style="width:65%;background:#E6CF2E"></span><span style="width:32%;background:#B5A019"></span><span style="width:3%;background:#8A8A80"></span></div><div class="pp-legend"><span><i style="background:#E6CF2E"></i>Oil refining<b>65%</b></span><span><i style="background:#B5A019"></i>Gas processing<b>32%</b></span><span><i style="background:#8A8A80"></i>Mining &amp; other<b>3%</b></span></div><p class="pp-total">Total production ~85.8 Mt (2025E)</p></div><p class="pp-call">~10 t of sulphur for every tonne of nickel from Indonesian HPAL, the new driver of demand.</p></div><div class="pp-drops"><details class="pp-drop"><summary>How we supply<i aria-hidden="true"></i></summary><div class="pp-drop-b"><p>By leveraging decades of industry experience and a vast international network of trusted partners, HexaHessman anticipates and responds to the evolving energy and feedstock needs of clients worldwide, with solutions that are both precise and dependable.</p></div></details><details class="pp-drop"><summary>Procedures<i aria-hidden="true"></i></summary><div class="pp-drop-b"><h4 class="ph">Phase I · Pre-contract</h4><ol><li>LOI · Buyer states intent, including any broker commission details. The LOI must come from the entity that will open the L/C.</li><li>FCO · Seller sends the offer with KYC documents.</li><li>ICPO · Buyer sends the purchase order with KYC documents.</li><li>SPA · Seller issues the agreement; Buyer signs it and sends it back.</li><li>Proforma Invoice · Seller issues it; Buyer signs it.</li></ol><h4 class="ph">Phase II · L/C and loading</h4><ol><li>L/C Issuance · Buyer’s bank opens a 100% irrevocable MT700 L/C at sight that matches the SPA and PI.</li><li>L/C Verification · Seller’s bank confirms the L/C, and loading preparations begin.</li><li>Insurance · Seller insures the cargo before the vessel sails.</li><li>Vessel and Loading · Seller nominates the vessel and loads.</li><li>SGS Inspection · Seller pays for SGS to certify quantity and quality at the loading port. Buyer approves the inspector.</li><li>B/L and Title · A Clean On Board B/L is issued. Title passes to the Buyer at the loading port.</li><li>Documents · Seller sends the full set of shipping documents, and the vessel sails.</li></ol><h4 class="ph">Phase III · Payment</h4><ol><li>L/C Payment · Buyer’s bank pays at sight when compliant documents are presented.</li><li>Discharge Inspection (Optional) · Buyer may inspect at the discharge port at its own cost. This cannot delay payment.</li></ol><p><em>Any change to these terms needs written agreement from both parties.</em></p></div></details><details class="pp-drop"><summary>Packaging<i aria-hidden="true"></i></summary><div class="pp-drop-b"><ul><li>Bulk, in dedicated wood chip carriers</li><li>Containerised (40 ft HC) for smaller lots</li></ul><p>Wood Chips supplier in Southeast Asia: Singapore, Malaysia, Thailand, Vietnam and Indonesia.</p></div></details><details class="pp-drop"><summary>Key features<i aria-hidden="true"></i></summary><div class="pp-drop-b"><ul><li>Plantation-grown, traceable origins</li><li>Fibre and fuel grades</li><li>Screened for uniform size and low bark</li><li>Phytosanitary certification and fumigation where required</li></ul></div></details></div></section></div></div>
 <section class="section" id="related"><div class="wrap"><div class="section-head"><h2>Related products</h2></div><div class="grid c3"><a class="card" href="/commodities/biomass/coconut-shell-charcoal/"><h3>Coconut Shell Charcoal</h3><p>Coconut-shell charcoal for activated carbon.</p><span class="more">View product →</span></a><a class="card" href="/commodities/fertilizer-phosphate/sulphur/"><h3>Sulphur</h3><p>Granular, prilled and lump sulphur for acid, fertilizer and refining.</p><span class="more">View product →</span></a><a class="card" href="/commodities/fertilizer-phosphate/sulphuric-acid/"><h3>Sulphuric Acid</h3><p>98% sulphuric acid for phosphate and fertilizer plants.</p><span class="more">View product →</span></a></div></div></section>
 
 <section class="section" id="cta"><div class="wrap"><div class="cta-band"><h2>Let’s connect</h2><p class="lead">For technical datasheets, pricing or samples, message our supply team on WhatsApp.</p><div class="btn-row"><a class="pill solid" href="https://wa.me/6580619119" target="_blank" rel="noopener">WhatsApp us</a></div></div></div></section>
 
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=1110a" defer></script>
-<script src="/assets/deco-lines.js?v=2" defer></script>
+<script src="/assets/site-header.js?v=1112a" defer></script>
+<script src="/assets/deco-lines.js?v=3" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js?v=1110b" defer></script>
-<script src="/assets/product-contact.js?v=1" data-up="/commodities/" data-spot="wood-chips" data-name="Adam Yeoh" data-role="Business Development Manager" data-entity="HexaHessman Singapore" data-email="Adam.Yeoh@HexaHessman.com" data-photo="/assets/team/cut/adam-yeoh.webp" defer></script>
+<script src="/assets/product-contact.js?v=2" data-up="/commodities/" data-spot="wood-chips" data-name="Adam Yeoh" data-role="Business Development Manager" data-entity="HexaHessman Singapore" data-email="Adam.Yeoh@HexaHessman.com" data-photo="/assets/team/cut/adam-yeoh.webp" defer></script>
+<script src="/assets/product-lines.js?v=4" defer></script>
 </body>
 </html>

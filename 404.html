@@ -8,9 +8,9 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=1111a">
-<link rel="stylesheet" href="/assets/site.css?v=1111g">
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=1112a">
+<link rel="stylesheet" href="/assets/site.css?v=1112d">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -32,7 +32,7 @@
 .card ul.list { margin-top: 6px; }
 .who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
 .cta-band { display: grid; gap: 22px; padding: clamp(24px, 6vh, 72px) 0 clamp(16px, 3vh, 32px); justify-items: center; text-align: center; }   /* no box: the user wants no cards anywhere */
-.cta-band h2 { max-width: 18ch; font-size: clamp(28px, 3.2vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
+.cta-band h2 { max-width: 20ch; font-size: clamp(30px, 3.4vw, 52px); line-height: .95; text-wrap: balance; }
 .cta-band .lead { max-width: 46ch; }
 .cta-band .btn-row { justify-content: center; margin-top: 10px; }
 .related { display: grid; gap: 18px; }
@@ -53,11 +53,11 @@
 .contact-hero .media::after { background: linear-gradient(90deg, rgba(10,22,16,.78), rgba(10,22,16,.35) 55%, rgba(10,22,16,.1)), linear-gradient(180deg, transparent 50%, rgba(0,0,0,.5)); }
 .pr-hero .wrap, .pr-hero .crumbs, .pr-hero .crumbs a, .pr-hero .eyebrow { color: #fff; }
 .pr-hero .crumbs, .pr-hero .eyebrow { opacity: .85; }
-.pr-hero h1 { color: #fff; font-size: clamp(34px, 4.2vw, 60px); }
-.pr-hero .lead { color: rgba(255,255,255,.9); max-width: 58ch; }
+.pr-hero h1 { color: #fff; max-width: 17ch; }   /* the sulphur page's name style, on the bar's left edge */
+.pr-hero .lead { color: #fff; font-weight: 600; max-width: 58ch; }
 .pr-hero .pr-cov { font-size: 15px; color: rgba(255,255,255,.72); }
 .pr-photo .media::after { background: linear-gradient(180deg, rgba(15,42,30,.5) 0%, rgba(15,42,30,.58) 45%, rgba(15,42,30,.86) 100%); }   /* a dark HexaHessman-green veil so the words read on any photo */
-.pr-logo { position: absolute; z-index: 2; right: var(--gutter); top: clamp(150px, 20vh, 200px); width: auto; height: 54px; max-width: 34vw; object-fit: contain; filter: brightness(0) invert(1); opacity: .92; }   /* in white, so every part reads on the photo */
+.pr-logo { position: absolute; z-index: 2; right: var(--edge); top: clamp(150px, 20vh, 200px); width: auto; height: 54px; max-width: 34vw; object-fit: contain; filter: brightness(0) invert(1); opacity: .92; }   /* in white, so every part reads on the photo */
 .pr-logo.mq-shibata { height: 46px; } .pr-logo.mq-manntek { height: 70px; } .pr-logo.mq-straatman { height: 58px; } .pr-logo.mq-raythink { height: 60px; }
 @media (max-width: 720px) { .pr-logo { top: 104px; height: 34px; } .pr-logo.mq-manntek { height: 44px; } }
 .product-hero { min-height: 74vh; }
@@ -81,7 +81,7 @@
 .fuel-tile:hover img { transform: scale(1.24); }
 .fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.38); transition: background .3s; }
 .fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
-.fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.fuel-label { position: relative; font-family: var(--display); font-size: clamp(22px, 2.5vw, 38px); font-weight: 700; letter-spacing: 0; line-height: .95; text-transform: uppercase; }
 .fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
 .fuel-tile[aria-expanded="true"] .fuel-more { background: #fff; color: #0F2A1E; }
 .spin-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.2,.7,.2,1); }
@@ -112,7 +112,7 @@
 .zig-layers .pl { position: absolute; display: block; max-height: none; margin: 0; clip-path: inset(100% 0 0 0); }
 .zig-layers.in .pl { clip-path: inset(0 0 0 0); transition: clip-path .9s cubic-bezier(.2,.7,.2,1) calc(.3s + var(--i) * .45s); }
 @media (prefers-reduced-motion: reduce) { .zig-layers .pl { clip-path: none; } }
-.zig-sub { margin: 26px 0 8px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+.zig-sub { margin: 26px 0 8px; font-size: 16px; font-weight: 600; letter-spacing: 0; }
 .zig-text > p + p { margin-top: 14px; }
 /* a product with its picture: picture one side, text the other, alternating down the page (as on the principal's own site) */
 .zig { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 80px); align-items: center; }
@@ -158,8 +158,8 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=1110a" defer></script>
-<script src="/assets/deco-lines.js?v=2" defer></script>
+<script src="/assets/site-header.js?v=1112a" defer></script>
+<script src="/assets/deco-lines.js?v=3" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js?v=1110b" defer></script>
 </body>

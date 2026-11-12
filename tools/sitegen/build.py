@@ -339,7 +339,7 @@ PAGE_CSS = """
 .card ul.list { margin-top: 6px; }
 .who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
 .cta-band { display: grid; gap: 22px; padding: clamp(24px, 6vh, 72px) 0 clamp(16px, 3vh, 32px); justify-items: center; text-align: center; }   /* no box: the user wants no cards anywhere */
-.cta-band h2 { max-width: 18ch; font-size: clamp(28px, 3.2vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
+.cta-band h2 { max-width: 20ch; font-size: clamp(30px, 3.4vw, 52px); line-height: .95; text-wrap: balance; }
 .cta-band .lead { max-width: 46ch; }
 .cta-band .btn-row { justify-content: center; margin-top: 10px; }
 .related { display: grid; gap: 18px; }
@@ -360,11 +360,11 @@ PAGE_CSS = """
 .contact-hero .media::after { background: linear-gradient(90deg, rgba(10,22,16,.78), rgba(10,22,16,.35) 55%, rgba(10,22,16,.1)), linear-gradient(180deg, transparent 50%, rgba(0,0,0,.5)); }
 .pr-hero .wrap, .pr-hero .crumbs, .pr-hero .crumbs a, .pr-hero .eyebrow { color: #fff; }
 .pr-hero .crumbs, .pr-hero .eyebrow { opacity: .85; }
-.pr-hero h1 { color: #fff; font-size: clamp(34px, 4.2vw, 60px); }
-.pr-hero .lead { color: rgba(255,255,255,.9); max-width: 58ch; }
+.pr-hero h1 { color: #fff; max-width: 17ch; }   /* the sulphur page's name style, on the bar's left edge */
+.pr-hero .lead { color: #fff; font-weight: 600; max-width: 58ch; }
 .pr-hero .pr-cov { font-size: 15px; color: rgba(255,255,255,.72); }
 .pr-photo .media::after { background: linear-gradient(180deg, rgba(15,42,30,.5) 0%, rgba(15,42,30,.58) 45%, rgba(15,42,30,.86) 100%); }   /* a dark HexaHessman-green veil so the words read on any photo */
-.pr-logo { position: absolute; z-index: 2; right: var(--gutter); top: clamp(150px, 20vh, 200px); width: auto; height: 54px; max-width: 34vw; object-fit: contain; filter: brightness(0) invert(1); opacity: .92; }   /* in white, so every part reads on the photo */
+.pr-logo { position: absolute; z-index: 2; right: var(--edge); top: clamp(150px, 20vh, 200px); width: auto; height: 54px; max-width: 34vw; object-fit: contain; filter: brightness(0) invert(1); opacity: .92; }   /* in white, so every part reads on the photo */
 .pr-logo.mq-shibata { height: 46px; } .pr-logo.mq-manntek { height: 70px; } .pr-logo.mq-straatman { height: 58px; } .pr-logo.mq-raythink { height: 60px; }
 @media (max-width: 720px) { .pr-logo { top: 104px; height: 34px; } .pr-logo.mq-manntek { height: 44px; } }
 .product-hero { min-height: 74vh; }
@@ -388,7 +388,7 @@ PAGE_CSS = """
 .fuel-tile:hover img { transform: scale(1.24); }
 .fuel-veil { position: absolute; inset: 0; background: rgba(0,0,0,.38); transition: background .3s; }
 .fuel-tile:hover .fuel-veil, .fuel-tile[aria-expanded="true"] .fuel-veil { background: rgba(15,42,30,.6); }
-.fuel-label { position: relative; font-size: clamp(20px, 2.3vw, 34px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.fuel-label { position: relative; font-family: var(--display); font-size: clamp(22px, 2.5vw, 38px); font-weight: 700; letter-spacing: 0; line-height: .95; text-transform: uppercase; }
 .fuel-more { position: relative; padding: 9px 16px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; font-size: 13px; font-weight: 500; letter-spacing: .02em; }
 .fuel-tile[aria-expanded="true"] .fuel-more { background: #fff; color: #0F2A1E; }
 .spin-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.2,.7,.2,1); }
@@ -419,7 +419,7 @@ PAGE_CSS = """
 .zig-layers .pl { position: absolute; display: block; max-height: none; margin: 0; clip-path: inset(100% 0 0 0); }
 .zig-layers.in .pl { clip-path: inset(0 0 0 0); transition: clip-path .9s cubic-bezier(.2,.7,.2,1) calc(.3s + var(--i) * .45s); }
 @media (prefers-reduced-motion: reduce) { .zig-layers .pl { clip-path: none; } }
-.zig-sub { margin: 26px 0 8px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+.zig-sub { margin: 26px 0 8px; font-size: 16px; font-weight: 600; letter-spacing: 0; }
 .zig-text > p + p { margin-top: 14px; }
 /* a product with its picture: picture one side, text the other, alternating down the page (as on the principal's own site) */
 .zig { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 80px); align-items: center; }
@@ -466,9 +466,9 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=1111a">
-<link rel="stylesheet" href="/assets/site.css?v=1111g">
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/header.css?v=1112a">
+<link rel="stylesheet" href="/assets/site.css?v=1112d">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -482,8 +482,8 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 {body}
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=1110a" defer></script>
-<script src="/assets/deco-lines.js?v=2" defer></script>
+<script src="/assets/site-header.js?v=1112a" defer></script>
+<script src="/assets/deco-lines.js?v=3" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js?v=1110b" defer></script>
 {body_scripts}</body>
@@ -508,7 +508,7 @@ def product_contact(up, spot):
     """the floating Back circle and Contact pill on product pages (client's PDF, 2026-11-11); opens the contact card"""
     c = PP.CONTACT
     attrs = "".join(f' data-{k}="{esc_attr(v)}"' for k, v in c.items() if v)
-    return f'<script src="/assets/product-contact.js?v=1" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n'
+    return f'<script src="/assets/product-contact.js?v=2" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=4" defer></script>\n'
 
 
 def write(relpath, html):
@@ -531,7 +531,12 @@ def build_commodities_hub():
             '<rect x="32.5" y="3" width="13" height="42"/><rect x="35.5" y="6" width="7" height="36" stroke-width=".8"/>'
             '<path d="M24 9.5 L38.5 24 L24 38.5 L9.5 24 Z"/><path d="M24 14 L34 24 L24 34 L14 24 Z" stroke-width=".8"/></svg>')
     # partner logos in a hairline grid with a cross at each corner (after pestimesh.vercel.app's client grid); placeholders for now
-    cells = "".join(f'<div class="pcell" data-i="{i}"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><span class="ph"><i></i><b>Partner logo</b></span></div>' for i in range(12))   # two rows (user, 2026-11-06)
+    # the client's twelve logos, in their order (WhatsApp sheet, 2026-11-12), each company's own file in its own colours
+    # (user: "go online find their logo ... can be the correct colour"); sources are listed in assets/partners/SOURCES.md.
+    # Aidreo's site was unreachable, so its mark is still the one traced from the client's sheet, in our green.
+    PARTNERS = [("jewe-wani.png", "Jewe Wani Holdings"), ("vale.svg", "Vale"), ("pertamina.svg", "Pertamina"), ("harita.png", "Harita Group"), ("burgaz.png", "Burgaz Ventures"), ("petronas.svg", "Petronas"),
+                ("wijaya-pura.png", "PT. Wijaya Pura"), ("indevco.png", "Indevco"), ("pvfcco.png", "PetroVietnam PVFCCo"), ("hessman-energy.png", "Hessman Energy"), ("arkema.svg", "Arkema"), ("aidreo.svg", "Aidreo")]
+    cells = "".join(f'<div class="pcell" data-i="{i}"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><img class="plogo plogo-{f.split(".")[0]}" src="/assets/partners/{f}?v=2" alt="{esc_attr(name)}" loading="lazy" decoding="async"></div>' for i, (f, name) in enumerate(PARTNERS))   # two rows (user, 2026-11-06)
     # hero: the bulk port at dusk, edge to edge, with the headline pushed to the left over the sky (user, 2026-11-06)
     body = [f'''<section class="arrive com-arrive" id="partners" aria-label="Partners">
   <div class="com-hero"><video class="com-hero-vid" muted playsinline preload="auto" poster="/assets/commodities/crane-loop.jpg" aria-label="A harbour crane loading jumbo bags onto a ship at dusk"><source media="(max-width: 720px)" src="/assets/commodities/crane-loop-m.mp4" type="video/mp4"><source src="/assets/commodities/crane-loop.mp4" type="video/mp4"></video>
@@ -564,8 +569,8 @@ def build_commodities_hub():
 
     write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
         # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
-        head_tags='<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Inter:wght@400;500&family=Courier+Prime&display=swap" rel="stylesheet">\n',
-        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1111c" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=2612a" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
+        head_tags='<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">\n',
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112a" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112a" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
 
 
 def build_group(g):
@@ -629,7 +634,7 @@ def product_sections(p):
 
 
 # ------------------------------------------------------------------ product pages in the client's format (2026-11-11)
-PRODUCT_FONTS = '<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">\n'
+PRODUCT_FONTS = ""   # the three faces now load on every page (page(), client 2026-11-12)
 
 PRODUCT_CSS = """
 /* product pages after the client's own layout (Hafriz's PDF, 2026-11-11): white page, wide photo hero, League Spartan
@@ -640,8 +645,8 @@ PRODUCT_CSS = """
 .pp-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
 .pp-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.42) 45%, rgba(0,0,0,.1) 78%), linear-gradient(180deg, rgba(0,0,0,.42), transparent 38%, rgba(0,0,0,.4)); }
 .pp-hero .pp-w { position: relative; z-index: 1; padding-bottom: clamp(24px, 3vw, 44px); }
-.pp-hero h1 { margin: 0; max-width: 11ch; font-family: 'League Spartan', var(--sans); font-weight: 800; text-transform: uppercase; font-size: clamp(48px, 6.6vw, 104px); line-height: .84; letter-spacing: -.035em; color: #fff; }
-.pp-hero h1.long { max-width: 17ch; font-size: clamp(36px, 4.6vw, 72px); line-height: .9; }
+/* every product's name at one size, not too big (client, 2026-11-12; short names used to run to 104px) */
+.pp-hero h1, .pp-hero h1.long { margin: 0; max-width: 18ch; font-family: 'League Spartan', var(--sans); font-weight: 800; text-transform: uppercase; font-size: clamp(34px, 4.2vw, 64px); line-height: .9; letter-spacing: -.03em; color: #fff; }
 .pp-hero p { margin: 16px 0 0; max-width: 52ch; font-weight: 600; font-size: clamp(15px, 1.25vw, 19px); line-height: 1.38; color: #fff; }
 .pp-sec { padding: clamp(40px, 5vw, 66px) 0; border-bottom: 1px solid var(--pp-line); }
 .pp-sec:last-child { border-bottom: 0; }
@@ -655,18 +660,37 @@ PRODUCT_CSS = """
 .pp-type img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 26px; background: #EEF0EE; }
 .pp-type h3 { margin: 22px 0 0; text-align: center; font-weight: 600; font-size: clamp(16px, 1.4vw, 20px); letter-spacing: 0; }
 .pp-type p { margin: 6px auto 0; max-width: 36ch; text-align: center; font-size: 13.5px; line-height: 1.45; color: var(--pp-soft); }
+/* the client's layout (mock-ups, 2026-11-12): two photos on the left, their words on the right, grade cards centred below */
+.pp-duo { display: grid; grid-template-columns: minmax(0, 1.86fr) minmax(0, 1fr); gap: clamp(24px, 3.4vw, 52px); align-items: start; }
+.pp-duo .pp-types, .pp-duo .pp-types.n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(18px, 3.2vw, 48px); justify-content: stretch; }
+.pp-side p { margin: 0 0 1.5em; max-width: none; font-size: clamp(14px, 1.08vw, 16.5px); line-height: 1.62; color: var(--pp-soft); }
+.pp-side p:last-child { margin-bottom: 0; }
+.pp-side b { font-weight: 700; color: var(--pp-ink); }
+.pp-grades { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: clamp(28px, 3.4vw, 46px); }
+.pp-grades .pp-type { flex: 0 1 calc((100% - 32px) / 3); box-sizing: border-box; background: #F1F3F1; border-radius: 22px; padding: 24px 20px 22px; }
+.pp-grades .pp-type h3 { margin-top: 0; }
 .pp-types.text { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; justify-content: stretch; }
 .pp-types.text.n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pp-types.text.n4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .pp-types.text .pp-type { height: 100%; box-sizing: border-box; background: #F1F3F1; border-radius: 22px; padding: 26px 22px 24px; }
 .pp-types.text .pp-type h3 { margin-top: 0; }
 .pp-feats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .pp-feats li { background: #F1F3F1; border-radius: 20px; padding: 20px 22px; font-weight: 500; font-size: 15px; line-height: 1.4; }
+/* two glowing lines in our green come in from the sides and run down between the cards to the bottom of the section,
+   landing where the closing band's lines start (product-lines.js). The cards sit above them. */
+.pp-lined { position: relative; }
+.pp-lined > * { position: relative; z-index: 1; }
+.pp-lines { position: absolute; z-index: 0; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }   /* product-lines.js stretches it to the full page width */
+.pp-lines path { fill: none; vector-effect: non-scaling-stroke; }
+.pp-lines .ppl-line { stroke: rgba(15,42,30,.22); stroke-width: 1.3; }
+.pp-lines .ppl-run { stroke: #0F2A1E; stroke-width: 2.4; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(15,42,30,.6)) drop-shadow(0 0 10px rgba(15,42,30,.3)); }
+.pp-lined .pp-type img { position: relative; }
+@media (max-width: 900px) { .pp-lines { display: none; } }
 /* charts */
 .pp-tt { margin: 26px 0 10px; font-weight: 600; font-size: 15px; letter-spacing: 0; }
 .pp-h + .pp-tt { margin-top: 0; }
 .pp-tw + .pp-tt, .pp-note + .pp-tt { margin-top: 34px; }
 .pp-tw { overflow-x: auto; margin: 0 0 14px; }
-.pp-t { width: 100%; min-width: 560px; border-collapse: collapse; font-family: 'Barlow', var(--sans); font-size: 14.5px; }
+.pp-t { width: 100%; min-width: 560px; border-collapse: collapse; font-family: var(--chart); font-size: 14.5px; }
 .pp-t thead th { background: var(--pp-green); color: #fff; text-align: left; text-transform: uppercase; font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 9px 12px; }
 .pp-t tbody th { text-align: left; font-weight: 600; padding: 11px 12px; vertical-align: top; }
 .pp-t td { padding: 11px 12px; font-style: italic; color: #2B332F; vertical-align: top; }
@@ -676,9 +700,9 @@ PRODUCT_CSS = """
 .pp-t.apps th:first-child { width: 27%; } .pp-t.apps td:nth-child(2) { width: 13%; white-space: nowrap; text-align: center; } .pp-t.apps thead th:nth-child(2) { text-align: center; }
 .pp-note { margin: 4px 0 18px; font-size: 13.5px; line-height: 1.5; color: var(--pp-soft); max-width: 86ch; }
 .pp-apps { margin-top: 30px; }
-.pp-apps-h { background: var(--pp-green); color: #fff; font-family: 'Barlow', var(--sans); text-transform: uppercase; font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 9px 12px; }
+.pp-apps-h { background: var(--pp-green); color: #fff; font-family: var(--chart); text-transform: uppercase; font-weight: 600; font-size: 12.5px; letter-spacing: .02em; padding: 9px 12px; }
 .pp-apps ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: 34px; border-bottom: 2px solid #7D8A84; }
-.pp-apps li { font-family: 'Barlow', var(--sans); font-weight: 600; font-size: 14.5px; padding: 11px 12px; border-bottom: 1px solid #C5CCC8; }
+.pp-apps li { font-family: var(--chart); font-weight: 600; font-size: 14.5px; padding: 11px 12px; border-bottom: 1px solid #C5CCC8; }
 /* product resources: big figures, two pictures, the "where it comes from" bar */
 .pp-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; margin-bottom: 30px; }
 .pp-stat b { font-family: 'League Spartan', var(--sans); font-weight: 700; font-size: clamp(40px, 4.4vw, 62px); line-height: 1; letter-spacing: .015em; }
@@ -724,12 +748,15 @@ PRODUCT_CSS = """
   .pp-types.text, .pp-types.text.n4 { gap: 12px; }
   .pp-feats { grid-template-columns: 1fr 1fr; }
   .pp-stats { grid-template-columns: 1fr 1fr; gap: 26px 18px; }
-  .pp-pics, .pp-mix, .pp-drops { grid-template-columns: 1fr; }
+  .pp-pics, .pp-mix, .pp-drops, .pp-duo { grid-template-columns: 1fr; }
+  .pp-grades .pp-type { flex-basis: calc((100% - 16px) / 2); }
   .pp-apps ul { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
   .pp-types, .pp-types.n2, .pp-types.text, .pp-types.text.n2, .pp-types.text.n4 { grid-template-columns: 1fr; }
   .pp-type img { max-width: 340px; margin: 0 auto; }
+  .pp-grades .pp-type { flex-basis: 100%; }
+  .pp-duo .pp-type h3 { font-size: 14.5px; margin-top: 14px; } .pp-duo .pp-type p { font-size: 12.5px; }
   .pp-feats { grid-template-columns: 1fr; }
 }
 """
@@ -792,7 +819,8 @@ def product_body(p):
     pos = f' style="--pos:{P["hero_pos"]}"' if P.get("hero_pos") else ""
     out = [f'<section class="pp-hero"><img src="{hero_img}?v=3" alt="" fetchpriority="high"{pos}><div class="pp-w"><h1{" class=" + chr(34) + "long" + chr(34) if len(title) > 15 else ""}>{esc(title)}</h1><p>{esc(lead)}</p></div></section>']
     blocks = []
-    if over:
+    side = P.get("side")   # the client's own words beside the photos (their mock-ups, 2026-11-12): they stand in for the overview
+    if over and not side:
         blocks.append('<section class="pp-sec pp-over">' + "".join(f"<p>{esc(t)}</p>" for t in over) + "</section>")
     # ---- product types (photos), or the key features where a product has no separate types
     types = P.get("types")
@@ -802,7 +830,20 @@ def product_body(p):
         types = [(t, d, imgs.get(t)) for t, d in forms["defs"] if not is_placeholder(d)]
     feats = next((x for x in secs if x.get("title") == "Key features"), None)
     used = {id(forms)} if forms else set()
-    if types:
+    pics = [(src, alt) for src, alt in P.get("pics", []) if pp_exists(src)]
+    if side and (pics or (types and all(pp_exists(t[2]) for t in types))):
+        # the client's layout: two photos on the left (with their names, or bare where the types are grades), their words on
+        # the right, and any grade cards in a centred row underneath
+        if pics:
+            photos = "".join(f'<article class="pp-type"><img src="{src}?v=2" alt="{esc_attr(alt)}" loading="lazy" decoding="async"></article>' for src, alt in pics)
+        else:
+            photos = "".join(f'<article class="pp-type"><img src="{t[2]}?v=2" alt="{esc_attr(t[0])}" loading="lazy" decoding="async"><h3>{esc(t[0])}</h3>' + (f"<p>{esc(t[1])}</p>" if t[1] else "") + "</article>" for t in types)
+        words = "".join(f"<p><b>{esc(x[0])}</b> {esc(x[1])}</p>" if isinstance(x, tuple) else f"<p>{esc(x)}</p>" for x in side)
+        grades = ""
+        if pics and types:
+            grades = '<div class="pp-grades">' + "".join(f'<article class="pp-type"><h3>{esc(t[0])}</h3><p>{esc(t[1])}</p></article>' for t in types) + "</div>"
+        blocks.append(f'<section class="pp-sec" id="types"><h2 class="pp-h">{esc(P.get("types_title", "Product types"))}</h2><div class="pp-duo"><div class="pp-types n2">{photos}</div><div class="pp-side">{words}</div></div>{grades}</section>')
+    elif types:
         has_img = all(pp_exists(t[2]) for t in types)
         cards = "".join((f'<article class="pp-type"><img src="{t[2]}?v=1" alt="{esc_attr(t[0])}" loading="lazy" decoding="async">' if has_img else '<article class="pp-type">') + f"<h3>{esc(t[0])}</h3><p>{esc(t[1])}</p></article>" for t in types)
         blocks.append(f'<section class="pp-sec" id="types"><h2 class="pp-h">{esc(P.get("types_title", "Product types"))}</h2><div class="pp-types n{len(types)}{"" if has_img else " text"}">{cards}</div></section>')
@@ -843,7 +884,11 @@ def product_body(p):
         blocks.append(f'<section class="pp-sec" id="specifications"><h2 class="pp-h">Product specifications</h2>{spec_html}</section>')
     # ---- product resources: key figures and pictures (where the client has supplied them), then the drop-downs
     res = ""
-    Rs = P.get("resources")
+    # every product shows the Product Resources block (client, 2026-11-12: "just copy the section, we will amend content").
+    # A product without its own figures and pictures shows SULPHUR'S as a stand-in: give it a "resources" entry in
+    # product_pages.PAGES to replace them.
+    Rs = P.get("resources") or PP.PAGES["sulphur"]["resources"]
+    standin = not P.get("resources")
     if Rs:
         if Rs.get("stats"):
             res += '<div class="pp-stats">' + "".join(f'<div class="pp-stat"><b>{esc(a)}</b>{f"<sup>{esc(u)}</sup>" if u else ""}<span>{esc(l)}</span></div>' for a, u, l in Rs["stats"]) + "</div>"
@@ -880,7 +925,12 @@ def product_body(p):
         drops.append((3, "Distribution", f"<p>{esc(dist)}</p>"))
     drops.sort(key=lambda d: d[0])
     res += '<div class="pp-drops">' + "".join(pp_drop(t, h) for _, t, h in drops) + "</div>"
-    blocks.append(f'<section class="pp-sec pp-res" id="resources"><h2 class="pp-h">Product resources</h2>{res}</section>')
+    blocks.append(f'<section class="pp-sec pp-res" id="resources"{" data-standin=" + chr(34) + "sulphur" + chr(34) if standin else ""}><h2 class="pp-h">Product resources</h2>{res}</section>')
+    # the two glowing lines run down the Product types section (or the Key features one) to the points where the lines
+    # of the closing band start (client, 2026-11-12; assets/product-lines.js)
+    for i, b in enumerate(blocks):
+        if 'id="types"' in b[:60] or 'id="features"' in b[:60]:
+            blocks[i] = b.replace('<section class="pp-sec"', '<section class="pp-sec pp-lined" data-pp-lines', 1); break
     return '<div class="pp">' + out[0] + '<div class="pp-w">' + "".join(blocks) + "</div></div>"
 
 
@@ -969,7 +1019,7 @@ def build_engineering_hub():
     body.append(cta(H["cta_h"], ENG_CTA_P, "engineering"))
     # (the cone fender line drawing under the hero was tried and removed, user 2026-11-06; eng-draw.html is kept, unused)
     scripts = ('<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n'
-               '<script src="/assets/arrive.js?v=2612a" defer></script>\n<script src="/assets/eng.js?v=2611a" defer></script>\n')
+               '<script src="/assets/arrive.js?v=1112a" defer></script>\n<script src="/assets/eng.js?v=2611a" defer></script>\n')
     write("/engineering/index.html", page("Engineering Solutions", meta_desc(H["lead"]), "\n".join(body), body_scripts=scripts, body_class="eng"))
 
 
@@ -1041,9 +1091,10 @@ ABOUT_CSS = """
 .story-logo iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
 @media (max-width: 820px) { .story-grid { grid-template-columns: 1fr; } .story-logo { max-width: 360px; } }
 .about-hero2 { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 100svh; min-height: 560px; overflow: hidden; background: #0F2A1E; }   /* full 16:9, the drawing fills it, words over the top (user, 2026-11-06) */
-.about-hero2 .wrap { position: absolute; z-index: 2; left: var(--gutter); bottom: clamp(32px, 7%, 80px); width: min(640px, 100% - 2 * var(--gutter)); display: grid; gap: 12px; justify-items: start; text-align: left; }   /* bottom left (user) */
+.about-hero2 .wrap { position: absolute; z-index: 2; left: var(--edge); bottom: clamp(32px, 7%, 80px); width: min(700px, 100% - 2 * var(--gutter)); display: grid; gap: 12px; justify-items: start; text-align: left; }   /* bottom left (user) */
 .about-hero2 .crumbs { justify-content: flex-start; }
-.about-hero2::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 70% 62% at 0% 100%, rgba(15,42,30,.96) 30%, rgba(15,42,30,.7) 58%, transparent 80%); }
+.about-hero2::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 72% 64% at 16% 100%, rgba(15,42,30,.97) 36%, rgba(15,42,30,.74) 60%, transparent 82%); }   /* the shade sits under the words, which now start on the bar's edge */
+.about-hero2 .lead { color: var(--ink); font-weight: 600; }
 .about-street { position: absolute; inset: 0; z-index: 0; display: flex; align-items: flex-end; justify-content: center; }
 .shop-draw { position: relative; width: 100%; }   /* the whole street, edge to edge, standing on the bottom of the frame */
 .shop-draw img { display: block; width: 100%; height: auto;   /* fades in from left to right behind a wide soft edge, no pen line (user, 2026-11-06) */
@@ -1082,10 +1133,11 @@ ABOUT_CSS = """
 @media (max-width: 720px) { .about-pin { padding-bottom: 72px; } .about-cue { display: none; } }
 @media (prefers-reduced-motion: reduce) { .about-logo iframe { animation: none; opacity: 1; } .about-cue i { animation: none; } }
 /* ---- the voyage timeline: a white section with green words (user, 2026-11-05) ---- */
-.vy { --vy-fg: #0F2A1E; --vy-fg-rgb: 15,42,30; background: #FFFFFF; color: var(--vy-fg);   /* pure white, the same as the ship clip's ground */
+.vy { overflow-x: clip;   /* the photos wait 50px to the side before they slide in: keep that from widening a phone page */
+  --vy-fg: #0F2A1E; --vy-fg-rgb: 15,42,30; background: #FFFFFF; color: var(--vy-fg);   /* pure white, the same as the ship clip's ground */
   --paper: #FFFFFF; --ink: #0F2A1E; --ink-soft: rgba(15,42,30,.78); --muted: rgba(15,42,30,.58); --line: rgba(15,42,30,.14); --line-strong: rgba(15,42,30,.3); }
 .vy-head { text-align: center; margin-left: auto; margin-right: auto; justify-items: center; }
-.vy-head h2 { font-size: clamp(40px, 5vw, 76px); }   /* Our voyage bigger, its line smaller (client, 2026-11-10) */
+.vy-head h2 { font-size: clamp(40px, 5vw, 76px); line-height: .9; }   /* Our voyage bigger, its line smaller (client, 2026-11-10) */
 .vy-head .lead { font-size: clamp(15px, 1.1vw, 17px); }
 .vy-wrap { position: relative; width: min(var(--max), 100% - 2 * var(--gutter)); margin: 0 auto; padding: 40px 0 120px; }
 .vy-lane { position: absolute; left: 50%; top: 0; bottom: 0; width: 240px; transform: translateX(-50%); pointer-events: none; }
@@ -1136,8 +1188,8 @@ ABOUT_CSS = """
 .vy-gem { position: absolute; right: -18px; bottom: -18px; width: 11px; height: 11px; border: 1.2px solid rgba(var(--vy-fg-rgb),.7); transform: rotate(45deg); background: var(--paper); }
 .vy-stop.r .vy-gem { right: auto; left: -18px; }
 .vy-text { max-width: 400px; display: grid; gap: 10px; }
-.vy-year { font-size: clamp(32px, 3.6vw, 52px); font-weight: 400; letter-spacing: -.04em; line-height: 1; color: var(--ink); }
-.vy-text h3 { font-size: clamp(19px, 1.6vw, 23px); font-weight: 500; }
+.vy-year { font-family: var(--display); font-size: clamp(36px, 4vw, 58px); font-weight: 700; letter-spacing: -.02em; line-height: .9; color: var(--ink); }
+.vy-text h3 { font-size: clamp(18px, 1.5vw, 21px); font-weight: 600; }
 .vy-text p:last-child { color: var(--ink-soft); font-size: 16px; line-height: 1.55; }
 .vy-node { position: absolute; left: 50%; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border: 1.3px solid rgba(var(--vy-fg-rgb),.45); background: var(--paper); transform: rotate(45deg) scale(.8); transition: transform .5s, background .5s, border-color .5s, box-shadow .5s; }
 .vy-stop.on .vy-node { background: var(--vy-fg); border-color: var(--vy-fg); transform: rotate(45deg) scale(1); box-shadow: 0 0 14px rgba(var(--vy-fg-rgb),.7); }
@@ -1171,9 +1223,9 @@ ABOUT_CSS = """
 .tl + section, .tl ~ .section { }
 /* the header, set like the Commodities hub's: centred, no eyebrow, a large title over text that lights up word by word (client, 2026-11-07) */
 .tl-head { display: grid; gap: clamp(28px, 4vh, 48px); justify-items: center; text-align: center; padding: clamp(20px, 6vh, 80px) var(--g) 0; margin-bottom: clamp(16px, 3vh, 36px); }
-.tl-title { max-width: 18ch; font-size: clamp(30px, 3.4vw, 50px); font-weight: 400; line-height: 1.06; letter-spacing: -.03em; }
+.tl-title { max-width: 20ch; font-size: clamp(32px, 3.6vw, 56px); line-height: .95; letter-spacing: -.03em; }
 .tl-title em { font-style: normal; color: inherit; }
-.tl-fill { max-width: 32ch; font-size: clamp(17px, 1.35vw, 21px); line-height: 1.35; letter-spacing: -.01em; color: var(--ink); }
+.tl-fill { max-width: 36ch; font-weight: 500; font-size: clamp(16px, 1.2vw, 19px); line-height: 1.45; letter-spacing: 0; color: var(--ink); }
 .tl-title .w, .tl-fill .w { opacity: .16; transition: opacity .25s linear; }
 @media (prefers-reduced-motion: reduce) { .tl-title .w, .tl-fill .w { opacity: 1 !important; } }
 .tl-wrap { position: relative; }
@@ -1194,16 +1246,16 @@ ABOUT_CSS = """
 .tl-globe-label { position: absolute; left: 0; top: 0; margin: -30px 0 0 10px; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 4px; background: rgba(15,42,30,.75);
   font: 500 14px/1.3 var(--sans); letter-spacing: -.01em; text-transform: none; color: var(--ink-soft); white-space: nowrap; opacity: 0; transition: opacity .4s; }
 .tl-foot { display: contents; }
-.tl-info { position: absolute; z-index: 3; left: var(--gutter); top: clamp(70px, 12vh, 130px); max-width: min(560px, 48vw); display: grid; gap: 10px; pointer-events: none; }
+.tl-info { position: absolute; z-index: 3; left: var(--edge); top: clamp(70px, 12vh, 130px); max-width: min(560px, 48vw); display: grid; gap: 10px; pointer-events: none; }
 .tl-count { font: 400 12px/1 var(--mono); letter-spacing: .18em; color: var(--muted); }
-.tl-name { font-size: clamp(26px, 2.6vw, 38px); font-weight: 400; line-height: .98; letter-spacing: -.04em; text-shadow: 0 2px 28px rgba(15,42,30,.9); }
-.tl-role { font-size: clamp(16px, 1.5vw, 22px); color: var(--ink); }
+.tl-name { font-family: var(--display); text-transform: uppercase; font-size: clamp(30px, 3vw, 46px); font-weight: 700; line-height: .92; letter-spacing: -.025em; text-shadow: 0 2px 28px rgba(15,42,30,.9); }
+.tl-role { font-size: clamp(15px, 1.3vw, 19px); font-weight: 600; color: var(--ink); }
 .tl-where { font-size: 15px; line-height: 1.5; color: var(--muted); }
 .tl-desc { margin-top: 8px; max-width: 40ch; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.5; color: var(--ink-soft); }
 .tl-info.swap .tl-name, .tl-info.swap .tl-role, .tl-info.swap .tl-where, .tl-info.swap .tl-desc { animation: tlSwap .7s cubic-bezier(.2,.7,.2,1) both; }
 .tl-info.swap .tl-role { animation-delay: .06s; } .tl-info.swap .tl-where { animation-delay: .12s; } .tl-info.swap .tl-desc { animation-delay: .18s; }
 @keyframes tlSwap { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-.tl-ctrl { position: absolute; z-index: 3; right: var(--gutter); bottom: clamp(36px, 6vh, 72px); display: flex; gap: 10px; align-items: center; }
+.tl-ctrl { position: absolute; z-index: 3; right: var(--edge); bottom: clamp(36px, 6vh, 72px); display: flex; gap: 10px; align-items: center; }
 .tl-hint { font: 500 14px/1.3 var(--sans); letter-spacing: -.01em; text-transform: none; color: var(--muted); margin-right: 8px; }
 .tl-ctrl button { width: 54px; height: 54px; border-radius: 50%; border: 1px solid var(--line-strong); background: rgba(15,42,30,.55); color: var(--ink); cursor: pointer; display: grid; place-items: center;
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: background .25s, color .25s, transform .25s; }
@@ -1242,7 +1294,7 @@ ABOUT_CSS = """
 @media (prefers-reduced-motion: reduce) { .tl-cut, .tl-cut.far { transition: none; } .tl-info.swap * { animation: none; } }
 /* the closing call: plain and centred, no card */
 .cta-band.plain { border: 0; background: none; border-radius: 0; padding: clamp(24px, 6vh, 72px) 0 clamp(16px, 3vh, 32px); justify-items: center; text-align: center; gap: 22px; }
-.cta-band.plain h2 { max-width: 18ch; font-size: clamp(28px, 3.2vw, 46px); font-weight: 400; line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
+.cta-band.plain h2 { max-width: 20ch; font-size: clamp(30px, 3.4vw, 52px); line-height: .95; text-wrap: balance; }
 .cta-band.plain .lead { max-width: 46ch; }
 .cta-band.plain .btn-row { justify-content: center; margin-top: 10px; }
 
@@ -1256,40 +1308,36 @@ ABOUT_CSS = """
 .tg-grid::before, .tg-grid::after { content: ""; position: absolute; left: -50vw; right: -50vw; height: 1px; top: 0; background: linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent); }
 .tg-grid::after { top: auto; bottom: 0; }
 .tg-cell { position: relative; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: box-shadow .35s ease; }
-.tg-cell::after { content: ""; position: absolute; inset: -1px; pointer-events: none; border: 1.5px solid var(--tg-hi); opacity: 0; transition: opacity .3s ease; z-index: 3;
-  box-shadow: 0 0 10px rgba(15,42,30,.45), inset 0 0 8px rgba(15,42,30,.25);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%); mask-image: linear-gradient(180deg, transparent 0%, #000 45%); }   /* the lines light up, fading out toward the top, as on Terminal */
-.tg-cell:hover::after { opacity: 1; }
-.tg-empty:hover::after { opacity: 0; }
+/* (the green glow round the cell on hover was replaced by the black name strip: client, 2026-11-12) */
 /* the little crosses at the corners; on hover they flicker and turn green */
 .tg-x { position: absolute; width: 13px; height: 13px; z-index: 4; pointer-events: none; }
 .tg-x::before, .tg-x::after { content: ""; position: absolute; background: rgba(15,42,30,.45); transition: background .3s; }
 .tg-x::before { left: 6px; top: 0; width: 1px; height: 13px; } .tg-x::after { top: 6px; left: 0; height: 1px; width: 13px; }
 .tg-x.tl { left: -7px; top: -7px; } .tg-x.tr { right: -7px; top: -7px; } .tg-x.bl { left: -7px; bottom: -7px; } .tg-x.br { right: -7px; bottom: -7px; }
-.tg-cell:hover .tg-x { animation: tgFlicker .5s steps(1) 1; }
-.tg-cell:hover .tg-x::before, .tg-cell:hover .tg-x::after { background: var(--tg-hi); }
+
 @keyframes tgFlicker { 0% { opacity: 1; } 15% { opacity: .1; } 30% { opacity: 1; } 45% { opacity: .2; } 60%, 100% { opacity: 1; } }
 /* the photo: a square that fills the cell, the person standing in it; it slides up into the cell when its row arrives */
 .tg-pic { padding: 8px; }
 .tg-slide { aspect-ratio: 1 / 1; overflow: hidden; position: relative; border-radius: 2px;
-  background: radial-gradient(ellipse 85% 75% at 50% 80%, #dcdedb, #cbcec9 62%, #b9bcb7); }   /* grey (client, 2026-11-10; was a dark green) */
+  background: #0F2A1E; }   /* our green behind each person (client, 2026-11-12; was grey) */
 .tg-slide img { position: absolute; left: 50%; bottom: 0; height: calc(var(--s, 1) * 100%); width: auto; max-width: none; translate: -50% 0; display: block;   /* heads level (--s set per person) */
   transform: translateY(101%); filter: saturate(.15) contrast(1.02); transition: transform .9s cubic-bezier(.645,.045,.355,1), filter .5s ease, scale .6s cubic-bezier(.2,.7,.2,1);
   transition-delay: calc(var(--c, 0) * .12s), 0s, 0s; }
 .tg-cell.in .tg-slide img { transform: none; }
 .tg-cell:hover .tg-slide img { filter: none; scale: 1.04; }
-.tg-meta { display: grid; gap: 3px; justify-items: center; text-align: center; padding: 16px 10px 20px; border-top: 1px solid var(--line); position: relative; transition: background .35s ease, box-shadow .35s ease, border-color .35s ease; }
-.tg-cell:hover .tg-meta { border-top-color: var(--tg-hi); background: radial-gradient(ellipse 70% 90% at 50% 50%, rgba(15,42,30,.04), rgba(15,42,30,.11)); box-shadow: inset 0 0 26px rgba(15,42,30,.22); }   /* the name cell fills with a soft green glow (Terminal's hover, our green) */
-.tg-meta b { font-weight: 500; font-size: 17px; letter-spacing: -.015em; color: var(--ink); transition: color .3s; }
-.tg-meta span { font-size: 13.5px; color: var(--muted); }
-.tg-meta small { font-size: 13px; color: var(--muted); opacity: .8; }
-.tg-cell:hover .tg-meta b { color: #0F2A1E; }
+.tg-meta { display: grid; gap: 4px; justify-items: center; text-align: center; padding: 18px 10px 20px; border-top: 1px solid var(--line); position: relative; background: #F6F7F6; transition: background .25s ease, border-color .25s ease; }
+.tg-cell:hover .tg-meta { background: #000; border-top-color: #000; }   /* the name strip turns black, its words white */
+.tg-meta b { font-weight: 700; font-size: 16px; letter-spacing: 0; color: var(--ink); transition: color .25s; }
+.tg-meta span { font-size: 12.5px; font-weight: 500; color: var(--muted); transition: color .25s; }
+.tg-meta small { font-size: 12.5px; color: var(--muted); opacity: .8; }
+.tg-cell:hover .tg-meta b { color: #fff; }
+.tg-cell:hover .tg-meta span { color: rgba(255,255,255,.86); }
 @media (max-width: 900px) {
   .tg-grid { grid-template-columns: repeat(2, 1fr); width: calc(100% - 32px); }
   .tg-empty { display: none; }
-  .tg-pic { padding: 5px; } .tg-meta { padding: 14px 8px 16px; } .tg-meta b { font-size: 15px; } .tg-meta span { font-size: 12.5px; } .tg-meta small { font-size: 11.5px; }
+  .tg-pic { padding: 5px; } .tg-meta { padding: 14px 8px 16px; } .tg-meta b { font-size: 14px; } .tg-meta span { font-size: 11.5px; } .tg-meta small { font-size: 11.5px; }
 }
-@media (prefers-reduced-motion: reduce) { .tg-slide img { transform: none; transition: none; } .tg-cell:hover .tg-x { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .tg-slide img { transform: none; transition: none; } }
 """
 
 
@@ -1447,7 +1495,7 @@ CONTACT_CSS = """
 .contact-grid { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
 .contact-aside { position: sticky; top: 110px; display: grid; gap: 22px; padding: clamp(24px, 2.6vw, 34px); border: 1px solid var(--line-strong); border-radius: 16px; background: rgba(var(--ink-rgb), .035); }
 .contact-aside .ca-item { display: grid; gap: 6px; padding-top: 18px; border-top: 1px solid var(--line); }
-.contact-aside h3 { font-size: 23px; font-weight: 500; letter-spacing: -.015em; }   /* the two division titles bigger, their lines smaller (client, 2026-11-10) */
+.contact-aside h3 { font-family: var(--display); font-size: 27px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }   /* the two division titles bigger, their lines smaller (client, 2026-11-10) */
 .contact-aside p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
 #quote .section-head h2 { font-size: clamp(38px, 4.4vw, 64px); }   /* Drop us a line bigger */
 .contact-aside .ca-mail { display: grid; gap: 14px; padding-top: 20px; border-top: 1px solid var(--line); }
@@ -1455,8 +1503,8 @@ CONTACT_CSS = """
 .contact-aside .ca-wa { justify-self: start; margin-top: 8px; font-size: 14.5px; }
 .form { display: grid; gap: 20px; }
 .form .two { display: grid; gap: 20px; grid-template-columns: 1fr 1fr; }
-.form label { display: grid; gap: 8px; font-family: var(--sans); font-size: 14px; font-weight: 500; letter-spacing: -.005em; text-transform: none; color: var(--ink); }
-.form input, .form select, .form textarea { width: 100%; height: 50px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line-strong); background: rgba(var(--ink-rgb), .05); color: var(--ink); font: 400 16px/1.4 var(--sans); transition: border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
+.form label { display: grid; gap: 8px; font-family: var(--sans); font-size: 13.5px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.form input, .form select, .form textarea { width: 100%; height: 50px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line-strong); background: rgba(var(--ink-rgb), .05); color: var(--ink); font: 500 15px/1.4 var(--sans); transition: border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
 .form select { background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 22px) 22px, calc(100% - 17px) 22px; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 40px; }
 .form input::placeholder, .form textarea::placeholder { color: var(--muted); }
 .form input:focus, .form select:focus, .form textarea:focus { outline: none; border-color: var(--ink); background: rgba(var(--ink-rgb), .08); }
