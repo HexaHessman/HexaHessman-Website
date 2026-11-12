@@ -58,6 +58,9 @@ def meta_desc(text, n=158):
 import product_pages as PP
 PP.enrich(C.PRODUCTS)   # more from the client's PDF and website (2026-11-11)
 PRODUCT_BY_SLUG = {p["slug"]: p for p in C.PRODUCTS}
+# products the client has asked to hide for now (2026-11-12): off the menu (site-header.js), the Commodities page
+# (cscroll.js HIDE), the group page and the Related products picks. Their pages are still built, so a direct link works.
+HIDDEN_PRODUCTS = {"base-oil"}
 GROUP_BY_SLUG = {g["slug"]: g for g in C.GROUPS}
 PRODUCT_NAME_TO_SLUG = {}
 for g in C.GROUPS:
@@ -338,7 +341,7 @@ PAGE_CSS = """
 .card .apps { margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
 .card ul.list { margin-top: 6px; }
 .who { font-size: clamp(18px, 1.6vw, 24px); letter-spacing: -.01em; max-width: 60ch; }
-.cta-band { display: grid; gap: 22px; padding: clamp(24px, 6vh, 72px) 0 clamp(16px, 3vh, 32px); justify-items: center; text-align: center; }   /* no box: the user wants no cards anywhere */
+.cta-band { display: grid; gap: 22px; padding: clamp(12px, 3vh, 36px) 0 clamp(8px, 1.5vh, 16px); justify-items: center; text-align: center; }   /* half the space above and below (client, 2026-11-12) */   /* no box: the user wants no cards anywhere */
 .cta-band h2 { max-width: 20ch; font-size: clamp(30px, 3.4vw, 52px); line-height: .95; text-wrap: balance; }
 .cta-band .lead { max-width: 46ch; }
 .cta-band .btn-row { justify-content: center; margin-top: 10px; }
@@ -468,7 +471,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=1112a">
-<link rel="stylesheet" href="/assets/site.css?v=1112j">
+<link rel="stylesheet" href="/assets/site.css?v=1112k">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -482,7 +485,7 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 {body}
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=1112b" defer></script>
+<script src="/assets/site-header.js?v=1112c" defer></script>
 <script src="/assets/deco-lines.js?v=3" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js?v=1110b" defer></script>
@@ -572,7 +575,7 @@ def build_commodities_hub():
     write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
         # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
         head_tags='<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">\n',
-        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112c" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112c" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112d" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112c" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
 
 
 def build_group(g):
@@ -582,7 +585,7 @@ def build_group(g):
     body.append(hero_plain([("Home", "/"), ("Commodities Supply", "/commodities/"), (g["name"], None)],
                            "Commodities Supply", g["name"], [g["lead"]]))
     body.append(section(f'<p class="who">{esc(g["who"])}</p>', eyebrow="Who it’s for", id_="who"))
-    cards = [card(name, desc, href=f"{group_url(g['slug'])}{slug}/", more="View product →") for slug, name, desc in g["products"]]
+    cards = [card(name, desc, href=f"{group_url(g['slug'])}{slug}/", more="View product →") for slug, name, desc in g["products"] if slug not in HIDDEN_PRODUCTS]
     body.append(section(grid(cards, "c3"), title="Products", id_="products"))
     body.append(cta(C.COMMODITIES_HUB["cta_h"], C.GROUP_CTA, "commodities"))
     # hero3d-embed.js mounts a sticky scroll-driven scene in #hero-3d and lifts the breadcrumb/eyebrow/h1
@@ -998,7 +1001,7 @@ def build_product(p):
     slugs = []
     for name in p.get("related", []):
         slug = PRODUCT_NAME_TO_SLUG.get(name)
-        if slug and slug in PRODUCT_BY_SLUG and slug != p["slug"] and slug not in slugs:
+        if slug and slug in PRODUCT_BY_SLUG and slug != p["slug"] and slug not in slugs and slug not in HIDDEN_PRODUCTS:
             slugs.append(slug)
     # fewer than three listed: top up from the same group, then from the groups after it
     gi = next((i for i, x in enumerate(C.GROUPS) if x["slug"] == g["slug"]), 0)
@@ -1006,7 +1009,7 @@ def build_product(p):
         for q in grp.get("products", []):
             qs = q["slug"] if isinstance(q, dict) else (q[0] if isinstance(q, (list, tuple)) else q)
             if len(slugs) >= 3: break
-            if qs in PRODUCT_BY_SLUG and qs != p["slug"] and qs not in slugs: slugs.append(qs)
+            if qs in PRODUCT_BY_SLUG and qs != p["slug"] and qs not in slugs and qs not in HIDDEN_PRODUCTS: slugs.append(qs)
     rel = [card(short_name(slug), HUB_LEADS.get(slug) or descriptor(slug), href=product_url(slug), more="View product →") for slug in slugs[:3]]
     if rel:
         body.append(section(grid(rel, "c3"), title="Related products", id_="related"))

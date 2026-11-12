@@ -118,7 +118,19 @@ PAGES = {
         ("Technical Grade", "90–98% H₂SO₄ for general industrial use.", None),
         ("Electronic Grade", "99.999% purity for the semiconductor industry.", None),
         ("Food / Pharma Grade", "Highly purified, for specialised applications.", None)]},
-    "phosphoric-acid": {"types": [
+    # Rock Phosphate and Phosphoric Acid: the client's second batch of mock-ups (2026-11-12), copied as sent
+    "rock-phosphate": {
+        "side": ["Rock phosphate is a naturally occurring mineral rich in P₂O₅. Commercial grades contain at least 25% P₂O₅ and are the primary raw material for phosphoric acid, DAP, MAP, TSP, SSP and NPK fertilizers, as well as elemental phosphorus.",
+                 "Our rock phosphate comes from high-quality sedimentary deposits with 28–31% P₂O₅ and 62–68% BPL (bone phosphate of lime).",
+                 "Its reactivity (35–40% soluble in 2% citric acid and 55–65% in 2% formic acid) also makes it suitable for direct application on acidic soils."],
+        "types": [
+        ("Granular Form", "", T + "rock-phosphate-1.jpg"),
+        ("Powder Form", "", T + "rock-phosphate-2.jpg")]},
+    "phosphoric-acid": {
+        "pics": [(T + "phosphoric-acid-1.jpg", "85% phosphoric acid poured from a bottle into a beaker"), (T + "phosphoric-acid-2.jpg", "An IBC container of 85% phosphoric acid")],
+        "side": ["Produced primarily through the wet-process method, phosphoric acid is manufactured by reacting phosphate rock with sulfuric acid. Its quality is determined by P₂O₅ concentration, impurity levels, and consistency, making it suitable for applications ranging from fertilizer manufacturing to industrial chemical production.",
+                 "Global demand is largely driven by agricultural fertilizer consumption, particularly in major markets across Asia, the Middle East, and Latin America. Reliable sourcing, consistent product specifications, and efficient logistics are essential to ensuring uninterrupted supply for industrial and agricultural applications."],
+        "types": [
         ("Merchant-Grade Acid (MGA)", "52–54% P₂O₅ for MAP, DAP, TSP and NPK fertilizer manufacture.", None),
         ("Technical Grade 85%", "Purified 85% H₃PO₄ for industrial use and metal treatment.", None)]},
     "map": {

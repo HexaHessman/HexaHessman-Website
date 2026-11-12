@@ -529,6 +529,10 @@ section#cta > .wrap, [data-lines] > .wrap { position: relative; z-index: 1; }
 .deco-lines path { fill: none; vector-effect: non-scaling-stroke; }
 .dl-line { stroke: rgba(var(--ink-rgb), .16); stroke-width: 1.2; }
 .dl-run { stroke: rgba(var(--ink-rgb), .75); stroke-width: 1.6; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(var(--ink-rgb), .45)); }
+/* on the black closing band the lines are green and the travelling light glows green (client, 2026-11-12; was cream) */
+section#cta .dl-line { stroke: rgba(46, 150, 96, .42); }
+section#cta .dl-run { stroke: #3CC27E; stroke-width: 1.9; filter: drop-shadow(0 0 5px rgba(60, 194, 126, .85)) drop-shadow(0 0 14px rgba(60, 194, 126, .45)); }
+section#cta { padding: clamp(28px, 4vw, 60px) 0; }   /* half the space above and below the words (client, 2026-11-12) */
 
 /* words fading in (words.js): headings word by word, paragraphs as a whole */
 .fw-h .fw { display: inline-block; opacity: 0; transform: translateY(.35em); filter: blur(4px); transition: opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1), filter .7s ease; transition-delay: calc(var(--wi) * 45ms); }

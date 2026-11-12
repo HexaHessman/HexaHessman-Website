@@ -16,7 +16,7 @@
         { title: 'Industrial Chemicals', href: '/commodities/industrial-chemicals/', jump: '/commodities/#industrial-chemicals', items: [
           ['Methanol', 'methanol'], ['Caustic Soda', 'caustic-soda'], ['Soda Ash', 'soda-ash']] },
         { title: 'Petroleum & Oilfield Products', href: '/commodities/petroleum-oilfield/', jump: '/commodities/#petroleum-oilfield', items: [
-          ['Bitumen', 'bitumen'], ['Base Oil', 'base-oil'], ['Barite Powder', 'barite-powder'], ['Bentonite', 'bentonite']] },
+          ['Bitumen', 'bitumen'], ['Barite Powder', 'barite-powder'], ['Bentonite', 'bentonite']] },   // Base Oil hidden for now (client, 2026-11-12)
         { title: 'Biomass & Renewable Fuels', href: '/commodities/biomass/', jump: '/commodities/#biomass', items: [
           ['Wood Chips', 'wood-chips'], ['Coconut Shell Charcoal', 'coconut-shell-charcoal']] },
       ],

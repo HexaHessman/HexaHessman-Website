@@ -10,6 +10,8 @@
 (async () => {
   const sec = document.getElementById('cscroll'); if (!sec) return;
   const data = await fetch('/assets/commodities-data.json').then(r => r.json()).catch(() => null);
+  const HIDE = new Set(['base-oil']);   // products the client has asked to hide for now (2026-11-12); keep in step with HIDDEN_PRODUCTS in build.py
+  if (data) for (const g of data) g.products = g.products.filter(p => !HIDE.has(p.slug));
   if (!data) { sec.remove(); return; }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const hub = JSON.parse(sec.dataset.intro || 'null') || { h2: 'Specialist supply across five industrial value chains', p: '' };
