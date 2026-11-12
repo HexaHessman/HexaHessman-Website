@@ -50,7 +50,12 @@ sec.innerHTML = `
     <div class="globe-card" aria-live="polite"></div>
   </div>`;
 const line = sec.querySelector('.gp-line');
-addEventListener('resize', () => { const n = line.querySelector('.gp-names'); if (n) n.style.bottom = `calc(2% + ${Math.max(0, ...[...n.children].map(c => c.offsetHeight)) + 4}px)`; });
+// the names start just above the bottom of the globe's frame and hang below it, so the people show down to the chest
+// (client, 2026-11-12: they sat too high); the frame leaves room under itself for them
+const placeNames = () => { const n = line.querySelector('.gp-names'), st = line.parentElement; if (!n) { st.style.marginBottom = ''; return; }
+  const h = Math.max(0, ...[...n.children].map(c => c.offsetHeight)), up = 14;
+  n.style.bottom = up + 'px'; n.style.setProperty('--nh', h + 'px'); st.style.marginBottom = Math.max(0, h - up + 14) + 'px'; };
+addEventListener('resize', placeNames);
 const canvas = sec.querySelector('.globe-canvas'), labelsEl = sec.querySelector('.globe-labels'), card = sec.querySelector('.globe-card'), tabs = [...sec.querySelectorAll('.globe-list button')];
 
 // ---------- scene ----------
@@ -127,11 +132,14 @@ function select(i, byUser) {
     // the names share one top line (client, 2026-11-07), each centred under its person
     // (spread a little wider than the people, so every title has room; they needn't sit exactly under each head)
     // (a pair's names sit exactly under the two heads; long names wrap onto a second line and never run into each other)
-    + `<div class="gp-names">${L.map((l, k) => { const step = pair ? PAIR_GAP * 0.46 : Math.max(GAP * 0.46, Math.min(20, 90 / L.length));
-        return `<p class="gp-name" style="--k:${k};left:${(50 + (k - mid) * step).toFixed(1)}%;width:${Math.min(30, step - 1).toFixed(1)}%"><b>${l.name}</b><span>${l.role}</span></p>`; }).join('')}</div>`;
+    // phones (client, 2026-11-12): the names share the WHOLE width of the globe, one equal column each, so every name and
+    // title fits on whole words and can be read (the narrow columns under each head broke words in the middle)
+    + `<div class="gp-names">${L.map((l, k) => { const phone = innerWidth <= 900;
+        const step = phone ? Math.min(pair ? 34 : 60, 98 / L.length) : pair ? PAIR_GAP * 0.46 : Math.max(GAP * 0.46, Math.min(20, 90 / L.length));
+        return `<p class="gp-name" style="--k:${k};left:${(50 + (k - mid) * step).toFixed(1)}%;width:${Math.min(phone ? 60 : 30, step - 1.5).toFixed(1)}%"><b>${l.name}</b><span>${l.role}</span></p>`; }).join('')}</div>`;
   // the names hang from one top line, set high enough that the longest title (wrapped onto more lines) still shows in full
   const names = line.querySelector('.gp-names');
-  const fitNames = () => { const h = Math.max(0, ...[...names.children].map(n => n.offsetHeight)); names.style.bottom = `calc(2% + ${h + 4}px)`; };
+  const fitNames = placeNames;
   fitNames(); requestAnimationFrame(fitNames); if (document.fonts) document.fonts.ready.then(fitNames);
   line.classList.remove('in'); void line.offsetWidth; line.classList.add('in');
   const people = (o.list || L).map(l => `

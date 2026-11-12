@@ -474,7 +474,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=1112a">
-<link rel="stylesheet" href="/assets/site.css?v=1112k">
+<link rel="stylesheet" href="/assets/site.css?v=1112q">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -1340,9 +1340,12 @@ ABOUT_CSS = """
 .tl-grid span:not(.tl-grid-pic) { font-size: 13px; color: var(--ink-soft); }
 .tl-grid small { font-size: 13px; line-height: 1.5; color: var(--muted); }
 @media (max-width: 900px) {   /* phones: the figure fills the width, the write-up and buttons sit below the stage */
-  .tl-stage { --fw: min(84vw, 60vh); height: calc(var(--fw) * .868 + 16px); min-height: 0; max-height: none; }
-  .tl-stage::after { height: 22%; }
-  .tl-globe { left: 108%; top: 5%; height: 170%; }
+  /* phones (client, 2026-11-12): like the desktop, the globe sits in the MIDDLE behind the people and rises above their
+     heads. The stage is taller to make room for it, and the section's heading and line are left out to give it that room. */
+  .tl-head { display: none; }
+  .tl-stage { --fw: min(84vw, 54vh); height: calc(var(--fw) * .868 + 16px + min(44vw, 24vh)); min-height: 0; max-height: none; }
+  .tl-stage::after { height: 16%; }
+  .tl-globe { left: 50%; top: 1%; height: min(152vw, 200%); }
   .tl-foot { display: grid; gap: 20px; padding: 22px 20px 0; }
   .tl-info, .tl-ctrl { position: static; max-width: none; }
   .tl-globe-label { margin: 14px 0 0 0; translate: -50% 0; }   /* the label hangs under the pin, clear of the head and the edge */
@@ -1533,7 +1536,7 @@ def build_about():
     body.append(cta(A["cta_h"], A["cta_p"], "general"))
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=10" defer></script>\n<script type="module" src="/assets/team-globe.js?v=15"></script>\n'
+    scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=10" defer></script>\n<script type="module" src="/assets/team-globe.js?v=16"></script>\n'
     write("/about/index.html", page("About", meta_desc(A["story"][0]), "\n".join(body), extra_head=ABOUT_CSS, head_tags=head_tags, body_scripts=scripts))
 
 
@@ -1697,7 +1700,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=21"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=23"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 

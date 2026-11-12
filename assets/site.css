@@ -24,6 +24,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 html.no-scroll { overflow: hidden; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }   /* nothing can widen a page past the screen, on any phone browser (sticky sections still work with clip) */
 body { background: var(--paper); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; line-height: 1.5; }
 body::before {  /* paper grain */
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .09; mix-blend-mode: soft-light;
@@ -214,17 +215,23 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .gp-fig figcaption { position: absolute; left: 50%; bottom: 6%; transform: translateX(-50%); text-align: center; white-space: nowrap; display: grid; gap: 2px; opacity: 0; }
 .gp-fig figcaption b { font-size: 15px; font-weight: 500; color: var(--ink); }
 .gp-fig figcaption span { font-size: 12.5px; color: var(--ink-soft); }
-.gp-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(transparent, rgba(15,42,30,.85)); pointer-events: none; z-index: 11; }
-.gp-names { position: absolute; left: 0; right: 0; bottom: calc(2% + 50px); height: 0; z-index: 12; }   /* the names hang from one shared top line */
-.gp-names .gp-name { position: absolute; top: 0; transform: translateX(-50%); }   /* under its own person (globe.js sets left and width) */
+.gp-line::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14%; background: linear-gradient(transparent, rgba(15,42,30,.7)); pointer-events: none; z-index: 11; }   /* lighter: the names have their own green band now */
+.gp-names { position: absolute; left: 0; right: 0; bottom: 14px; height: 0; z-index: 12; }   /* the names hang from one shared top line */
+.gp-names .gp-name { position: absolute; top: 0; transform: translateX(-50%); }
+/* the names stand on solid green, not over the suits (client, 2026-11-12: "make the green, make sure the names can read"):
+   a band of the page's own green starts just above the names, with a short soft edge, and runs to the bottom */
+.gp-names::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: -26px; height: calc(var(--nh, 60px) + 38px); pointer-events: none;   /* inside the globe's own column and only as tall as the names, so it never covers what is beside or below */
+  background: linear-gradient(rgba(15,42,30,0), #0F2A1E 26px); }   /* under its own person (globe.js sets left and width) */
 .gp-name b { white-space: normal; text-wrap: balance; line-height: 1.15; }   /* a long name wraps inside its own column, never over the next name (client, 2026-11-12) */
 .gp-name { flex: 1 1 0; min-width: 0; text-align: center; display: grid; gap: 3px; opacity: 0; }
 .gp-name b { font-size: 16.5px; font-weight: 600; letter-spacing: 0; color: var(--ink); }   /* names bigger, titles smaller (client, 2026-11-10) */
-.gp-name span { font-size: 11px; line-height: 1.3; color: var(--ink-soft); text-wrap: balance; }
+.gp-name span { font-size: 11px; line-height: 1.3; color: #E3D9BE; text-wrap: balance; }
 .gp-line.in .gp-name { animation: gpCap .6s ease forwards; animation-delay: calc(.45s + var(--k) * .14s); }
 @media (max-width: 900px) { .gp-name b { font-size: 13.5px; } .gp-name span { font-size: 10px; } }
-.gp-name b, .gp-name span { overflow-wrap: anywhere; }
-@media (max-width: 420px) { .gp-name b { font-size: 12px; } .gp-name span { font-size: 9px; } }
+/* phones: whole words only, small enough that a three-person office fits across the globe (client, 2026-11-12) */
+@media (max-width: 900px) { .gp-name b { font-size: 13px; line-height: 1.12; } .gp-name span { font-size: 10px; line-height: 1.25; } .gp-name { gap: 2px; }
+}
+@media (max-width: 420px) { .gp-name b { font-size: 12px; } .gp-name span { font-size: 9.5px; } }
 .gp-line.in .gp-fig img { animation: gpIn .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--k) * .14s); }
 .gp-line.in .gp-fig figcaption { animation: gpCap .6s ease forwards; animation-delay: calc(.45s + var(--k) * .14s); }
 @keyframes gpIn { to { opacity: 1; transform: none; } }
