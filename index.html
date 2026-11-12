@@ -76,7 +76,7 @@
   .door-line .edge { stroke: rgba(238,227,199,.42); stroke-width: 1.2; transition: stroke .35s; }
   .door:hover .door-line .edge { stroke: rgba(238,227,199,.75); }
   .door-line .run { stroke: #F4ECD6; stroke-width: 2; filter: drop-shadow(0 0 5px rgba(244,236,214,.95)) drop-shadow(0 0 14px rgba(244,236,214,.5)); }
-  @media (prefers-reduced-motion: reduce) { .door-line .run { display: none; } }
+  /* with Reduce Motion on, the light stays on the line (it does not travel): it used to disappear altogether */
   .door .k { font-family: var(--sans); font-size: 14px; letter-spacing: -.01em; text-transform: none; color: var(--muted); }
   .door .t { font-family: var(--display); font-size: clamp(26px, 2.7vw, 44px); font-weight: 700; text-transform: uppercase; letter-spacing: -.025em; line-height: .92; color: #FCFCFC; }
   .door .d { max-width: 42ch; font-size: clamp(14px, 1.1vw, 17px); font-weight: 500; line-height: 1.45; color: #F4EFE0; }
@@ -310,6 +310,7 @@
       svg.querySelector('.edge').setAttribute('d', d);
       const run = svg.querySelector('.run'); run.setAttribute('d', d);
       el.querySelector('.door-bg').style.clipPath = `path('${d}')`;
+      if (reduce) { const L = run.getTotalLength(); run.style.strokeDasharray = `${(L * 0.08).toFixed(1)} ${L.toFixed(1)}`; run.style.strokeDashoffset = i ? -L * 0.5 : 0; }
       if (!reduce) {
         const L = run.getTotalLength(); run.style.strokeDasharray = `${(L * 0.08).toFixed(1)} ${L.toFixed(1)}`;
         if (run._anim) run._anim.cancel();

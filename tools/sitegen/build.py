@@ -539,11 +539,11 @@ def build_commodities_hub():
     # partner logos in a hairline grid with a cross at each corner (after pestimesh.vercel.app's client grid); placeholders for now
     # the client's twelve logos, in their order (WhatsApp sheet, 2026-11-12), each company's own file in its own colours
     # (user: "go online find their logo ... can be the correct colour"); sources are listed in assets/partners/SOURCES.md.
-    # Aidreo's site was unreachable, so its mark is still the one traced from the client's sheet, in our green.
+    # Aidreo's site was unreachable; its logo is the colour picture the client sent, with the sky background cut out.
     PARTNERS = [("jewe-wani.png", "Jewe Wani Holdings"), ("vale.svg", "Vale"), ("pertamina.svg", "Pertamina"), ("harita.png", "Harita Group"), ("burgaz.png", "Burgaz Ventures"), ("petronas.svg", "Petronas"),
-                ("wijaya-pura.png", "PT. Wijaya Pura"), ("indevco.png", "Indevco"), ("pvfcco.png", "PetroVietnam PVFCCo"), ("hessman-energy.png", "Hessman Energy"), ("arkema.svg", "Arkema"), ("aidreo.svg", "Aidreo")]
+                ("wijaya-pura.png", "PT. Wijaya Pura"), ("indevco.png", "Indevco"), ("pvfcco.png", "PetroVietnam PVFCCo"), ("hessman-energy.png", "Hessman Energy"), ("arkema.svg", "Arkema"), ("aidreo.png", "Aidreo")]
     # five across, two rows (client, 2026-11-12): ten show at a time and the other two swap in at random (arrive.js reads data-logos)
-    cells = "".join(f'<div class="pcell" data-i="{i}"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><img class="plogo plogo-{f.split(".")[0]}" src="/assets/partners/{f}?v=2" alt="{esc_attr(name)}" loading="lazy" decoding="async"></div>' for i, (f, name) in enumerate(PARTNERS[:10]))
+    cells = "".join(f'<div class="pcell" data-i="{i}"><i class="x tl"></i><i class="x tr"></i><i class="x bl"></i><i class="x br"></i><img class="plogo plogo-{f.split(".")[0]}" src="/assets/partners/{f}?v=3" alt="{esc_attr(name)}" loading="lazy" decoding="async"></div>' for i, (f, name) in enumerate(PARTNERS[:10]))
     all_logos = _html.escape(_json.dumps([[f, name] for f, name in PARTNERS], ensure_ascii=False), quote=True)
     # hero: the bulk port at dusk, edge to edge, with the headline pushed to the left over the sky (user, 2026-11-06)
     body = [f'''<section class="arrive com-arrive" id="partners" aria-label="Partners">
@@ -578,7 +578,7 @@ def build_commodities_hub():
     write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
         # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
         head_tags='<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">\n',
-        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112d" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112c" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112e" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112d" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
 
 
 def build_group(g):
@@ -905,7 +905,7 @@ def product_body(p):
         blocks.append(f'<section class="pp-sec" id="types"><h2 class="pp-h">{esc(P.get("types_title", "Product types"))}</h2><div class="pp-duo"><div class="pp-types n2">{photos}</div><div class="pp-side">{words}</div></div>{grades}</section>')
     elif types:
         has_img = all(pp_exists(t[2]) for t in types)
-        cards = "".join((f'<article class="pp-type"><img src="{t[2]}?v=1" alt="{esc_attr(t[0])}" loading="lazy" decoding="async">' if has_img else '<article class="pp-type">') + f"<h3>{esc(t[0])}</h3><p>{esc(t[1])}</p></article>" for t in types)
+        cards = "".join((f'<article class="pp-type"><img src="{t[2]}?v=3" alt="{esc_attr(t[0])}" loading="lazy" decoding="async">' if has_img else '<article class="pp-type">') + f"<h3>{esc(t[0])}</h3><p>{esc(t[1])}</p></article>" for t in types)
         blocks.append(f'<section class="pp-sec" id="types"><h2 class="pp-h">{esc(P.get("types_title", "Product types"))}</h2><div class="pp-types n{len(types)}{"" if has_img else " text"}">{cards}</div></section>')
     elif feats:
         used.add(id(feats))
@@ -1080,7 +1080,7 @@ def build_engineering_hub():
     body.append(cta(H["cta_h"], ENG_CTA_P, "engineering"))
     # (the cone fender line drawing under the hero was tried and removed, user 2026-11-06; eng-draw.html is kept, unused)
     scripts = ('<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n'
-               '<script src="/assets/arrive.js?v=1112c" defer></script>\n<script src="/assets/eng.js?v=2611a" defer></script>\n')
+               '<script src="/assets/arrive.js?v=1112d" defer></script>\n<script src="/assets/eng.js?v=2611a" defer></script>\n')
     write("/engineering/index.html", page("Engineering Solutions", meta_desc(H["lead"]), "\n".join(body), body_scripts=scripts, body_class="eng"))
 
 
@@ -1180,7 +1180,15 @@ ABOUT_CSS = """
 @keyframes shopDraw { to { stroke-dashoffset: 0; } }
 @keyframes shopFade { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .shop-svg path { animation: none; stroke-dashoffset: 0; } .shop-traced path { fill-opacity: 1; stroke-opacity: 0; } .shop-svg text { animation: none; opacity: 1; } }
-@media (max-width: 720px) { .about-hero2 { aspect-ratio: auto; height: auto; min-height: 0; padding-top: 300px; } .about-street { position: relative; } }
+/* phones (client, 2026-11-12: the drawing had shrunk to a small strip half hidden behind the words): the words sit on top
+   and the street stands large underneath, about 2.3 screens wide and centred on the HexaHessman shophouse */
+@media (max-width: 720px) {
+  .about-hero2 { aspect-ratio: auto; height: auto; min-height: 0; max-height: none; padding-top: 118px; display: flex; flex-direction: column; }
+  .about-hero2::before { display: none; }
+  .about-hero2 .wrap { position: relative; left: auto; bottom: auto; width: auto; margin: 0 var(--gutter) 26px; }
+  .about-street { position: relative; inset: auto; overflow: hidden; justify-content: center; }
+  .shop-draw { flex: none; width: 230%; }
+}
 .about-hero { position: relative; height: 210svh; }   /* the hero holds for about a screen while the logo turns */
 .about-pin { position: sticky; top: 0; height: 100svh; min-height: 0; align-items: flex-end; padding-top: 140px; }
 .about-logo { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
@@ -1384,7 +1392,7 @@ ABOUT_CSS = """
 .tg-pic { padding: 8px; }
 .tg-slide { aspect-ratio: 1 / 1; overflow: hidden; position: relative; border-radius: 2px;
   background: #0F2A1E; }   /* our green behind each person (client, 2026-11-12; was grey) */
-.tg-slide img { position: absolute; left: 50%; bottom: 0; height: calc(var(--s, 1) * 100%); width: auto; max-width: none; translate: -50% 0; display: block;   /* heads level (--s set per person) */
+.tg-slide img { position: absolute; left: 50%; bottom: calc(var(--b, 0%) * -1); height: calc(var(--s, 1) * 100%); width: auto; max-width: none; translate: calc(-50% + var(--dx, 0%)) 0; display: block;   /* heads level (--s set per person) */
   transform: translateY(101%); filter: saturate(.15) contrast(1.02); transition: transform .9s cubic-bezier(.645,.045,.355,1), filter .5s ease, scale .6s cubic-bezier(.2,.7,.2,1);
   transition-delay: calc(var(--c, 0) * .12s), 0s, 0s; }
 .tg-cell.in .tg-slide img { transform: none; }
@@ -1514,8 +1522,17 @@ def build_about():
         except Exception:
             top = 0.05
         return round(0.85 / (1 - top), 3)
+    # per person (client, 2026-11-12): dx moves the cutout sideways (% of its own width), z enlarges it while the head stays
+    # at the same height (the extra length runs off the bottom of the square). Azmi stood right of centre; Hafriz looked small.
+    TG_FIT = {"azmi-mahmood": {"dx": -6.5}, "hafriz-razif": {"z": 1.17, "dx": 3}}
+    def tg_style(slug):
+        f = TG_FIT.get(slug, {}); s = head_scale(slug); z = f.get("z", 1)
+        out = f"--s:{round(s * z, 3)}"
+        if z != 1: out += f";--b:{round(0.85 * (z - 1) * 100, 1)}%"
+        if f.get("dx"): out += f";--dx:{f['dx']}%"
+        return out
     cells = "".join(f'''<li class="tg-cell">{cross("tl")}{cross("tr")}{cross("bl")}{cross("br")}
-  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/{slug}.webp?v=2" alt="{esc_attr(n)}" loading="lazy" decoding="async" width="900" height="781" style="--s:{head_scale(slug)}"></div></div>
+  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/{slug}.webp?v=2" alt="{esc_attr(n)}" loading="lazy" decoding="async" width="900" height="781" style="{tg_style(slug)}"></div></div>
   <div class="tg-meta"><b>{esc(n)}</b><span>{esc(r)}</span></div></li>''' for n, r, e, slug, _, _ in A["team"])   # two lines: name and title (client, 2026-11-10)
     our_team = f'''<section class="section tg" id="our-team">
   <div class="wrap section-head tg-head"><p class="eyebrow">Our team</p><h2>The people behind every delivery</h2></div>

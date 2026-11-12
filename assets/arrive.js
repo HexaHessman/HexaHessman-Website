@@ -25,7 +25,7 @@
   const grid = box.querySelector('.pgrid[data-logos]');
   if (grid) {
     let all = []; try { all = JSON.parse(grid.dataset.logos); } catch (e) {}
-    const srcOf = f => '/assets/partners/' + f + '?v=2', clsOf = f => 'plogo plogo-' + f.split('.')[0];
+    const srcOf = f => '/assets/partners/' + f + '?v=3', clsOf = f => 'plogo plogo-' + f.split('.')[0];
     const shown = () => cells.filter(c => c.offsetParent !== null && c.querySelector('.plogo'));   // phones show fewer cells
     const fileOf = c => { const m = (c.querySelector('.plogo').getAttribute('src') || '').match(/partners\/([^?]+)/); return m ? m[1] : ''; };
     all.forEach(([f]) => { const im = new Image(); im.src = srcOf(f); });   // ready before their turn

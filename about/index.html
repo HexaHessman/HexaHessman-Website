@@ -176,7 +176,15 @@
 @keyframes shopDraw { to { stroke-dashoffset: 0; } }
 @keyframes shopFade { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .shop-svg path { animation: none; stroke-dashoffset: 0; } .shop-traced path { fill-opacity: 1; stroke-opacity: 0; } .shop-svg text { animation: none; opacity: 1; } }
-@media (max-width: 720px) { .about-hero2 { aspect-ratio: auto; height: auto; min-height: 0; padding-top: 300px; } .about-street { position: relative; } }
+/* phones (client, 2026-11-12: the drawing had shrunk to a small strip half hidden behind the words): the words sit on top
+   and the street stands large underneath, about 2.3 screens wide and centred on the HexaHessman shophouse */
+@media (max-width: 720px) {
+  .about-hero2 { aspect-ratio: auto; height: auto; min-height: 0; max-height: none; padding-top: 118px; display: flex; flex-direction: column; }
+  .about-hero2::before { display: none; }
+  .about-hero2 .wrap { position: relative; left: auto; bottom: auto; width: auto; margin: 0 var(--gutter) 26px; }
+  .about-street { position: relative; inset: auto; overflow: hidden; justify-content: center; }
+  .shop-draw { flex: none; width: 230%; }
+}
 .about-hero { position: relative; height: 210svh; }   /* the hero holds for about a screen while the logo turns */
 .about-pin { position: sticky; top: 0; height: 100svh; min-height: 0; align-items: flex-end; padding-top: 140px; }
 .about-logo { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
@@ -380,7 +388,7 @@
 .tg-pic { padding: 8px; }
 .tg-slide { aspect-ratio: 1 / 1; overflow: hidden; position: relative; border-radius: 2px;
   background: #0F2A1E; }   /* our green behind each person (client, 2026-11-12; was grey) */
-.tg-slide img { position: absolute; left: 50%; bottom: 0; height: calc(var(--s, 1) * 100%); width: auto; max-width: none; translate: -50% 0; display: block;   /* heads level (--s set per person) */
+.tg-slide img { position: absolute; left: 50%; bottom: calc(var(--b, 0%) * -1); height: calc(var(--s, 1) * 100%); width: auto; max-width: none; translate: calc(-50% + var(--dx, 0%)) 0; display: block;   /* heads level (--s set per person) */
   transform: translateY(101%); filter: saturate(.15) contrast(1.02); transition: transform .9s cubic-bezier(.645,.045,.355,1), filter .5s ease, scale .6s cubic-bezier(.2,.7,.2,1);
   transition-delay: calc(var(--c, 0) * .12s), 0s, 0s; }
 .tg-cell.in .tg-slide img { transform: none; }
@@ -541,11 +549,11 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
   <div class="tg-meta"><b>Ibrahim Koc</b><span>Principal Advisor</span></div></li><li class="tg-cell"><i class="tg-x tl" aria-hidden="true"></i><i class="tg-x tr" aria-hidden="true"></i><i class="tg-x bl" aria-hidden="true"></i><i class="tg-x br" aria-hidden="true"></i>
   <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/anuar-ebrahim.webp?v=2" alt="Anuar Ebrahim" loading="lazy" decoding="async" width="900" height="781" style="--s:0.913"></div></div>
   <div class="tg-meta"><b>Anuar Ebrahim</b><span>Director of Trading</span></div></li><li class="tg-cell"><i class="tg-x tl" aria-hidden="true"></i><i class="tg-x tr" aria-hidden="true"></i><i class="tg-x bl" aria-hidden="true"></i><i class="tg-x br" aria-hidden="true"></i>
-  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/azmi-mahmood.webp?v=2" alt="Azmi Mahmood" loading="lazy" decoding="async" width="900" height="781" style="--s:0.868"></div></div>
+  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/azmi-mahmood.webp?v=2" alt="Azmi Mahmood" loading="lazy" decoding="async" width="900" height="781" style="--s:0.868;--dx:-6.5%"></div></div>
   <div class="tg-meta"><b>Azmi Mahmood</b><span>Principal Advisor</span></div></li><li class="tg-cell"><i class="tg-x tl" aria-hidden="true"></i><i class="tg-x tr" aria-hidden="true"></i><i class="tg-x bl" aria-hidden="true"></i><i class="tg-x br" aria-hidden="true"></i>
   <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/connie-tai.webp?v=2" alt="Connie Tai" loading="lazy" decoding="async" width="900" height="781" style="--s:0.866"></div></div>
   <div class="tg-meta"><b>Connie Tai</b><span>Chief Financial Officer</span></div></li><li class="tg-cell"><i class="tg-x tl" aria-hidden="true"></i><i class="tg-x tr" aria-hidden="true"></i><i class="tg-x bl" aria-hidden="true"></i><i class="tg-x br" aria-hidden="true"></i>
-  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/hafriz-razif.webp?v=2" alt="Hafriz Razif" loading="lazy" decoding="async" width="900" height="781" style="--s:0.869"></div></div>
+  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/hafriz-razif.webp?v=2" alt="Hafriz Razif" loading="lazy" decoding="async" width="900" height="781" style="--s:1.017;--b:14.4%;--dx:3%"></div></div>
   <div class="tg-meta"><b>Hafriz Razif</b><span>Chief Executive Officer</span></div></li></ul>
 <script>
 (() => {   // each photo slides up into its cell as its row comes on screen, left to right along the row

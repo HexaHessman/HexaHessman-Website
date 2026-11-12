@@ -16,4 +16,4 @@ flat background) cut out. They are the companies' trademarks, shown as the clien
 | pvfcco.png | PetroVietnam PVFCCo | dpm.vn (the flame logo on the client's sheet; grey panel removed) |
 | hessman-energy.png | Hessman Energy | hessmanenergy.com (208 px, the largest horizontal lockup) |
 | arkema.svg | Arkema | Wikimedia Commons, Arkema.svg |
-| aidreo.svg | Aidreo | NOT the official file: aidreo.com was unreachable, so this is traced from the client's sheet |
+| aidreo.png | Aidreo | The colour logo picture the client sent on 2026-11-12 (aidreo.com was unreachable), with its sky background cut out |

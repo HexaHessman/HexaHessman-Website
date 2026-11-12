@@ -11,6 +11,9 @@
   const sec = document.getElementById('cscroll'); if (!sec) return;
   const data = await fetch('/assets/commodities-data.json').then(r => r.json()).catch(() => null);
   const HIDE = new Set(['base-oil']);   // products the client has asked to hide for now (2026-11-12); keep in step with HIDDEN_PRODUCTS in build.py
+  // the 3D scene (sulphur3d.html?mode=all) sizes its chapters by the full product counts, so keep those for the mapping:
+  // with Base Oil hidden the counts shifted and the jumbo bags turned into the ISO tank before their group ended
+  const SCENE_N = data ? data.map(g => g.products.length) : [];
   if (data) for (const g of data) g.products = g.products.filter(p => !HIDE.has(p.slug));
   if (!data) { sec.remove(); return; }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -146,10 +149,10 @@
   }
 
   // each group: its window, its scroll span, and its stretch of the scene (chapters weighted by product count)
-  const total = data.reduce((a, g) => a + g.products.length, 0);
+  const total = SCENE_N.reduce((a, n) => a + n, 0);
   let acc = 0;
   const groups = [...sec.querySelectorAll('.cs-chapter')].map((ch, gi) => {
-    const n = data[gi].products.length, from = acc / total; acc += n;
+    const n = SCENE_N[gi], from = acc / total; acc += n;
     return { ch, gi, pin: ch, panel: ch.querySelector('.cs-panel'), txt: ch.querySelector('.cs-copy'), video: ch.querySelector('.cs-vid'), from, to: acc / total, copy: gi % 2 };
   });
   // the inner (text-facing) edge: on phones the window sits above the text, so its indent faces left
@@ -236,6 +239,9 @@
     else v.pause();
   } }, { rootMargin: '50% 0px' });
   sec.querySelectorAll('.cs-vid').forEach(v => vio.observe(v));
+  // a phone in Low Power Mode will not start a video by itself: start the ones on screen again at the first touch
+  if (!reduce) { const kick = () => sec.querySelectorAll('.cs-vid').forEach(v => { if (v.src && v.paused) { const r = v.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) v.play().catch(() => {}); } });
+    addEventListener('touchstart', kick, { passive: true }); addEventListener('touchend', kick, { passive: true }); addEventListener('click', kick); }
 
   // desktop (client, 2026-11-11): the group's name stays at the window's top edge; under it the products scroll past
   // at their full size, spaced as before, but only inside the window's height: nothing shows above the name's line or
