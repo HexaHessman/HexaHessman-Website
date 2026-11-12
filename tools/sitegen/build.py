@@ -61,6 +61,9 @@ PRODUCT_BY_SLUG = {p["slug"]: p for p in C.PRODUCTS}
 # products the client has asked to hide for now (2026-11-12): off the menu (site-header.js), the Commodities page
 # (cscroll.js HIDE), the group page and the Related products picks. Their pages are still built, so a direct link works.
 HIDDEN_PRODUCTS = {"base-oil"}
+# principals hidden the same way (client, 2026-11-12: "to hide in the codes"): off the menu (site-header.js), the main
+# Engineering page (logo strip and its section) and the Contact form's list. The principal's own page is still built.
+HIDDEN_PRINCIPALS = {"raythink"}
 GROUP_BY_SLUG = {g["slug"]: g for g in C.GROUPS}
 PRODUCT_NAME_TO_SLUG = {}
 for g in C.GROUPS:
@@ -511,7 +514,7 @@ def product_contact(up, spot):
     """the floating Back circle and Contact pill on product pages (client's PDF, 2026-11-11); opens the contact card"""
     c = PP.CONTACT
     attrs = "".join(f' data-{k}="{esc_attr(v)}"' for k, v in c.items() if v)
-    return f'<script src="/assets/product-contact.js?v=2" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=5" defer></script>\n<script src="/assets/related-folders.js?v=1" defer></script>\n'
+    return f'<script src="/assets/product-contact.js?v=2" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=6" defer></script>\n<script src="/assets/related-folders.js?v=1" defer></script>\n'
 
 
 def write(relpath, html):
@@ -689,7 +692,7 @@ PRODUCT_CSS = """
 .pp-lines .ppl-line { stroke: rgba(15,42,30,.22); stroke-width: 1.3; }
 .pp-lines .ppl-run { stroke: #0F2A1E; stroke-width: 2.4; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(15,42,30,.6)) drop-shadow(0 0 10px rgba(15,42,30,.3)); }
 .pp-lined .pp-type img { position: relative; }
-@media (max-width: 900px) { .pp-lines { display: none; } }
+@media (max-width: 900px) { .pp-lines .ppl-run { stroke-width: 2; } }   /* phones have their own route for the line (product-lines.js) */
 /* charts */
 .pp-tt { margin: 26px 0 10px; font-weight: 600; font-size: 15px; letter-spacing: 0; }
 .pp-h + .pp-tt { margin-top: 0; }
@@ -1030,10 +1033,11 @@ def build_engineering_hub():
     Motion lives in /assets/eng.js; styles in site.css under "engineering hub"."""
     H = C.ENGINEERING_HUB
     PR = {p["slug"]: p for p in C.PRINCIPALS}
-    names = {slug: name for slug, name, _ in H["principals"]}
+    shown = [x for x in H["principals"] if x[0] not in HIDDEN_PRINCIPALS]   # Raythink is hidden for now
+    names = {slug: name for slug, name, _ in shown}
     # carousel: the four logos repeated so one copy always fills the widest screen; eng.js doesn't need to clone
     one = "".join(f'<li class="mq-cell"><a href="/engineering/{slug}/" tabindex="-1"><img src="/assets/engineering/logo-{slug}.svg?v=3" alt="{esc_attr(names[slug])}" class="mq-logo mq-{slug}"></a></li>'
-                  for slug, _, _ in H["principals"])
+                  for slug, _, _ in shown)
     track = f'<ul class="mq-set">{one * 2}</ul><ul class="mq-set" aria-hidden="true">{one * 2}</ul>'
     # hero: the port photo edge to edge, the headline lower left (as Commodities; user, 2026-11-06), then the line drawing
     body = [f'''<section class="arrive eng-arrive com-arrive" aria-label="Engineering Solutions">
@@ -1056,8 +1060,8 @@ def build_engineering_hub():
     # Services removed (client, 2026-11-10)   # moved up, in place of the long statement (user, 2026-11-05)
 
     stops = []
-    n = len(H["principals"])
-    for i, (slug, name, short) in enumerate(H["principals"]):
+    n = len(shown)
+    for i, (slug, name, short) in enumerate(shown):
         pr = PR[slug]
         tags = " · ".join(esc(t) for t in H["principal_tags"].get(slug, []))   # a plain line, not chips (user: no circles)
         cov = f'<p class="ep-cov">{esc(pr["coverage"])}</p>' if pr.get("coverage") else ""
@@ -1638,7 +1642,7 @@ def build_contact():
     body.append(f'<section id="globe" class="globe" data-people="{_html.escape(json.dumps(team, ensure_ascii=False), quote=True)}"></section>')   # the office globe, under the photo hero
 
     groups_opts = "".join(f'<option>{esc(g["name"])}</option>' for g in C.GROUPS)
-    principal_opts = "".join(f'<option>{esc(p["name"])}</option>' for p in C.PRINCIPALS)
+    principal_opts = "".join(f'<option>{esc(p["name"])}</option>' for p in C.PRINCIPALS if p["slug"] not in HIDDEN_PRINCIPALS)
     enq_opts = "".join(f'<option>{esc(o)}</option>' for o in K["enquiring"])
     countries = ["Singapore", "Malaysia", "Thailand", "Indonesia", "Vietnam", "India", "South Korea", "Türkiye", "United Kingdom", "United States", "Other"]
     country_opts = '<option value="">Select…</option>' + "".join(f"<option>{esc(c)}</option>" for c in countries)

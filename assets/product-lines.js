@@ -2,7 +2,8 @@
 // left to right: in from the left edge above the cards, down between the first two, along under the cards, up between
 // the last two and out to the right edge. Where it turns under the cards, two short drops carry on down through the
 // bottom of the section; the closing band's two lines (deco-lines.js) start at those same two points, so the lines
-// read as one run down the page. The section is marked data-pp-lines by the generator. Desktop only.
+// read as one run down the page. The section is marked data-pp-lines by the generator. Phones get their own route
+// for the same line (see "phone" below).
 (() => {
   const sec = document.querySelector('[data-pp-lines]'); if (!sec) return;
   const NS = 'http://www.w3.org/2000/svg';
@@ -30,11 +31,12 @@
     const tell = (a, b) => { if (!cta) return; const was = cta.dataset.x1 + '|' + cta.dataset.x2;   // the closing band starts its lines under ours
       if (a === null) { delete cta.dataset.x1; delete cta.dataset.x2; } else { cta.dataset.x1 = a.toFixed(1); cta.dataset.x2 = b.toFixed(1); }
       if (was !== cta.dataset.x1 + '|' + cta.dataset.x2 && window.__decoLines) window.__decoLines(); };
-    if (W <= 900 || !cards.length || H < 120) { svg.innerHTML = ''; last = ''; tell(null); return; }
+    const phone = W <= 900;
+    if (!cards.length || H < 120) { svg.innerHTML = ''; last = ''; tell(null); return; }
     const under = [...sec.children].filter(e => e !== svg).pop() || grid;   // the last block in the section (grade cards, where there are any)
     const g = grid.getBoundingClientRect(), top = g.top - box.top, bottom = under.getBoundingClientRect().bottom - box.top;
     const rows = cards.map(c => c.getBoundingClientRect()), first = rows.filter(q => Math.abs(q.top - rows[0].top) < 4);
-    const key = [W, H, Math.round(box.left), Math.round(top), Math.round(bottom), first.length, Math.round(first[0].left)].join(',');
+    const key = [W, H, Math.round(box.left), Math.round(top), Math.round(bottom), first.length, Math.round(first[0].left), rows.length, Math.round(rows[rows.length - 1].top - box.top)].join(',');
     if (key === last) return; last = key;
     anims.forEach(a => a.cancel()); anims = []; svg.innerHTML = '';
     svg.style.left = (-box.left) + 'px'; svg.style.width = W + 'px'; svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -46,11 +48,29 @@
     const y1 = Math.max(8, (hb + top) / 2);              // the line runs between the heading and the cards
     const yb = bottom + (H - bottom) * 0.5;              // and turns in the space under them
     const r = Math.min(40, (H - bottom) * 0.42, Math.max(6, (top - hb) * 0.9));
-    tell(xl, xr);
-    const lines = [
-      round([[-2, y1], [xl, y1], [xl, yb], [xr, yb], [xr, y1], [W + 2, y1]], r),   // the one line, left to right
-      // (the two straight drops from its corners down to the bottom of the section were removed: client, 2026-11-12)
-    ];
+    let lines;
+    if (phone) {
+      // phones and narrow screens (client, 2026-11-12): the cards are stacked, so the one line weaves down the page. It comes
+      // in from the left under the heading, runs down the right-hand margin beside the first block, crosses in the gap to
+      // the left-hand margin beside the next block, and so on, then leaves through the bottom of the section. It stays in
+      // the margins and the gaps, so it never crosses a photo or the words.
+      tell(null);
+      const blocks = [];   // each stacked block: the photo row, the words, the grade cards; or each row of cards
+      if (duo) [duo.querySelector('.pp-types'), duo.querySelector('.pp-side'), sec.querySelector('.pp-grades')].forEach(e => { if (e) { const q = e.getBoundingClientRect(); blocks.push([q.top - box.top, q.bottom - box.top]); } });
+      else for (const q of rows) { const t = q.top - box.top, b = q.bottom - box.top, lastB = blocks[blocks.length - 1]; if (lastB && Math.abs(lastB[0] - t) < 4) lastB[1] = Math.max(lastB[1], b); else blocks.push([t, b]); }
+      const gut = Math.max(12, first[0].left > 0 ? Math.min(...rows.map(q => q.left)) : 20), xL = Math.max(5, gut * 0.42), xR = W - xL;
+      const gaps = []; for (let k = 1; k < blocks.length && gaps.length < 3; k++) if (blocks[k][0] - blocks[k - 1][1] >= 14) gaps.push((blocks[k][0] + blocks[k - 1][1]) / 2);
+      const pts = [[-2, y1], [xR, y1]]; let right = true;
+      for (const gy of gaps) { pts.push([right ? xR : xL, gy]); right = !right; pts.push([right ? xR : xL, gy]); }
+      pts.push([right ? xR : xL, yb], [right ? -2 : W + 2, yb]);
+      lines = [round(pts, Math.min(14, gut * 0.5, (H - bottom) * 0.4))];
+    } else {
+      tell(xl, xr);
+      lines = [
+        round([[-2, y1], [xl, y1], [xl, yb], [xr, yb], [xr, y1], [W + 2, y1]], r),   // the one line, left to right
+        // (the two straight drops from its corners down to the bottom of the section were removed: client, 2026-11-12)
+      ];
+    }
     lines.forEach((d, i) => {
       const base = document.createElementNS(NS, 'path'); base.setAttribute('d', d); base.setAttribute('class', 'ppl-line'); svg.appendChild(base);
       if (reduce) return;
@@ -58,7 +78,7 @@
       const L = run.getTotalLength(), dash = i ? L : Math.min(170, L * 0.07);
       run.style.strokeDasharray = `${dash.toFixed(0)} ${(L + dash).toFixed(0)}`;
       // the light travels the whole line from left to right (6.4 s a pass); as it turns under the cards, a short one runs down each drop
-      const T = 6400, at = i === 1 ? 0.36 : 0.6;
+      const T = phone ? Math.max(5200, L / 0.5) : 6400, at = i === 1 ? 0.36 : 0.6;   // on a phone the line is longer: the light keeps one pace (about 500 px a second)
       const light = (wait) => anims.push(i === 0
         ? run.animate([{ strokeDashoffset: dash }, { strokeDashoffset: -L }], { duration: T, iterations: Infinity, easing: 'linear', delay: wait })
         : run.animate([{ strokeDashoffset: L, offset: 0 }, { strokeDashoffset: L, offset: at }, { strokeDashoffset: -L, offset: Math.min(1, at + 0.16) }, { strokeDashoffset: -L, offset: 1 }], { duration: T, iterations: Infinity, easing: 'linear', delay: wait }));
@@ -72,7 +92,7 @@
     });
     if (seen) return;
     if (svg._io) svg._io.disconnect();
-    svg._io = new IntersectionObserver(([e], io) => { if (!e.isIntersecting) return; io.disconnect(); seen = true; svg.querySelectorAll('.ppl-line').forEach(b => b._go && b._go()); }, { threshold: 0.2 });
+    svg._io = new IntersectionObserver(([e], io) => { if (!e.isIntersecting) return; io.disconnect(); seen = true; svg.querySelectorAll('.ppl-line').forEach(b => b._go && b._go()); }, { threshold: phone ? 0.06 : 0.2 });
     svg._io.observe(sec);
   };
   draw();
