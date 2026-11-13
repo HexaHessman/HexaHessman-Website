@@ -465,6 +465,7 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .cs-copy .cs-category, .cs-copy .cs-item { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
 .cs-copy .cs-item { transition-delay: calc(.12s + var(--i) * .06s); }
 .cs-copy.in .cs-category, .cs-copy.in .cs-item, .cscroll.still .cs-copy .cs-category, .cscroll.still .cs-copy .cs-item { opacity: 1; transform: none; }
+.cs-mstage { display: none; }
 .cs-logo3d { position: fixed; left: 0; top: 0; width: min(96vw, 160vh); aspect-ratio: 1; z-index: 1; opacity: 0; pointer-events: none; transform: translate(-50%, -50%); transition: opacity .25s linear; }   /* the faint 3D mark (cs-marks.js) */
 .cs-logo3d iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; transform: rotate(-9deg); }
 /* phones: the window pins under the header and the group's words scroll up beneath it */
@@ -473,6 +474,14 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
   .cs-pin, .text-left .cs-pin, .text-right .cs-pin { position: relative; height: auto; grid-template-columns: 1fr; grid-template-rows: auto; padding: 0; }
   .cs-stick, .text-left .cs-stick, .text-right .cs-stick { grid-column: 1; grid-row: 1; position: sticky; top: 0; z-index: 2; padding: 84px 0 14px; background: var(--cs-bg); overflow: hidden; }   /* edge to edge: both sides run off the screen (client, 2026-11-12) */
   .cs-panel { height: 44vh; }
+  /* one window for all the groups (client, 2026-11-13): it pins under the header from the first group to the last, and
+     each group's photo wipes in over the last one in the same place, so two windows never show at once */
+  .cs-stick, .text-left .cs-stick, .text-right .cs-stick { display: none; }
+  .cs-mstage { display: block; position: sticky; top: 0; z-index: 2; padding: 84px 0 14px; background: var(--cs-bg); overflow: hidden; }
+  .cs-mwin { position: relative; height: 44vh; }
+  .cs-mwin .cs-panel { position: absolute; inset: 0; height: auto; z-index: 1; opacity: 0; clip-path: inset(-6px -60px 100% -60px);
+    transition: opacity 0s .9s, clip-path 0s .9s; }   /* the old photo stays put under the new one until it has wiped in */
+  .cs-mwin .cs-panel.on { z-index: 2; opacity: 1; clip-path: inset(-6px -60px -6px -60px); transition: clip-path .9s cubic-bezier(.65,0,.25,1), opacity .25s; }
   .cs-copy, .text-left .cs-copy, .text-right .cs-copy { grid-column: 1; grid-row: 2; z-index: 0; padding: 30px 20px 90px; }
   .cs-category { font-size: min(40px, 9.6vw); text-align: center; text-wrap: balance; }   /* each group's name centred on phones (client, 2026-11-12) */
   .cs-list { overflow: visible; -webkit-mask-image: none; mask-image: none; margin-top: 0; }
@@ -481,6 +490,7 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
   .cs-lead { font-size: 16px; max-width: none; }
   .cs-view { font-size: 12px; }
 }
+@media (max-width: 900px) and (prefers-reduced-motion: reduce) { .cs-mwin .cs-panel, .cs-mwin .cs-panel.on { transition: none; } }
 
 /* ---------- commodities hub: market prices under the scroll (client, 2026-11-11, after chemportal.com.tr/markets):
    a live strip, then dated reference cards in the scroll's type (markets.js, data in /assets/market-prices.json) ---------- */

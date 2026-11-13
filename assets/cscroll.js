@@ -59,6 +59,7 @@
         <h2 class="cs-h2 cs-lit">${esc(hub.h2)}</h2>
         ${hub.p ? `<p class="cs-fill">${esc(hub.p)}</p>` : ''}
       </div>
+      <div class="cs-mstage" aria-hidden="true"><div class="cs-mwin"></div></div>
       ${chapters}
     </div>`;
 
@@ -105,7 +106,7 @@
     let y = ch.getBoundingClientRect().top + scrollY;
     const g = groups.find(x => x.ch === ch);
     if (innerWidth > 900 && item && g && g.travel) y += innerHeight * DWELL_IN + Math.min(g.travel, Math.max(0, el.offsetTop - 26));
-    if (innerWidth <= 900 && item) y = el.getBoundingClientRect().top + scrollY - ch.querySelector('.cs-stick').offsetHeight - 16;
+    if (innerWidth <= 900) y = (item ? el : ch).getBoundingClientRect().top + scrollY - mstage.offsetHeight - (item ? 16 : 0);   // below the one pinned window
     y = Math.max(0, Math.round(y));
     if (window.__lenis) window.__lenis.scrollTo(y, smooth ? { duration: 1.4 } : { immediate: true });
     else scrollTo({ top: y, behavior: smooth ? 'smooth' : 'auto' });
@@ -160,6 +161,24 @@
   // each window gets its shape drawn as an outline (a thin cream line); the scene / video sit on top, cut to the same
   // shape, so only the outer half of the line shows
   const SVGNS = 'http://www.w3.org/2000/svg';
+  // phones (client, 2026-11-13): every group's window moves into one shared window pinned at the top, and the group being
+  // read has its photo shown there; desktop puts each window back beside its own group
+  const mstage = sec.querySelector('.cs-mstage'), mwin = sec.querySelector('.cs-mwin');
+  let active = null, holdUntil = 0;
+  function place() {
+    const ph = innerWidth <= 900;
+    for (const g of groups) { const to = ph ? mwin : g.ch.querySelector('.cs-stick'); if (g.panel.parentNode !== to) to.appendChild(g.panel); }
+    if (ph && !active) setActive(groups[0], true);
+  }
+  function setActive(g, first) {
+    active = g; if (!first) holdUntil = performance.now() + 900;   // a 3D window waits for the wipe to finish
+    for (const x of groups) {
+      x.panel.classList.toggle('on', x === g);
+      if (!x.video || innerWidth > 900) continue;
+      if (x === g) { if (!x.video.src) { x.video.src = x.video.dataset.src; x.video.load(); } if (!reduce) x.video.play().catch(() => {}); }
+      else setTimeout(() => { if (active !== x) x.video.pause(); }, 950);
+    }
+  }
   function shapePanels() {
     for (const g of groups) {
       const w = g.panel.offsetWidth, h = g.panel.offsetHeight, d = shape(w, h, innerOf(g));
@@ -191,9 +210,15 @@
     const vh = innerHeight;
     const r = sec.getBoundingClientRect();
     const near = r.bottom > -vh && r.top < vh * 2;
-    const best = [null, null], area = [0, 0];
+    const best = [null, null], area = [0, 0], phone = innerWidth <= 900;
+    if (phone && near) {   // the group being read: the last one whose words have reached the bottom of the pinned window
+      const sb = mstage.getBoundingClientRect().bottom + 60; let a = groups[0];
+      for (const g of groups) if (g.ch.getBoundingClientRect().top <= sb) a = g;
+      if (a !== active) setActive(a);
+    }
     if (near) for (const g of groups) {
       if (g.video) continue;   // this window plays its own video
+      if (phone && (g !== active || performance.now() < holdUntil)) continue;   // phones: only the shown group, once it has wiped in
       const b = g.panel.getBoundingClientRect(); const seen = Math.min(b.bottom, vh) - Math.max(b.top, 0);
       if (seen > area[g.copy]) { area[g.copy] = seen; best[g.copy] = { g, b }; }
     }
@@ -235,7 +260,8 @@
   // video windows: load when close, play only while on screen (a still frame for reduced motion)
   const vio = new IntersectionObserver(entries => { for (const e of entries) {
     const v = e.target;
-    if (e.isIntersecting) { if (!v.src) { v.src = v.dataset.src; v.load(); } if (!reduce) v.play().catch(() => {}); }
+    const own = groups.find(g => g.video === v);
+    if (e.isIntersecting) { if (!v.src) { v.src = v.dataset.src; v.load(); } if (!reduce && (innerWidth > 900 || own === active)) v.play().catch(() => {}); }
     else v.pause();
   } }, { rootMargin: '50% 0px' });
   sec.querySelectorAll('.cs-vid').forEach(v => vio.observe(v));
@@ -276,7 +302,7 @@
       if (y !== g.lastY) { g.lastY = y; g.track.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`; }
     }
   }
-  const layout = () => { fit(); shapePanels(); };
+  const layout = () => { place(); fit(); shapePanels(); };
   layout();
   addEventListener('resize', layout);
   document.fonts && document.fonts.ready.then(layout);

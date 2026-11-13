@@ -474,7 +474,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=1112a">
-<link rel="stylesheet" href="/assets/site.css?v=1113a">
+<link rel="stylesheet" href="/assets/site.css?v=1113b">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -578,7 +578,7 @@ def build_commodities_hub():
     write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
         # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
         head_tags='<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">\n',
-        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1112e" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112d" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1113a" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112d" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
 
 
 def build_group(g):
