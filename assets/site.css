@@ -434,7 +434,9 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .cscroll.still .cs-fill .w, .cscroll.still .cs-lit .w { opacity: 1; }
 .cs-chapter { position: relative; height: calc(150vh + var(--n) * 8vh); }
 .cs-pin { position: sticky; top: 0; height: 100vh; box-sizing: border-box; display: grid; grid-template-rows: 100%; column-gap: clamp(28px, 4vw, 72px); padding: 110px var(--g) 22px; }   /* the window and the words run down to the bottom of the screen (client, 2026-11-11) */
-.text-left .cs-pin { grid-template-columns: 40fr 58fr; } .text-right .cs-pin { grid-template-columns: 58fr 40fr; }
+/* the windows take one half each (client, 2026-11-13): a window on the right starts where one on the left ends, so the
+   two sides line up down the page and never overlap (they were 58% wide, so they crossed over in the middle) */
+.text-left .cs-pin, .text-right .cs-pin { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 .cs-stick { min-height: 0; }
 .cs-panel { height: 100%; position: relative; }
 /* the window's outline: filled with the scene green, stroked cream; the scene / video cover the inner half of the line */
