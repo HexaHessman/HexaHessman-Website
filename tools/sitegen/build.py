@@ -1185,9 +1185,13 @@ ABOUT_CSS = """
 @media (max-width: 720px) {
   .about-hero2 { aspect-ratio: auto; height: auto; min-height: 0; max-height: none; padding-top: 118px; display: flex; flex-direction: column; }
   .about-hero2::before { display: none; }
-  .about-hero2 .wrap { position: relative; left: auto; bottom: auto; width: auto; margin: 0 var(--gutter) 26px; }
-  .about-street { position: relative; inset: auto; overflow: hidden; justify-content: center; }
-  .shop-draw { flex: none; width: 230%; }
+  /* the words sit ON the drawing (client, 2026-11-12): the street slides up under them, and a soft green shade sits
+     behind just the words so they read over the lines */
+  .about-hero2 .wrap { position: relative; z-index: 2; left: auto; bottom: auto; width: auto; margin: 0 var(--gutter) calc(-1 * var(--lap, 52vw)); isolation: isolate; }
+  .about-hero2 .wrap::before { content: ""; position: absolute; z-index: -1; inset: -34px -26px -40px; pointer-events: none;
+    background: radial-gradient(ellipse 72% 66% at 42% 52%, rgba(15,42,30,.94) 0%, rgba(15,42,30,.86) 48%, rgba(15,42,30,.5) 74%, rgba(15,42,30,0) 100%); }
+  .about-street { position: relative; z-index: 1; inset: auto; overflow: hidden; justify-content: center; }
+  .shop-draw { flex: none; width: 250%; }
 }
 .about-hero { position: relative; height: 210svh; }   /* the hero holds for about a screen while the logo turns */
 .about-pin { position: sticky; top: 0; height: 100svh; min-height: 0; align-items: flex-end; padding-top: 140px; }
@@ -1349,9 +1353,11 @@ ABOUT_CSS = """
 .tl-grid small { font-size: 13px; line-height: 1.5; color: var(--muted); }
 @media (max-width: 900px) {   /* phones: the figure fills the width, the write-up and buttons sit below the stage */
   /* phones (client, 2026-11-12): like the desktop, the globe sits in the MIDDLE behind the people and rises above their
-     heads. The stage is taller to make room for it, and the section's heading and line are left out to give it that room. */
-  .tl-head { display: none; }
-  .tl-stage { --fw: min(84vw, 54vh); height: calc(var(--fw) * .868 + 16px + min(44vw, 24vh)); min-height: 0; max-height: none; }
+     heads; the section's heading stays on top; the people a little smaller; the two arrows centred */
+  .tl-head { padding: 34px 20px 0; gap: 18px; margin-bottom: 4px; }
+  .tl-title { font-size: clamp(26px, 7.4vw, 32px); }
+  .tl-fill { font-size: 15.5px; }
+  .tl-stage { --fw: min(68vw, 44vh); height: calc(var(--fw) * .868 + 16px + min(44vw, 24vh)); min-height: 0; max-height: none; }
   .tl-stage::after { height: 16%; }
   .tl-globe { left: 50%; top: 1%; height: min(152vw, 200%); }
   .tl-foot { display: grid; gap: 20px; padding: 22px 20px 0; }
@@ -1359,6 +1365,7 @@ ABOUT_CSS = """
   .tl-globe-label { margin: 14px 0 0 0; translate: -50% 0; }   /* the label hangs under the pin, clear of the head and the edge */
   .tl-name { font-size: clamp(26px, 7.5vw, 36px); }
   .tl-hint { display: none; } .tl-ctrl button { width: 50px; height: 50px; }
+  .tl-ctrl { justify-content: center; padding-bottom: 40px; }   /* (the arrows sat on the section's bottom edge) */
   .tl-all { padding: 48px 20px 0; }
   .tl-grid { gap: 20px 10px; }
   .tl-grid b { font-size: 13px; } .tl-grid span:not(.tl-grid-pic) { font-size: 11px; } .tl-grid small { font-size: 11px; }
