@@ -20,7 +20,9 @@
     if (e.isIntersecting) { v.currentTime = 0; v.play().catch(() => {}); } else { v.pause(); v.currentTime = 0; }
   }, { threshold: 0.45 }).observe(v));
   // labelled diagrams: the labels pop out one by one once the picture is well on screen
-  document.querySelectorAll('.dg').forEach(dg => new IntersectionObserver(([e], io) => { if (e.isIntersecting) { dg.classList.add('in'); io.disconnect(); } }, { threshold: 0.45 }).observe(dg));
+  // (watch the strip it scrolls sideways in, not the picture itself: on a phone the picture is wider than the screen, so
+  // less than half of it can ever be in view and the labels never came out: client, 2026-11-14)
+  document.querySelectorAll('.dg').forEach(dg => new IntersectionObserver(([e], io) => { if (e.isIntersecting) { dg.classList.add('in'); io.disconnect(); } }, { threshold: 0.45 }).observe(dg.closest('.dg-scroll') || dg));
   // [data-spin]: a 360° turntable stored as still frames (<base>000.webp … ); the frame drawn follows the picture's place
   // on screen — about one and a quarter turns while it crosses the viewport — eased so it glides (the way Apple does it)
   const spins = [...document.querySelectorAll('[data-spin]')].map((el, k) => {

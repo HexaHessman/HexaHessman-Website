@@ -675,12 +675,12 @@ PRINCIPALS = [
              "lists": [("Characteristics", ["Exceptional energy absorption to reaction force ratio (E/R)", "Outstanding energy absorption per fender weight", "High shear stability",
                                             "No loss of performance up to 10° approach angle", "Sophisticated, optimised fender geometry", "Optional overload stopper"]),
                        ("Applications", ["Container & bulk terminals", "Oil & gas terminals", "General cargo terminals", "Cruise terminals", "Ferry & RoRo terminals", "Navy"])]},
-            {"title": "FE Element Fenders", "drawing": "/assets/engineering/shibata/fe-element-drawing.webp", "media": {"image": "/assets/engineering/shibata/fe-element.jpg"}, "side": "right",
+            {"title": "FE Element Fenders", "drawing": "/assets/engineering/shibata/fe-element-drawing.webp", "media": {"loop": "/assets/engineering/shibata/fe-element-float"}, "side": "right",
              "paras": ["Fully moulded rubber legs with embedded mounting plates. Based on V Fenders but with separate legs, the FE Element Fender gives high layout flexibility behind steel panels or where mounting space is limited."],
              "lists": [("Characteristics", ["Good energy absorption to reaction force ratio (E/R)", "High energy absorption per fender weight", "Modular, compact design with a small footprint",
                                             "Vertical and horizontal mounting, typically in pairs", "Pile fender designs may use single units", "Easy maintenance & replacement"]),
                        ("Applications", ["Container & bulk terminals", "General cargo terminals", "RoRo terminals", "Navy", "Barges"])]},
-            {"title": "Cylindrical Fender", "drawing": "/assets/engineering/shibata/cylindrical-drawing.webp", "media": {"image": "/assets/engineering/shibata/cylindrical.jpg"}, "side": "left",
+            {"title": "Cylindrical Fender", "drawing": "/assets/engineering/shibata/cylindrical-drawing.webp", "media": {"loop": "/assets/engineering/shibata/cylindrical-float"}, "side": "left",
              "paras": ["The first rubber fender type produced with a defined performance. It installs simply with chains, bars, ropes or ladder brackets, and its reaction force and energy rise in proportion to deflection for softer berthing.",
                        "Extruded or wrapped depending on size: outside diameters up to 2,700 mm, inside diameters 50–1,300 mm, lengths up to 20 m. Supplied with the matching fixings: chains, brackets, support bar or ladder brackets."]},
             {"title": "Pneumatic Fender", "drawing": "/assets/engineering/shibata/pneumatic-drawing.webp", "media": {"loop": "/assets/engineering/shibata/pneumatic-float"}, "side": "right",
@@ -754,7 +754,7 @@ PRINCIPALS = [
     {
         "slug": "straatman", "name": "Straatman", "h1": "Straatman Mooring Systems", "eyebrow": "Principal · Mooring & berthing",
         "logo": "/assets/engineering/logo-straatman.svg?v=3",
-        "hero_img": "/assets/engineering/straatman/hero.jpg?v=2",   # transfer lines and an LNG carrier at dusk (from Straatman's page on hexahessman.com)
+        "hero_img": "/assets/engineering/straatman/hero.jpg?v=3",   # an LNG carrier moored at a jetty, from above (the client's photo, 2026-11-14)
         # The skeleton offers "[more than 50 years / since 1902]"; "more than 50 years" is used.
         "hero": ["HexaHessman is an official representative of Straatman in Southeast Asia. With more than 50 years of maritime experience, Straatman is an established manufacturer of mooring, berthing and dredging equipment. In 2024 it reorganised into Straatman Mooring Systems and Straatman Dredging & Construction."],
         "coverage": "Coverage: Indonesia · Thailand",

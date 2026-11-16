@@ -255,6 +255,7 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .globe-card .lead a { display: inline-block; margin-top: 4px; font-size: 14px; color: var(--ink); }
 @media (max-width: 960px) {
   .globe { grid-template-columns: 1fr; padding-top: 100px; }
+  @media (max-width: 720px) { .globe { padding-top: 40px; } }   /* less green between the photo and the globe on phones (client, 2026-11-14) */
   .globe-stage { max-height: 62vh; margin: 0 auto; width: min(100%, 62vh); }
   .globe-side { padding: 20px var(--gutter) 0; }
   .globe-list { grid-template-columns: repeat(2, 1fr); }
@@ -274,6 +275,8 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .com-top .arrive-eyebrow { margin-top: 0; color: rgba(252,252,252,.78); }
 .com-top .arrive-title { max-width: 16ch; text-wrap: balance; }
 .com-arrive .pwall { margin-top: clamp(56px, 9vh, 100px); }
+/* phones (client, 2026-11-14): less white between the logo wall and the commodities heading, with some room kept */
+@media (max-width: 900px) { .com-arrive:not(.eng-arrive) { padding-bottom: 28px; } }   /* (and .cscroll's top, below) */
 @media (max-width: 720px) { .com-hero { aspect-ratio: auto; height: 78svh; min-height: 480px; } .com-hero img { object-position: 62% 50%; } .com-hero video { object-position: 52% 55%; } .com-top { bottom: 40px; right: var(--gutter); } }
 .arrive-mark { width: clamp(60px, 6.5vw, 90px); height: auto; color: var(--ink); overflow: visible; }
 .arrive-mark * { stroke-dasharray: 220; stroke-dashoffset: 220; }
@@ -465,23 +468,15 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .cs-copy .cs-category, .cs-copy .cs-item { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
 .cs-copy .cs-item { transition-delay: calc(.12s + var(--i) * .06s); }
 .cs-copy.in .cs-category, .cs-copy.in .cs-item, .cscroll.still .cs-copy .cs-category, .cscroll.still .cs-copy .cs-item { opacity: 1; transform: none; }
-.cs-mstage { display: none; }
 .cs-logo3d { position: fixed; left: 0; top: 0; width: min(96vw, 160vh); aspect-ratio: 1; z-index: 1; opacity: 0; pointer-events: none; transform: translate(-50%, -50%); transition: opacity .25s linear; }   /* the faint 3D mark (cs-marks.js) */
 .cs-logo3d iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; transform: rotate(-9deg); }
 /* phones: the window pins under the header and the group's words scroll up beneath it */
 @media (max-width: 900px) {
+  .cscroll { padding-top: 56px; }
   .cs-chapter { height: auto; }
   .cs-pin, .text-left .cs-pin, .text-right .cs-pin { position: relative; height: auto; grid-template-columns: 1fr; grid-template-rows: auto; padding: 0; }
-  .cs-stick, .text-left .cs-stick, .text-right .cs-stick { grid-column: 1; grid-row: 1; position: sticky; top: 0; z-index: 2; padding: 84px 0 14px; background: var(--cs-bg); overflow: hidden; }   /* edge to edge: both sides run off the screen (client, 2026-11-12) */
-  .cs-panel { height: 44vh; }
-  /* one window for all the groups (client, 2026-11-13): it pins under the header from the first group to the last, and
-     each group's photo wipes in over the last one in the same place, so two windows never show at once */
-  .cs-stick, .text-left .cs-stick, .text-right .cs-stick { display: none; }
-  .cs-mstage { display: block; position: sticky; top: 0; z-index: 2; padding: 84px 0 14px; background: var(--cs-bg); overflow: hidden; }
-  .cs-mwin { position: relative; height: 44vh; }
-  .cs-mwin .cs-panel { position: absolute; inset: 0; height: auto; z-index: 1; opacity: 0; clip-path: inset(-6px -60px 100% -60px);
-    transition: opacity 0s .9s, clip-path 0s .9s; }   /* the old photo stays put under the new one until it has wiped in */
-  .cs-mwin .cs-panel.on { z-index: 2; opacity: 1; clip-path: inset(-6px -60px -6px -60px); transition: clip-path .9s cubic-bezier(.65,0,.25,1), opacity .25s; }
+  .cs-stick, .text-left .cs-stick, .text-right .cs-stick { grid-column: 1; grid-row: 1; position: sticky; top: 0; z-index: 2; padding: 0 0 12px; background: var(--cs-bg); overflow: hidden; }   /* the window runs up under the header: no white strip above it (client, 2026-11-14) */   /* edge to edge: both sides run off the screen (client, 2026-11-12) */
+  .cs-panel { height: calc(44vh + 84px); }   /* (as tall below the header as before) */
   .cs-copy, .text-left .cs-copy, .text-right .cs-copy { grid-column: 1; grid-row: 2; z-index: 0; padding: 30px 20px 90px; }
   .cs-category { font-size: min(40px, 9.6vw); text-align: center; text-wrap: balance; }   /* each group's name centred on phones (client, 2026-11-12) */
   .cs-list { overflow: visible; -webkit-mask-image: none; mask-image: none; margin-top: 0; }
@@ -490,7 +485,6 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
   .cs-lead { font-size: 16px; max-width: none; }
   .cs-view { font-size: 12px; }
 }
-@media (max-width: 900px) and (prefers-reduced-motion: reduce) { .cs-mwin .cs-panel, .cs-mwin .cs-panel.on { transition: none; } }
 
 /* ---------- commodities hub: market prices under the scroll (client, 2026-11-11, after chemportal.com.tr/markets):
    a live strip, then dated reference cards in the scroll's type (markets.js, data in /assets/market-prices.json) ---------- */
