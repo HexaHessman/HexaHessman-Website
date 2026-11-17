@@ -168,13 +168,13 @@ const SupaStore = {
   },
   async token() { const { data } = await sb.auth.getSession(); return data.session && data.session.access_token; },
   async publish() {
-    const r = await fetch("/api/publish", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + await this.token() }, body: "{}" });
+    const r = await fetch("/api/publish/", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + await this.token() }, body: "{}" });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(j.error || "Publishing failed.");
     return j;
   },
   async team(body) {
-    const r = await fetch("/api/users", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + await this.token() }, body: JSON.stringify(body) });
+    const r = await fetch("/api/users/", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + await this.token() }, body: JSON.stringify(body) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(j.error || "That did not work.");
     return j;
