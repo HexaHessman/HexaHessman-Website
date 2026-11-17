@@ -1,0 +1,52 @@
+name: Publish from CMS
+
+on:
+  repository_dispatch:
+    types: [cms-publish]      # sent by /api/publish when someone presses Publish in /admin
+  workflow_dispatch: {}       # the "Run workflow" button, for a manual publish
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pull the latest changes from the CMS
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python3 tools/cms/pull.py
+      - name: Rebuild the pages with the changes
+        run: python3 tools/sitegen/build.py "$GITHUB_WORKSPACE"
+      - name: Commit and push
+        run: |
+          git config user.name "HexaHessman CMS"
+          git config user.email "cms@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Nothing changed."; else
+            git commit -m "CMS: publish${{ github.event.client_payload.by && format(' (by {0})', github.event.client_payload.by) || '' }}"
+            for i in 1 2 3; do git push && break; git pull --rebase -X theirs origin main; done
+          fi
+      - name: Publish on Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_jKKXknwiGFvv4m5ILqnzrzCb
+          VERCEL_PROJECT_ID: prj_mUZv3yN2Dxq1S0cXj40NkI54mKRa
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then echo "No VERCEL_TOKEN: relying on Vercel's own GitHub connection."; exit 0; fi
+          npx --yes vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN"
+      - name: Record the publish
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PUBLISHED_BY: ${{ github.event.client_payload.by }}
+        run: python3 tools/cms/pull.py --done

@@ -28,13 +28,17 @@
     'petroleum-oilfield': { d: '/assets/commodities/ibc-loop.mp4', m: '/assets/commodities/ibc-loop-m.mp4', poster: '/assets/commodities/ibc-loop.jpg', pos: '50% 50%' },
     biomass: { d: '/assets/commodities/chips-loop.mp4', m: '/assets/commodities/chips-loop-m.mp4', poster: '/assets/commodities/chips-loop.jpg', pos: '74% 50%' },   // conveyor dropping wood chips onto a heap (2026-11-05)
   };
+  // phones: the scene lives inside its own window and scrolls natively with it. A fixed copy moved to the window by
+  // script every frame trails a finger scroll on iPhone, so it jittered and spilled over the neighbouring windows (client, 2026-11-17)
+  const PHONE = innerWidth <= 900;
+  const sceneTag = cls => `<iframe class="${cls}" src="/sulphur3d.html?mode=all&v=1110a" title="" tabindex="-1"></iframe>`;
   const vidTag = v => v ? `<video class="cs-vid" muted loop playsinline preload="none" poster="${v.poster}" data-src="${innerWidth <= 900 ? v.m : v.d}"${v.pos ? ` style="object-position:${v.pos}"` : ''}></video>` : '';
 
   // one screen per group (client, 2026-11-11): the window, and beside it the group's name with all its products
   const chapters = data.map((g, gi) => `
     <div class="cs-chapter ${gi % 2 ? 'text-right' : 'text-left'}" data-g="${gi}" id="${g.slug}" style="--n:${g.products.length}">
       <div class="cs-pin">
-        <div class="cs-stick"><div class="cs-panel" aria-hidden="true">${vidTag(VIDEOS[g.slug])}</div></div>
+        <div class="cs-stick"><div class="cs-panel" aria-hidden="true">${VIDEOS[g.slug] ? vidTag(VIDEOS[g.slug]) : PHONE ? sceneTag('cs-win cs-inwin') : ''}</div></div>
         <div class="cs-copy" data-reveal="copy">
           <h2 class="cs-category"><a href="/commodities/${g.slug}/">${esc(g.name)}</a></h2>
           <div class="cs-list"><div class="cs-track">
@@ -50,10 +54,7 @@
     </div>`).join('');
 
   sec.innerHTML = `
-    <div class="cs-wins" aria-hidden="true">
-      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=1110a" title="" tabindex="-1"></iframe>
-      <iframe class="cs-win" src="/sulphur3d.html?mode=all&v=1110a" title="" tabindex="-1"></iframe>
-    </div>
+    ${PHONE ? '' : `<div class="cs-wins" aria-hidden="true">${sceneTag('cs-win')}${sceneTag('cs-win')}</div>`}
     <div class="cs-flow">
       <div class="cs-intro">
         <h2 class="cs-h2 cs-lit">${esc(hub.h2)}</h2>
@@ -153,7 +154,7 @@
   let acc = 0;
   const groups = [...sec.querySelectorAll('.cs-chapter')].map((ch, gi) => {
     const n = SCENE_N[gi], from = acc / total; acc += n;
-    return { ch, gi, pin: ch, panel: ch.querySelector('.cs-panel'), txt: ch.querySelector('.cs-copy'), video: ch.querySelector('.cs-vid'), from, to: acc / total, copy: gi % 2 };
+    return { ch, gi, pin: ch, panel: ch.querySelector('.cs-panel'), txt: ch.querySelector('.cs-copy'), video: ch.querySelector('.cs-vid'), scene: ch.querySelector('.cs-inwin'), from, to: acc / total, copy: gi % 2 };
   });
   // the inner (text-facing) edge: on phones the window sits above the text, so its indent faces left
   const innerOf = g => innerWidth <= 900 ? 'left' : (g.ch.classList.contains('text-left') ? 'left' : 'right');
@@ -178,12 +179,14 @@
         run._anim = run.animate([{ strokeDashoffset: 0 }, { strokeDashoffset: -L * 1.07 }], { duration: Math.max(7000, L * 2.4), iterations: Infinity, easing: 'linear' });
       }
       if (g.video) g.video.style.clipPath = `path('${d}')`;
+      if (g.scene) g.scene.style.clipPath = `path('${d}')`;
     }
     sized = [null, null];
   }
 
   // ---- every frame: each scene copy rides on the window it plays in, words light up, the scene follows its group ----
-  const wins = [...sec.querySelectorAll('.cs-win')];
+  const wins = [...sec.querySelectorAll('.cs-wins .cs-win')];
+  for (const g of groups) if (g.scene) { g.scene._last = -1; g.scene.addEventListener('load', () => { g.scene._ready = true; g.scene._last = -1; g.scene._paused = undefined; }); }
   const ready = new Set(), lastP = [-1, -1];
   let sized = [null, null];
   wins.forEach((f, c) => f.addEventListener('load', () => { ready.add(f); lastP[c] = -1; }));
@@ -220,6 +223,17 @@
         if (jump) { delete f.dataset.jump; setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => { if (sized[c] === g) f.style.visibility = 'visible'; })), 60); }   // show it once the cut has rendered
       }
     });
+    // phones: each in-window scene follows its group as it scrolls, and rests while off screen
+    for (const g of groups) {
+      const f = g.scene; if (!f || !f._ready) continue;
+      const b = g.panel.getBoundingClientRect(), on = near && b.bottom > 0 && b.top < vh;
+      if (f._paused !== !on) { f._paused = !on; f.contentWindow.postMessage({ type: 'scene-pause', v: !on }, '*'); }
+      if (!on) continue;
+      const pr = g.pin.getBoundingClientRect();
+      const local = Math.min(1, Math.max(0, (vh * 0.5 - pr.top) / Math.max(1, pr.height - vh * 0.5)));
+      const p = g.from + (g.to - g.from) * (0.04 + 0.92 * local);
+      if (Math.abs(p - f._last) > 0.0005) { const jump = f._last < 0; f._last = p; f.contentWindow.postMessage({ type: 'hero-progress', p, grabSide: 0.5, jump }, '*'); }
+    }
     if (near) scrollLists();
     // words: a paragraph lights up as it rises from the bottom of the screen to a little above the middle
     if (near && !reduce) for (const f of fills) {

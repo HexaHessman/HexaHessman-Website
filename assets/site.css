@@ -446,6 +446,7 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .cs-outline { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .cs-outline path { fill: #0F2A1E; stroke: rgba(var(--cs-fg-rgb), .3); stroke-width: 2.4; }
 .cs-outline .cs-run { fill: none; stroke: var(--cs-fg); stroke-width: 2.6; stroke-linecap: round; filter: drop-shadow(0 0 5px rgba(var(--cs-fg-rgb), .8)); }   /* the light that runs round the line (dash set in cscroll.js) */
+.cs-win.cs-inwin { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; visibility: visible; will-change: auto; pointer-events: none; }   /* phones: the scene sits inside its window and scrolls with it (a fixed copy moved by script lagged behind the finger) */
 .cs-vid { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; display: block; }
 .text-left .cs-stick { grid-column: 2; grid-row: 1; } .text-right .cs-stick { grid-column: 1; grid-row: 1; }
 .text-left .cs-copy { grid-column: 1; grid-row: 1; } .text-right .cs-copy { grid-column: 2; grid-row: 1; }
@@ -475,7 +476,7 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
   .cscroll { padding-top: 56px; }
   .cs-chapter { height: auto; }
   .cs-pin, .text-left .cs-pin, .text-right .cs-pin { position: relative; height: auto; grid-template-columns: 1fr; grid-template-rows: auto; padding: 0; }
-  .cs-stick, .text-left .cs-stick, .text-right .cs-stick { grid-column: 1; grid-row: 1; position: sticky; top: 0; z-index: 2; padding: 0 0 12px; background: var(--cs-bg); overflow: hidden; }   /* the window runs up under the header: no white strip above it (client, 2026-11-14) */   /* edge to edge: both sides run off the screen (client, 2026-11-12) */
+  .cs-stick, .text-left .cs-stick, .text-right .cs-stick { grid-column: 1; grid-row: 1; position: sticky; top: 0; z-index: 2; padding: 0 0 12px; background: transparent; overflow: hidden; }   /* no backing: the text slides under the window along its stepped edge, not a straight line (client, 2026-11-17) */   /* the window runs up under the header: no white strip above it (client, 2026-11-14) */   /* edge to edge: both sides run off the screen (client, 2026-11-12) */
   .cs-panel { height: calc(44vh + 84px); }   /* (as tall below the header as before) */
   .cs-copy, .text-left .cs-copy, .text-right .cs-copy { grid-column: 1; grid-row: 2; z-index: 0; padding: 30px 20px 90px; }
   .cs-category { font-size: min(40px, 9.6vw); text-align: center; text-wrap: balance; }   /* each group's name centred on phones (client, 2026-11-12) */

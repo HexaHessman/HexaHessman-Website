@@ -54,3 +54,8 @@ assets/entrance/commodities-m.mp4
 assets/entrance/engineering.mp4
 assets/entrance/engineering-m.mp4
 assets/entrance/choice.jpg
+
+# the CMS's working files (the admin itself, /admin and /api, is published)
+data
+supabase
+.github
