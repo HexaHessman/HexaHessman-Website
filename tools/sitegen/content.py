@@ -799,6 +799,10 @@ PRINCIPALS = [
 # ---------------------------------------------------------------- about
 # ---------------------------------------------------------------- contact
 CONTACT_PAGE = {
+    # people shown only on the Contact page (in their office's card on the globe), with no photo (client, 2026-11-17)
+    "people_only_here": [
+        ("Gina Jeong", "Business Development Manager", "gina-jeong", "us"),   # US Market
+    ],
     "eyebrow": "Contact",
     "h1": "Navigating with Excellence",
     "lead": "We are pleased to offer our full assistance and address any queries you may have.",

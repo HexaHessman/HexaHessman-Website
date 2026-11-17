@@ -20,12 +20,15 @@ How it works
   the menu, the footer, the Commodities list) are changed in place, and data/cms-applied.json remembers what was
   written into them so the next change (or an undo) finds it again.
 """
-import hashlib, html, json, os, re, sys, time
+import hashlib, html, json, os, re, sys, time, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CMS = os.path.join(ROOT, "data", "cms.json")
 APPLIED = os.path.join(ROOT, "data", "cms-applied.json")
 SEED = os.path.join(ROOT, "admin", "seed.json")
+FONTS = os.path.join(ROOT, "tools", "cms", "fonts.json")
+FONTS_CSS = os.path.join(ROOT, "assets", "cms-fonts.css")
+FONT_SCOPE = "@fonts"   # font choices are saved as changes with this scope and o = "font:<group id>"
 
 SHARED = [  # (file, name shown in the admin)
     ("assets/site-header.js", "Menu"),
@@ -95,6 +98,7 @@ def write(rel, s):
 
 TOKEN = re.compile(r"(<!--.*?-->|<script\b.*?</script\s*>|<style\b.*?</style\s*>|<svg\b.*?</svg\s*>|<template\b.*?</template\s*>|<[^>]+>)", re.S | re.I)
 ATTR = re.compile(r'(\s)([\w:-]+)="([^"]*)"')
+BAR_LABEL = {"pp-bar-t": "Bar heading", "pp-total": "Bar total", "pp-call": "Note beside the bar"}
 TEXT_ATTRS = {"alt": "Photo description", "title": "Hover text", "aria-label": "Screen reader label", "placeholder": "Box hint"}
 META_TEXT = {"description": "Google description", "og:title": "Share title", "og:description": "Share description",
              "twitter:title": "Share title", "twitter:description": "Share description"}
@@ -105,6 +109,52 @@ TAG_LABEL = {"h1": "Main heading", "h2": "Heading", "h3": "Sub-heading", "h4": "
              "span": "Text", "div": "Text", "summary": "Question"}
 JSON_SKIP_KEYS = {"slug", "href", "url", "src", "img", "image", "photo", "poster", "id", "office", "lat", "lon", "code", "icon",
                   "file", "path", "video", "jump", "key", "type", "class", "color", "pos", "side"}
+VID_EXT = re.compile(r"(\.(mp4|webm|mov|m4v)(\?[^\"']*)?$)|^data:video/", re.I)
+
+
+MAP_SRC = re.compile(r"https://(www\.)?google\.[a-z.]+/maps\?", re.I)
+
+
+def map_query(src):
+    """the place / address a Google map iframe shows (its q=)"""
+    qs = urllib.parse.parse_qs(urllib.parse.urlsplit(src).query)
+    return norm(qs.get("q", [""])[0])
+
+
+def map_with(src, q):
+    """the same map, showing another place"""
+    u = urllib.parse.urlsplit(src)
+    pairs = [(k, (q if k == "q" else v)) for k, v in urllib.parse.parse_qsl(u.query, keep_blank_values=True)]
+    return urllib.parse.urlunsplit(u._replace(query=urllib.parse.urlencode(pairs, quote_via=urllib.parse.quote)))
+
+
+def is_video(u):
+    return bool(u and VID_EXT.search(u))
+
+
+def keep_attrs(tok, names):
+    return {k.lower(): v for _, k, v in ATTR.findall(tok) if k.lower() in names}
+
+
+def img_to_video(tok, src):
+    """a photo swapped for a video in the editor: the same spot, playing muted on a loop like the site's other clips"""
+    a = keep_attrs(tok, {"class", "id", "style", "width", "height", "alt"})
+    alt = html.unescape(a.pop("alt", ""))
+    cls = (html.unescape(a.pop("class", "")) + " cms-vid").strip()
+    extra = "".join(f' {k}="{v}"' for k, v in a.items())
+    label = f' aria-label="{html.escape(alt, quote=True)}"' if alt.strip() else ' aria-hidden="true"'
+    return f'<video class="{html.escape(cls, quote=True)}"{extra} src="{html.escape(src, quote=True)}" autoplay muted loop playsinline preload="metadata"{label}></video>'
+
+
+def video_to_img(tok, src):
+    """the other way round: a video put in by the editor goes back to being a photo"""
+    a = keep_attrs(tok, {"class", "id", "style", "width", "height", "aria-label"})
+    alt = html.unescape(a.pop("aria-label", ""))
+    cls = " ".join(c for c in html.unescape(a.pop("class", "")).split() if c != "cms-vid")
+    extra = (f' class="{html.escape(cls, quote=True)}"' if cls else "") + "".join(f' {k}="{v}"' for k, v in a.items())
+    return f'<img{extra} src="{html.escape(src, quote=True)}" alt="{html.escape(alt, quote=True)}" loading="lazy" decoding="async">'
+
+
 IMG_EXT = re.compile(r"\.(jpe?g|png|webp|gif|avif|svg)(\?[^\"']*)?$", re.I)
 
 
@@ -164,6 +214,8 @@ def scan_html(src, lookup=None, img_lookup=None):
     parts = TOKEN.split(src)
     out = []
     stack_tag, section, in_title = "", "", False
+    in_legend, bar_box = False, ""
+    drop_close = 0   # a video tag the editor turned back into a photo leaves its </video> behind: drop it
     meta_props = None
     for i, part in enumerate(parts):
         if i % 2 == 1:   # a tag, comment, or script/style/svg block
@@ -177,6 +229,15 @@ def scan_html(src, lookup=None, img_lookup=None):
             if not closing:
                 stack_tag = name
                 in_title = name == "title"
+                # the product pages' "where it comes from" bar: name its boxes plainly (pp-bar.js sizes the bar
+                # from the legend's percentages, so changing a number moves the bar)
+                cm = re.search(r'\bclass="([^"]*)"', tok)
+                if cm:
+                    c = cm.group(1).split()
+                    in_legend = "pp-legend" in c or (in_legend and not ({"pp-total", "pp-call", "pp-drops"} & set(c)))
+                    bar_box = BAR_LABEL.get(next((x for x in c if x in BAR_LABEL), ""), "")
+                else:
+                    bar_box = ""
                 if name == "section":
                     m = re.search(r'\bid="([^"]+)"', tok)
                     section = m.group(1).replace("-", " ").capitalize() if m else section
@@ -184,6 +245,8 @@ def scan_html(src, lookup=None, img_lookup=None):
                 if name == "meta":
                     mm = re.search(r'\b(?:name|property)="([^"]+)"', tok)
                     meta_props = mm.group(1).lower() if mm else None
+                swap = []   # the new photo / video path, when this tag's media is replaced
+                cms_vid = name == "video" and "cms-vid" in tok
                 def attr(m):
                     sp, an, av = m.group(1), m.group(2), m.group(3)
                     anl = an.lower()
@@ -198,13 +261,30 @@ def scan_html(src, lookup=None, img_lookup=None):
                                 seen.add(n)
                                 return f'{sp}{an}="{html.escape(lookup[n], quote=True)}"'
                     elif (name == "img" and anl == "src") or (name == "video" and anl == "poster") or \
-                            (name == "meta" and anl == "content" and meta_props in ("og:image", "twitter:image")):
+                            (name == "meta" and anl == "content" and meta_props in ("og:image", "twitter:image")) or \
+                            (anl == "src" and (cms_vid or (name in ("video", "source") and is_video(val)))):
+                        kind = "share" if name == "meta" else "video" if (anl == "src" and name in ("video", "source")) else name
                         if lookup is None and img_lookup is None:
                             if not val.startswith("data:"):
-                                images.append({"src": val, "sec": section, "kind": "share" if name == "meta" else name})
+                                images.append({"src": val, "sec": section, "kind": kind})
                         elif img_lookup and val in img_lookup:
+                            new = img_lookup[val]
+                            # a photo spot takes a photo or a video; a video spot of the site's own takes only a video,
+                            # and a poster or share picture only a photo
+                            if (kind == "video" and not cms_vid and not is_video(new)) or (kind in ("share",) or anl == "poster") and is_video(new):
+                                return m.group(0)
                             seen.add("img:" + val)
-                            return f'{sp}{an}="{html.escape(img_lookup[val], quote=True)}"'
+                            if (name == "img" and anl == "src") or cms_vid:
+                                swap.append(new)
+                            return f'{sp}{an}="{html.escape(new, quote=True)}"'
+                    elif name == "iframe" and anl == "src" and MAP_SRC.match(val):
+                        q = map_query(val)
+                        if q:
+                            if lookup is None:
+                                fields.append({"o": q, "tag": "map", "label": "Google map: place or address (the pin moves to it)", "sec": section})
+                            elif q in lookup:
+                                seen.add(q)
+                                return f'{sp}{an}="{html.escape(map_with(val, lookup[q]), quote=True)}"'
                     elif anl.startswith("data-") and val[:1] in "[{":
                         try:
                             data = json.loads(val)
@@ -224,9 +304,20 @@ def scan_html(src, lookup=None, img_lookup=None):
                     new_tok = ATTR.sub(attr, tok)
                     if lookup is not None or img_lookup is not None:
                         tok = new_tok
+                if swap and name == "img":
+                    # the old srcset would keep showing the old photo on sharp screens
+                    tok = re.sub(r'\s(srcset|sizes)="[^"]*"', "", tok)
+                    if is_video(swap[0]):
+                        tok = img_to_video(tok, swap[0])
+                elif swap and cms_vid and not is_video(swap[0]):
+                    tok = video_to_img(tok, swap[0])
+                    drop_close += 1
             else:
                 if name == "title":
                     in_title = False
+                if name == "video" and drop_close:
+                    drop_close -= 1
+                    continue
             out.append(tok)
             continue
         # a run of text
@@ -237,8 +328,12 @@ def scan_html(src, lookup=None, img_lookup=None):
             if stack_tag in ("h1", "h2") and lookup is None:
                 section = n if len(n) < 80 else n[:77] + "…"
             if lookup is None:
-                fields.append({"o": n, "tag": "title" if in_title else stack_tag,
-                               "label": TAG_LABEL.get("title" if in_title else stack_tag, "Text"), "sec": section})
+                label = TAG_LABEL.get("title" if in_title else stack_tag, "Text")
+                if bar_box:
+                    label = bar_box
+                elif in_legend:
+                    label = "Bar percentage (the bar follows it)" if stack_tag == "b" else "Bar part name"
+                fields.append({"o": n, "tag": "title" if in_title else stack_tag, "label": label, "sec": section})
             elif n in lookup:
                 seen.add(n)
                 lead = val[:len(val) - len(val.lstrip())]
@@ -397,15 +492,17 @@ def load_json(path, default):
 def apply(cms=None, quiet=False):
     cms = cms if cms is not None else load_json(CMS, {})
     edits = cms.get("edits") or []
+    fonts_css(edits)
+    edits = [e for e in edits if e.get("scope") != FONT_SCOPE]
     images = cms.get("images") or []
     # photos chosen in draft mode arrive inside the changes file: save them as files in assets/cms/
     for e in images:
         t = e.get("t") or ""
-        m = re.match(r"data:image/(\w+);base64,(.*)", t, re.S)
+        m = re.match(r"data:(?:image|video)/([\w+.-]+);base64,(.*)", t, re.S)
         if m:
             import base64
             raw = base64.b64decode(m.group(2))
-            ext = {"jpeg": "jpg", "svg+xml": "svg"}.get(m.group(1), m.group(1))
+            ext = {"jpeg": "jpg", "svg+xml": "svg", "quicktime": "mov"}.get(m.group(1), m.group(1))
             name = hashlib.sha1(raw).hexdigest()[:12] + "." + ext
             os.makedirs(os.path.join(ROOT, "assets", "cms"), exist_ok=True)
             with open(os.path.join(ROOT, "assets", "cms", name), "wb") as f:
@@ -508,6 +605,8 @@ def seed():
     applied = load_json(APPLIED, {})
     cms = load_json(CMS, {})
     edits, images = cms.get("edits") or [], cms.get("images") or []
+    live_fonts = {e["o"]: e["t"] for e in edits if e.get("scope") == FONT_SCOPE}
+    edits = [e for e in edits if e.get("scope") != FONT_SCOPE]
     fields = {}   # key -> {o, t, n (how many places)}
     pages = []
 
@@ -554,13 +653,44 @@ def seed():
         flist, _ = scan_file(rel, read(rel))
         out, _ = add(rel, None, flist, [])
         shared.append({"url": "@" + rel, "file": rel, "title": name, "area": "Shared", "fields": out, "images": []})
-    data = {"generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "pages": pages, "shared": shared, "fields": fields}
+    fcfg = load_json(FONTS, {"groups": [], "fonts": []})
+    fcfg = {"groups": fcfg["groups"], "fonts": fcfg["fonts"], "live": live_fonts}
+    data = {"generated": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "pages": pages, "shared": shared, "fields": fields, "fonts": fcfg}
     os.makedirs(os.path.dirname(SEED), exist_ok=True)
     with open(SEED, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
     nf = sum(len(p["fields"]) for p in pages + shared)
     ni = sum(len(p["images"]) for p in pages)
     print(f"cms: admin/seed.json with {len(pages)} pages, {len(shared)} shared parts, {len(fields)} different texts, {nf} boxes, {ni} photos")
+
+
+def fonts_css(edits):
+    """write assets/cms-fonts.css: the Google Fonts for the chosen families, and the group variables pointing at them.
+    Groups left on their original font are not mentioned, so with no choices the file is only a comment."""
+    cfg = load_json(FONTS, {"groups": [], "fonts": []})
+    known = {f["name"]: f for f in cfg["fonts"]}
+    chosen = {e["o"][5:]: e["t"] for e in edits if e.get("scope") == FONT_SCOPE and str(e.get("o", "")).startswith("font:")}
+    fams, rules = [], []
+    for g in cfg["groups"]:
+        name = chosen.get(g["id"])
+        if not name or name == g["default"] or name not in known:
+            continue
+        f = known[name]
+        fall = {"serif": 'Georgia, "Times New Roman", serif', "mono": '"Courier New", monospace'}.get(f["kind"], '"Helvetica Neue", Arial, sans-serif')
+        for v in g["vars"]:
+            rules.append(f'  {v}: "{name}", {fall};')
+        fam = "family=" + name.replace(" ", "+") + (":" + f["spec"] if f["spec"] else "")
+        if fam not in fams:
+            fams.append(fam)
+    css = "/* Fonts chosen in the website editor (/admin, Fonts). Written by tools/cms/cms.py: do not edit by hand. */\n"
+    if rules:
+        css += f'@import url("https://fonts.googleapis.com/css2?{"&".join(fams)}&display=swap");\n'
+        css += ":root, .cscroll {\n" + "\n".join(rules) + "\n}\n"
+    old = read("assets/cms-fonts.css") if os.path.exists(FONTS_CSS) else None
+    if old != css:
+        write("assets/cms-fonts.css", css)
+    changed = [g["name"] for g in cfg["groups"] if chosen.get(g["id"]) not in (None, g["default"]) and chosen.get(g["id"]) in known]
+    print(f"cms: fonts: {', '.join(changed) if changed else 'all original'}")
 
 
 def run():

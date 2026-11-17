@@ -26,6 +26,7 @@ const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = se
 const ICONS = {
   home: '<path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/>',
   file: '<path d="M6 3h8l4 4v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4M8.5 12h7M8.5 16h7"/>',
+  type: '<path d="M5 7V5h14v2M12 5v14M9 19h6"/>',
   layout: '<rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 8.5h17M3.5 16h17"/>',
   image: '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m20.5 16-5-5-9 8.5"/>',
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
@@ -89,9 +90,9 @@ const loadSeed = async () => {
   ALL = SEED.pages.concat(SEED.shared);
   BYURL = Object.fromEntries(ALL.map(p => [p.url, p]));
   IMGUSE = {};
-  for (const p of SEED.pages) for (const im of p.images) (IMGUSE[im.o] = IMGUSE[im.o] || { o: im.o, t: im.t, pages: [] }).pages.push(p.url);
+  for (const p of SEED.pages) for (const im of p.images) (IMGUSE[im.o] = IMGUSE[im.o] || { o: im.o, t: im.t, kind: im.kind, pages: [] }).pages.push(p.url);
 };
-const pageName = url => (BYURL[url] && BYURL[url].title) || url;
+const pageName = url => url === "@fonts" ? "Fonts" : (BYURL[url] && BYURL[url].title) || url;
 const whereText = (k, url) => {
   const w = (F(k).where || []).filter(u => u !== url);
   if (!w.length) return "";
@@ -121,7 +122,7 @@ const LocalStore = {
   async addHistory(h) { const d = this.load(); d.history.unshift(Object.assign({ at: new Date().toISOString(), by: "You" }, h)); d.history = d.history.slice(0, 500); this.save(); },
   async publishes() { return this.load().publishes; },
   async upload(file) {
-    if (file.size > 1.6e6) throw new Error("In draft mode photos must be under 1.6 MB. Once the editor is connected any size works.");
+    if (file.size > 1.6e6) throw new Error("In draft mode files must be under 1.6 MB. Once the editor is connected, bigger photos and videos work.");
     return await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
   },
   async publish() { download(); const d = this.load(); d.publishes.unshift({ status: "done", created_at: new Date().toISOString(), requested_by: "You" }); this.save(); return { message: "Draft mode: the changes file was downloaded. Send it to your web developer to publish." }; },
@@ -261,6 +262,7 @@ const route = () => {
   if (path === "/page") return viewEditor(q.get("u"), q.get("k"));
   if (path === "/shared") return viewShared();
   if (path === "/photos") return viewPhotos(q);
+  if (path === "/fonts") return viewFonts();
   if (path === "/activity") return viewActivity();
   if (path === "/team") return viewTeam();
   if (path === "/search") return viewSearch(q.get("q") || "");
@@ -324,7 +326,7 @@ async function viewDashboard() {
           <div class="bars-x">${days.map((d, i) => `<span>${i % 2 ? "" : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>`).join("")}</div>
         </div></div>
       <div class="card"><div class="card__head"><h2>Recent activity</h2><a class="iconbtn" href="#/activity" aria-label="Activity">${ic("arrow")}</a></div>
-        <div class="res">${HIST.slice(0, 5).map(h => `<a href="${h.page ? "#/page?u=" + encodeURIComponent(h.page) : "#/activity"}"><span class="txt">${h.kind === "image" ? "Photo replaced" : esc((h.after ?? h.o).slice(0, 70))}</span><span class="meta">${esc(h.page ? pageName(h.page) : "")} · ${esc(ago(h.at))}${h.after == null ? " · undone" : ""}</span></a>`).join("") || '<div class="empty">No changes yet. Pick a page and click any words to change them.</div>'}</div></div>
+        <div class="res">${HIST.slice(0, 5).map(h => `<a href="${h.scope === "@fonts" ? "#/fonts" : h.page ? "#/page?u=" + encodeURIComponent(h.page) : "#/activity"}"><span class="txt">${h.scope === "@fonts" ? esc(fontLine(h)) : h.kind === "image" ? "Photo replaced" : esc((h.after ?? h.o).slice(0, 70))}</span><span class="meta">${esc(h.page ? pageName(h.page) : "")} · ${esc(ago(h.at))}${h.after == null ? " · undone" : ""}</span></a>`).join("") || '<div class="empty">No changes yet. Pick a page and click any words to change them.</div>'}</div></div>
     </div>
     <div class="card"><div class="card__head"><h2>${ic("file")} All pages</h2></div>
       <div class="card__body">${pagesTable(SEED.pages)}</div></div>`;
@@ -502,8 +504,9 @@ function pvMount(frame, p, url) {
       if (now !== live && idx.has(live)) for (const n of idx.get(live)) n.nodeValue = n.nodeValue.replace(n.nodeValue.trim(), now);
       PV.shown.set(k, now);
     }
-    for (const im of p.images) { const now = imgNow(im.o, url); if (now !== im.t) $$(`img`, doc).forEach(img => { if (img.getAttribute("src") === im.t) img.src = now; }); }
+    for (const im of p.images) { const now = imgNow(im.o, url); if (now !== im.t) pvMedia(doc, im.o, im.t, now); }
   };
+  pvFonts(doc);
   setTimeout(paintDrafts, 700); setTimeout(paintDrafts, 1800);
   // click any words: open their box
   const findKey = el => {
@@ -535,32 +538,56 @@ function pvSetText(k, url, value) {
   if (before === now) return;
   const w = PV.doc.createTreeWalker(PV.doc.body, NodeFilter.SHOW_TEXT);
   for (let n; (n = w.nextNode());) if (norm(n.nodeValue) === before) n.nodeValue = n.nodeValue.replace(n.nodeValue.trim(), now);
+  // a Google map whose place is this box: show the new place (after a short pause, so it doesn't reload on every key)
+  $$("iframe[src*='google.']", PV.doc).forEach(f => {
+    try { const u = new URL(f.src); if (!/\/maps/.test(u.pathname) || norm(u.searchParams.get("q") || "") !== before) return;
+      u.searchParams.set("q", now); clearTimeout(f._t); f._t = setTimeout(() => { f.src = u.toString(); }, 700); } catch (e) {}
+  });
   PV.shown.set(k, now);
 }
 function pvSetImg(o, url) {
   if (!PV || !PV.doc) return;
   const now = imgNow(o, url);
-  $$("img", PV.doc).forEach(img => { const s = img.getAttribute("data-cms-o") || img.getAttribute("src"); if (s === o || s === (IMGUSE[o] || {}).t) { img.setAttribute("data-cms-o", o); img.src = now; } });
+  pvMedia(PV.doc, o, (IMGUSE[o] || {}).t, now);
+}
+/* in the preview, put the new photo or video in the spot that showed o (or its published version t) */
+function pvMedia(doc, o, t, now) {
+  $$("img, video, video source", doc).forEach(el => {
+    const s = el.getAttribute("data-cms-o") || el.getAttribute("src");
+    if (!s || (s !== o && s !== t)) return;
+    if (el.tagName === "SOURCE") { if (isVid(now)) { el.src = now; el.parentNode.load(); } return; }
+    const wantVid = isVid(now);
+    if ((el.tagName === "VIDEO") === wantVid) { el.setAttribute("srcset", ""); el.setAttribute("sizes", ""); el.src = now; el.setAttribute("data-cms-o", o); return; }
+    const n = doc.createElement(wantVid ? "video" : "img");
+    for (const a of ["class", "id", "style", "width", "height"]) if (el.hasAttribute(a)) n.setAttribute(a, el.getAttribute(a));
+    if (wantVid) { n.classList.add("cms-vid"); n.muted = true; n.loop = true; n.autoplay = true; n.playsInline = true; n.setAttribute("muted", ""); }
+    else { n.classList.toggle("cms-vid", false); n.alt = el.getAttribute("aria-label") || ""; }
+    n.setAttribute("data-cms-o", o); n.src = now; el.replaceWith(n); if (wantVid) n.play().catch(() => {});
+  });
 }
 
 /* ---------- photos ---------- */
 const imgSrc = s => s;   // site paths, Supabase links and (draft mode) data links all work as they are
+const isVid = u => /^data:video\/|\.(mp4|webm|mov|m4v)(\?|$)/i.test(u || "");
+const thumb = (u, cls) => isVid(u) ? `<video class="${cls}" src="${esc(u)}#t=0.5" muted playsinline preload="metadata"></video>` : "";
 function photoCard(o, url) {
   const now = url ? imgNow(o, url) : imgNow(o, "*"), live = (IMGUSE[o] || {}).t || o;
   const name = o.split("?")[0].split("/").pop();
   const badge = now !== live ? '<span class="badge">Not published</span>' : now !== o ? '<span class="badge badge--live">Replaced</span>' : "";
-  return `<div class="ph" data-photo="${esc(o)}"><div class="ph__img" style="background-image:url('${esc(imgSrc(now)).replace(/'/g, "%27")}')">${badge}</div><div class="ph__meta"><b>${esc(name)}</b><span>${(IMGUSE[o] || { pages: [] }).pages.length} page${(IMGUSE[o] || { pages: [] }).pages.length === 1 ? "" : "s"}</span></div></div>`;
+  return `<div class="ph" data-photo="${esc(o)}"><div class="ph__img" style="${isVid(now) ? "" : `background-image:url('${esc(imgSrc(now)).replace(/'/g, "%27")}')`}">${thumb(now, "ph__vid")}${badge}${isVid(now) ? '<span class="ph__play" aria-hidden="true"></span>' : ""}</div><div class="ph__meta"><b>${esc(name)}</b><span>${(IMGUSE[o] || { pages: [] }).pages.length} page${(IMGUSE[o] || { pages: [] }).pages.length === 1 ? "" : "s"}</span></div></div>`;
 }
 function photoModal(o, url, done) {
   const use = IMGUSE[o] || { pages: [url] };
   const now = imgNow(o, url || "*");
   const onlyHere = url && EDITS.has(ek("image", o, url));
-  modal(`<h2>Replace photo</h2>
-    <img class="modal__img" src="${esc(imgSrc(now))}" alt="">
+  const vidOnly = (IMGUSE[o] || {}).kind === "video", picOnly = (IMGUSE[o] || {}).kind === "share";
+  const what = vidOnly ? "video" : picOnly ? "photo" : "photo or video";
+  modal(`<h2>Replace ${vidOnly ? "video" : "photo"}</h2>
+    ${isVid(now) ? `<video class="modal__img" src="${esc(now)}" muted loop autoplay playsinline controls></video>` : `<img class="modal__img" src="${esc(imgSrc(now))}" alt="">`}
     <p class="muted small">${esc(o.split("?")[0])}<br>Used on: ${use.pages.map(u => esc(pageName(u))).join(", ")}</p>
     ${url && use.pages.length > 1 ? `<label class="small"><input type="checkbox" id="phOnly" ${onlyHere ? "checked" : ""}> Only on ${esc(pageName(url))}</label>` : ""}
-    <p class="muted small">Use a photo of the same shape (wide, tall or square) as the one it replaces, so it fits the layout. JPG or WebP, ideally under 600 KB.</p>
-    <div class="modal__foot">${now !== o ? '<button class="btn" data-orig>Back to the original</button>' : ""}<button class="btn btn--dark" data-up>${ic("upload")}<span>Choose a new photo</span></button></div>`,
+    <p class="muted small">Use the same shape (wide, tall or square) as the one it replaces, so it fits the layout.${vidOnly ? "" : " Photos: JPG or WebP, ideally under 600 KB."}${picOnly ? "" : " Videos: MP4, a few seconds long, under 20 MB. They play silently on a loop."}</p>
+    <div class="modal__foot">${now !== o ? '<button class="btn" data-orig>Back to the original</button>' : ""}<button class="btn btn--dark" data-up>${ic("upload")}<span>Choose a new ${what}</span></button></div>`,
   (box, close) => {
     const scopeUrl = url || "*";
     const only = () => !!($("#phOnly", box) && $("#phOnly", box).checked);
@@ -568,11 +595,16 @@ function photoModal(o, url, done) {
     if (orig) orig.onclick = async () => { await setImage(o, scopeUrl, o, only()); close(); done && done(); toast("Photo set back to the original."); };
     $("[data-up]", box).onclick = () => {
       const pick = $("#filePick"); pick.value = "";
+      pick.accept = vidOnly ? "video/mp4,video/webm,video/quicktime" : picOnly ? "image/*" : "image/*,video/mp4,video/webm,video/quicktime";
       pick.onchange = async () => {
         const f = pick.files[0]; if (!f) return;
+        const vid = /^video\//.test(f.type) || isVid(f.name);
+        if (vidOnly && !vid) return toast("This spot holds a video: choose an MP4 video.", "err");
+        if (picOnly && vid) return toast("This spot only takes a photo.", "err");
+        if (vid && f.size > 50e6) return toast("That video is over 50 MB. Please use a shorter or smaller MP4 (under 20 MB is best).", "err");
         $("[data-up] span", box).textContent = "Uploading…";
-        try { const u = await Store.upload(f); await setImage(o, scopeUrl, u, only()); close(); done && done(); toast("Photo replaced. Publish to put it on the website."); }
-        catch (e) { toast(e.message || "Upload failed.", "err"); $("[data-up] span", box).textContent = "Choose a new photo"; }
+        try { const u = await Store.upload(f); await setImage(o, scopeUrl, u, only()); close(); done && done(); toast((vid ? "Video" : "Photo") + " in place. Publish to put it on the website."); }
+        catch (e) { toast(e.message || "Upload failed.", "err"); $("[data-up] span", box).textContent = "Choose a new " + what; }
       };
       pick.click();
     };
@@ -581,12 +613,82 @@ function photoModal(o, url, done) {
 function viewPhotos(q) {
   const filter = q.get("p") || "";
   const list = Object.values(IMGUSE).filter(x => !filter || x.pages.includes(filter));
-  view().innerHTML = `<div class="pagehead"><div class="grow"><h1>Photos</h1><p class="muted">${list.length} photos on the website. Click one to replace it.</p></div>
+  view().innerHTML = `<div class="pagehead"><div class="grow"><h1>Photos and videos</h1><p class="muted">${list.length} photos and videos on the website. Click one to replace it with a new photo or a video.</p></div>
     <select id="phFilter" style="width:auto;min-width:220px"><option value="">All pages</option>${SEED.pages.filter(p => p.images.length).map(p => `<option value="${esc(p.url)}" ${p.url === filter ? "selected" : ""}>${esc(p.title)}</option>`).join("")}</select></div>
     <div class="photos">${list.map(x => photoCard(x.o, filter || null)).join("") || '<div class="empty">No photos.</div>'}</div>`;
   paintIcons(view());
   $("#phFilter").onchange = e => go("#/photos" + (e.target.value ? "?p=" + encodeURIComponent(e.target.value) : ""));
   $(".photos", view()).addEventListener("click", e => { const c = e.target.closest("[data-photo]"); if (c) photoModal(c.dataset.photo, filter || null, () => viewPhotos(q)); });
+}
+
+/* ---------- fonts ----------
+   Four groups (tools/cms/fonts.json). A choice is saved like a word change: kind "text", o "font:<group>", t the font,
+   scope "@fonts". On publish tools/cms/cms.py writes assets/cms-fonts.css, which every page loads last. */
+const FONTCFG = () => SEED.fonts || { groups: [], fonts: [], live: {} };
+const fontGroup = id => FONTCFG().groups.find(g => g.id === id) || { id, name: id, default: "", vars: [] };
+const fontInfo = name => FONTCFG().fonts.find(f => f.name === name) || { name, kind: "sans", spec: "" };
+const fontNow = id => (EDITS.get(ek("text", "font:" + id, "@fonts")) || {}).t || fontGroup(id).default;
+const fontLive = id => FONTCFG().live["font:" + id] || fontGroup(id).default;
+const fontStack = name => { const k = fontInfo(name).kind; return `"${name}", ` + (k === "serif" ? "Georgia, serif" : k === "mono" ? '"Courier New", monospace' : '"Helvetica Neue", Arial, sans-serif'); };
+const fontLine = h => `Font for ${fontGroup(h.o.slice(5)).name}: ${h.after || fontGroup(h.o.slice(5)).default + " (the original)"}`;
+const fontUrl = names => "https://fonts.googleapis.com/css2?" + [...new Set(names)].map(n => { const f = fontInfo(n); return "family=" + n.replace(/ /g, "+") + (f.spec ? ":" + f.spec : ""); }).join("&") + "&display=swap";
+const fontsLoaded = new Set();
+function loadFonts(doc, names) {   // add the Google Fonts for these families to a document (this page, or the preview)
+  const want = names.filter(n => n && !(doc === document && fontsLoaded.has(n)));
+  if (!want.length) return;
+  for (let i = 0; i < want.length; i += 12) {
+    const l = doc.createElement("link"); l.rel = "stylesheet"; l.href = fontUrl(want.slice(i, i + 12)); doc.head.appendChild(l);
+  }
+  if (doc === document) want.forEach(n => fontsLoaded.add(n));
+}
+function pvFonts(doc) {   // the preview shows the saved (not yet published) font choices
+  if (!doc) return;
+  const groups = FONTCFG().groups, rules = [], names = [];
+  for (const g of groups) { const n = fontNow(g.id); if (n !== fontLive(g.id) || n !== g.default) { names.push(n); for (const v of g.vars) rules.push(`${v}: ${fontStack(n)} !important;`); } }
+  let st = doc.getElementById("cms-pv-fonts");
+  if (!st) { st = doc.createElement("style"); st.id = "cms-pv-fonts"; doc.head.appendChild(st); }
+  st.textContent = rules.length ? `:root, .cscroll { ${rules.join(" ")} }` : "";
+  loadFonts(doc, names);
+}
+async function setFont(id, name) {
+  const o = "font:" + id, g = fontGroup(id), key = ek("text", o, "@fonts");
+  const before = fontNow(id);
+  if (before === name) return;
+  saving++; saveState("Saving…");
+  try {
+    if (name === g.default) { if (EDITS.has(key)) { await Store.remove("text", o, "@fonts"); EDITS.delete(key); } }
+    else { const row = { kind: "text", o, t: name, scope: "@fonts", page: "@fonts" }; await Store.upsert(row); EDITS.set(key, Object.assign({ updated_at: new Date().toISOString(), updated_by: ME.email }, row)); }
+    const h = { kind: "text", o, scope: "@fonts", page: "@fonts", before, after: name === g.default ? null : name, at: new Date().toISOString(), by: ME.email };
+    HIST.unshift(h); await Store.addHistory(h);
+    saveState("All changes saved", true);
+  } catch (e) { console.error(e); saveState(""); toast("Could not save: " + (e.message || e), "err"); }
+  finally { saving--; refreshPub(); }
+}
+function viewFonts() {
+  const { groups, fonts } = FONTCFG();
+  loadFonts(document, fonts.map(f => f.name));
+  const kinds = [["sans", "Clean (sans serif)"], ["serif", "Classic (serif)"], ["mono", "Typewriter (monospace)"]];
+  const options = (g, cur) => (g.mono ? [kinds[2], kinds[0], kinds[1]] : kinds).map(([k, label]) =>
+    `<optgroup label="${label}">${fonts.filter(f => f.kind === k).map(f => `<option value="${esc(f.name)}" ${f.name === cur ? "selected" : ""}>${esc(f.name)}${f.name === g.default ? " (original)" : ""}</option>`).join("")}</optgroup>`).join("");
+  const card = g => {
+    const cur = fontNow(g.id), live = fontLive(g.id);
+    const badge = cur !== live ? '<span class="badge">Not published</span>' : cur !== g.default ? '<span class="badge badge--live">Changed</span>' : "";
+    return `<div class="card fontcard" data-g="${esc(g.id)}">
+      <div class="fontcard__top"><div class="grow"><h2>${esc(g.name)} ${badge}</h2><p class="muted small">${esc(g.hint)}</p></div>
+        <select data-font aria-label="Font for ${esc(g.name)}">${options(g, cur)}</select></div>
+      <div class="fontcard__sample${g.upper ? " up" : ""}" style='font-family:${esc(fontStack(cur))}'>${esc(g.sample)}</div>
+      <div class="fontcard__foot"><span class="muted small">Now: <b>${esc(cur)}</b>${cur !== g.default ? ` · original: ${esc(g.default)}` : ""}</span>${cur !== g.default ? '<button class="linkbtn" data-orig type="button">Back to the original</button>' : ""}</div>
+    </div>`;
+  };
+  view().innerHTML = `<div class="pagehead"><div class="grow"><h1>Fonts</h1><p class="muted">The website uses four groups of fonts. Pick a font for a group and every page changes together. Open any page to see it in the preview, then publish.</p></div>
+    <a class="btn" href="#/page?u=%2F">${ic("desktop")}<span>See it on the home page</span></a></div>
+    <div class="fontgrid">${groups.map(card).join("")}</div>`;
+  paintIcons(view());
+  $$(".fontcard", view()).forEach(c => {
+    const id = c.dataset.g;
+    $("[data-font]", c).onchange = async e => { await setFont(id, e.target.value); viewFonts(); toast("Font saved. Publish to put it on the website."); };
+    const o = $("[data-orig]", c); if (o) o.onclick = async () => { await setFont(id, fontGroup(id).default); viewFonts(); toast("Back to the original font."); };
+  });
 }
 
 /* ---------- search everywhere ---------- */
@@ -609,14 +711,15 @@ function viewActivity() {
   const rows = HIST.slice(0, 200);
   view().innerHTML = `<div class="pagehead"><div class="grow"><h1>Activity</h1><p class="muted">Every change, newest first. Undo puts the words back as they were before that change.</p></div></div>
     <div class="card">${rows.length ? rows.map((h, i) => `<div class="act"><span class="avatar">${esc(initials(h.by))}</span>
-      <span class="what">${h.kind === "image" ? `Photo ${h.after ? "replaced" : "set back to the original"}` : h.after == null ? `Set back to the original: “${esc(h.o.slice(0, 120))}”` : `<s>${esc((h.before || "").slice(0, 120))}</s> → ${esc(h.after.slice(0, 160))}`}</span>
+      <span class="what">${h.scope === "@fonts" ? esc(fontLine(h)) : h.kind === "image" ? `Photo ${h.after ? "replaced" : "set back to the original"}` : h.after == null ? `Set back to the original: “${esc(h.o.slice(0, 120))}”` : `<s>${esc((h.before || "").slice(0, 120))}</s> → ${esc(h.after.slice(0, 160))}`}</span>
       <button class="btn btn--sm" data-undo="${i}">${ic("undo")}Undo</button>
-      <span class="meta">${esc(h.page ? pageName(h.page) : "")}${h.scope !== "*" ? " only" : ""} · ${esc(h.by || "")} · ${esc(ago(h.at))}</span></div>`).join("") : '<div class="empty">No changes yet.</div>'}</div>`;
+      <span class="meta">${esc(h.page ? pageName(h.page) : "")}${h.scope !== "*" && h.scope !== "@fonts" ? " only" : ""} · ${esc(h.by || "")} · ${esc(ago(h.at))}</span></div>`).join("") : '<div class="empty">No changes yet.</div>'}</div>`;
   paintIcons(view());
   $$("[data-undo]", view()).forEach(b => b.onclick = async () => {
     const h = rows[+b.dataset.undo];
     if (!await confirmBox("Undo this change?", "The words go back to how they were before it. You can publish afterwards.", "Undo")) return;
-    if (h.kind === "image") await setImage(h.o, h.scope === "*" ? (h.page || "*") : h.scope, h.before, h.scope !== "*");
+    if (h.scope === "@fonts") await setFont(h.o.slice(5), h.before || fontGroup(h.o.slice(5)).default);
+    else if (h.kind === "image") await setImage(h.o, h.scope === "*" ? (h.page || "*") : h.scope, h.before, h.scope !== "*");
     else {
       const k = Object.keys(SEED.fields).find(x => SEED.fields[x].o === h.o);
       if (!k) { toast("Those words are no longer on the website.", "err"); return; }

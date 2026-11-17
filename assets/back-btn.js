@@ -4,7 +4,7 @@
 (() => {
   const me = document.currentScript, up = (me && me.dataset.up) || '/';
   const css = `.back-btn { position: fixed; right: 22px; bottom: 22px; z-index: 40; display: inline-flex; align-items: center; gap: 10px;
-      height: 46px; padding: 0 18px 0 14px; border-radius: 999px; border: 1px solid rgba(15,42,30,.12);
+      height: 46px; padding: 0 18px 0 14px; border-radius: 10px; border: 1px solid rgba(15,42,30,.12);
       background: #FCFCFC; color: #0F2A1E; font: 500 14px/1 var(--sans, system-ui); letter-spacing: .01em; cursor: pointer;
       -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 6px 24px rgba(0,0,0,.28);
       opacity: 0; transform: translateY(8px); transition: opacity .4s, transform .4s, background .2s, border-color .2s; }

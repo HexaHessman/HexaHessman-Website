@@ -36,7 +36,10 @@ jobs:
             git commit -m "CMS: publish${{ github.event.client_payload.by && format(' (by {0})', github.event.client_payload.by) || '' }}"
             for i in 1 2 3; do git push && break; git pull --rebase -X theirs origin main; done
           fi
-      - name: Publish on Vercel
+      # The live site (Vercel project "hexahessman-website") rebuilds by itself from the push above, through Vercel's
+      # GitHub connection. This extra step only refreshes the developer's preview copy; if it fails, the publish still counts.
+      - name: Refresh the developer's preview copy (optional)
+        continue-on-error: true
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: team_jKKXknwiGFvv4m5ILqnzrzCb

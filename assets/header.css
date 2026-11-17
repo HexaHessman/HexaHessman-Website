@@ -54,14 +54,15 @@ html { scroll-padding-top: 120px; }
 .actions { display: flex; gap: 9px; }
 .btn {
   display: inline-flex; flex-direction: row; gap: .28em; align-items: center; justify-content: center; white-space: nowrap;
-  min-height: 44px; padding: 10px 30px; border-radius: 980px; border: 0;   /* longer button (client, 2026-11-11) */
+  min-height: 44px; padding: 10px 30px; border-radius: 8px; border: 0;   /* longer button (client, 2026-11-11) */
   font-family: var(--hdr-sans); font-size: 13.5px; font-weight: 600; letter-spacing: 0; line-height: 1.2;
   text-transform: none; text-align: center; text-decoration: none;
   color: var(--hdr-dark);
   cursor: pointer; transition: filter .2s, transform .2s;
 }
 .btn span { display: block; }
-.btn:hover { filter: brightness(1.06); }
+.btn { transition: background-color .3s, color .3s; }
+.btn:hover { background: #1F7A4A; color: #fff; }   /* the colour changes and the words roll up (btn-roll.js) */
 .btn:active { transform: translateY(1px); }
 .btn.primary { background: #eee3c7; }   /* the site's ink, in place of Terminal's lime */
 .btn.light   { background: #ffffff; }

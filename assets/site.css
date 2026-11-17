@@ -17,6 +17,7 @@
   --mono: "Montserrat", "Helvetica Neue", Arial, sans-serif;
   --display: "League Spartan", "Montserrat", "Helvetica Neue", Arial, sans-serif;
   --chart: "Barlow", "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --type: "Courier Prime", "Courier New", monospace;   /* typewriter labels */
   --gutter: clamp(20px, 4vw, 52px);
   --max: 1280px;            /* the header bar's width: every page's words start on the bar's left edge, as on the sulphur page */
   --edge: max(var(--gutter), calc((100% - var(--max)) / 2));   /* that left / right edge, for absolutely placed words */
@@ -100,11 +101,12 @@ ul.list li::before { content: ""; position: absolute; left: 0; top: .72em; width
 
 /* buttons (page-level; header .btn comes from header.css) */
 .btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
-a.pill, button.pill { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 11px 22px; border-radius: 980px; border: 1px solid var(--line-strong);
+a.pill, button.pill { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 11px 22px; border-radius: 8px; border: 1px solid var(--line-strong);
   font-family: var(--sans); font-size: 15px; font-weight: 500; letter-spacing: -.01em; text-transform: none; text-decoration: none; color: var(--ink); background: transparent; cursor: pointer; transition: background .2s, color .2s, filter .2s; }
-a.pill:hover, button.pill:hover { background: rgba(var(--ink-rgb),.08); }
+a.pill, button.pill { transition: background-color .3s, color .3s, border-color .3s; }
+a.pill:hover, button.pill:hover { background: var(--ink); color: var(--paper-2, #0F2A1E); border-color: var(--ink); }
 a.pill.solid, button.pill.solid { background: var(--ink); color: var(--paper-2); border-color: var(--ink); }
-a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
+a.pill.solid:hover, button.pill.solid:hover { background: #1F7A4A; border-color: #1F7A4A; color: #fff; }
 
 /* enquiry block (G7) */
 .enquiry { padding: clamp(28px, 6vh, 72px) 0; display: grid; gap: 20px; justify-items: center; text-align: center; max-width: 760px; margin: 0 auto; }   /* no box, centred (user, 2026-11-06) */
@@ -210,7 +212,7 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 /* the office's people, out in front of the globe (globe.js) */
 .gp-line { position: absolute; left: 0; right: 0; bottom: 0; height: 62%; pointer-events: none; z-index: 2; }
 .gp-fig { position: absolute; left: 50%; bottom: 0; width: 46%; margin: 0; z-index: var(--z); transform: translateX(calc(-50% + var(--x))) scale(var(--s)); transform-origin: 50% 100%; }
-.gp-fig img { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 30%); mask-image: linear-gradient(to top, transparent 0%, #000 30%);
+.gp-fig :is(img, video) { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 30%); mask-image: linear-gradient(to top, transparent 0%, #000 30%);
   opacity: 0; transform: translateY(14%); filter: blur(calc(var(--z) * 0px)); }
 .gp-fig figcaption { position: absolute; left: 50%; bottom: 6%; transform: translateX(-50%); text-align: center; white-space: nowrap; display: grid; gap: 2px; opacity: 0; }
 .gp-fig figcaption b { font-size: 15px; font-weight: 500; color: var(--ink); }
@@ -232,11 +234,11 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 @media (max-width: 900px) { .gp-name b { font-size: 13px; line-height: 1.12; } .gp-name span { font-size: 10px; line-height: 1.25; } .gp-name { gap: 2px; }
 }
 @media (max-width: 420px) { .gp-name b { font-size: 12px; } .gp-name span { font-size: 9.5px; } }
-.gp-line.in .gp-fig img { animation: gpIn .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--k) * .14s); }
+.gp-line.in .gp-fig :is(img, video) { animation: gpIn .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--k) * .14s); }
 .gp-line.in .gp-fig figcaption { animation: gpCap .6s ease forwards; animation-delay: calc(.45s + var(--k) * .14s); }
 @keyframes gpIn { to { opacity: 1; transform: none; } }
 @keyframes gpCap { to { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .gp-fig img, .gp-fig figcaption { opacity: 1; transform: none; animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .gp-fig :is(img, video), .gp-fig figcaption { opacity: 1; transform: none; animation: none !important; } }
 .globe-side { display: grid; gap: 22px; align-content: center; padding: 0 var(--gutter) 0 40px; }
 .globe-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .globe-list button { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--ink-soft); font-family: var(--sans); font-size: 14px; text-align: left; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
@@ -337,14 +339,14 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 /* ---------- product photos in the commodities scroll ---------- */
 /* the frame itself is never clipped (an IntersectionObserver ignores clipped-away targets), only the picture inside it */
 .cs-photo { display: block; position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 6px; margin-bottom: 10px; }
-.cs-photo img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 6px; filter: saturate(.9);
+.cs-photo :is(img, video) { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 6px; filter: saturate(.9);
   clip-path: inset(100% 0 0 0 round 6px); transform: scale(1.12);
   transition: clip-path 1.1s cubic-bezier(.2,.7,.2,1), transform 1.6s cubic-bezier(.2,.7,.2,1), filter .5s; }
 .cs-photo::after { content: ""; position: absolute; inset: 0; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(var(--ink-rgb),.12); pointer-events: none; opacity: 0; transition: opacity .8s .5s; }
-.cs-photo.in img { clip-path: inset(0 0 0 0 round 6px); transform: scale(1); }
+.cs-photo.in :is(img, video) { clip-path: inset(0 0 0 0 round 6px); transform: scale(1); }
 .cs-photo.in::after { opacity: 1; }
-.cs-photo.in:hover img { transform: scale(1.04); filter: saturate(1.05); }
-@media (prefers-reduced-motion: reduce) { .cs-photo img { clip-path: none; transform: none; } }
+.cs-photo.in:hover :is(img, video) { transform: scale(1.04); filter: saturate(1.05); }
+@media (prefers-reduced-motion: reduce) { .cs-photo :is(img, video) { clip-path: none; transform: none; } }
 
 /* ---------- engineering hub: arrival, logo carousel, word-by-word statement, one stop per principal ---------- */
 .eng-arrive { padding-bottom: 54px; }
@@ -376,7 +378,7 @@ a.pill.solid:hover, button.pill.solid:hover { filter: brightness(1.06); }
 .ep-photo, .ep-copy { grid-row: 1; }
 .ep.left .ep-photo { grid-column: 1 / span 6; } .ep.left .ep-copy { grid-column: 8 / span 5; }   /* photos a little smaller (user, 2026-11-06) */
 .ep.right .ep-photo { grid-column: 7 / span 6; } .ep.right .ep-copy { grid-column: 1 / span 5; }
-.ep .ep-photo { margin: 0; border-radius: 8px; } .ep .ep-photo img { border-radius: 8px; }
+.ep .ep-photo { margin: 0; border-radius: 8px; } .ep .ep-photo :is(img, video) { border-radius: 8px; }
 .ep .ep-photo::after { display: none; }   /* no frame line; just the light running round the photo's own edge */
 .ep-run { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; opacity: 0; transition: opacity .6s ease; }
 .ep-photo.in .ep-run { opacity: 1; transition-delay: 1s; }   /* the line comes in after the photo has wiped in (client, 2026-11-07) */
@@ -429,7 +431,7 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 /* each product group is one screen (client, 2026-11-11, from their mock-up): the window on one side and, beside it,
    the group's name and all its products, kept between the window's top and bottom edges. The screen pins while the
    scene plays, then the next group comes up. Type: League Spartan names, Inter lines, a typewriter "View product". */
-.cscroll { --cs-display: 'League Spartan', var(--sans); --cs-body: 'Montserrat', var(--sans); --cs-mono: 'Courier Prime', 'Courier New', monospace; }
+.cscroll { --cs-display: var(--display); --cs-body: var(--sans); --cs-mono: var(--type); }
 .cs-intro .cs-h2 { font-family: var(--cs-display); font-weight: 700; letter-spacing: -.025em; line-height: .95; }
 .cs-intro .cs-fill { font-family: var(--cs-body); }
 .cs-fill { font-size: clamp(15.5px, 1.1vw, 17.5px); font-weight: 500; line-height: 1.45; letter-spacing: 0; color: var(--ink); max-width: 44ch; }
@@ -490,12 +492,12 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 /* ---------- commodities hub: market prices under the scroll (client, 2026-11-11, after chemportal.com.tr/markets):
    a live strip, then dated reference cards in the scroll's type (markets.js, data in /assets/market-prices.json) ---------- */
 .markets { --mk-fg: #0F2A1E; --mk-rgb: 15,42,30; position: relative; z-index: 2; background: #FCFCFC; color: var(--mk-fg);
-  padding: clamp(90px, 14vh, 160px) var(--gutter) clamp(80px, 12vh, 140px); font-family: 'Montserrat', var(--sans); }
+  padding: clamp(90px, 14vh, 160px) var(--gutter) clamp(80px, 12vh, 140px); font-family: var(--sans); }
 .markets a { color: inherit; }
 .mk-head { max-width: 1280px; margin: 0 auto clamp(36px, 6vh, 64px); display: grid; gap: 16px; }
-.mk-eyebrow, .mk-label, .mk-date, .mk-src, .mk-wa { font-family: 'Courier Prime', 'Courier New', monospace; text-transform: uppercase; letter-spacing: .04em; }
+.mk-eyebrow, .mk-label, .mk-date, .mk-src, .mk-wa { font-family: var(--type); text-transform: uppercase; letter-spacing: .04em; }
 .mk-eyebrow { margin: 0; font-size: 13px; color: rgba(var(--mk-rgb), .7); }
-.mk-h2 { margin: 0; font-family: 'League Spartan', var(--sans); font-weight: 700; text-transform: uppercase; font-size: clamp(40px, 5.4vw, 80px); line-height: .9; letter-spacing: -.02em; }
+.mk-h2 { margin: 0; font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(40px, 5.4vw, 80px); line-height: .9; letter-spacing: -.02em; }
 .mk-lead { margin: 0; max-width: 52ch; font-weight: 500; font-size: clamp(14.5px, 1.1vw, 17.5px); line-height: 1.45; color: rgba(var(--mk-rgb), .76); }
 .mk-live { max-width: 1280px; margin: 0 auto clamp(28px, 4vh, 44px); border-top: 1px solid rgba(var(--mk-rgb), .16); border-bottom: 1px solid rgba(var(--mk-rgb), .16); padding: 12px 0 6px; }
 .mk-label { margin: 0 0 6px; font-size: 12px; color: rgba(var(--mk-rgb), .82); display: flex; align-items: center; gap: 8px; }
@@ -509,10 +511,10 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
   opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .9s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i) * .06s); }
 .markets.in .mk-card { opacity: 1; transform: none; }
 .mk-date { margin: 0; font-size: 12px; color: rgba(var(--mk-rgb), .6); }
-.mk-name { margin: 4px 0 0; font-family: 'League Spartan', var(--sans); font-weight: 700; font-size: clamp(22px, 1.9vw, 30px); line-height: 1; letter-spacing: -.02em; }
+.mk-name { margin: 4px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(22px, 1.9vw, 30px); line-height: 1; letter-spacing: -.02em; }
 .mk-name a { text-decoration: none; } .mk-name a:hover { text-decoration: underline; text-underline-offset: .14em; text-decoration-thickness: 2px; }
 .mk-price { margin: 6px 0 0; display: flex; align-items: baseline; gap: 8px; }
-.mk-price b { font-family: 'League Spartan', var(--sans); font-weight: 700; font-size: clamp(38px, 3.4vw, 54px); line-height: .95; letter-spacing: -.03em; }
+.mk-price b { font-family: var(--display); font-weight: 700; font-size: clamp(38px, 3.4vw, 54px); line-height: .95; letter-spacing: -.03em; }
 .mk-price span { font-size: 14px; color: rgba(var(--mk-rgb), .6); }
 .mk-move { font-size: 14px; font-weight: 500; }
 .mk-move.up { color: #2f7a45; } .mk-move.down { color: #a33a2a; } .mk-move.flat { color: rgba(var(--mk-rgb), .55); }
@@ -521,7 +523,7 @@ html.lenis, html.lenis body { height: auto; } .lenis.lenis-smooth { scroll-behav
 .mk-src a { text-decoration: underline; text-underline-offset: 3px; }
 .mk-ask { align-content: start; }
 .mk-wa { justify-self: start; margin-top: 10px; font-size: 13px; text-decoration: none; display: inline-flex; gap: .8em; align-items: center; }
-.mk-wa span { font-family: 'Montserrat', var(--sans); font-size: 1.25em; transition: transform .25s; } .mk-wa:hover span { transform: translateX(4px); }
+.mk-wa span { font-family: var(--sans); font-size: 1.25em; transition: transform .25s; } .mk-wa:hover span { transform: translateX(4px); }
 .mk-note { max-width: 1280px; margin: clamp(24px, 4vh, 40px) auto 0; font-size: 12.5px; line-height: 1.5; color: rgba(var(--mk-rgb), .55); }
 @media (prefers-reduced-motion: reduce) { .mk-card { opacity: 1; transform: none; transition: none; } .mk-label i { animation: none; } }
 @media (max-width: 600px) { .markets { padding-left: 20px; padding-right: 20px; } .mk-grid { grid-template-columns: 1fr; } }
@@ -620,3 +622,14 @@ section.spec-white { background: #FCFCFC; color: #0F2A1E; border-top: 0;
   --paper: #FCFCFC; --paper-2: #FCFCFC; --paper-3: #F3F5F2; --paper-rgb: 252,252,252;
   --ink: #0F2A1E; --ink-soft: rgba(15,42,30,.8); --ink-rgb: 15,42,30; --muted: rgba(15,42,30,.6); --line: rgba(15,42,30,.14); --line-strong: rgba(15,42,30,.3); }
 section.spec-white + section.spec-white { padding-top: 0; }
+
+/* a photo swapped for a video in the website editor (/admin): it fills the same spot (tools/cms/cms.py) */
+video.cms-vid { display: block; max-width: 100%; object-fit: cover; }
+
+/* buttons: on hover the words roll up and a copy comes in from below (assets/btn-roll.js, user 2026-11-17) */
+:is(.btn, .pill) .roll { display: inline-grid; overflow: hidden; vertical-align: top; padding: .1em 0; margin: -.1em 0; }   /* beats the header's ".btn span { display: block }" */
+.roll > span { grid-area: 1 / 1; transition: transform .42s cubic-bezier(.2, .7, .2, 1); }
+.roll-b { transform: translateY(115%); }
+:is(.btn, a.pill, button.pill):hover .roll-a, :is(.btn, a.pill, button.pill):focus-visible .roll-a { transform: translateY(-115%); }
+:is(.btn, a.pill, button.pill):hover .roll-b, :is(.btn, a.pill, button.pill):focus-visible .roll-b { transform: none; }
+@media (prefers-reduced-motion: reduce) { .roll > span { transition: none; } }

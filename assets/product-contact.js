@@ -6,7 +6,7 @@
 (() => {
   const me = document.currentScript, d = (me && me.dataset) || {}, up = d.up || '/';
   const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const css = `.pc-dock { position: fixed; right: 22px; bottom: 22px; z-index: 40; display: flex; align-items: center; gap: 12px; font-family: 'Montserrat', var(--sans, system-ui);
+  const css = `.pc-dock { position: fixed; right: 22px; bottom: 22px; z-index: 40; display: flex; align-items: center; gap: 12px; font-family: var(--sans, 'Montserrat', system-ui);
       opacity: 0; transform: translateY(8px); transition: opacity .4s, transform .4s; }
     .pc-dock.on { opacity: 1; transform: none; }
     html.no-scroll .pc-dock { opacity: 0; pointer-events: none; }
@@ -14,11 +14,11 @@
     .pc-back { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; padding: 0; }
     .pc-back svg { width: 22px; height: 22px; transition: transform .2s; }
     .pc-back:hover svg { transform: translateX(-3px); }
-    .pc-open { height: 54px; border-radius: 999px; display: flex; align-items: center; gap: 10px; padding: 0 22px 0 8px; text-align: left; font: 700 13px/1.25 'Montserrat', var(--sans, system-ui); }
+    .pc-open { height: 54px; border-radius: 14px; display: flex; align-items: center; gap: 10px; padding: 0 22px 0 8px; text-align: left; font: 700 13px/1.25 var(--sans, 'Montserrat', system-ui); }
     .pc-open:hover, .pc-back:hover { background: #fff; transform: translateY(-1px); }
     .pc-open img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; background: #1B221F; filter: grayscale(1); }
     .pc-open span { display: block; }
-    .pc-veil { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px; background: rgba(60,66,63,.62); opacity: 0; pointer-events: none; transition: opacity .3s; font-family: 'Montserrat', var(--sans, system-ui); }
+    .pc-veil { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px; background: rgba(60,66,63,.62); opacity: 0; pointer-events: none; transition: opacity .3s; font-family: var(--sans, 'Montserrat', system-ui); }
     .pc-veil.on { opacity: 1; pointer-events: auto; }
     .pc-card { position: relative; width: min(940px, 100%); background: #263C34; color: #fff; border-radius: 34px; padding: clamp(26px, 4vw, 56px); display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(20px, 3vw, 44px); align-items: center;
       transform: translateY(14px) scale(.98); transition: transform .35s cubic-bezier(.2,.7,.2,1); box-shadow: 0 30px 80px rgba(0,0,0,.4); }

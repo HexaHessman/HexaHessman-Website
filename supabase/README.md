@@ -11,7 +11,7 @@ GitHub repository: `HexaHessman/HexaHessman-Website`. Vercel project: `hexahessm
 
 ## 2. Supabase: the owner's sign-in
 1. **Authentication > Users > Add user > Create new user**: the same owner email, a strong password, tick **Auto Confirm User**.
-2. **Authentication > URL Configuration**: Site URL `https://hexahessman.vercel.app`, and add `https://hexahessman.vercel.app/admin/` to the Redirect URLs (for "Forgot your password?").
+2. **Authentication > URL Configuration**: Site URL `https://hexahessman-website.vercel.app`, and add `https://hexahessman-website.vercel.app/admin/` to the Redirect URLs (for "Forgot your password?").
 3. Everyone else is added later by the owner inside the editor: **Team > Add a person**.
 
 ## 3. Supabase: the two keys
@@ -31,7 +31,7 @@ GitHub repository: `HexaHessman/HexaHessman-Website`. Vercel project: `hexahessm
 | `VERCEL_TOKEN` | a Vercel token: vercel.com > your picture > **Account Settings > Tokens > Create** |
 
 ## 5. Vercel
-Project `hexahessman` > **Settings > Environment Variables**, for Production:
+Project `hexahessman-website` (the live site, which rebuilds from GitHub on every push) > **Settings > Environment Variables**, for Production:
 
 | Name | Value |
 |---|---|
@@ -44,7 +44,7 @@ Project `hexahessman` > **Settings > Environment Variables**, for Production:
 Then deploy the site again so the new settings are used.
 
 ## 6. First sign-in
-Open `https://hexahessman.vercel.app/admin/` and sign in with the owner email and password.
+Open `https://hexahessman-website.vercel.app/admin/` and sign in with the owner email and password.
 
 ## How publishing works
 - Typing in a box saves the change in Supabase at once. Nothing on the website changes yet.
@@ -56,5 +56,8 @@ Open `https://hexahessman.vercel.app/admin/` and sign in with the owner email an
 ## For the developer
 - `admin/seed.json` (the list of every editable word and photo) is rewritten by every build.
 - A change matches whole runs of words only (a heading, a paragraph, a button), never part of a sentence.
+- Any photo can be swapped for a photo or an MP4 video (it then plays muted on a loop in the same spot). The site's own clips take only videos.
+- **Fonts** has four groups (tools/cms/fonts.json). A choice is saved as a change with scope `@fonts`; publishing writes `assets/cms-fonts.css`, which every page loads last.
+- The "where it comes from" bar on product pages sizes itself from its legend's percentages (assets/pp-bar.js).
 - A changes file downloaded in draft mode can be applied by hand: `python3 tools/cms/cms.py apply hexahessman-changes.json`.
 - When a developer later rewrites a sentence in the code, any edit made to the old sentence stops matching. It is still listed in Activity and can be made again.

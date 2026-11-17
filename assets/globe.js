@@ -21,7 +21,7 @@ const OFFICES = [
 const sec = document.getElementById('globe'); if (!sec) throw new Error('no #globe');
 // the people for each office come from the About team (data-people), everyone in that office
 let TEAM = []; try { TEAM = JSON.parse(sec.dataset.people || '[]'); } catch (e) {}
-if (TEAM.length) OFFICES.forEach(o => { o.leads = TEAM.filter(p => p.office === o.id).map(p => P(p.slug, p.name, p.role)); });
+if (TEAM.length) OFFICES.forEach(o => { o.leads = TEAM.filter(p => p.office === o.id).map(p => Object.assign(P(p.slug, p.name, p.role), { nophoto: !!p.nophoto })); });
 // who stands where in an office's line (the middle one stands in front): Adam Yeoh in the middle, Hafriz Razif on his right (user, 2026-11-07)
 // each cutout's head sits a little differently in its photo: dx moves the head onto its spot (in % of the figure's width),
 // s can even out a figure's size
@@ -120,7 +120,8 @@ function select(i, byUser) {
   tabs.forEach((t, k) => t.setAttribute('aria-selected', String(k === i)));
   pins.forEach((p, k) => p.label.classList.toggle('active', k === i));
   // the office's people step out in front of the globe, as in the About lineup: the first in front, the rest either side
-  const L = o.leads || [], mid = (L.length - 1) / 2, GAP = 36;   // head-to-head spacing, in % of a figure's width
+  // people without a photo (Contact only, client 2026-11-17) are listed in the card but don't stand in the line
+  const L = (o.leads || []).filter(l => !l.nophoto), mid = (L.length - 1) / 2, GAP = 36;   // head-to-head spacing, in % of a figure's width
   // an office of two: both the same size, standing a little further apart, so neither is the bigger one (client, 2026-11-12).
   // FRONT only decides who overlaps whom where their shoulders meet.
   const pair = L.length === 2, PAIR_GAP = 52, fk = pair ? L.findIndex(l => l.slug === FRONT[o.id]) : -1;

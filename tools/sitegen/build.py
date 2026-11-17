@@ -4,6 +4,7 @@
 Usage: python3 build.py [site_root]   (default /Users/poopiepie/Hexahessman)
 Does not touch /index.html or anything in /assets/.
 """
+import urllib.parse
 import json
 import html as _html
 import os
@@ -473,15 +474,17 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=1112a">
-<link rel="stylesheet" href="/assets/site.css?v=1117a">
+<link rel="stylesheet" href="/assets/header.css?v=1117a">
+<link rel="stylesheet" href="/assets/site.css?v=1117d">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
 html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;background:#0F2A1E;pointer-events:none;animation:hxEnter 1s .15s cubic-bezier(.4,0,.2,1) forwards}}
 @keyframes hxEnter{{to{{opacity:0;visibility:hidden}}}}
 @media (prefers-reduced-motion: reduce){{html.hx-enter body::after{{animation-duration:.01s}}}}</style>
-{head_tags}</head>
+{head_tags}<link rel="stylesheet" href="/assets/cms-fonts.css">
+<script src="/assets/btn-roll.js?v=1" defer></script>
+</head>
 <body{f' class="{body_class}"' if body_class else ""}>
 <div id="site-header"></div>
 <main>
@@ -507,14 +510,14 @@ def back_btn(up, spot=None):
     """the floating Back button on product and principal pages (user, 2026-11-06); `up` is where it goes with no history.
     `spot` (a commodity's slug): Back always returns to the main Commodities page where the visitor left off (client, 2026-11-07)"""
     extra = f' data-spot="{spot}"' if spot else ''
-    return f'<script src="/assets/back-btn.js?v=4" data-up="{up}"{extra} defer></script>\n'
+    return f'<script src="/assets/back-btn.js?v=5" data-up="{up}"{extra} defer></script>\n'
 
 
 def product_contact(up, spot):
     """the floating Back circle and Contact pill on product pages (client's PDF, 2026-11-11); opens the contact card"""
     c = PP.CONTACT
     attrs = "".join(f' data-{k}="{esc_attr(v)}"' for k, v in c.items() if v)
-    return f'<script src="/assets/product-contact.js?v=2" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=6" defer></script>\n<script src="/assets/related-folders.js?v=1" defer></script>\n'
+    return f'<script src="/assets/product-contact.js?v=3" data-up="{up}" data-spot="{spot}"{attrs} defer></script>\n<script src="/assets/product-lines.js?v=6" defer></script>\n<script src="/assets/related-folders.js?v=1" defer></script>\n<script src="/assets/pp-bar.js?v=1" defer></script>\n'
 
 
 def write(relpath, html):
@@ -647,25 +650,25 @@ PRODUCT_FONTS = ""   # the three faces now load on every page (page(), client 20
 PRODUCT_CSS = """
 /* product pages after the client's own layout (Hafriz's PDF, 2026-11-11): white page, wide photo hero, League Spartan
    capitals for headings, Montserrat words, Barlow charts with a dark green header row, dark green drop-down pills */
-.pp { --pp-green: #142B21; --pp-ink: #0C1410; --pp-soft: #5F6964; --pp-line: #56635D; background: #fff; color: var(--pp-ink); font-family: 'Montserrat', var(--sans); }
+.pp { --pp-green: #142B21; --pp-ink: #0C1410; --pp-soft: #5F6964; --pp-line: #56635D; background: #fff; color: var(--pp-ink); font-family: var(--sans); }
 .pp-w { width: min(1280px, calc(100% - 2 * var(--gutter))); margin: 0 auto; }
 .pp-hero { position: relative; min-height: clamp(430px, 36vw, 600px); padding-top: 150px; box-sizing: border-box; display: flex; align-items: flex-end; overflow: hidden; background: #0B0F0D; color: #fff; }
-.pp-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
+.pp-hero > :is(img, video) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
 .pp-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.72), rgba(0,0,0,.42) 45%, rgba(0,0,0,.1) 78%), linear-gradient(180deg, rgba(0,0,0,.42), transparent 38%, rgba(0,0,0,.4)); }
 .pp-hero .pp-w { position: relative; z-index: 1; padding-bottom: clamp(24px, 3vw, 44px); }
 /* every product's name at one size, not too big (client, 2026-11-12; short names used to run to 104px) */
-.pp-hero h1, .pp-hero h1.long { margin: 0; max-width: 18ch; font-family: 'League Spartan', var(--sans); font-weight: 800; text-transform: uppercase; font-size: clamp(34px, 4.2vw, 64px); line-height: .9; letter-spacing: -.03em; color: #fff; }
+.pp-hero h1, .pp-hero h1.long { margin: 0; max-width: 18ch; font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(34px, 4.2vw, 64px); line-height: .9; letter-spacing: -.03em; color: #fff; }
 .pp-hero p { margin: 16px 0 0; max-width: 52ch; font-weight: 600; font-size: clamp(15px, 1.25vw, 19px); line-height: 1.38; color: #fff; }
 .pp-sec { padding: clamp(40px, 5vw, 66px) 0; border-bottom: 1px solid var(--pp-line); }
 .pp-sec:last-child { border-bottom: 0; }
-.pp-h { margin: 0 0 clamp(22px, 2.8vw, 36px); font-family: 'League Spartan', var(--sans); font-weight: 700; text-transform: uppercase; font-size: clamp(28px, 2.9vw, 42px); line-height: 1; letter-spacing: -.03em; color: #000; }
+.pp-h { margin: 0 0 clamp(22px, 2.8vw, 36px); font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(28px, 2.9vw, 42px); line-height: 1; letter-spacing: -.03em; color: #000; }
 .pp-over p { max-width: 78ch; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.6; color: #2B332F; margin: 0 0 14px; }
 .pp-over p:last-child { margin-bottom: 0; }
 /* product types: three photos with rounded corners, the name and a short line under each */
 .pp-types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4.4vw, 68px); align-items: start; }
 .pp-types.n2 { grid-template-columns: repeat(2, minmax(0, 400px)); justify-content: center; }
 .pp-types.n1 { grid-template-columns: minmax(0, 400px); justify-content: center; }
-.pp-type img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 26px; background: #EEF0EE; }
+.pp-type :is(img, video) { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 26px; background: #EEF0EE; }
 .pp-type h3 { margin: 22px 0 0; text-align: center; font-weight: 600; font-size: clamp(16px, 1.4vw, 20px); letter-spacing: 0; }
 .pp-type p { margin: 6px auto 0; max-width: 36ch; text-align: center; font-size: 13.5px; line-height: 1.45; color: var(--pp-soft); }
 /* the client's layout (mock-ups, 2026-11-12): two photos on the left, their words on the right, grade cards centred below */
@@ -677,6 +680,12 @@ PRODUCT_CSS = """
 .pp-grades { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: clamp(28px, 3.4vw, 46px); }
 .pp-grades .pp-type { flex: 0 1 calc((100% - 32px) / 3); box-sizing: border-box; background: #F1F3F1; border-radius: 22px; padding: 24px 20px 22px; }
 .pp-grades .pp-type h3 { margin-top: 0; }
+/* every grade card the same (user, 2026-11-17): the name on one line, the words on exactly two, so the cards all match in size on every page */
+.pp-grades .pp-type, .pp-types.text .pp-type { display: flex; flex-direction: column; justify-content: center; }
+.pp-grades .pp-type h3, .pp-types.text .pp-type h3 { font-size: clamp(15px, 1.25vw, 18px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pp-grades .pp-type p, .pp-types.text .pp-type p { max-width: none; min-height: calc(2em * 1.45); }
+@media (min-width: 700px) and (max-width: 1180px) { .pp-grades .pp-type, .pp-types.text .pp-type { padding-left: 14px; padding-right: 14px; } .pp-grades .pp-type p, .pp-types.text .pp-type p { font-size: 13px; } }
+@media (min-width: 700px) { .pp-grades .pp-type p, .pp-types.text .pp-type p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }
 .pp-types.text { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; justify-content: stretch; }
 .pp-types.text.n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pp-types.text.n4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .pp-types.text .pp-type { height: 100%; box-sizing: border-box; background: #F1F3F1; border-radius: 22px; padding: 26px 22px 24px; }
@@ -691,7 +700,7 @@ PRODUCT_CSS = """
 .pp-lines path { fill: none; vector-effect: non-scaling-stroke; }
 .pp-lines .ppl-line { stroke: rgba(15,42,30,.22); stroke-width: 1.3; }
 .pp-lines .ppl-run { stroke: #0F2A1E; stroke-width: 2.4; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(15,42,30,.6)) drop-shadow(0 0 10px rgba(15,42,30,.3)); }
-.pp-lined .pp-type img { position: relative; }
+.pp-lined .pp-type :is(img, video) { position: relative; }
 @media (max-width: 900px) { .pp-lines .ppl-run { stroke-width: 2; } }   /* phones have their own route for the line (product-lines.js) */
 /* charts */
 .pp-tt { margin: 26px 0 10px; font-weight: 600; font-size: 15px; letter-spacing: 0; }
@@ -713,12 +722,12 @@ PRODUCT_CSS = """
 .pp-apps li { font-family: var(--chart); font-weight: 600; font-size: 14.5px; padding: 11px 12px; border-bottom: 1px solid #C5CCC8; }
 /* product resources: big figures, two pictures, the "where it comes from" bar */
 .pp-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; margin-bottom: 30px; }
-.pp-stat b { font-family: 'League Spartan', var(--sans); font-weight: 700; font-size: clamp(40px, 4.4vw, 62px); line-height: 1; letter-spacing: .015em; }
+.pp-stat b { font-family: var(--display); font-weight: 700; font-size: clamp(40px, 4.4vw, 62px); line-height: 1; letter-spacing: .015em; }
 .pp-stat sup { position: relative; top: -.2em; margin-left: 8px; vertical-align: baseline; font-weight: 500; font-size: 13px; color: #B98A14; }
 .pp-stat span { display: block; margin-top: 10px; max-width: 21ch; font-size: 15px; line-height: 1.45; }
 .pp-pics { display: grid; grid-template-columns: 3fr 4fr; gap: 14px; }
 .pp-pics.n1 { grid-template-columns: 1fr; }
-.pp-pics img { display: block; width: 100%; height: clamp(230px, 26vw, 390px); object-fit: cover; background: #111; }
+.pp-pics :is(img, video) { display: block; width: 100%; height: clamp(230px, 26vw, 390px); object-fit: cover; background: #111; }
 .pp-pics img[src*='.svg'] { object-fit: contain; background: #161613; }
 .pp-mix { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 6vw, 90px); align-items: center; margin-top: 34px; }
 .pp-bar-t { margin: 0; text-transform: uppercase; letter-spacing: .22em; font-weight: 500; font-size: 12px; color: #1D4A3B; }
@@ -786,7 +795,7 @@ PRODUCT_CSS = """
 @media (prefers-reduced-motion: reduce) { .pp-swipe span { animation: none; } }
 @media (max-width: 560px) {
   .pp-types, .pp-types.n2, .pp-types.text, .pp-types.text.n2, .pp-types.text.n4 { grid-template-columns: 1fr; }
-  .pp-type img { max-width: 340px; margin: 0 auto; }
+  .pp-type :is(img, video) { max-width: 340px; margin: 0 auto; }
   .pp-grades .pp-type { flex-basis: 100%; }
   .pp-duo .pp-type h3 { font-size: 14.5px; margin-top: 14px; } .pp-duo .pp-type p { font-size: 12.5px; }
   .pp-feats { grid-template-columns: 1fr; }
@@ -1143,6 +1152,8 @@ def _ship_svg():
 SHIP_SVG = _ship_svg()
 
 
+SPX_MARK = "M780 8510 l0 -7990 2740 0 2740 0 0 2067 0 2068 940 -940 940 -940 970 970 970 970 0 -2098 0 -2097 2745 0 2745 0 0 7990 0 7990 -2740 0 -2740 0 0 -2102 0 -2103 -975 975 -975 975 -2867 -2868 -2868 -2867 1200 -1200 c660 -660 1203 -1200 1207 -1200 5 0 8 228 8 507 l0 508 -692 692 -693 693 1053 1053 1052 1052 0 -4688 0 -4687 -2020 0 -2020 0 0 7270 0 7270 2020 0 2020 0 0 -1557 0 -1558 360 360 360 360 0 1557 0 1558 -2740 0 -2740 0 0 -7990z m14070 0 l0 -7270 -2020 0 -2020 0 0 2102 0 2103 1532 1532 1533 1533 -1173 1172 -1172 1173 0 -515 0 -515 660 -660 660 -660 -2347 -2347 c-1292 -1292 -2352 -2348 -2358 -2348 -5 0 -432 422 -947 937 l-938 938 0 2825 0 2825 940 940 940 940 975 -975 975 -975 0 -2245 0 -2245 360 360 360 360 0 4142 0 4143 2020 0 2020 0 0 -7270z"
+
 ABOUT_CSS = """
 /* About hero: the shophouse street drawn in line, stroke by stroke, left to right and street up */
 .story-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start; }   /* text straight under the title, no gap (user, 2026-11-06) */
@@ -1417,6 +1428,46 @@ ABOUT_CSS = """
   .tg-pic { padding: 5px; } .tg-meta { padding: 14px 8px 16px; } .tg-meta b { font-size: 14px; } .tg-meta span { font-size: 11.5px; } .tg-meta small { font-size: 11.5px; }
 }
 @media (prefers-reduced-motion: reduce) { .tg-slide img { transform: none; transition: none; } }
+
+/* What we specialise in: two dark panels running into the HexaHessman mark, a light looping round them (user, 2026-11-17) */
+.spx { position: relative; background: #FCFCFC; color: #0F2A1E; padding: clamp(36px, 4vw, 60px) 0; }   /* no heading (client, 2026-11-17): the same space above and below */
+.spx-wrap { --mh: clamp(240px, 16.5vw, 255px); --mw: calc(var(--mh) * 0.9255); position: relative; width: min(100% - 2 * var(--gutter), 1500px); margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) var(--mw) minmax(0, 1fr); height: var(--mh); }
+/* the heading on the white, big and in the green (user, 2026-11-17) */
+.spx-h { width: min(100% - 2 * var(--gutter), 1500px); margin: 0 auto clamp(26px, 3vw, 44px); text-align: center; white-space: nowrap; font-family: var(--display); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .02em; font-size: min(clamp(40px, 5vw, 80px), 6.4vw); line-height: 1.05; color: #0F2A1E; }
+.spx-p { position: relative; z-index: 0; display: flex; flex-direction: column; justify-content: flex-start; gap: 18px; background: #0F2A1E; color: #EEE3C7;
+  padding: clamp(26px, 3vw, 46px); }
+.spx-l { grid-column: 1; margin-right: calc(var(--mw) * -0.2); padding-right: calc(var(--mw) * 0.2 + clamp(24px, 3vw, 46px)); border-radius: 14px 0 0 14px; }
+.spx-r { grid-column: 3; margin-left: calc(var(--mw) * -0.2); padding-left: calc(var(--mw) * 0.2 + clamp(24px, 3vw, 46px)); border-radius: 0 14px 14px 0; }
+.spx-c { display: grid; gap: 10px; }
+.spx-c h3 { margin: 0; font-family: var(--sans); font-weight: 600; font-size: clamp(19px, 1.6vw, 24px); color: #EEE3C7; }
+.spx-c p { margin: 0; font-size: 14px; line-height: 1.6; color: rgba(238,227,199,.74); max-width: 46ch; }
+.spx-c .more { justify-self: start; margin-top: 6px; font-size: 13px; font-weight: 500; color: #EEE3C7; text-decoration: none; }
+.spx-c .more::after { content: ""; position: absolute; inset: 0; }   /* the whole panel is the link */
+.spx-p:hover .more { text-decoration: underline; text-underline-offset: 4px; }
+.spx-r .spx-c { justify-items: end; text-align: right; }   /* the two sides mirror each other: left on the left edge, right on the right (user, 2026-11-17) */
+.spx-r .spx-c .more { justify-self: end; }
+.spx-mark { grid-column: 2; position: relative; z-index: 1; }
+.spx-mark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.spx-fr { fill: #FCFCFC; }
+.spx-ink { fill: #0F2A1E; }
+.spx-line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 2; }
+.spx-line path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.spx-base { stroke: none; }   /* only the travelling light shows (user, 2026-11-17) */
+.spx-run { stroke: #3DBB78; stroke-width: 2.6; stroke-dasharray: 6 94; filter: drop-shadow(0 0 5px rgba(61,187,120,.95)); opacity: 0; }
+.spx.on .spx-run { opacity: 1; animation: spxRun 11s linear infinite; }
+.spx.on .spx-run.b { animation-delay: -5.5s; }
+@keyframes spxRun { to { stroke-dashoffset: -100; } }
+@media (max-width: 760px) {
+  .spx-wrap { --mh: 230px; height: auto; grid-template-columns: 1fr; grid-template-rows: auto var(--mh) auto; justify-items: center; }
+  .spx-p { width: 100%; margin: 0; padding: 30px 24px; }
+  .spx-l { grid-column: 1; grid-row: 1; border-radius: 14px 14px 0 0; padding-right: 24px; }
+  .spx-r { grid-column: 1; grid-row: 3; border-radius: 0 0 14px 14px; padding-left: 24px; }
+  .spx-r .spx-c { justify-items: start; text-align: left; } .spx-r .spx-c .more { justify-self: start; }
+  .spx-mark { grid-column: 1; grid-row: 2; width: var(--mw); height: var(--mh); }
+}
+@media (prefers-reduced-motion: reduce) { .spx.on .spx-run { animation: none; opacity: 0; } }
 """
 
 
@@ -1462,7 +1513,52 @@ def build_about():
     {stops}
   </div>
 </section>''')
-    specialise = section(grid([card(h, p, href=href, more="Learn more →") for h, p, href in A["specialise"]], "c2"), title="What we specialise in", id_="specialise")
+    # What we specialise in (user, 2026-11-17): the two divisions as dark panels either side of the HexaHessman mark, the
+    # panels running into its two frames; one line runs round both panels and through the diamond, a light travelling
+    # along it on an endless loop (the path is measured from the boxes, so it fits any width)
+    (sh1, sp1, shref1), (sh2, sp2, shref2) = A["specialise"][:2]
+    specialise = f'''<section class="spx" id="specialise" aria-label="What we specialise in"><div class="spx-wrap">
+  <div class="spx-p spx-l"><div class="spx-c"><h3>{esc(sh1)}</h3><p>{esc(sp1)}</p><a class="more" href="{shref1}">Learn more →</a></div></div>
+  <div class="spx-mark" aria-hidden="true"><svg viewBox="74 80 1490 1606" preserveAspectRatio="none"><rect class="spx-fr" x="140" y="146" width="424" height="1474"/><rect class="spx-fr" x="1071" y="146" width="424" height="1474"/><g transform="translate(0,1734) scale(0.1,-0.1)"><path class="spx-ink" d="{SPX_MARK}"/></g></svg></div>
+  <div class="spx-p spx-r"><div class="spx-c"><h3>{esc(sh2)}</h3><p>{esc(sp2)}</p><a class="more" href="{shref2}">Learn more →</a></div></div>
+  <svg class="spx-line" aria-hidden="true"><path class="spx-base" pathLength="100"/><path class="spx-run" pathLength="100"/><path class="spx-run b" pathLength="100"/></svg>
+</div>
+<script>
+(() => {{
+  // the loop, in the mark's own units: frames x 78-626 and 1009-1557, y 84-1682; the diamond's outer edge has its
+  // top at (814, 309.5), bottom at (814, 1456.5) and meets the frames at y 504.5 (top) and 1261.5 / 1268.5 (bottom)
+  const sec = document.currentScript.closest('.spx'), wrap = sec.querySelector('.spx-wrap');
+  const mk = sec.querySelector('.spx-mark'), L = sec.querySelector('.spx-l'), R = sec.querySelector('.spx-r');
+  const paths = [...sec.querySelectorAll('.spx-line path')];
+  const draw = () => {{
+    const W = wrap.getBoundingClientRect(), m = mk.getBoundingClientRect(), l = L.getBoundingClientRect(), r = R.getBoundingClientRect();
+    const k = m.width / 1479, ox = m.left - W.left, oy = m.top - W.top;
+    const f = (x, y) => `${{(ox + (x - 78) * k).toFixed(1)}},${{(oy + (y - 84) * (m.height / 1598)).toFixed(1)}}`;
+    const c = 14, P = (x, y) => `${{x.toFixed(1)}},${{y.toFixed(1)}}`;
+    let d;
+    if (l.top < m.top - 2) {{   // phones: panel above, mark, panel below; the line runs round both and down the mark's sides
+      const t1 = l.left - W.left, t2 = l.right - W.left, tt = l.top - W.top, tb = l.bottom - W.top;
+      const b1 = r.left - W.left, b2 = r.right - W.left, bt = r.top - W.top, bb = r.bottom - W.top;
+      d = `M${{f(78, 84)}} L${{P(t1, tb)}} L${{P(t1, tt + c)}} Q${{P(t1, tt)}} ${{P(t1 + c, tt)}} L${{P(t2 - c, tt)}} Q${{P(t2, tt)}} ${{P(t2, tt + c)}} L${{P(t2, tb)}} L${{f(1557, 84)}}`
+        + ` L${{f(1557, 1682)}} L${{P(b2, bt)}} L${{P(b2, bb - c)}} Q${{P(b2, bb)}} ${{P(b2 - c, bb)}} L${{P(b1 + c, bb)}} Q${{P(b1, bb)}} ${{P(b1, bb - c)}} L${{P(b1, bt)}} L${{f(78, 1682)}} Z`;
+    }} else {{
+      const lx = l.left - W.left, rx = r.right - W.left, top = m.top - W.top, bot = m.bottom - W.top;
+      d = `M${{f(626, 84)}} L${{P(lx + c, top)}} Q${{P(lx, top)}} ${{P(lx, top + c)}} L${{P(lx, bot - c)}} Q${{P(lx, bot)}} ${{P(lx + c, bot)}} L${{f(626, 1682)}}`
+        + ` L${{f(626, 1268.5)}} L${{f(814, 1456.5)}} L${{f(1009, 1261.5)}} L${{f(1009, 1682)}}`
+        + ` L${{P(rx - c, bot)}} Q${{P(rx, bot)}} ${{P(rx, bot - c)}} L${{P(rx, top + c)}} Q${{P(rx, top)}} ${{P(rx - c, top)}} L${{f(1009, 84)}}`
+        + ` L${{f(1009, 504.5)}} L${{f(814, 309.5)}} L${{f(626, 504.5)}} Z`;
+    }}
+    paths.forEach(p => p.setAttribute('d', d));
+  }};
+  draw();
+  new ResizeObserver(draw).observe(wrap);
+  if (document.fonts) document.fonts.ready.then(draw);
+  // the light only runs while the section is on screen
+  new IntersectionObserver(es => es.forEach(e => sec.classList.toggle('on', e.isIntersecting)), {{ rootMargin: '100px' }}).observe(sec);
+}})();
+</script>
+</section>'''
+
     # the team lookbook: everyone in one line (team-lookbook.js), a part of the globe at the side (team-globe.js)
     people = [dict(name=n, role=r, entity=e, slug=slug, office=o, city=A["office_pins"][o][0], country=A["office_pins"][o][1],
                    lat=A["office_pins"][o][2], lon=A["office_pins"][o][3], blurb=b) for n, r, e, slug, o, b in A["team"]]
@@ -1605,7 +1701,26 @@ CONTACT_CSS = """
 .form .help-row { margin-top: -10px; }
 .form .two { align-items: end; }
 .contact-form { min-width: 0; }
-@media (max-width: 900px) { .contact-grid { grid-template-columns: minmax(0, 1fr); } .contact-aside { position: static; order: 2; } .form .two { grid-template-columns: minmax(0, 1fr); } }
+.ca-col { display: grid; gap: 26px; align-self: start; position: sticky; top: 110px; }
+.ca-col .contact-aside { position: relative; top: auto; }
+.ca-glow { position: absolute; inset: -9px; width: calc(100% + 18px); height: calc(100% + 18px); overflow: visible; pointer-events: none; }
+.ca-glow rect { x: 1px; y: 1px; width: calc(100% - 2px); height: calc(100% - 2px); rx: 22px; fill: none; }
+.ca-gl-line { stroke: rgba(46,158,98,.4); stroke-width: 1.2; }
+.ca-gl-run { stroke: #3DBB78; stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 8 92; filter: drop-shadow(0 0 5px rgba(61,187,120,.95)); animation: caRun 9s linear infinite; }
+.ca-map .ca-gl-run { animation-delay: -4.5s; }
+@keyframes caRun { to { stroke-dashoffset: -100; } }
+.ca-map { margin: 0; display: grid; gap: 12px; }
+.ca-map-f { position: relative; }
+/* the map: the full width of the page, no frame, no caption (client, 2026-11-17) */
+.ca-map-sec { background: #FCFCFC; line-height: 0; }
+.ca-map-sec iframe { display: block; width: 100%; height: clamp(320px, 38vw, 560px); border: 0; }
+
+.ca-map figcaption { display: grid; gap: 2px; font-size: 13.5px; line-height: 1.5; padding: 0 4px; }
+.ca-map figcaption b { font-weight: 600; }
+.ca-map figcaption span { color: var(--ink-soft, #5F6964); }
+.ca-map figcaption a { margin-top: 4px; justify-self: start; font-weight: 500; }
+@media (prefers-reduced-motion: reduce) { .ca-gl-run { animation: none; opacity: 0; } }
+@media (max-width: 900px) { .contact-grid { grid-template-columns: minmax(0, 1fr); } .ca-col { position: static; order: 2; } .contact-aside { position: static; order: 2; } .form .two { grid-template-columns: minmax(0, 1fr); } }
 .form .help.error { color: #f0b49a; }
 .form input.invalid { border-color: #f0b49a; }
 .contact-card h3 { margin-bottom: 6px; }
@@ -1666,6 +1781,7 @@ def build_contact():
     body.append(f"""<section class="hero pr-hero contact-hero"><div class="media"><img src="/assets/contact-office.jpg?v=2"{phone_srcset("/assets/contact-office.jpg?v=2")} alt="The HexaHessman office" fetchpriority="high"></div>
 <div class="wrap">{crumbs([("Home", "/"), ("Contact", None)])}<p class="eyebrow">{esc(K["eyebrow"])}</p><h1>{esc(K["h1"])}</h1><p class="lead">{esc(K["lead"])}</p></div></section>""")   # their office photo (from hexahessman.com's about page)
     team = [{"name": n, "role": r, "slug": s, "office": o} for n, r, e, s, o, _ in C.ABOUT["team"]]   # everyone in each office, Singapore included (user, 2026-11-06)
+    team += [{"name": n, "role": r, "slug": s, "office": o, "nophoto": True} for n, r, s, o in K.get("people_only_here", [])]   # listed in their office's card, no cutout
     body.append(f'<section id="globe" class="globe" data-people="{_html.escape(json.dumps(team, ensure_ascii=False), quote=True)}"></section>')   # the office globe, under the photo hero
 
     groups_opts = "".join(f'<option>{esc(g["name"])}</option>' for g in C.GROUPS)
@@ -1706,10 +1822,17 @@ def build_contact():
     commits = "".join(f'<div class="ca-item"><h3>{esc(h)}</h3><p>{esc(p)}</p>'
                       + (f'<a class="pill ca-wa" href="{WA[h][0]}"{"" if WA[h][0].startswith("mailto:") else ' target="_blank" rel="noopener"'}>{esc(WA[h][1])}</a>' if h in WA else '')
                       + '</div>' for h, p in K["commitments"])
-    aside = f'''<aside class="contact-aside" id="response">
-  <p class="eyebrow">Response commitments</p>{commits}
-</aside>'''
+    # a light runs round the box and round the map below it, like the lines elsewhere on the site; the map is the
+    # Singapore headquarters on Google Maps (user, 2026-11-17)
+    glow = '<svg class="ca-glow" aria-hidden="true"><rect class="ca-gl-line" pathLength="100"/><rect class="ca-gl-run" pathLength="100"/></svg>'
+    hq = "HexaHessman Pte. Ltd., 39 Arab Street, Singapore 199738"
+    aside = f'''<div class="ca-col"><aside class="contact-aside" id="response">
+  <p class="eyebrow">Response commitments</p>{commits}{glow}
+</aside>
+</div>'''
     body.append(section(f'<div class="contact-grid">{aside}<div class="contact-form">{form}</div></div>', title=K["form_h"], id_="quote"))
+    # the map gets the full width, below the whole form (client, 2026-11-17)
+    body.append(f'''<section class="ca-map-sec" aria-label="Our Singapore headquarters"><iframe src="https://www.google.com/maps?q={urllib.parse.quote(hq)}&amp;z=17&amp;output=embed" title="HexaHessman headquarters in Singapore on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></section>''')
 
     # (the "Direct contacts" block was removed at the user's request, 2026-11-05)
 
@@ -1724,7 +1847,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=23"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=24"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 
