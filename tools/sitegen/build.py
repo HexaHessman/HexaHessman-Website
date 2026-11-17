@@ -1160,10 +1160,16 @@ ABOUT_CSS = """
 .story-text { display: grid; gap: 14px; }
 #story .section-head h2 { font-size: clamp(34px, 3.6vw, 54px); }   /* a little bigger (client, 2026-11-17) */
 #story .section-head { margin-bottom: clamp(22px, 2.4vw, 34px); }
-.story-tag { margin-top: 10px; padding-top: 18px; border-top: 1px solid rgba(238,227,199,.16); font-size: clamp(16px, 1.3vw, 19px); font-weight: 500; line-height: 1.45; color: inherit; }   /* their tagline closes the story, in the same colour as the story (client, 2026-11-17) */
-.story-logo { aspect-ratio: 1; width: 100%; max-width: 460px; justify-self: center; margin-top: clamp(-90px, -6vw, -40px); opacity: 0; transition: opacity .8s ease; }
+.story-tag { margin-top: 10px; padding-top: 18px; border-top: 1px solid rgba(238,227,199,.16); font-size: clamp(17px, 1.4vw, 20px); font-weight: 700; line-height: 1.45; color: inherit; }   /* their tagline closes the story, in the same colour as the story (client, 2026-11-17) */
+.story-logo { position: relative; aspect-ratio: 1; width: 100%; max-width: 460px; justify-self: center; margin-top: clamp(-90px, -6vw, -40px); opacity: 0; transition: opacity .8s ease; }
 .story-logo.in { opacity: 1; }
-.story-logo iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
+.story-logo iframe { position: relative; width: 100%; height: 100%; border: 0; display: block; background: transparent; }
+/* the heritage street, very light, behind the whole Our story section; it fades out towards the logo on the right (user, 2026-11-17) */
+#story { position: relative; isolation: isolate; overflow: hidden; }
+.story-heritage { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 60%; opacity: .11; mix-blend-mode: screen; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 38%, transparent 66%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%); -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, #000 0%, #000 38%, transparent 66%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%); mask-composite: intersect; }
+@media (max-width: 820px) { .story-heritage { -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 55%, transparent 80%); mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 55%, transparent 80%); } }   /* phones: the logo sits under the words, so it fades out downwards */
 @media (max-width: 820px) { .story-grid { grid-template-columns: 1fr; } .story-logo { max-width: 360px; } }
 .about-hero2 { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 100svh; min-height: 560px; overflow: hidden; background: #0F2A1E; }   /* full 16:9, the drawing fills it, words over the top (user, 2026-11-06) */
 .about-hero2 .wrap { position: absolute; z-index: 2; left: var(--edge); bottom: clamp(32px, 7%, 80px); width: min(700px, 100% - 2 * var(--gutter)); display: grid; gap: 12px; justify-items: start; text-align: left; }   /* bottom left (user) */
@@ -1171,6 +1177,10 @@ ABOUT_CSS = """
 .about-hero2::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 72% 64% at 16% 100%, rgba(15,42,30,.97) 36%, rgba(15,42,30,.74) 60%, transparent 82%); }   /* the shade sits under the words, which now start on the bar's edge */
 .about-hero2 .lead { color: var(--ink); font-weight: 600; }
 .about-street { position: absolute; inset: 0; z-index: 0; display: flex; align-items: flex-end; justify-content: center; }
+/* the 3D grab scene fills the hero behind the words (user, 2026-11-17) */
+.about-crane { position: absolute; inset: 0; z-index: 0; opacity: 0; transition: opacity 1s ease; }
+.about-hero2.go .about-crane { opacity: 1; }
+.about-crane iframe { width: 100%; height: 100%; border: 0; display: block; pointer-events: none; }
 .shop-draw { position: relative; width: 100%; }   /* the whole street, edge to edge, standing on the bottom of the frame */
 .shop-draw img { display: block; width: 100%; height: auto;   /* fades in from left to right behind a wide soft edge, no pen line (user, 2026-11-06) */
   -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 30%, transparent 70%); mask-image: linear-gradient(90deg, #000 0%, #000 30%, transparent 70%);
@@ -1206,6 +1216,8 @@ ABOUT_CSS = """
     background: radial-gradient(ellipse 72% 66% at 42% 52%, rgba(15,42,30,.94) 0%, rgba(15,42,30,.86) 48%, rgba(15,42,30,.5) 74%, rgba(15,42,30,0) 100%); }
   .about-street { position: relative; z-index: 1; inset: auto; overflow: hidden; justify-content: center; }
   .shop-draw { flex: none; width: 250%; }
+  .about-hero2 .wrap { margin-bottom: 0; }
+  .about-crane { position: relative; inset: auto; width: 100%; aspect-ratio: 4 / 3; margin-top: 8px; }
 }
 .about-hero { position: relative; height: 210svh; }   /* the hero holds for about a screen while the logo turns */
 .about-pin { position: sticky; top: 0; height: 100svh; min-height: 0; align-items: flex-end; padding-top: 140px; }
@@ -1488,14 +1500,17 @@ def build_about():
     <h1>{esc(A["h1"])}</h1>
     <p class="lead">{esc(A["lead"])}</p>
   </div>
-  <div class="about-street">{shop}</div>
+  <div class="about-crane" aria-hidden="true"><iframe src="/sulphur3d.html?mode=grab&v=1117a" title="" tabindex="-1"></iframe></div>
 <script>
-(() => {{   // the drawing sweeps in once it has loaded, then the words follow
-  const h = document.currentScript.closest('.about-hero2'), img = h.querySelector('.shop-draw img');
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {{ h.classList.add('go', 'words'); return; }}
+(() => {{   // the scene fades in once loaded, then the words follow; scrolling moves the grab across
+  const h = document.currentScript.closest('.about-hero2'), f = h.querySelector('.about-crane iframe');
   let done = false;
-  const go = () => {{ if (done) return; done = true; h.classList.add('go'); setTimeout(() => h.classList.add('words'), 1600); }};
-  if (img.complete && img.naturalWidth) go(); else {{ img.addEventListener('load', go, {{ once: true }}); img.addEventListener('error', go, {{ once: true }}); setTimeout(go, 3000); }}
+  const go = () => {{ if (done) return; done = true; h.classList.add('go'); setTimeout(() => h.classList.add('words'), 500); send(true); }};
+  const post = m => {{ if (f.contentWindow) f.contentWindow.postMessage(m, '*'); }};
+  const send = jump => {{ const p = Math.min(1, Math.max(0, scrollY / Math.max(1, h.offsetHeight * 0.9))); post({{ type: 'hero-progress', p, jump }}); }};
+  f.addEventListener('load', () => setTimeout(go, 300), {{ once: true }}); setTimeout(go, 3500);
+  addEventListener('scroll', () => send(false), {{ passive: true }});
+  new IntersectionObserver(([e]) => post({{ type: 'scene-pause', v: !e.isIntersecting }})).observe(h);
 }})();
 </script>
 </section>"""]
@@ -1602,7 +1617,7 @@ def build_about():
 }})();
 </script>
 </section>''')
-    story_sec = section(f'''<div class="story-grid"><div class="story-text">{story}<p class="story-tag">Navigating with Excellence in Consultancy, Energy and Engineering.</p></div>
+    story_sec = section(f'''<div class="story-grid"><div class="story-text"><img class="story-heritage" src="/assets/about-shophouses.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">{story}<p class="story-tag">Navigating with Excellence in Consultancy, Energy and Engineering.</p></div>
   <div class="story-logo" aria-hidden="true"><iframe data-src="/logo.html?embed&story&v=9" title="" tabindex="-1"></iframe></div></div>
 <script>
 (() => {{

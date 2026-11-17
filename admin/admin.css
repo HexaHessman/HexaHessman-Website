@@ -69,6 +69,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--blue); box-shado
 .pubcard { margin-top: auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 16px 16px; display: grid; gap: 6px; }
 .pubcard__icon { width: 34px; height: 34px; border-radius: 10px; background: var(--soft); display: grid; place-items: center; margin-bottom: 4px; }
 .pubcard p { margin: 0 0 6px; font-size: 12.5px; }
+.publist { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 6px; }
+.publist:empty { display: none; }
+.publist li { font-size: 12px; line-height: 1.35; color: var(--ink2, #424245); padding-left: 12px; position: relative; overflow-wrap: anywhere; }
+.publist li::before { content: ""; position: absolute; left: 0; top: .5em; width: 5px; height: 5px; border-radius: 50%; background: #1d1d1f; }
+.publist li.more::before { display: none; }
+.publist li.more a { color: var(--blue, #0071e3); text-decoration: none; }
 .meter { height: 4px; border-radius: 4px; background: var(--line); overflow: hidden; margin: 2px 0 10px; }
 .meter span { display: block; height: 100%; background: var(--dark); border-radius: 4px; transition: width .4s; }
 .me { display: flex; align-items: center; gap: 10px; padding: 4px 4px 0 6px; }

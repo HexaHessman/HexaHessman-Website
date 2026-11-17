@@ -198,11 +198,28 @@ const pending = () => {
   for (const h of HIST) if (new Date(h.at).getTime() > since) seen.add(ek(h.kind, h.o, h.scope));
   return seen.size;
 };
+/* the changes waiting to be published, newest first, one line each (user, 2026-11-17: say what they are) */
+const pendingList = () => {
+  const since = lastPublish() ? new Date(lastPublish().created_at).getTime() : 0;
+  const seen = new Set(), out = [];
+  for (const h of HIST) { if (new Date(h.at).getTime() <= since) continue; const k = ek(h.kind, h.o, h.scope); if (seen.has(k)) continue; seen.add(k); out.push(h); }
+  return out;
+};
+function changeLine(h) {
+  const cut = (t, n) => { t = String(t || "").replace(/\s+/g, " ").trim(); return t.length > n ? t.slice(0, n - 1) + "…" : t; };
+  const where = h.page && h.scope !== "@fonts" ? " · " + pageName(h.page) : "";
+  try {
+    if (h.scope === "@fonts") return fontLine(h);
+    if (h.kind === "image") return (h.after ? (isVid(h.after) ? "Video put in" : "Photo replaced") : "Photo set back to the original") + where;
+  } catch (e) {}
+  return (h.after == null ? `Set back: “${cut(h.o, 34)}”` : `“${cut(h.after, 40)}”`) + where;
+}
 const refreshPub = () => {
-  const n = pending(), lp = lastPublish();
+  const list = pendingList(), n = list.length, lp = lastPublish();
   $("#pubTitle").textContent = n ? `${n} change${n > 1 ? "s" : ""} waiting` : "Everything is published";
   $("#pubText").textContent = n ? "Publish to put them on the website." : lp ? `Last published ${ago(lp.created_at)}.` : "Your changes go live when you publish.";
-  $("#pubMeter").style.width = n ? Math.min(100, 12 + n * 8) + "%" : "100%";
+  const ul = $("#pubList");
+  if (ul) ul.innerHTML = list.slice(0, 3).map(h => `<li>${esc(changeLine(h))}</li>`).join("") + (n > 3 ? `<li class="more"><a href="#/activity">and ${n - 3} more</a></li>` : "");
   $("#publishBtn").disabled = !n && LIVE;
 };
 let saving = 0;

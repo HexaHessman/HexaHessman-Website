@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=4">
+<link rel="stylesheet" href="admin.css?v=5">
 </head>
 <body>
 
@@ -44,7 +44,7 @@
       <div class="pubcard__icon" aria-hidden="true"><i data-i="send"></i></div>
       <b id="pubTitle">Everything is published</b>
       <p id="pubText" class="muted">Your changes go live when you publish.</p>
-      <div class="meter"><span id="pubMeter" style="width:0"></span></div>
+      <ul class="publist" id="pubList"></ul>
       <button class="btn btn--dark btn--block" id="publishBtn" type="button"><i data-i="send"></i><span>Publish to website</span></button>
     </div>
     <div class="me">
@@ -75,6 +75,6 @@
 
 <script src="config.js?v=1"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="admin.js?v=4"></script>
+<script src="admin.js?v=5"></script>
 </body>
 </html>
