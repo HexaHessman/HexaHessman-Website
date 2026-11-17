@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=1117a">
-<link rel="stylesheet" href="/assets/site.css?v=1117d">
+<link rel="stylesheet" href="/assets/site.css?v=1117e">
 <style>
 .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(36px, 5vw, 56px) clamp(24px, 3vw, 48px); align-items: start; }   /* three to a row, no boxes (user, 2026-11-06) */
 .trio-col { border-top: 1px solid var(--line); padding-top: 22px; display: grid; gap: 12px; align-content: start; }
@@ -167,6 +167,9 @@
 .form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }   /* (a long option in a drop-down used to widen the form past a narrow phone screen) */
 .form label, .form .two > * { min-width: 0; }
 .form .two { display: grid; gap: 20px; grid-template-columns: 1fr 1fr; }
+.form .form-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }   /* a trap for spam robots, never seen */
+.form-sent { padding: 26px 28px; border-radius: 14px; background: #EEF3EF; color: #0F2A1E; font-size: 16px; line-height: 1.6; }
+.form-sent b { display: block; font-size: 20px; margin-bottom: 4px; }
 .form label { display: grid; gap: 8px; font-family: var(--sans); font-size: 13.5px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); }
 .form input, .form select, .form textarea { width: 100%; height: 50px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line-strong); background: rgba(var(--ink-rgb), .05); color: var(--ink); font: 500 15px/1.4 var(--sans); transition: border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
 .form select { background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 22px) 22px, calc(100% - 17px) 22px; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 40px; }
@@ -231,7 +234,13 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 </aside>
 </div><div class="contact-form">
 <span id="datasheet"></span><span id="sample"></span><span id="service"></span>
-<form class="form" action="#" method="post" enctype="multipart/form-data" novalidate>
+<p class="form-sent" id="form-sent" hidden role="status"><b>Thank you, your enquiry has been sent.</b> Our team will reply to the email address you gave.</p>
+<form class="form" action="https://formsubmit.co/inquiry@hexahessman.com" method="post" enctype="multipart/form-data" novalidate>
+  <input type="hidden" name="_subject" value="New enquiry from the HexaHessman website">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="https://hexahessman-website.vercel.app/contact/?sent=1#quote">
+  <input type="text" name="_honey" class="form-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
   <div class="two">
     <label>Full name *<input type="text" name="name" required autocomplete="name"></label>
     <label>Company *<input type="text" name="company" required autocomplete="organization"></label>
@@ -291,8 +300,11 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
   email.addEventListener('input', () => { if (email.classList.contains('invalid')) check(); });
   form.addEventListener('submit', (e) => {
     const ok = check();
-    if (!ok || !form.checkValidity()) { e.preventDefault(); if (!ok) { email.focus(); help.classList.add('error'); } else form.reportValidity(); }
+    if (!ok || !form.checkValidity()) { e.preventDefault(); if (!ok) { email.focus(); help.classList.add('error'); } else form.reportValidity(); return; }
+    const btn = form.querySelector('[type=submit]'); if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
   });
+  const next = form.querySelector('[name=_next]'); if (next) next.value = location.origin + '/contact/?sent=1#quote';
+  if (/[?&]sent=1/.test(location.search)) { const ok = document.getElementById('form-sent'); if (ok) { ok.hidden = false; form.hidden = true; } }
 })();
 </script>
 </main>
@@ -300,7 +312,7 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 <script src="/assets/site-header.js?v=1112c" defer></script>
 <script src="/assets/deco-lines.js?v=3" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js?v=1110b" defer></script>
+<script src="/assets/site-footer.js?v=1117a" defer></script>
 <script type="module" src="/assets/globe.js?v=24"></script>
 <script src="/assets/top-btn.js?v=2" defer></script>
 </body>

@@ -174,10 +174,11 @@ c-64 3 -72 1 -66 -14z"/>
 </g>
 </svg></a>
         <p class="foot-tag">Navigating with Excellence in Consultancy, Energy and Engineering.</p>
+        <a class="foot-social" href="https://sg.linkedin.com/company/hexahessman" target="_blank" rel="noopener" aria-label="HexaHessman on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
       </div>
       <div class="foot-col"><h4>Company</h4><a href="/about/">About</a><a href="/about/#reach">Global Presence</a><a href="/contact/">Contact</a></div>
       <div class="foot-col"><h4>Divisions</h4><a href="/commodities/">Commodities Supply</a><a href="/engineering/">Engineering Solutions</a></div>
-      <div class="foot-col"><h4>Get in touch</h4><span>39 Arab Street, Singapore 199738</span><a href="mailto:inquiry@hexahessman.com">inquiry@hexahessman.com</a><a href="https://wa.me/6580619119">WhatsApp +65 8061 9119</a><span>Mon–Fri, 09:00–17:00 SGT</span><a href="#" rel="noopener">LinkedIn</a></div>
+      <div class="foot-col"><h4>Get in touch</h4><span>39 Arab Street, Singapore 199738</span><a href="mailto:inquiry@hexahessman.com">inquiry@hexahessman.com</a><a href="https://wa.me/6580619119">WhatsApp +65 8061 9119</a><span>Mon–Fri, 09:00–17:00 SGT</span><a href="https://sg.linkedin.com/company/hexahessman" target="_blank" rel="noopener">LinkedIn</a></div>
     </div>
     <div class="foot-legal"><span>© 2026 HexaHessman Pte. Ltd. · UEN 202419032H · A member of HexaHessman Global Group</span><span><a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Use</a> · <a href="/cookies/">Cookie Notice</a></span></div>
   </footer>`;

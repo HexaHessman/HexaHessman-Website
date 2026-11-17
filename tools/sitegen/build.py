@@ -475,7 +475,7 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/header.css?v=1117a">
-<link rel="stylesheet" href="/assets/site.css?v=1117d">
+<link rel="stylesheet" href="/assets/site.css?v=1117e">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -494,7 +494,7 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 <script src="/assets/site-header.js?v=1112c" defer></script>
 <script src="/assets/deco-lines.js?v=3" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js?v=1110b" defer></script>
+<script src="/assets/site-footer.js?v=1117a" defer></script>
 {body_scripts}</body>
 </html>
 """
@@ -1158,6 +1158,8 @@ ABOUT_CSS = """
 /* About hero: the shophouse street drawn in line, stroke by stroke, left to right and street up */
 .story-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start; }   /* text straight under the title, no gap (user, 2026-11-06) */
 .story-text { display: grid; gap: 14px; }
+#story .section-head { margin-bottom: clamp(20px, 2vw, 28px); }   /* the story starts as close under the tagline as the tagline sits under the title */
+#story .section-head .lead { font-size: clamp(18px, 1.55vw, 23px); font-weight: 500; line-height: 1.4; color: #EEE3C7; opacity: .9; max-width: none; }   /* the tagline as the subheader (client, 2026-11-17) */
 .story-logo { aspect-ratio: 1; width: 100%; max-width: 460px; justify-self: center; margin-top: clamp(-90px, -6vw, -40px); opacity: 0; transition: opacity .8s ease; }
 .story-logo.in { opacity: 1; }
 .story-logo iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
@@ -1454,6 +1456,7 @@ ABOUT_CSS = """
 .spx-ink { fill: #0F2A1E; }
 .spx-line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 2; }
 .spx-line path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+#specialise + .section { border-top: 0; padding-top: clamp(16px, 2.5vw, 40px); }   /* no line between this and Our team, and less space (client, 2026-11-17) */
 .spx-base { stroke: none; }   /* only the travelling light shows (user, 2026-11-17) */
 .spx-run { stroke: #3DBB78; stroke-width: 2.6; stroke-dasharray: 6 94; filter: drop-shadow(0 0 5px rgba(61,187,120,.95)); opacity: 0; }
 .spx.on .spx-run { opacity: 1; animation: spxRun 11s linear infinite; }
@@ -1610,7 +1613,7 @@ def build_about():
   const send = () => {{ const r = sec.getBoundingClientRect(); const p = (innerHeight - r.top) / (innerHeight + r.height); if (f.contentWindow && f.src) f.contentWindow.postMessage({{ type: 'logo-scroll', p: (p - 0.5) * 0.35 }}, '*'); }};
   addEventListener('scroll', send, {{ passive: true }}); f.addEventListener('load', send);
 }})();
-</script>''', title="Our story", id_="story")
+</script>''', title="Our story", lead="Navigating with Excellence in Consultancy, Energy and Engineering.", id_="story")   # their tagline under the title (client, 2026-11-17)
     # Our team: everyone in a white Terminal-style grid (terminal-industries.com/about "Our Leaders"): hairline cells with
     # corner crosses, square photos that slide up into their cells, the cell lights up green on hover (client, 2026-11-06)
     cross = lambda pos: f'<i class="tg-x {pos}" aria-hidden="true"></i>'
@@ -1688,6 +1691,9 @@ CONTACT_CSS = """
 .form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }   /* (a long option in a drop-down used to widen the form past a narrow phone screen) */
 .form label, .form .two > * { min-width: 0; }
 .form .two { display: grid; gap: 20px; grid-template-columns: 1fr 1fr; }
+.form .form-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }   /* a trap for spam robots, never seen */
+.form-sent { padding: 26px 28px; border-radius: 14px; background: #EEF3EF; color: #0F2A1E; font-size: 16px; line-height: 1.6; }
+.form-sent b { display: block; font-size: 20px; margin-bottom: 4px; }
 .form label { display: grid; gap: 8px; font-family: var(--sans); font-size: 13.5px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink); }
 .form input, .form select, .form textarea { width: 100%; height: 50px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line-strong); background: rgba(var(--ink-rgb), .05); color: var(--ink); font: 500 15px/1.4 var(--sans); transition: border-color .2s, background .2s; -webkit-appearance: none; appearance: none; }
 .form select { background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 22px) 22px, calc(100% - 17px) 22px; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 40px; }
@@ -1769,8 +1775,11 @@ CONTACT_JS = """
   email.addEventListener('input', () => { if (email.classList.contains('invalid')) check(); });
   form.addEventListener('submit', (e) => {
     const ok = check();
-    if (!ok || !form.checkValidity()) { e.preventDefault(); if (!ok) { email.focus(); help.classList.add('error'); } else form.reportValidity(); }
+    if (!ok || !form.checkValidity()) { e.preventDefault(); if (!ok) { email.focus(); help.classList.add('error'); } else form.reportValidity(); return; }
+    const btn = form.querySelector('[type=submit]'); if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
   });
+  const next = form.querySelector('[name=_next]'); if (next) next.value = location.origin + '/contact/?sent=1#quote';
+  if (/[?&]sent=1/.test(location.search)) { const ok = document.getElementById('form-sent'); if (ok) { ok.hidden = false; form.hidden = true; } }
 })();
 </script>"""
 
@@ -1791,7 +1800,13 @@ def build_contact():
     country_opts = '<option value="">Select…</option>' + "".join(f"<option>{esc(c)}</option>" for c in countries)
     form = f"""
 <span id="datasheet"></span><span id="sample"></span><span id="service"></span>
-<form class="form" action="#" method="post" enctype="multipart/form-data" novalidate>
+<p class="form-sent" id="form-sent" hidden role="status"><b>Thank you, your enquiry has been sent.</b> Our team will reply to the email address you gave.</p>
+<form class="form" action="https://formsubmit.co/inquiry@hexahessman.com" method="post" enctype="multipart/form-data" novalidate>
+  <input type="hidden" name="_subject" value="New enquiry from the HexaHessman website">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_next" value="https://hexahessman-website.vercel.app/contact/?sent=1#quote">
+  <input type="text" name="_honey" class="form-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
   <div class="two">
     <label>Full name *<input type="text" name="name" required autocomplete="name"></label>
     <label>Company *<input type="text" name="company" required autocomplete="organization"></label>
