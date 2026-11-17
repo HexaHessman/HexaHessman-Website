@@ -31,7 +31,7 @@
       ${cards.map((c, i) => `
       <article class="mk-card" style="--i:${i}">
         <p class="mk-date">${esc(c.date)}</p>
-        <h3 class="mk-name"><a href="${esc(c.href)}">${esc(c.product)}</a></h3>
+        <h3 class="mk-name">${esc(c.product)}</h3>
         <p class="mk-price"><b>$${num(c.price)}</b> <span>${esc(c.unit)}</span></p>
         ${move(c.change)}
         <p class="mk-basis">${esc(c.basis)}</p>

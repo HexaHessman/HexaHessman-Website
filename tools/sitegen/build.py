@@ -492,9 +492,9 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 </main>
 <div id="site-footer"></div>
 <script src="/assets/site-header.js?v=1112c" defer></script>
-<script src="/assets/deco-lines.js?v=3" defer></script>
+<script src="/assets/deco-lines.js?v=4" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js?v=1117a" defer></script>
+<script src="/assets/site-footer.js?v=1117b" defer></script>
 {body_scripts}</body>
 </html>
 """
@@ -581,7 +581,7 @@ def build_commodities_hub():
     write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
         # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
         head_tags='<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">\n',
-        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1117a" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112d" defer></script>\n<script src="/assets/markets.js?v=1" defer></script>\n'))
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1117b" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112d" defer></script>\n<script src="/assets/markets.js?v=2" defer></script>\n'))
 
 
 def build_group(g):
@@ -1158,8 +1158,9 @@ ABOUT_CSS = """
 /* About hero: the shophouse street drawn in line, stroke by stroke, left to right and street up */
 .story-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start; }   /* text straight under the title, no gap (user, 2026-11-06) */
 .story-text { display: grid; gap: 14px; }
-#story .section-head { margin-bottom: clamp(20px, 2vw, 28px); }   /* the story starts as close under the tagline as the tagline sits under the title */
-#story .section-head .lead { font-size: clamp(18px, 1.55vw, 23px); font-weight: 500; line-height: 1.4; color: #EEE3C7; opacity: .9; max-width: none; }   /* the tagline as the subheader (client, 2026-11-17) */
+#story .section-head h2 { font-size: clamp(34px, 3.6vw, 54px); }   /* a little bigger (client, 2026-11-17) */
+#story .section-head { margin-bottom: clamp(22px, 2.4vw, 34px); }
+.story-tag { margin-top: 10px; padding-top: 18px; border-top: 1px solid rgba(238,227,199,.16); font-size: clamp(16px, 1.3vw, 19px); font-weight: 500; line-height: 1.45; color: inherit; }   /* their tagline closes the story, in the same colour as the story (client, 2026-11-17) */
 .story-logo { aspect-ratio: 1; width: 100%; max-width: 460px; justify-self: center; margin-top: clamp(-90px, -6vw, -40px); opacity: 0; transition: opacity .8s ease; }
 .story-logo.in { opacity: 1; }
 .story-logo iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
@@ -1601,7 +1602,7 @@ def build_about():
 }})();
 </script>
 </section>''')
-    story_sec = section(f'''<div class="story-grid"><div class="story-text">{story}</div>
+    story_sec = section(f'''<div class="story-grid"><div class="story-text">{story}<p class="story-tag">Navigating with Excellence in Consultancy, Energy and Engineering.</p></div>
   <div class="story-logo" aria-hidden="true"><iframe data-src="/logo.html?embed&story&v=9" title="" tabindex="-1"></iframe></div></div>
 <script>
 (() => {{
@@ -1613,7 +1614,7 @@ def build_about():
   const send = () => {{ const r = sec.getBoundingClientRect(); const p = (innerHeight - r.top) / (innerHeight + r.height); if (f.contentWindow && f.src) f.contentWindow.postMessage({{ type: 'logo-scroll', p: (p - 0.5) * 0.35 }}, '*'); }};
   addEventListener('scroll', send, {{ passive: true }}); f.addEventListener('load', send);
 }})();
-</script>''', title="Our story", lead="Navigating with Excellence in Consultancy, Energy and Engineering.", id_="story")   # their tagline under the title (client, 2026-11-17)
+</script>''', title="Our story", id_="story")
     # Our team: everyone in a white Terminal-style grid (terminal-industries.com/about "Our Leaders"): hairline cells with
     # corner crosses, square photos that slide up into their cells, the cell lights up green on hover (client, 2026-11-06)
     cross = lambda pos: f'<i class="tg-x {pos}" aria-hidden="true"></i>'

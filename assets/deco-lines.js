@@ -16,6 +16,15 @@
     }
     const z = pts[pts.length - 1]; return d + `L${z[0]},${z[1]}`;
   };
+  const bg = el => { for (let e = el; e; e = e.parentElement) { const c = getComputedStyle(e).backgroundColor; if (c && c !== 'transparent' && !/rgba\(.*,\s*0\)$/.test(c)) return c; } return ''; };
+  const reach = sec => {
+    const prev = sec.previousElementSibling;
+    if (!prev || prev.offsetHeight < 40 || bg(prev) !== bg(sec)) return 0;
+    const kids = [...prev.children].filter(e => e.offsetHeight && getComputedStyle(e).position !== 'absolute');
+    const last = kids[kids.length - 1]; if (!last) return 0;
+    const gap = sec.getBoundingClientRect().top - last.getBoundingClientRect().bottom;
+    return gap > 40 ? Math.min(gap * 0.5, 140) : 0;
+  };
   const draw = (sec) => {
     const w = sec.offsetWidth, h = sec.offsetHeight; if (w < 300 || h < 160) return;
     let svg = sec.querySelector(':scope > .deco-lines');
@@ -24,8 +33,14 @@
     const r = Math.min(70, h * 0.18), narrow = w < 760;
     // the two lines start at 42% and 64% of the width, or where the page says (product pages: under the Product types line, product-lines.js)
     const x1 = +sec.dataset.x1 || w * (narrow ? 0.46 : 0.42), x2 = +sec.dataset.x2 || w * (narrow ? 0.7 : 0.64);
-    const left = [[x1, -2], [x1, h * 0.2], [w * 0.1, h * 0.2], [w * 0.1, h * 0.62], [w * 0.06, h * 0.66], [-2, h * 0.66]];
-    const right = [[x2, -2], [x2, h * 0.3], [w * 0.93, h * 0.3], [w * 0.93, h * 0.58], [w + 2, h * 0.58]];
+    let left = [[x1, -2], [x1, h * 0.2], [w * 0.1, h * 0.2], [w * 0.1, h * 0.62], [w * 0.06, h * 0.66], [-2, h * 0.66]];
+    let right = [[x2, -2], [x2, h * 0.3], [w * 0.93, h * 0.3], [w * 0.93, h * 0.58], [w + 2, h * 0.58]];
+    // when the section above has the same colour (no edge shows, as under Related products on the product pages), the
+    // lines don't start in mid air: they come in from the page's left and right edges, up in the gap under that
+    // section's content, and turn down into the band (client, 2026-11-17)
+    const up = reach(sec);
+    svg.style.overflow = up ? 'visible' : '';
+    if (up) { left = [[-2, -up], [x1, -up], ...left.slice(1)]; right = [[w + 2, -up], [x2, -up], ...right.slice(1)]; }
     const first = !sec.dataset.drawn && !reduce;   // the first time the band comes into view, the lines draw themselves down
     if (first) sec._go = [];   // (a redraw before it is seen replaces the waiting lines)
     [left, right].forEach((pts, i) => {

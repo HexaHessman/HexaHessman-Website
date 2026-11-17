@@ -178,7 +178,7 @@ c-64 3 -72 1 -66 -14z"/>
       </div>
       <div class="foot-col"><h4>Company</h4><a href="/about/">About</a><a href="/about/#reach">Global Presence</a><a href="/contact/">Contact</a></div>
       <div class="foot-col"><h4>Divisions</h4><a href="/commodities/">Commodities Supply</a><a href="/engineering/">Engineering Solutions</a></div>
-      <div class="foot-col"><h4>Get in touch</h4><span>39 Arab Street, Singapore 199738</span><a href="mailto:inquiry@hexahessman.com">inquiry@hexahessman.com</a><a href="https://wa.me/6580619119">WhatsApp +65 8061 9119</a><span>Mon–Fri, 09:00–17:00 SGT</span><a href="https://sg.linkedin.com/company/hexahessman" target="_blank" rel="noopener">LinkedIn</a></div>
+      <div class="foot-col"><h4>Get in touch</h4><span>39 Arab Street, Singapore 199738</span><a href="mailto:inquiry@hexahessman.com">inquiry@hexahessman.com</a><a href="https://wa.me/6580619119">WhatsApp +65 8061 9119</a><span>Mon–Fri, 09:00–17:00 SGT</span></div>
     </div>
     <div class="foot-legal"><span>© 2026 HexaHessman Pte. Ltd. · UEN 202419032H · A member of HexaHessman Global Group</span><span><a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Use</a> · <a href="/cookies/">Cookie Notice</a></span></div>
   </footer>`;

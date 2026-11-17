@@ -40,11 +40,11 @@
       <div class="cs-pin">
         <div class="cs-stick"><div class="cs-panel" aria-hidden="true">${VIDEOS[g.slug] ? vidTag(VIDEOS[g.slug]) : PHONE ? sceneTag('cs-win cs-inwin') : ''}</div></div>
         <div class="cs-copy" data-reveal="copy">
-          <h2 class="cs-category"><a href="/commodities/${g.slug}/">${esc(g.name)}</a></h2>
+          <h2 class="cs-category">${esc(g.name)}</h2>
           <div class="cs-list"><div class="cs-track">
             ${g.products.map((p, pi) => `
             <article class="cs-item" id="${p.slug}" style="--i:${pi}">
-              <h3 class="cs-title"><a href="/commodities/${g.slug}/${p.slug}/">${esc(p.name)}</a></h3>
+              <h3 class="cs-title">${esc(p.name)}</h3>
               <p class="cs-lead">${esc(p.lead || p.short)}</p>
               <a class="cs-view" href="/commodities/${g.slug}/${p.slug}/">View product <span aria-hidden="true">→</span></a>
             </article>`).join('')}

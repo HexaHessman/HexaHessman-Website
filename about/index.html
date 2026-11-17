@@ -143,8 +143,9 @@
 /* About hero: the shophouse street drawn in line, stroke by stroke, left to right and street up */
 .story-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start; }   /* text straight under the title, no gap (user, 2026-11-06) */
 .story-text { display: grid; gap: 14px; }
-#story .section-head { margin-bottom: clamp(20px, 2vw, 28px); }   /* the story starts as close under the tagline as the tagline sits under the title */
-#story .section-head .lead { font-size: clamp(18px, 1.55vw, 23px); font-weight: 500; line-height: 1.4; color: #EEE3C7; opacity: .9; max-width: none; }   /* the tagline as the subheader (client, 2026-11-17) */
+#story .section-head h2 { font-size: clamp(34px, 3.6vw, 54px); }   /* a little bigger (client, 2026-11-17) */
+#story .section-head { margin-bottom: clamp(22px, 2.4vw, 34px); }
+.story-tag { margin-top: 10px; padding-top: 18px; border-top: 1px solid rgba(238,227,199,.16); font-size: clamp(16px, 1.3vw, 19px); font-weight: 500; line-height: 1.45; color: inherit; }   /* their tagline closes the story, in the same colour as the story (client, 2026-11-17) */
 .story-logo { aspect-ratio: 1; width: 100%; max-width: 460px; justify-self: center; margin-top: clamp(-90px, -6vw, -40px); opacity: 0; transition: opacity .8s ease; }
 .story-logo.in { opacity: 1; }
 .story-logo iframe { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
@@ -552,7 +553,7 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 </article>
   </div>
 </section>
-<section class="section" id="story"><div class="wrap"><div class="section-head"><h2>Our story</h2><p class="lead">Navigating with Excellence in Consultancy, Energy and Engineering.</p></div><div class="story-grid"><div class="story-text"><p>Established in 2007, HexaHessman was founded on a legacy of engineering expertise and precision-driven solutions. Over time our vision expanded, turning specialised technical knowledge into a platform for the supply of fertilizers, reductants, chemicals and energy products.</p><p>Our leaders have always looked beyond the immediate horizon, combining engineering rigour with entrepreneurial insight. In 2024 HexaHessman unified these legacy strengths with fresh ambition, establishing itself as a reliable partner for structured supply and engineering solutions.</p><p>Today we are guided by operational discipline, strategic insight and people-first values, connecting trusted partners worldwide and delivering what our clients need with precision and dependability.</p></div>
+<section class="section" id="story"><div class="wrap"><div class="section-head"><h2>Our story</h2></div><div class="story-grid"><div class="story-text"><p>Established in 2007, HexaHessman was founded on a legacy of engineering expertise and precision-driven solutions. Over time our vision expanded, turning specialised technical knowledge into a platform for the supply of fertilizers, reductants, chemicals and energy products.</p><p>Our leaders have always looked beyond the immediate horizon, combining engineering rigour with entrepreneurial insight. In 2024 HexaHessman unified these legacy strengths with fresh ambition, establishing itself as a reliable partner for structured supply and engineering solutions.</p><p>Today we are guided by operational discipline, strategic insight and people-first values, connecting trusted partners worldwide and delivering what our clients need with precision and dependability.</p><p class="story-tag">Navigating with Excellence in Consultancy, Energy and Engineering.</p></div>
   <div class="story-logo" aria-hidden="true"><iframe data-src="/logo.html?embed&story&v=9" title="" tabindex="-1"></iframe></div></div>
 <script>
 (() => {
@@ -661,9 +662,9 @@ html.hx-enter body::after{content:"";position:fixed;inset:0;z-index:10000;backgr
 </main>
 <div id="site-footer"></div>
 <script src="/assets/site-header.js?v=1112c" defer></script>
-<script src="/assets/deco-lines.js?v=3" defer></script>
+<script src="/assets/deco-lines.js?v=4" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js?v=1117a" defer></script>
+<script src="/assets/site-footer.js?v=1117b" defer></script>
 <script src="/assets/team-lookbook.js?v=12" defer></script>
 <script src="/assets/voyage.js?v=10" defer></script>
 <script type="module" src="/assets/team-globe.js?v=16"></script>
