@@ -14,7 +14,7 @@
 
   const stage = sec.querySelector('.tl-stage'), queue = sec.querySelector('.tl-queue');
   const info = sec.querySelector('.tl-info');
-  queue.innerHTML = people.map((p, i) => `<img class="tl-cut" src="/assets/team/cut/${p.slug}.webp?v=2" alt="${esc(p.name)}" width="900" height="781" decoding="async" draggable="false">`).join('');
+  queue.innerHTML = people.map((p, i) => `<img class="tl-cut" src="/assets/team/cut/${p.slug}.webp?v=3" alt="${esc(p.name)}" width="900" height="781" decoding="async" draggable="false">`).join('');
   const cuts = [...queue.children];
   let active = 0, busy = false;
 
@@ -43,7 +43,7 @@
     info.querySelector('.tl-name').textContent = p.name;
     info.querySelector('.tl-role').textContent = p.role;
     info.querySelector('.tl-where').textContent = `${p.entity} · ${p.city}`;
-    info.querySelector('.tl-desc').textContent = p.blurb || '';
+    info.querySelector('.tl-desc').innerHTML = [].concat(p.blurb || []).map(t => `<p>${esc(t)}</p>`).join('');   // the profile's paragraphs
     info.classList.remove('swap'); void info.offsetWidth; info.classList.add('swap');
     window.__teamCurrent = p;
     document.dispatchEvent(new CustomEvent('team-change', { detail: p }));   // the globe turns to this office

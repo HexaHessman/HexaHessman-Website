@@ -492,7 +492,7 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 </main>
 <div id="site-footer"></div>
 <script src="/assets/site-header.js?v=1112c" defer></script>
-<script src="/assets/deco-lines.js?v=4" defer></script>
+<script src="/assets/deco-lines.js?v=6" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
 <script src="/assets/site-footer.js?v=1117b" defer></script>
 {body_scripts}</body>
@@ -737,7 +737,9 @@ PRODUCT_CSS = """
 .pp-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 8px; }
 .pp-legend b { font-weight: 500; margin-left: 6px; }
 .pp-total { margin: 14px 0 0; font-size: 15px; }
-.pp-call { margin: 0; padding-left: 18px; border-left: 3px solid #E6CF2E; max-width: 38ch; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.5; }
+.pp-call { margin: 0; padding-left: 18px; border-left: 3px solid var(--fc, #E6CF2E); max-width: 38ch; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.5; }
+.pp-facts { display: grid; gap: 22px; }
+.pp-facts .pp-call { max-width: 46ch; font-size: clamp(15px, 1.15vw, 17px); }
 /* drop-downs: dark green pills with a plus in a circle */
 .pp-drops { display: grid; grid-template-columns: 1fr 1fr; gap: 26px clamp(22px, 2.6vw, 36px); align-items: start; }
 .pp-res .pp-drops { margin-top: 36px; padding-top: 30px; border-top: 1px solid var(--pp-line); }
@@ -969,7 +971,10 @@ def product_body(p):
             segs = "".join(f'<span style="width:{v}%;background:{c}"></span>' for _, v, c in bar["parts"])
             legend = "".join(f'<span><i style="background:{c}"></i>{esc(n)}<b>{v}%</b></span>' for n, v, c in bar["parts"])
             call = f'<p class="pp-call">{esc(Rs["note"])}</p>' if Rs.get("note") else ""
-            res += f'<div class="pp-mix"><div><p class="pp-bar-t">{esc(bar["title"])}</p><div class="pp-bar" role="img" aria-label="{esc_attr(", ".join(f"{n} {v}%" for n, v, _ in bar["parts"]))}">{segs}</div><div class="pp-legend">{legend}</div><p class="pp-total">{esc(bar["total"])}</p></div>{call}</div>'
+            if Rs.get("facts"):   # the two facts beside the bar, each marked in the bar's first colour
+                call = f'<div class="pp-facts" style="--fc:{bar["parts"][0][2]}">' + "".join(f'<p class="pp-call">{esc(t)}</p>' for t in Rs["facts"]) + "</div>"
+            total = f'<p class="pp-total">{esc(bar["total"])}</p>' if bar.get("total") else ""
+            res += f'<div class="pp-mix"><div><p class="pp-bar-t">{esc(bar["title"])}</p><div class="pp-bar" role="img" aria-label="{esc_attr(", ".join(f"{n} {v}%" for n, v, _ in bar["parts"]))}">{segs}</div><div class="pp-legend">{legend}</div>{total}</div>{call}</div>'
     drops = [(0 if t == "Source of origin" else 1, t, h) for t, h in P.get("drops", [])]
     proc = ""
     for ph, steps in PP.PROCEDURES:
@@ -1350,7 +1355,12 @@ ABOUT_CSS = """
 .tl-name { font-family: var(--display); text-transform: uppercase; font-size: clamp(30px, 3vw, 46px); font-weight: 700; line-height: .92; letter-spacing: -.025em; text-shadow: 0 2px 28px rgba(15,42,30,.9); }
 .tl-role { font-size: clamp(15px, 1.3vw, 19px); font-weight: 600; color: var(--ink); }
 .tl-where { font-size: 15px; line-height: 1.5; color: var(--muted); }
-.tl-desc { margin-top: 8px; max-width: 40ch; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.5; color: var(--ink-soft); }
+/* the profile is the client's own two paragraphs (2026-11-25): a little smaller and wider than the old one-liner, with a
+   soft dark cloud behind it so it stays readable where it reaches the blurred people at the back of the line */
+.tl-desc { position: relative; margin-top: 6px; max-width: 54ch; font-size: clamp(14px, 1.05vw, 15.5px); line-height: 1.5; color: var(--ink-soft); }
+.tl-desc::before { content: ""; position: absolute; z-index: -1; inset: -10px -34px -22px -30px; background: rgba(15,42,30,.78); filter: blur(20px); }
+.tl-desc p { margin: 0; } .tl-desc p + p { margin-top: .75em; }
+@media (min-width: 901px) and (max-height: 780px) { .tl-info { top: clamp(64px, 10vh, 90px); gap: 7px; } .tl-desc { font-size: 13.5px; line-height: 1.45; max-width: 58ch; } }
 .tl-info.swap .tl-name, .tl-info.swap .tl-role, .tl-info.swap .tl-where, .tl-info.swap .tl-desc { animation: tlSwap .7s cubic-bezier(.2,.7,.2,1) both; }
 .tl-info.swap .tl-role { animation-delay: .06s; } .tl-info.swap .tl-where { animation-delay: .12s; } .tl-info.swap .tl-desc { animation-delay: .18s; }
 @keyframes tlSwap { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -1388,6 +1398,7 @@ ABOUT_CSS = """
   .tl-globe { left: 50%; top: 1%; height: min(152vw, 200%); }
   .tl-foot { display: grid; gap: 20px; padding: 22px 20px 0; }
   .tl-info, .tl-ctrl { position: static; max-width: none; }
+  .tl-desc { max-width: none; font-size: 15px; } .tl-desc::before { content: none; }
   .tl-globe-label { margin: 14px 0 0 0; translate: -50% 0; }   /* the label hangs under the pin, clear of the head and the edge */
   .tl-name { font-size: clamp(26px, 7.5vw, 36px); }
   .tl-hint { display: none; } .tl-ctrl button { width: 50px; height: 50px; }
@@ -1592,7 +1603,7 @@ def build_about():
       <div class="tl-queue"></div>
     </div>
     <div class="tl-foot">
-      <div class="tl-info" aria-live="polite"><h3 class="tl-name"></h3><p class="tl-role"></p><p class="tl-where"></p><p class="tl-desc"></p></div>
+      <div class="tl-info" aria-live="polite"><h3 class="tl-name"></h3><p class="tl-role"></p><p class="tl-where"></p><div class="tl-desc"></div></div>
       <div class="tl-ctrl"><span class="tl-hint">Next person</span><button class="tl-prev" type="button" aria-label="Previous person">{arrow(-1)}</button><button class="tl-next" type="button" aria-label="Next person">{arrow(1)}</button></div>
     </div>
   </div>
@@ -1654,7 +1665,7 @@ def build_about():
         if f.get("dx"): out += f";--dx:{f['dx']}%"
         return out
     cells = "".join(f'''<li class="tg-cell">{cross("tl")}{cross("tr")}{cross("bl")}{cross("br")}
-  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/{slug}.webp?v=2" alt="{esc_attr(n)}" loading="lazy" decoding="async" width="900" height="781" style="{tg_style(slug)}"></div></div>
+  <div class="tg-pic"><div class="tg-slide"><img src="/assets/team/cut/{slug}.webp?v=3" alt="{esc_attr(n)}" loading="lazy" decoding="async" width="900" height="781" style="{tg_style(slug)}"></div></div>
   <div class="tg-meta"><b>{esc(n)}</b><span>{esc(r)}</span></div></li>''' for n, r, e, slug, _, _ in A["team"])   # two lines: name and title (client, 2026-11-10)
     our_team = f'''<section class="section tg" id="our-team">
   <div class="wrap section-head tg-head"><p class="eyebrow">Our team</p><h2>The people behind every delivery</h2></div>
@@ -1675,7 +1686,7 @@ def build_about():
     body.append(cta(A["cta_h"], A["cta_p"], "general"))
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    scripts = '<script src="/assets/team-lookbook.js?v=12" defer></script>\n<script src="/assets/voyage.js?v=10" defer></script>\n<script type="module" src="/assets/team-globe.js?v=16"></script>\n'
+    scripts = '<script src="/assets/team-lookbook.js?v=13" defer></script>\n<script src="/assets/voyage.js?v=10" defer></script>\n<script type="module" src="/assets/team-globe.js?v=16"></script>\n'
     write("/about/index.html", page("About", meta_desc(A["story"][0]), "\n".join(body), extra_head=ABOUT_CSS, head_tags=head_tags, body_scripts=scripts))
 
 
@@ -1878,7 +1889,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=24"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=25"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 

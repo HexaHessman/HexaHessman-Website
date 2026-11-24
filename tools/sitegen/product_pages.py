@@ -52,7 +52,7 @@ PROCEDURES = [
 PROCEDURES_NOTE = "Any change to these terms needs written agreement from both parties."
 
 # the person behind the floating Contact button on every commodity page (PDF p.5)
-CONTACT = {"name": "Adam Yeoh", "role": "Business Development Manager", "entity": "HexaHessman Singapore",
+CONTACT = {"name": "Adam Yeoh", "role": "Executive Business Development Manager", "entity": "HexaHessman Singapore",
            "email": "Adam.Yeoh@HexaHessman.com", "photo": "/assets/team/cut/adam-yeoh.webp", "linkedin": ""}   # LinkedIn link still to come from the client
 
 PAGES = {
@@ -233,6 +233,119 @@ PAGES = {
         ("Granular", "Screened granules of uniform size.", T + "charcoal-granular.jpg"),
         ("Crushed", "Finely crushed charcoal in small fragments.", T + "charcoal-crushed.jpg")]},
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# PRODUCT RESOURCES for every product: four key figures (figure, unit, caption), two facts and the breakdown bar, copied
+# word for word from the client's "Product Facts — HexaHessman Commodity Range" document (Nov 20, 2026; put in 2026-11-25).
+# Only the colours of the bars are ours. These replace sulphur's earlier figures, bar and note, and the sulphur stand-in
+# the other pages showed. (Base Oil is not in the document; its page is hidden.)
+FACTS = {
+    "coconut-shell-charcoal": {   # 1. Coconut Shell Charcoal
+        "stats": [("~62", "Mt/yr", "global coconut production (FAO)"), ("~73", "%", "of world coconuts grown in Indonesia, the Philippines and India"), ("7,000+", "kcal/kg", "typical calorific value of export-grade charcoal"), ("25–30", "%", "charcoal yield from raw shell by weight")],
+        "facts": ["The shell is about 15–20% of a coconut’s weight, so making charcoal turns farm waste into an export product.",
+                  "Activated coconut carbon can exceed 1,000 m²/g of surface area, so one teaspoon has about the area of a football field."],
+        "bar": {"title": "Where the world’s coconuts come from", "parts": [("Indonesia", 28, "#1D4A3B"), ("Philippines", 24, "#4F8A6F"), ("India", 21, "#9CC2AC"), ("Other", 27, "#8A8A80")], "total": "Total production ~62 Mt (FAO)"}},
+    "wood-chips": {   # 2. Wood Chips
+        "stats": [("#1", "", "Vietnam, the world’s largest wood chip exporter"), ("2", "", "dominant import markets: China and Japan"), ("~19", "GJ/t", "energy content of dry wood"), ("30–50", "%", "typical moisture content as delivered")],
+        "facts": ["Wood chips weigh only about 0.3 t/m³, so dedicated chip carriers are built tall to fill up on volume before they reach their weight limit.",
+                  "Japan’s paper industry started the dedicated chip-carrier trade in the 1960s."],
+        "bar": {"title": "Where seaborne wood chips go", "parts": [("China", 55, "#1D4A3B"), ("Japan", 35, "#4F8A6F"), ("Other", 10, "#8A8A80")], "total": "Seaborne trade ~30 Mt/yr (est.)"}},
+    "ammonium-sulphate": {   # 3. Ammonium Sulphate
+        "stats": [("21", "%", "nitrogen content"), ("24", "%", "sulphur content, the highest of the major N fertilizers"), ("#1", "", "China, the world’s largest exporter"), ("2", "", "main sources: caprolactam by-product and coke-oven gas")],
+        "facts": ["It is one of the oldest synthetic fertilizers; it was first recovered from coal gas in the 19th century.",
+                  "It acidifies soil, which makes it a favourite for rice and alkaline soils."],
+        "bar": {"title": "Where ammonium sulphate comes from", "parts": [("Caprolactam by-product", 50, "#1D4A3B"), ("Synthetic", 30, "#4F8A6F"), ("Coke-oven & other by-product", 20, "#9CC2AC")], "total": "Total production ~65 Mt (est.)"}},
+    "dap": {   # 4. Diammonium Phosphate (DAP)
+        "stats": [("18-46-0", "N-P-K", "standard grade"), ("64", "%", "total nutrient content, the highest of the common phosphate fertilizers"), ("#1", "", "India, the world’s largest DAP importer"), ("4", "", "leading exporters: China, Morocco, Russia, Saudi Arabia")],
+        "facts": ["Ammonium phosphates are a key ingredient in the aerial fire retardants used against wildfires.",
+                  "One tonne of DAP takes about 1.6 t of phosphate rock to make."],
+        "bar": {"title": "Where DAP exports come from", "parts": [("China", 30, "#1D4A3B"), ("Morocco", 30, "#4F8A6F"), ("Saudi Arabia", 15, "#9CC2AC"), ("Russia", 15, "#B98A14"), ("Other", 10, "#8A8A80")], "total": "Global trade ~16 Mt/yr"}},
+    "map": {   # 5. Mono Ammonium Phosphate (MAP)
+        "stats": [("11-52-0", "N-P-K", "standard granular grade"), ("61", "%", "P₂O₅ in water-soluble 12-61-0 technical grade"), ("#1", "", "Brazil, the world’s largest MAP importer"), ("2", "", "main end uses: granular fertilizer and fertigation")],
+        "facts": ["MAP is the yellow powder in ABC dry-chemical fire extinguishers.",
+                  "It releases less free ammonia than DAP, so it is safer to place right next to seed."],
+        "bar": {"title": "Where MAP exports come from", "parts": [("Morocco", 30, "#1D4A3B"), ("Russia", 25, "#4F8A6F"), ("China", 25, "#9CC2AC"), ("Other", 20, "#8A8A80")], "total": "Global trade ~14 Mt/yr"}},
+    "phosphoric-acid": {   # 6. Phosphoric Acid
+        "stats": [("52–54", "%", "P₂O₅ in merchant-grade acid"), ("~85", "%", "of output used to make fertilizers"), ("~2.7", "t", "of sulphuric acid needed per tonne of P₂O₅"), ("#1", "", "India, the world’s largest merchant-acid importer")],
+        "facts": ["Food-grade phosphoric acid gives cola its tang.",
+                  "Each tonne of P₂O₅ produces about 5 t of phosphogypsum as a by-product."],
+        "bar": {"title": "Where phosphoric acid goes", "parts": [("Fertilizers", 85, "#1D4A3B"), ("Animal feed", 8, "#4F8A6F"), ("Food & technical", 7, "#9CC2AC")], "total": "Total production ~50 Mt P₂O₅"}},
+    "rock-phosphate": {   # 7. Rock Phosphate
+        "stats": [("~240", "Mt/yr", "global mine production (USGS)"), ("~70", "%", "of world reserves held by Morocco"), ("~45", "%", "of global output mined in China"), ("28–34", "%", "typical P₂O₅ in traded rock")],
+        "facts": ["Phosphorus has no substitute: every living cell needs it for DNA and ATP.",
+                  "Most of it is sedimentary rock formed from ancient marine deposits millions of years old."],
+        "bar": {"title": "Where the world’s phosphate rock comes from", "parts": [("China", 46, "#1D4A3B"), ("Morocco", 13, "#4F8A6F"), ("United States", 8, "#9CC2AC"), ("Other", 33, "#8A8A80")], "total": "Total production ~240 Mt (USGS)"}},
+    "sulphuric-acid": {   # 8. Sulphuric Acid
+        "stats": [("~270", "Mt/yr", "global production, the world’s most-produced chemical"), ("~50", "%", "of demand comes from phosphate fertilizers"), ("98", "%", "standard commercial concentration"), ("#1", "", "Chile, the largest importer, for copper leaching")],
+        "facts": ["A country’s sulphuric acid use was once treated as a measure of its industrial strength.",
+                  "Burning sulphur releases so much heat that acid plants sell surplus steam and electricity."],
+        "bar": {"title": "Where sulphuric acid comes from", "parts": [("Sulphur burning", 65, "#1D4A3B"), ("Metal smelter off-gas", 30, "#4F8A6F"), ("Pyrite & other", 5, "#9CC2AC")], "total": "Total production ~270 Mt"}},
+    "urea": {   # 9. Urea
+        "stats": [("46", "%", "nitrogen, the highest of any solid fertilizer"), ("~190", "Mt/yr", "global production"), ("~55", "Mt/yr", "global seaborne trade"), ("#1", "", "India, the world’s largest urea importer")],
+        "facts": ["In 1828 urea became the first organic compound made from inorganic materials, by Friedrich Wöhler.",
+                  "AdBlue (DEF) is a 32.5% urea solution that cuts NOx emissions from diesel engines."],
+        "bar": {"title": "Where urea exports come from", "parts": [("Middle East", 35, "#1D4A3B"), ("Russia", 15, "#4F8A6F"), ("China", 10, "#9CC2AC"), ("Other", 40, "#8A8A80")], "total": "Global trade ~55 Mt/yr"}},
+    "caustic-soda": {   # 10. Caustic Soda
+        "stats": [("~85", "Mt/yr", "global production"), ("1.1", "t", "of NaOH co-produced per tonne of chlorine"), ("50 / 99", "%", "liquid lye and flake grades"), ("#1", "", "alumina refining, the largest single end use")],
+        "facts": ["It is made alongside chlorine, so its price often follows PVC demand.",
+                  "Lye has been used for soap for thousands of years, and it still gives pretzels their brown crust."],
+        "bar": {"title": "Where caustic soda goes", "parts": [("Chemicals", 40, "#1D4A3B"), ("Alumina", 15, "#4F8A6F"), ("Pulp & paper", 12, "#9CC2AC"), ("Other", 33, "#8A8A80")], "total": "Total production ~85 Mt"}},
+    "methanol": {   # 11. Methanol
+        "stats": [("~100", "Mt/yr", "global demand"), ("~60", "%", "of demand in China"), ("~1/3", "", "of demand from methanol-to-olefins (MTO)"), ("99.85", "%", "IMPCA purity specification")],
+        "facts": ["It was first known as “wood alcohol” because it was made by distilling wood.",
+                  "Major container lines now operate methanol-fuelled ships."],
+        "bar": {"title": "Where methanol goes", "parts": [("Olefins (MTO)", 30, "#1D4A3B"), ("Formaldehyde", 25, "#4F8A6F"), ("Fuels", 20, "#9CC2AC"), ("Other", 25, "#8A8A80")], "total": "Total demand ~100 Mt"}},
+    "soda-ash": {   # 12. Soda Ash
+        "stats": [("~70", "Mt/yr", "global production"), ("~50", "%", "of output from China"), ("~50", "%", "of demand from glassmaking"), ("#1", "", "US natural trona (Wyoming), the largest reserves")],
+        "facts": ["Ancient Egyptians used natural soda (natron) in mummification.",
+                  "Growth in solar panel glass is adding new demand."],
+        "bar": {"title": "Where soda ash comes from", "parts": [("Synthetic (Solvay & Hou)", 70, "#1D4A3B"), ("Natural trona", 30, "#4F8A6F")], "total": "Total production ~70 Mt"}},
+    "calcined-pet-coke": {   # 13. Calcined Pet Coke (CPC)
+        "stats": [("~0.4", "t", "of CPC consumed per tonne of primary aluminium"), ("~75", "%", "of CPC demand from aluminium anodes"), ("98.5+", "%", "fixed carbon"), ("~1,300", "°C", "calcination temperature")],
+        "facts": ["Pet coke is the solid residue left at the bottom of an oil refinery.",
+                  "Aluminium anodes are used up during smelting, so the carbon in CPC leaves the pot as CO₂."],
+        "bar": {"title": "Where CPC goes", "parts": [("Aluminium anodes", 75, "#1D4A3B"), ("Titanium dioxide", 10, "#4F8A6F"), ("Steel & other", 15, "#9CC2AC")], "total": "Total production ~25 Mt (est.)"}},
+    "graphite-pet-coke": {   # 14. Graphite Pet Coke (GPC)
+        "stats": [("98.5+", "%", "fixed carbon"), ("≤0.05", "%", "sulphur content"), ("~3,000", "°C", "graphitization temperature"), ("2", "", "main uses: recarburizer for steel and for ductile iron")],
+        "facts": ["Its very low sulphur and nitrogen mean fewer pinholes and gas defects in castings.",
+                  "It is graphitized in the same kind of furnaces used to make graphite electrodes."],
+        "bar": {"title": "What’s in graphite pet coke (typical)", "parts": [("Fixed carbon", 98.5, "#1D4A3B"), ("Ash & volatiles", 1.45, "#4F8A6F"), ("Sulphur", 0.05, "#9CC2AC")], "total": ""}},
+    "metallurgical-coke": {   # 15. Metallurgical Coke
+        "stats": [("~680", "Mt/yr", "global production"), ("~70", "%", "of output from China"), ("350–450", "kg/t", "coke rate per tonne of hot metal"), ("60+", "CSR", "typical blast-furnace strength spec")],
+        "facts": ["Making one tonne of coke takes about 1.3–1.4 t of coking coal.",
+                  "In a blast furnace, coke is the fuel and the reducing agent, and it also holds up the furnace load like scaffolding."],
+        "bar": {"title": "Where the world’s met coke is made", "parts": [("China", 72, "#1D4A3B"), ("India", 7, "#4F8A6F"), ("Russia", 4, "#9CC2AC"), ("Other", 17, "#8A8A80")], "total": "Total production ~680 Mt"}},
+    "semi-coke": {   # 16. Semi Coke
+        "stats": [("600–700", "°C", "low-temperature carbonization"), ("80+", "%", "fixed carbon"), ("#1", "", "Yulin, Shaanxi, China’s largest production base"), ("3", "", "main uses: ferroalloys, NPI and calcium carbide")],
+        "facts": ["Its Chinese name, lantan (兰炭, “blue charcoal”), comes from the blue flame it burns with.",
+                  "Its high electrical resistivity makes it ideal for the submerged-arc furnaces used for ferroalloys and NPI."],
+        "bar": {"title": "What’s in semi coke (typical)", "parts": [("Fixed carbon", 82, "#1D4A3B"), ("Ash", 9, "#4F8A6F"), ("Volatiles", 6, "#9CC2AC"), ("Moisture", 3, "#B98A14")], "total": ""}},
+    "barite-powder": {   # 17. Barite Powder
+        "stats": [("4.2", "SG", "API drilling-grade specific gravity"), ("~80", "%", "of demand from oil and gas drilling fluids"), ("~8", "Mt/yr", "global production"), ("2", "", "leading producers: China and India")],
+        "facts": ["Barium blocks X-rays, so it is used in medical “barium meals” and radiation-shielding concrete.",
+                  "Its name comes from the Greek barys, meaning “heavy.”"],
+        "bar": {"title": "Where the world’s barite comes from", "parts": [("China", 30, "#1D4A3B"), ("India", 25, "#4F8A6F"), ("Morocco", 15, "#9CC2AC"), ("Other", 30, "#8A8A80")], "total": "Total production ~8 Mt"}},
+    "bentonite": {   # 18. Bentonite
+        "stats": [("15+", "×", "swelling capacity of sodium bentonite"), ("4", "", "main markets: foundry, drilling, iron-ore pelletizing, pet litter"), ("#1", "", "United States, the largest producer"), ("85+", "%", "montmorillonite in premium grades")],
+        "facts": ["It is named after Fort Benton, Montana, where it was first identified.",
+                  "It forms from volcanic ash that weathered over millions of years."],
+        "bar": {"title": "Where bentonite goes", "parts": [("Pet litter", 25, "#1D4A3B"), ("Foundry", 25, "#4F8A6F"), ("Drilling", 15, "#9CC2AC"), ("Iron ore pelletising", 15, "#B98A14"), ("Other", 20, "#8A8A80")], "total": "Total production ~22 Mt (est.)"}},
+    "bitumen": {   # 19. Bitumen
+        "stats": [("~120", "Mt/yr", "global demand"), ("~85", "%", "used in road paving"), ("~5", "%", "of an asphalt mix by weight"), ("60/70", "pen", "most-traded paving grade in Asia")],
+        "facts": ["Ancient Mesopotamians used bitumen to waterproof boats and as mortar for buildings.",
+                  "Asphalt pavement is one of the most recycled materials in the world."],
+        "bar": {"title": "Where bitumen goes", "parts": [("Roads", 85, "#1D4A3B"), ("Roofing & waterproofing", 10, "#4F8A6F"), ("Other", 5, "#8A8A80")], "total": "Total demand ~120 Mt"}},
+    "sulphur": {   # 20. Sulphur
+        "stats": [("~90", "%", "of world sulphur turned into sulphuric acid"), ("~50", "%", "of demand from phosphate fertilizers"), ("99.5", "%", "minimum purity for export-grade granular sulphur"), ("~115", "°C", "melting point; molten cargoes are kept at about 135–140 °C")],
+        "facts": ["Ancient texts called sulphur “brimstone,” meaning “burning stone.” It burns with a blue flame.",
+                  "Indonesia’s nickel boom has made it one of the fastest-growing sulphur importers. HPAL plants there use large amounts of sulphuric acid to leach nickel from laterite ore."],
+        "bar": {"title": "Where the world’s sulphur goes", "parts": [("Phosphate fertilizers", 50, "#E6CF2E"), ("Chemicals & industrial", 25, "#B5A019"), ("Metal leaching", 15, "#7D6F14"), ("Other", 10, "#8A8A80")], "total": "Total consumption ~85 Mt (2025E)"}},
+}
+for _slug, _f in FACTS.items():
+    _r = PAGES.setdefault(_slug, {}).setdefault("resources", {})
+    _r.pop("note", None)
+    _r.update(_f)
+
 
 
 # ---------------------------------------------------------------------------------------------------------------------

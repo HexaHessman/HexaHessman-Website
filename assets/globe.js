@@ -6,15 +6,15 @@ import * as THREE from 'three';
 const P = (slug, name, role) => ({ slug, name, role, email: slug.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join('.') + '@HexaHessman.com' });
 const OFFICES = [
   { id: 'sg', country: 'Singapore', entity: 'Headquarters', address: '39 Arab Street, Singapore 199738', extra: 'Warehouse: 10 Buroh Street, West Connect Building, Singapore 627564', lat: 1.3005, lon: 103.859,
-    leads: [P('hafriz-razif', 'Hafriz Razif', 'Chief Executive Officer'), P('aizat-amin', 'Aizat Amin', 'Head of Engineering Solutions'), P('adam-yeoh', 'Adam Yeoh', 'Head of Commodity Supply'), P('azmi-mahmood', 'Azmi Mahmood', 'Principal Advisor')] },
+    leads: [P('hafriz-razif', 'Hafriz Razif', 'Group Chief Executive Officer'), P('aizat-amin', 'Aizat Amin', 'Executive Business Development Manager'), P('adam-yeoh', 'Adam Yeoh', 'Executive Business Development Manager'), P('azmi-mahmood', 'Azmi Mahmood', 'Principal Advisor')] },
   { id: 'id', country: 'Indonesia', entity: 'PT. HexaHessman Indonesia', address: 'The CEO Building Level 12, Jl. TB Simatupang No. 18 C, Jakarta Selatan 12430', lat: -6.29, lon: 106.80,
-    leads: [P('krishna-hartono', 'Krishna Hartono', 'Regional Business Director'), P('yos-rizaldy', 'Yos Rizaldy', 'Regional Business Director')] },
+    leads: [P('krishna-hartono', 'Krishna Hartono', 'Head of Engineering'), P('yos-rizaldy', 'Yos Rizaldy', 'Principal Advisor')] },
   { id: 'kr', country: 'South Korea', entity: 'HexaHessman Korea', address: '#619, 87 Ogeum-ro, Songpa-gu, Seoul 05542', lat: 37.505, lon: 127.11, leads: [P('eddie-jeong', 'Eddie Jeong', 'Regional Business Director')] },
-  { id: 'my', country: 'Malaysia', entity: 'HexaHessman Sdn Bhd', address: 'Unit 9-6, Binjai 8 Premium Soho, 2 Lorong Binjai, 50450 Kuala Lumpur', lat: 3.158, lon: 101.72, leads: [P('anuar-ebrahim', 'Anuar Ebrahim', 'Director of Trading'), P('zulkurnain-rahman', 'Zulkurnain Rahman', 'Principal Advisor')] },
+  { id: 'my', country: 'Malaysia', entity: 'HexaHessman Sdn Bhd', address: 'Unit 9-6, Binjai 8 Premium Soho, 2 Lorong Binjai, 50450 Kuala Lumpur', lat: 3.158, lon: 101.72, leads: [P('anuar-ebrahim', 'Anuar Ebrahim', 'Director of Trading & Chief Operating Officer'), P('zulkurnain-rahman', 'Zulkurnain Rahman', 'Principal Advisor')] },
   { id: 'th', country: 'Thailand', entity: 'HexaHessman Thailand', address: '118/3 Moo 7, Tambon Bang Sao Thong, Amphoe Bang Sao Thong, Samut Prakan 10570', lat: 13.56, lon: 100.80, leads: [P('hasareeyan-amin', 'Hasareeyan Amin', 'Regional Business Director')] },
   { id: 'in', country: 'India', entity: 'HexaHessman India', address: '129/1, Lal Bagh Main Road, Bengaluru 560027', lat: 12.955, lon: 77.59 },
   { id: 'uk', country: 'United Kingdom', entity: 'HexaHessman UK', address: '128 City Road, London EC1V 2NX', lat: 51.527, lon: -0.089, leads: [P('nigel-edwards', 'Nigel Edwards', 'Principal Advisor')] },
-  { id: 'tr', country: 'Türkiye', entity: 'HexaHessman Turkey', address: 'Gökçe Apartmanı No: 22/12, Mustafa Kemal Mahallesi, 2124. Cadde, Çankaya, Ankara 06530', lat: 39.91, lon: 32.80, leads: [P('cemal-koc', 'Cemal Koc', 'Regional Business Director')] },
+  { id: 'tr', country: 'Türkiye', entity: 'HexaHessman Turkey', address: 'Gökçe Apartmanı No: 22/12, Mustafa Kemal Mahallesi, 2124. Cadde, Çankaya, Ankara 06530', lat: 39.91, lon: 32.80, leads: [P('cemal-koc', 'Cemal Koç', 'Regional Business Director')] },
   { id: 'us', country: 'United States', entity: 'HexaHessman US', address: '730 N Milwaukee Ave, Chicago, IL 60642', lat: 41.90, lon: -87.66 },
 ];
 
@@ -129,7 +129,7 @@ function select(i, byUser) {
     const d = Math.abs(k - mid); return { d, x: Math.sign(k - mid) * Math.min(d, 2) * GAP, z: 10 - Math.round(d) }; };
   line.innerHTML = L.map((l, k) => { const { d, x, z } = pos(k), f = FIT[l.slug] || {};
     return `<figure class="gp-fig" style="--x:${(x + (f.dx || 0)).toFixed(1)}%;--s:${((1 - 0.16 * d) * (f.s || 1)).toFixed(3)};--z:${z};--k:${k}">
-      <img src="/assets/team/cut/${l.slug}.webp?v=2" alt="" draggable="false"></figure>`; }).join('')
+      <img src="/assets/team/cut/${l.slug}.webp?v=3" alt="" draggable="false"></figure>`; }).join('')
     // the names share one top line (client, 2026-11-07), each centred under its person
     // (spread a little wider than the people, so every title has room; they needn't sit exactly under each head)
     // (a pair's names sit exactly under the two heads; long names wrap onto a second line and never run into each other)
