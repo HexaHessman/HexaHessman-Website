@@ -787,7 +787,7 @@ def script_media(url, src):
     code = " ".join(re.findall(r"<script\b[^>]*>(.*?)</script\s*>", src, re.S | re.I))
     for m in re.finditer(r'<script[^>]*\bsrc="(/assets/[^"?]+\.js)', src):
         f = os.path.join(ROOT, m.group(1).lstrip("/"))
-        if os.path.exists(f):
+        if os.path.exists(f) and not f.endswith("cms-media.js"):   # (that one is the list of changes itself)
             code += " " + read(m.group(1).lstrip("/"))
     found = [m.group(1) for m in MEDIA_LIT.finditer(code)] + MEDIA_EXTRA.get(url, [])
     out, have = [], set()

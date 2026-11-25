@@ -370,7 +370,7 @@ function viewPages() {
   draw();
 }
 function viewShared() {
-  view().innerHTML = `<div class="pagehead"><div class="grow"><h1>Menu and footer</h1><p class="muted">These parts appear on every page. A change here shows everywhere.</p></div></div>
+  view().innerHTML = `<div class="pagehead"><div class="grow"><h1>Menu, footer and shared parts</h1><p class="muted">The menu and footer appear on every page. The other parts here are drawn by the site itself: the offices on the Contact page, the reference prices on the Commodities page, and a few buttons.</p></div></div>
     <div class="card"><div class="card__body">${pagesTable(SEED.shared)}</div></div>`;
   paintIcons(view()); bindRows();
 }
@@ -407,7 +407,7 @@ function viewEditor(url, focusKey) {
   };
   view().innerHTML = `
     <div class="pagehead"><div class="grow">
-      <a class="muted small" href="${shared ? "#/shared" : "#/pages"}" style="display:inline-flex;align-items:center;gap:4px">${ic("back")}${shared ? "Menu and footer" : "Pages"}</a>
+      <a class="muted small" href="${shared ? "#/shared" : "#/pages"}" style="display:inline-flex;align-items:center;gap:4px">${ic("back")}${shared ? "Menu, footer and shared parts" : "Pages"}</a>
       <h1 style="margin-top:6px">${esc(p.title)}</h1><p class="muted">${shared ? "Shown on every page" : esc(url)} · ${p.fields.length} texts${p.images.length ? " · " + p.images.length + " photos" : ""}</p></div>
       ${shared ? "" : `<a class="btn" href="${esc(url)}" target="_blank" rel="noopener">${ic("external")}<span>Open page</span></a>`}</div>
     <div class="ed">

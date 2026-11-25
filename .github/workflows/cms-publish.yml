@@ -3,7 +3,12 @@ name: Publish from CMS
 on:
   repository_dispatch:
     types: [cms-publish]      # sent by /api/publish when someone presses Publish in /admin
-  workflow_dispatch: {}       # the "Run workflow" button, for a manual publish
+  workflow_dispatch:          # the "Run workflow" button, for a manual publish
+    inputs:
+      check_only:
+        description: "Only check: pull the changes and rebuild, report what would change, publish nothing"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -31,7 +36,13 @@ jobs:
         run: python3 tools/cms/pull.py
       - name: Rebuild the pages with the changes
         run: python3 tools/sitegen/build.py "$GITHUB_WORKSPACE"
+      - name: Report what would change (check only)
+        if: ${{ inputs.check_only }}
+        run: |
+          echo "Files that would change:"; git status --short | head -40
+          echo "Total: $(git status --short | wc -l)"
       - name: Commit and push
+        if: ${{ !inputs.check_only }}
         run: |
           git config user.name "HexaHessman CMS"
           git config user.email "cms@users.noreply.github.com"
@@ -43,6 +54,7 @@ jobs:
       # The live site (Vercel project "hexahessman-website") rebuilds by itself from the push above, through Vercel's
       # GitHub connection. This extra step only refreshes the developer's preview copy; if it fails, the publish still counts.
       - name: Refresh the developer's preview copy (optional)
+        if: ${{ !inputs.check_only }}
         continue-on-error: true
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -52,6 +64,7 @@ jobs:
           if [ -z "$VERCEL_TOKEN" ]; then echo "No VERCEL_TOKEN: relying on Vercel's own GitHub connection."; exit 0; fi
           npx --yes vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN"
       - name: Record the publish
+        if: ${{ !inputs.check_only }}
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
