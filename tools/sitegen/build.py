@@ -907,7 +907,7 @@ def product_body(p):
         # the client's layout: two photos on the left (with their names, or bare where the types are grades), their words on
         # the right, and any grade cards in a centred row underneath
         if pics:
-            photos = "".join(f'<article class="pp-type"><img src="{src}?v=2" alt="{esc_attr(alt)}" loading="lazy" decoding="async"></article>' for src, alt in pics)
+            photos = "".join(f'<article class="pp-type"><img src="{src}?v=3" alt="{esc_attr(alt)}" loading="lazy" decoding="async"></article>' for src, alt in pics)
         else:
             photos = "".join(f'<article class="pp-type"><img src="{t[2]}?v=2" alt="{esc_attr(t[0])}" loading="lazy" decoding="async"><h3>{esc(t[0])}</h3>' + (f"<p>{esc(t[1])}</p>" if t[1] else "") + "</article>" for t in types)
         words = "".join(f"<p><b>{esc(x[0])}</b> {esc(x[1])}</p>" if isinstance(x, tuple) else f"<p>{esc(x)}</p>" for x in side)
@@ -1081,7 +1081,7 @@ def build_engineering_hub():
         tags = " · ".join(esc(t) for t in H["principal_tags"].get(slug, []))   # a plain line, not chips (user: no circles)
         cov = f'<p class="ep-cov">{esc(pr["coverage"])}</p>' if pr.get("coverage") else ""
         stops.append(f'''<article class="ep {'right' if i % 2 else 'left'}" id="{slug}">
-  <a class="ep-photo cs-photo" href="/engineering/{slug}/" data-reveal="photo" tabindex="-1" aria-hidden="true"><img src="/assets/engineering/{slug}.jpg?v=1" alt="" loading="lazy" decoding="async" width="1200" height="900"><svg class="ep-run" aria-hidden="true"><rect pathLength="100"/></svg></a>
+  <a class="ep-photo cs-photo" href="/engineering/{slug}/" data-reveal="photo" tabindex="-1" aria-hidden="true"><img src="/assets/engineering/{slug}.jpg?v=2" alt="" loading="lazy" decoding="async" width="1200" height="900"><svg class="ep-run" aria-hidden="true"><rect pathLength="100"/></svg></a>
   <div class="ep-copy">
     <img class="ep-logo mq-{slug}" src="/assets/engineering/logo-{slug}.svg?v=3" alt="{esc_attr(name)}" data-reveal="fade">
     <h2 class="ep-short" data-reveal="fade">{esc(short)}</h2>
