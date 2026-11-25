@@ -7,13 +7,16 @@
   const data = await fetch('/assets/market-prices.json', { cache: 'no-cache' }).then(r => r.json()).catch(() => null);
   if (!data) { sec.remove(); return; }
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // figures arrive as text (the website editor changes them); a value in [square brackets] is an empty slot
+  const val = v => { if (v === null || v === undefined) return null; const t = String(v).trim(); if (!t || t[0] === '[') return null; const k = Number(t.replace(/[,$\s]/g, '')); return isFinite(k) ? k : null; };
+  const txt = v => { const t = String(v ?? '').trim(); return t[0] === '[' ? '' : t; };
   const num = v => Number(v).toLocaleString('en-US', { maximumFractionDigits: 2 });
   const move = c => {
-    if (c === null || c === undefined || c === '') return '';
-    const k = Number(c), cls = k > 0 ? 'up' : k < 0 ? 'down' : 'flat', arrow = k > 0 ? '↗' : k < 0 ? '↘' : '→';
+    const k = val(c); if (k === null) return '';
+    const cls = k > 0 ? 'up' : k < 0 ? 'down' : 'flat', arrow = k > 0 ? '↗' : k < 0 ? '↘' : '→';
     return `<span class="mk-move ${cls}">${arrow} ${k > 0 ? '+' : k < 0 ? '−' : ''}${num(Math.abs(k))}</span>`;
   };
-  const cards = (data.cards || []).filter(c => c.price !== null && c.price !== undefined && c.price !== '');
+  const cards = (data.cards || []).filter(c => val(c.price) !== null);
   const live = data.live || [];
   const tv = live.length ? 'https://www.tradingview-widget.com/embed-widget/ticker-tape/?locale=en#' + encodeURIComponent(JSON.stringify({
     symbols: live.map(s => ({ proName: s.symbol, title: s.title })), showSymbolLogo: false, isTransparent: true, displayMode: 'regular', colorTheme: 'light', width: '100%', height: 46 })) : '';
@@ -30,12 +33,12 @@
     <div class="mk-grid">
       ${cards.map((c, i) => `
       <article class="mk-card" style="--i:${i}">
-        <p class="mk-date">${esc(c.date)}</p>
+        <p class="mk-date">${esc(txt(c.date))}</p>
         <h3 class="mk-name">${esc(c.product)}</h3>
-        <p class="mk-price"><b>$${num(c.price)}</b> <span>${esc(c.unit)}</span></p>
+        <p class="mk-price"><b>$${num(val(c.price))}</b> <span>${esc(c.unit)}</span></p>
         ${move(c.change)}
         <p class="mk-basis">${esc(c.basis)}</p>
-        <p class="mk-src">Source: ${c.source_url ? `<a href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(c.source)}</a>` : esc(c.source)}</p>
+        <p class="mk-src">Source: ${c.source_url ? `<a href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(txt(c.source))}</a>` : esc(txt(c.source))}</p>
       </article>`).join('')}
       <article class="mk-card mk-ask" style="--i:${cards.length}">
         <p class="mk-date">Updated weekly</p>

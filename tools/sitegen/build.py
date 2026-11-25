@@ -483,6 +483,7 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 @keyframes hxEnter{{to{{opacity:0;visibility:hidden}}}}
 @media (prefers-reduced-motion: reduce){{html.hx-enter body::after{{animation-duration:.01s}}}}</style>
 {head_tags}<link rel="stylesheet" href="/assets/cms-fonts.css">
+<script src="/assets/cms-media.js"></script>
 <script src="/assets/btn-roll.js?v=1" defer></script>
 </head>
 <body{f' class="{body_class}"' if body_class else ""}>
@@ -581,7 +582,7 @@ def build_commodities_hub():
     write("/commodities/index.html", page("Commodities Supply", meta_desc(H["lead"]), "\n".join(body),
         # the group screens' type (client, 2026-11-11): League Spartan names, Inter lines, Courier Prime "View product"
         head_tags='<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">\n',
-        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1117b" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112d" defer></script>\n<script src="/assets/markets.js?v=2" defer></script>\n'))
+        body_scripts='<script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>\n<script src="/assets/cscroll.js?v=1117b" defer></script>\n<script src="/assets/cs-marks.js?v=21" defer></script>\n<script src="/assets/arrive.js?v=1112d" defer></script>\n<script src="/assets/markets.js?v=3" defer></script>\n'))
 
 
 def build_group(g):
@@ -1889,7 +1890,7 @@ def build_contact():
     body.append(CONTACT_JS)
     head_tags = ('<script type="importmap">{ "imports": { "three": "/assets/vendor/three.module.js?v=160", '
                  '"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>\n')
-    body_scripts = '<script type="module" src="/assets/globe.js?v=25"></script>\n'
+    body_scripts = '<script type="module" src="/assets/globe.js?v=26"></script>\n'
     write("/contact/index.html", page("Contact", meta_desc(K["lead"]), "\n".join(body), extra_head=CONTACT_CSS,
                                       head_tags=head_tags, body_scripts=body_scripts))
 

@@ -35,7 +35,16 @@ SHARED = [  # (file, name shown in the admin)
     ("assets/site-footer.js", "Footer"),
     ("assets/product-contact.js", "Product enquiry form"),
     ("assets/commodities-data.json", "Commodities list"),
+    # words drawn by scripts (2026-11-25: every word on the site has a box)
+    ("assets/cscroll.js", "Commodities page: product scroll"),
+    ("assets/markets.js", "Commodities page: reference prices (headings)"),
+    ("assets/market-prices.json", "Commodities page: reference prices (figures)"),
+    ("assets/globe.js", "Contact page: offices on the globe"),
+    ("assets/back-btn.js", "Back button"),
+    ("assets/top-btn.js", "Back to top button"),
+    ("assets/hero3d-embed.js", "Scroll hint on the 3D pages"),
 ]
+MEDIA_JS = os.path.join(ROOT, "assets", "cms-media.js")
 SKIP_DIRS = {"admin", "api", "assets", "tools", "data", "supabase", "node_modules", "individual", "masters", "previews"}
 NOT_PAGES = {"logo.html", "sulphur3d.html", "eng-draw.html"}
 
@@ -108,7 +117,7 @@ TAG_LABEL = {"h1": "Main heading", "h2": "Heading", "h3": "Sub-heading", "h4": "
              "blockquote": "Quote", "title": "Browser tab title", "small": "Small print", "strong": "Bold text", "em": "Text",
              "span": "Text", "div": "Text", "summary": "Question"}
 JSON_SKIP_KEYS = {"slug", "href", "url", "src", "img", "image", "photo", "poster", "id", "office", "lat", "lon", "code", "icon",
-                  "file", "path", "video", "jump", "key", "type", "class", "color", "pos", "side"}
+                  "file", "path", "video", "jump", "key", "type", "class", "color", "pos", "side", "symbol"}
 VID_EXT = re.compile(r"(\.(mp4|webm|mov|m4v)(\?[^\"']*)?$)|^data:video/", re.I)
 
 
@@ -155,6 +164,24 @@ def video_to_img(tok, src):
     return f'<img{extra} src="{html.escape(src, quote=True)}" alt="{html.escape(alt, quote=True)}" loading="lazy" decoding="async">'
 
 
+SCRIPT_TEXT = {"data-name": "Contact card: name", "data-role": "Contact card: job title", "data-entity": "Contact card: company", "data-email": "Contact card: email"}
+
+
+def no_q(u):
+    return u.split("?")[0].split("#")[0]
+
+
+def img_hit(img_lookup, val):
+    """the key of img_lookup this photo path matches: exactly, or the same file with another ?v= tag"""
+    if val in img_lookup:
+        return val
+    v = no_q(val)
+    for k in img_lookup:
+        if no_q(k) == v:
+            return k
+    return None
+
+
 IMG_EXT = re.compile(r"\.(jpe?g|png|webp|gif|avif|svg)(\?[^\"']*)?$", re.I)
 
 
@@ -168,7 +195,7 @@ def json_strings(obj, path=""):
     if isinstance(obj, dict):
         for k, v in obj.items():
             if isinstance(v, str):
-                if k.lower() not in JSON_SKIP_KEYS and has_words(v) and not v.startswith(("/", "http", "#", "data:")):
+                if k.lower() not in JSON_SKIP_KEYS and not k.startswith("_") and has_words(v) and not v.startswith(("/", "http", "#", "data:")):
                     yield k, v
             else:
                 yield from json_strings(v, k)
@@ -222,6 +249,28 @@ def scan_html(src, lookup=None, img_lookup=None):
             tok = part
             name = tag_name(tok)
             low = tok[:20].lower()
+            if low.startswith("<script") and "data-name=" in tok[:tok.find(">") + 1]:
+                head_end = tok.find(">") + 1
+                def sattr(m):
+                    sp, an, av = m.group(1), m.group(2).lower(), m.group(3)
+                    val = html.unescape(av); n = norm(val)
+                    if an in SCRIPT_TEXT and n and has_words(n):
+                        if lookup is None:
+                            fields.append({"o": n, "tag": "data", "label": SCRIPT_TEXT[an], "sec": "Contact card"})
+                        elif n in lookup:
+                            seen.add(n)
+                            return f'{sp}{m.group(2)}="{html.escape(lookup[n], quote=True)}"'
+                    elif an == "data-photo" and val:
+                        if lookup is None and img_lookup is None:
+                            images.append({"src": val, "sec": "Contact card", "kind": "img"})
+                        elif img_lookup:
+                            hit = img_hit(img_lookup, val)
+                            if hit and not is_video(img_lookup[hit]):
+                                seen.add("img:" + hit)
+                                return f'{sp}{m.group(2)}="{html.escape(img_lookup[hit], quote=True)}"'
+                    return m.group(0)
+                out.append(ATTR.sub(sattr, tok[:head_end]) + tok[head_end:])
+                continue
             if low.startswith(("<!--", "<script", "<style", "<svg", "<template")):
                 out.append(tok)
                 continue
@@ -267,13 +316,14 @@ def scan_html(src, lookup=None, img_lookup=None):
                         if lookup is None and img_lookup is None:
                             if not val.startswith("data:"):
                                 images.append({"src": val, "sec": section, "kind": kind})
-                        elif img_lookup and val in img_lookup:
-                            new = img_lookup[val]
+                        elif img_lookup and img_hit(img_lookup, val):
+                            hit = img_hit(img_lookup, val)
+                            new = img_lookup[hit]
                             # a photo spot takes a photo or a video; a video spot of the site's own takes only a video,
                             # and a poster or share picture only a photo
                             if (kind == "video" and not cms_vid and not is_video(new)) or (kind in ("share",) or anl == "poster") and is_video(new):
                                 return m.group(0)
-                            seen.add("img:" + val)
+                            seen.add("img:" + hit)
                             if (name == "img" and anl == "src") or cms_vid:
                                 swap.append(new)
                             return f'{sp}{an}="{html.escape(new, quote=True)}"'
@@ -360,13 +410,19 @@ def js_text_ok(s):
         return False
     if not has_words(s) or s in JS_NOT_TEXT or len(s) > 400:
         return False
-    if s.startswith(("/", "#", ".", "http", "data:", "mailto:", "tel:")) or re.search(r"[<>{}=;]|\$\{", s):
+    if s.startswith(("/", ".", "http", "data:", "mailto:", "tel:")) or re.search(r"[<>{}=;]|\$\{", s):
+        return False
+    if re.match(r"#(?!\d)", s) or re.search(r"(^|\s)[#.][a-z][\w-]*", s):   # CSS selectors ("#619, 87 Ogeum-ro" is an address)
+        return False
+    if re.fullmatch(r"\(.*:.*\)", s) or re.search(r"\s\?\s.*\s:\s", s) or re.match(r"T?\d\d:\d\d", s):   # media queries, code, times
         return False
     if re.search(r"[a-z][A-Z]", s) and " " not in s:   # camelCase identifiers
         return False
     if not re.search(r"[A-Z]", s[:1]) and " " not in s:   # lower-case single words are code (class names, events)
         return False
-    if re.fullmatch(r"[\w-]+\s*[\w-]*\(.*\)", s) or re.fullmatch(r"[\d.\s%a-z-]+", s):   # CSS values
+    if re.fullmatch(r"[\w-]+\s*[\w-]*\(.*\)", s):   # CSS functions
+        return False
+    if re.fullmatch(r"[\d.\s%a-z-]+", s) and len(re.findall(r"[a-z]{3,}", s)) < 4:   # CSS values (a lower-case sentence has more words)
         return False
     return True
 
@@ -396,7 +452,7 @@ def scan_js(src, lookup=None):
         def seg(mm):
             raw = mm.group(1)
             n = norm(html.unescape(raw))
-            if not n or not has_words(n) or "${" in raw or SVG_PATH.fullmatch(n):
+            if not n or not has_words(n) or "${" in raw or SVG_PATH.fullmatch(n) or re.search(r"[{}=;]|\bconst\b|\breturn\b|\s\?\s.*\s:\s", n):
                 return mm.group(0)
             if lookup is None:
                 fields.append({"o": n, "tag": "js", "label": "Text", "sec": ""})
@@ -428,6 +484,8 @@ def scan_js(src, lookup=None):
     def lit(m):
         raw = m.group(1)
         s = js_unquote(raw)
+        if raw[0] == "'" and re.search(r"<[a-z][^<>]*>[^<>]+</", raw) and "\\" not in raw:   # a string of HTML: the words between its tags
+            return tpl(m)
         if not js_text_ok(s):
             return raw
         if lookup is None:
@@ -508,6 +566,7 @@ def apply(cms=None, quiet=False):
             with open(os.path.join(ROOT, "assets", "cms", name), "wb") as f:
                 f.write(raw)
             e["t"] = "/assets/cms/" + name
+    media_js(images)
     applied = load_json(APPLIED, {})
     files = [(u, f) for u, f in site_pages()] + [(None, f) for f, _ in SHARED]
     changed = 0
@@ -644,6 +703,8 @@ def seed():
     for url, rel in site_pages():
         src = read(rel)
         flist, ilist = scan_html(src)
+        listed = {no_q(im["src"]) for im in ilist}
+        ilist += [im for im in script_media(url, src) if im["src"] not in listed]
         out, imgs = add(rel, url, flist, ilist)
         pages.append({"url": url, "file": rel, "title": page_title(src), "area": area_of(url), "fields": out, "images": imgs})
     shared = []
@@ -662,6 +723,81 @@ def seed():
     nf = sum(len(p["fields"]) for p in pages + shared)
     ni = sum(len(p["images"]) for p in pages)
     print(f"cms: admin/seed.json with {len(pages)} pages, {len(shared)} shared parts, {len(fields)} different texts, {nf} boxes, {ni} photos")
+
+
+MEDIA_RUN = r"""  const here = Object.assign({}, M['*'], M[location.pathname]);
+  if (!Object.keys(here).length) return;
+  const isVid = u => /\.(mp4|webm|mov|m4v)$/i.test(u.split('?')[0]);
+  const find = u => {
+    if (!u || u.startsWith('data:') || u.startsWith('blob:')) return null;
+    let p; try { const x = new URL(u, location.href); if (x.origin !== location.origin) return null; p = x.pathname; } catch (e) { return null; }
+    return here[p] || here[p.replace(/-(m|hd)(\.\w+)$/, '$2')] || null;   // the phone and HD copies follow the main file
+  };
+  const fix = el => {
+    if (el.nodeType !== 1 || !/^(IMG|VIDEO|SOURCE)$/.test(el.tagName)) return;
+    for (const a of ['src', 'poster']) {
+      const v = el.getAttribute(a), n = find(v); if (!n || v === n) continue;
+      if (a === 'poster' && isVid(n)) continue;
+      if (el.tagName === 'IMG' && isVid(n)) {   // a photo swapped for a video: the same spot, playing muted on a loop
+        const vd = document.createElement('video'); vd.className = (el.className + ' cms-vid').trim(); vd.style.cssText = el.style.cssText;
+        vd.muted = true; vd.loop = true; vd.autoplay = true; vd.playsInline = true; vd.setAttribute('muted', ''); vd.setAttribute('playsinline', ''); vd.preload = 'metadata';
+        if (el.alt) vd.setAttribute('aria-label', el.alt); else vd.setAttribute('aria-hidden', 'true');
+        vd.src = n; el.replaceWith(vd); return;
+      }
+      if (el.tagName !== 'IMG' && a === 'src' && !isVid(n)) continue;   // a video spot takes only a video
+      if (el.tagName === 'IMG') { el.removeAttribute('srcset'); el.removeAttribute('sizes'); }
+      el.setAttribute(a, n);
+      if (el.tagName === 'SOURCE' && el.parentElement && el.parentElement.load) el.parentElement.load();
+    }
+  };
+  const walk = r => { if (r.nodeType !== 1) return; fix(r); r.querySelectorAll('img,video,source').forEach(fix); };
+  walk(document.documentElement);
+  new MutationObserver(ms => ms.forEach(m => { if (m.type === 'attributes') fix(m.target); else m.addedNodes.forEach(walk); }))
+    .observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['src', 'poster'] });
+})();
+"""
+
+
+def media_js(images):
+    """write assets/cms-media.js: the photo and video changes, for the spots that scripts fill in (the team line, the
+    contact globe, the product contact card, the entrance films). Photos in the pages' own HTML are changed in the HTML
+    itself; this covers the rest. With no changes the file is only a comment."""
+    m = {}
+    for e in images:
+        o, t, sc = e.get("o"), e.get("t"), e.get("scope") or "*"
+        if o and t and no_q(o) != no_q(t):
+            m.setdefault(sc, {})[no_q(o)] = t
+    js = "/* Photos and videos changed in the website editor (/admin). Written by tools/cms/cms.py: do not edit by hand. */\n"
+    if m:
+        js += "(() => {\n  const M = " + json.dumps(m, ensure_ascii=False, sort_keys=True) + ";\n" + MEDIA_RUN
+    old = read("assets/cms-media.js") if os.path.exists(MEDIA_JS) else None
+    if old != js:
+        write("assets/cms-media.js", js)
+
+
+MEDIA_LIT = re.compile(r"""['"`](/assets/[^'"`?\s$]+\.(?:jpe?g|png|webp|gif|avif|mp4|webm))(?:\?[^'"`]*)?['"`]""", re.I)
+# media that scripts build from pieces (no whole path in the code), by page
+MEDIA_EXTRA = {"/engineering/": ["/assets/engineering/sts-loop.mp4"],
+               "/": ["/assets/entrance/intro-v10.mp4", "/assets/entrance/commodities-v8b.mp4", "/assets/entrance/engineering-v8.mp4", "/assets/entrance/water-v1.mp4"]}
+MEDIA_NOT = ("/assets/cms/", "/assets/team/cut/")   # uploaded files; the portraits are listed from the team grid
+
+
+def script_media(url, src):
+    """photos and videos a page's scripts put on it: whole paths written in its inline scripts and in the site scripts it loads"""
+    code = " ".join(re.findall(r"<script\b[^>]*>(.*?)</script\s*>", src, re.S | re.I))
+    for m in re.finditer(r'<script[^>]*\bsrc="(/assets/[^"?]+\.js)', src):
+        f = os.path.join(ROOT, m.group(1).lstrip("/"))
+        if os.path.exists(f):
+            code += " " + read(m.group(1).lstrip("/"))
+    found = [m.group(1) for m in MEDIA_LIT.finditer(code)] + MEDIA_EXTRA.get(url, [])
+    out, have = [], set()
+    for u in found:
+        base = re.sub(r"-(m|hd)(\.\w+)$", r"\2", u)   # the phone and HD copies follow the main file
+        if base in have or u.startswith(MEDIA_NOT) or not os.path.exists(os.path.join(ROOT, base.lstrip("/"))):
+            continue
+        have.add(base)
+        out.append({"src": base, "sec": "Put on the page by a script", "kind": "video" if is_video(base) else "img"})
+    return out
 
 
 def fonts_css(edits):
