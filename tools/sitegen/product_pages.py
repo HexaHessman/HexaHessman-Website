@@ -354,7 +354,7 @@ for _slug, _f in FACTS.items():
 # fertilizers) and the product pages on hexahessman.com. Nothing here is researched or written from outside knowledge.
 SUPPLY_NET = "By leveraging decades of industry experience and a vast international network of trusted partners, HexaHessman anticipates and responds to the evolving energy and feedstock needs of clients worldwide, with solutions that are both precise and dependable."   # profile p.5
 SUPPLY_REFINERY = "We deliver products direct from refinery with consistency and reliability."   # profile p.5
-FERT_SUPPLY = ["HexaHessman is committed to supporting Indonesia’s agricultural sector with reliable fertilizer solutions tailored to local crop requirements, combining global sourcing strength with local market insight.",
+FERT_SUPPLY = ["HexaHessman is committed to supporting the agricultural sector with reliable fertilizer solutions tailored to local crop requirements, combining global sourcing strength with local market insight.",
                "We maintain a reliable supply chain through direct sourcing from trusted global producers, ensuring quality-assured products and consistent availability for bulk buyers. We coordinate efficient logistics and delivery, and offer competitive pricing for distributors and large-scale buyers."]   # profile p.14
 CROPS_N = "Supports vegetative growth, yield formation and overall crop productivity. Widely used in rice, corn, sugarcane, oil palm and other plantation crops."   # profile p.14, nitrogenous fertilizers
 CROPS_P = "Promotes root development, early plant establishment, flowering and yield formation. Used across corn, rice, horticulture and high-value crops."   # profile p.14, phosphatic fertilizers
