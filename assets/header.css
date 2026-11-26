@@ -33,7 +33,7 @@ html { scroll-padding-top: 120px; }
 /* logo */
 .logo-link { display: inline-flex; align-items: center; gap: 9px; color: inherit; text-decoration: none; min-width: 0; }
 .logo-link svg { width: 26px; height: 26px; flex: none; display: block; }
-.logo-link svg.hh-lockup { width: auto; height: 36px; aspect-ratio: 3.55; }   /* the client's lockup: mark + HEXA / HESSMAN (2026-11-10) */
+.logo-link svg.hh-lockup { width: auto; height: 36px; aspect-ratio: 1781 / 497; }   /* the client's logo: emblem + HEXA / HESSMAN (their new picture, 2026-11-26) */
 .logo-link .word {
   font-family: var(--hdr-sans); font-weight: 600; font-size: 20px; letter-spacing: -0.03em; line-height: 1;
   white-space: nowrap;

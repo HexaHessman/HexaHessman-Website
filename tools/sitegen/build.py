@@ -470,12 +470,14 @@ def page(title, description, body, extra_head="", head_tags="", body_scripts="",
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)} · HexaHessman</title>
 <meta name="description" content="{esc_attr(description)}">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-32.png?v=2" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/favicon.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@600;700;800&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:ital,wght@0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/header.css?v=1117a">
-<link rel="stylesheet" href="/assets/site.css?v=1117e">
+<link rel="stylesheet" href="/assets/header.css?v=1126a">
+<link rel="stylesheet" href="/assets/site.css?v=1126a">
 <style>{PAGE_CSS}{extra_head}</style>
 <script>try{{if(sessionStorage.getItem('hx-enter')){{sessionStorage.removeItem('hx-enter');document.documentElement.classList.add('hx-enter')}}}}catch(e){{}}</script>
 <style>/* arriving from a homepage door: the page opens on the door clip's last green and fades in (client, 2026-11-08) */
@@ -492,10 +494,10 @@ html.hx-enter body::after{{content:"";position:fixed;inset:0;z-index:10000;backg
 {body}
 </main>
 <div id="site-footer"></div>
-<script src="/assets/site-header.js?v=1112c" defer></script>
+<script src="/assets/site-header.js?v=1126a" defer></script>
 <script src="/assets/deco-lines.js?v=6" defer></script>
 <script src="/assets/words.js?v=3" defer></script>
-<script src="/assets/site-footer.js?v=1117b" defer></script>
+<script src="/assets/site-footer.js?v=1126a" defer></script>
 {body_scripts}</body>
 </html>
 """
@@ -1158,7 +1160,7 @@ def _ship_svg():
 SHIP_SVG = _ship_svg()
 
 
-SPX_MARK = "M780 8510 l0 -7990 2740 0 2740 0 0 2067 0 2068 940 -940 940 -940 970 970 970 970 0 -2098 0 -2097 2745 0 2745 0 0 7990 0 7990 -2740 0 -2740 0 0 -2102 0 -2103 -975 975 -975 975 -2867 -2868 -2868 -2867 1200 -1200 c660 -660 1203 -1200 1207 -1200 5 0 8 228 8 507 l0 508 -692 692 -693 693 1053 1053 1052 1052 0 -4688 0 -4687 -2020 0 -2020 0 0 7270 0 7270 2020 0 2020 0 0 -1557 0 -1558 360 360 360 360 0 1557 0 1558 -2740 0 -2740 0 0 -7990z m14070 0 l0 -7270 -2020 0 -2020 0 0 2102 0 2103 1532 1532 1533 1533 -1173 1172 -1172 1173 0 -515 0 -515 660 -660 660 -660 -2347 -2347 c-1292 -1292 -2352 -2348 -2358 -2348 -5 0 -432 422 -947 937 l-938 938 0 2825 0 2825 940 940 940 940 975 -975 975 -975 0 -2245 0 -2245 360 360 360 360 0 4142 0 4143 2020 0 2020 0 0 -7270z"
+SPX_MARK = "M102.2 585.3L280.7 585.3L280.7 621L137.9 621L137.9 1037.5L280.7 1037.5L280.7 1073.2L102.2 1073.2ZM245 586.3L280.7 586.3L280.7 671.85L245 707.55ZM245 736.75L280.7 736.75L280.7 1072.2L245 1072.2ZM569.6 1073.2L391.1 1073.2L391.1 1037.5L533.9 1037.5L533.9 621L391.1 621L391.1 585.3L569.6 585.3ZM391.1 586.3L426.8 586.3L426.8 856.85L391.1 892.55ZM391.1 921.75L426.8 921.75L426.8 1072.2L391.1 1072.2ZM144.7 829.25L335.9 638.05L408.95 711.1L408.95 762.4L335.9 689.35L196 829.25L230.8 864.05L230.8 915.35ZM527.1 829.25L335.9 1020.45L262.85 947.4L262.85 896.1L335.9 969.15L475.8 829.25L441 794.45L441 743.15Z"
 
 ABOUT_CSS = """
 /* About hero: the shophouse street drawn in line, stroke by stroke, left to right and street up */
@@ -1458,7 +1460,7 @@ ABOUT_CSS = """
 
 /* What we specialise in: two dark panels running into the HexaHessman mark, a light looping round them (user, 2026-11-17) */
 .spx { position: relative; background: #FCFCFC; color: #0F2A1E; padding: clamp(36px, 4vw, 60px) 0; }   /* no heading (client, 2026-11-17): the same space above and below */
-.spx-wrap { --mh: clamp(240px, 16.5vw, 255px); --mw: calc(var(--mh) * 0.9255); position: relative; width: min(100% - 2 * var(--gutter), 1500px); margin: 0 auto;
+.spx-wrap { --mh: clamp(240px, 16.5vw, 255px); --mw: calc(var(--mh) * 0.958); position: relative; width: min(100% - 2 * var(--gutter), 1500px); margin: 0 auto;
   display: grid; grid-template-columns: minmax(0, 1fr) var(--mw) minmax(0, 1fr); height: var(--mh); }
 /* the heading on the white, big and in the green (user, 2026-11-17) */
 .spx-h { width: min(100% - 2 * var(--gutter), 1500px); margin: 0 auto clamp(26px, 3vw, 44px); text-align: center; white-space: nowrap; font-family: var(--display); font-weight: 700;
@@ -1550,34 +1552,34 @@ def build_about():
     (sh1, sp1, shref1), (sh2, sp2, shref2) = A["specialise"][:2]
     specialise = f'''<section class="spx" id="specialise" aria-label="What we specialise in"><div class="spx-wrap">
   <div class="spx-p spx-l"><div class="spx-c"><h3>{esc(sh1)}</h3><p>{esc(sp1)}</p><a class="more" href="{shref1}">Learn more →</a></div></div>
-  <div class="spx-mark" aria-hidden="true"><svg viewBox="74 80 1490 1606" preserveAspectRatio="none"><rect class="spx-fr" x="140" y="146" width="424" height="1474"/><rect class="spx-fr" x="1071" y="146" width="424" height="1474"/><g transform="translate(0,1734) scale(0.1,-0.1)"><path class="spx-ink" d="{SPX_MARK}"/></g></svg></div>
+  <div class="spx-mark" aria-hidden="true"><svg viewBox="102.2 585.3 467.4 487.9" preserveAspectRatio="none"><rect class="spx-fr" x="120" y="603.1" width="142.9" height="452.3"/><rect class="spx-fr" x="408.9" y="603.1" width="142.9" height="452.3"/><path class="spx-ink" d="{SPX_MARK}"/></svg></div>
   <div class="spx-p spx-r"><div class="spx-c"><h3>{esc(sh2)}</h3><p>{esc(sp2)}</p><a class="more" href="{shref2}">Learn more →</a></div></div>
   <svg class="spx-line" aria-hidden="true"><path class="spx-base" pathLength="100"/><path class="spx-run" pathLength="100"/><path class="spx-run b" pathLength="100"/></svg>
 </div>
 <script>
 (() => {{
-  // the loop, in the mark's own units: frames x 78-626 and 1009-1557, y 84-1682; the diamond's outer edge has its
-  // top at (814, 309.5), bottom at (814, 1456.5) and meets the frames at y 504.5 (top) and 1261.5 / 1268.5 (bottom)
+  // the loop, in the mark's own units (tools/drawings/logo_lockup.py): frames x 102.2-280.7 and 391.1-569.6, y 585.3-1073.2;
+  // the diamond's outer edge has its top at (335.9, 638.05), bottom at (335.9, 1020.45) and meets the frames at y 693.25 and 965.25
   const sec = document.currentScript.closest('.spx'), wrap = sec.querySelector('.spx-wrap');
   const mk = sec.querySelector('.spx-mark'), L = sec.querySelector('.spx-l'), R = sec.querySelector('.spx-r');
   const paths = [...sec.querySelectorAll('.spx-line path')];
   const draw = () => {{
     const W = wrap.getBoundingClientRect(), m = mk.getBoundingClientRect(), l = L.getBoundingClientRect(), r = R.getBoundingClientRect();
-    const k = m.width / 1479, ox = m.left - W.left, oy = m.top - W.top;
-    const f = (x, y) => `${{(ox + (x - 78) * k).toFixed(1)}},${{(oy + (y - 84) * (m.height / 1598)).toFixed(1)}}`;
+    const k = m.width / 467.4, ox = m.left - W.left, oy = m.top - W.top;
+    const f = (x, y) => `${{(ox + (x - 102.2) * k).toFixed(1)}},${{(oy + (y - 585.3) * (m.height / 487.9)).toFixed(1)}}`;
     const c = 14, P = (x, y) => `${{x.toFixed(1)}},${{y.toFixed(1)}}`;
     let d;
     if (l.top < m.top - 2) {{   // phones: panel above, mark, panel below; the line runs round both and down the mark's sides
       const t1 = l.left - W.left, t2 = l.right - W.left, tt = l.top - W.top, tb = l.bottom - W.top;
       const b1 = r.left - W.left, b2 = r.right - W.left, bt = r.top - W.top, bb = r.bottom - W.top;
-      d = `M${{f(78, 84)}} L${{P(t1, tb)}} L${{P(t1, tt + c)}} Q${{P(t1, tt)}} ${{P(t1 + c, tt)}} L${{P(t2 - c, tt)}} Q${{P(t2, tt)}} ${{P(t2, tt + c)}} L${{P(t2, tb)}} L${{f(1557, 84)}}`
-        + ` L${{f(1557, 1682)}} L${{P(b2, bt)}} L${{P(b2, bb - c)}} Q${{P(b2, bb)}} ${{P(b2 - c, bb)}} L${{P(b1 + c, bb)}} Q${{P(b1, bb)}} ${{P(b1, bb - c)}} L${{P(b1, bt)}} L${{f(78, 1682)}} Z`;
+      d = `M${{f(102.2, 585.3)}} L${{P(t1, tb)}} L${{P(t1, tt + c)}} Q${{P(t1, tt)}} ${{P(t1 + c, tt)}} L${{P(t2 - c, tt)}} Q${{P(t2, tt)}} ${{P(t2, tt + c)}} L${{P(t2, tb)}} L${{f(569.6, 585.3)}}`
+        + ` L${{f(569.6, 1073.2)}} L${{P(b2, bt)}} L${{P(b2, bb - c)}} Q${{P(b2, bb)}} ${{P(b2 - c, bb)}} L${{P(b1 + c, bb)}} Q${{P(b1, bb)}} ${{P(b1, bb - c)}} L${{P(b1, bt)}} L${{f(102.2, 1073.2)}} Z`;
     }} else {{
       const lx = l.left - W.left, rx = r.right - W.left, top = m.top - W.top, bot = m.bottom - W.top;
-      d = `M${{f(626, 84)}} L${{P(lx + c, top)}} Q${{P(lx, top)}} ${{P(lx, top + c)}} L${{P(lx, bot - c)}} Q${{P(lx, bot)}} ${{P(lx + c, bot)}} L${{f(626, 1682)}}`
-        + ` L${{f(626, 1268.5)}} L${{f(814, 1456.5)}} L${{f(1009, 1261.5)}} L${{f(1009, 1682)}}`
-        + ` L${{P(rx - c, bot)}} Q${{P(rx, bot)}} ${{P(rx, bot - c)}} L${{P(rx, top + c)}} Q${{P(rx, top)}} ${{P(rx - c, top)}} L${{f(1009, 84)}}`
-        + ` L${{f(1009, 504.5)}} L${{f(814, 309.5)}} L${{f(626, 504.5)}} Z`;
+      d = `M${{f(280.7, 585.3)}} L${{P(lx + c, top)}} Q${{P(lx, top)}} ${{P(lx, top + c)}} L${{P(lx, bot - c)}} Q${{P(lx, bot)}} ${{P(lx + c, bot)}} L${{f(280.7, 1073.2)}}`
+        + ` L${{f(280.7, 965.25)}} L${{f(335.9, 1020.45)}} L${{f(391.1, 965.25)}} L${{f(391.1, 1073.2)}}`
+        + ` L${{P(rx - c, bot)}} Q${{P(rx, bot)}} ${{P(rx, bot - c)}} L${{P(rx, top + c)}} Q${{P(rx, top)}} ${{P(rx - c, top)}} L${{f(391.1, 585.3)}}`
+        + ` L${{f(391.1, 693.25)}} L${{f(335.9, 638.05)}} L${{f(280.7, 693.25)}} Z`;
     }}
     paths.forEach(p => p.setAttribute('d', d));
   }};
